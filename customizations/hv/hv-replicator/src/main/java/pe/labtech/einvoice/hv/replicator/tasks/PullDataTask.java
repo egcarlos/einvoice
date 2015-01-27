@@ -48,8 +48,8 @@ public class PullDataTask implements PullDataTaskLocal {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     @Override
     public void handle() {
-        Logger.getLogger(this.getClass().getSimpleName()).info("Dispatching for data pulling");
-        //accion a ejecutar con cada 
+        Logger.getLogger(this.getClass().getSimpleName()).fine("Dispatching for data pulling");
+
         Consumer<Header> forHeaders = (h) -> {
             h.setCestado('L');
             Document document = mapHeader(h);
@@ -58,8 +58,12 @@ public class PullDataTask implements PullDataTaskLocal {
             em.persist(document);
         };
 
-        List<Header> hs = em.createQuery(HEADER_QUERY, Header.class)
-                .getResultList();
+        //REDUCING LOG
+        List<Header> hs = em.createQuery(HEADER_QUERY, Header.class).getResultList();
+        if (hs.isEmpty()) {
+            return;
+        }
+
         Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "pulling items: {0}", hs.size());
         hs.forEach(forHeaders);
     }
@@ -188,21 +192,7 @@ public class PullDataTask implements PullDataTaskLocal {
                 .collect(Collectors.toList());
 
         attr.forEach(child -> child.setItem(item));
-
-        List<ItemAuxiliar> aux = Arrays.asList(
-                new ItemAuxiliar("9000", "100", 1l, detail.getDaux1()),
-                new ItemAuxiliar("9001", "100", 2l, detail.getDaux2()),
-                new ItemAuxiliar("9147", "100", 3l, detail.getDaux3()),
-                new ItemAuxiliar("9148", "100", 4l, detail.getDaux4())
-        )
-                .stream()
-                .filter(a -> a.getValue() != null)
-                .collect(Collectors.toList());
-
-        aux.forEach(child -> child.setItem(item));
-
         item.setAttributes(attr);
-        item.setAuxiliars(aux);
         return item;
     }
 

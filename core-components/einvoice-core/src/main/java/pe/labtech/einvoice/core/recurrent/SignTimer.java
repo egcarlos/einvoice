@@ -49,11 +49,11 @@ public class SignTimer {
     @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
     public void doWork() {
         if (!working.compareAndSet(false, true)) {
-            Logger.getLogger(this.getClass().getSimpleName()).info("Process busy... waiting");
+            Logger.getLogger(this.getClass().getSimpleName()).fine("Process busy... waiting");
             //already working, just wait until it ends
             return;
         }
-        Logger.getLogger(this.getClass().getSimpleName()).info("Dispatching for signature");
+        Logger.getLogger(this.getClass().getSimpleName()).fine("Dispatching for signature");
         try {
             List<Document> documents = find();
             documents.forEach(d -> relay(d));
