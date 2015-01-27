@@ -43,7 +43,7 @@ public class DetailPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 3)
-    @Column(name = "DID")
+    @Column(name = "NUM_LINEA")
     private String did;
     @Basic(optional = false)
     @NotNull

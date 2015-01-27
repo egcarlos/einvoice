@@ -42,7 +42,7 @@ public class PullDataTask implements PullDataTaskLocal {
             + "ORDER BY"
             + " o.detailPK.did";
 
-    @PersistenceContext(unitName = "pepsico_PU")
+    @PersistenceContext(unitName = "hv_PU")
     EntityManager em;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -70,15 +70,14 @@ public class PullDataTask implements PullDataTaskLocal {
         d.setDocumentType(h.getCtipcomprobante());
         d.setDocumentNumber(h.getCcomprobante());
         //creacion de los atributos
-        List<DocumentAttribute> da = Arrays.asList(
-                new DocumentAttribute("indicador", "C"),
+        List<DocumentAttribute> da = Arrays.asList(new DocumentAttribute("indicador", "C"),
                 new DocumentAttribute("tipoDocumentoEmisor", h.getCtipdocumentoemisor()),
                 new DocumentAttribute("numeroDocumentoEmisor", h.getCdocumentoemisor()),
                 new DocumentAttribute("razonSocialEmisor", h.getCrsocialemisor()),
                 new DocumentAttribute("nombreComercialEmisor", h.getCncomercialemisor()),
                 new DocumentAttribute("tipoDocumento", h.getCtipcomprobante()),
                 new DocumentAttribute("serieNumero", h.getCcomprobante()),
-                new DocumentAttribute("fechaEmision", h.getCfemision()),
+                new DocumentAttribute("fechaEmision", convertFecha(h)),
                 new DocumentAttribute("ubigeoEmisor", h.getCubigeoemisor()),
                 new DocumentAttribute("direccionEmisor", h.getCdireccionemisor()),
                 new DocumentAttribute("urbanizacion", h.getCurbanizacionemisor()),
@@ -127,7 +126,7 @@ public class PullDataTask implements PullDataTaskLocal {
                 new DocumentAttribute("inHabilitado", h.getChabilitado())
         )
                 .stream()
-                .filter(a -> a.getValue() != null)
+                .filter(a -> a.getValue() != null && !"".equals(a.getValue()))
                 .collect(Collectors.toList());
 
         d.setAttributes(da);
@@ -136,6 +135,13 @@ public class PullDataTask implements PullDataTaskLocal {
         items.forEach(child -> child.setDocument(d));
         d.setItems(items);
         return d;
+    }
+
+    //Personalización para HV. Cambio de formato de dd/mm/yyyy a yyyy-mm-dd
+    private static String convertFecha(Header h) {
+        String fecha = h.getCfemision();
+        fecha = fecha.substring(6, 10) + "-" + fecha.substring(3, 5) + "-" + fecha.substring(0, 2);
+        return fecha;
     }
 
     private List<Item> mapItems(Header h, Document document) {
