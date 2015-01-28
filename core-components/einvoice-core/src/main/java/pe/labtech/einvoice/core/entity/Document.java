@@ -52,6 +52,7 @@ public class Document implements Serializable {
     @Column(name = "SIGNATURE", length = 2000)
     private String signature;
 
+    //TODO rename column
     @Column(name = "HASH", length = 1000)
     private String hash;
 
@@ -64,6 +65,9 @@ public class Document implements Serializable {
     @OneToMany(orphanRemoval = true, mappedBy = "document", cascade = CascadeType.ALL)
     private List<DocumentAuxiliar> auxiliars;
 
+    @OneToMany(orphanRemoval = true, mappedBy = "document", cascade = CascadeType.ALL)
+    private List<DocumentLegend> legends;
+
     @Column(name = "DOCUMENT_STEP")
     private String step;
 
@@ -72,6 +76,9 @@ public class Document implements Serializable {
 
     @OneToMany(orphanRemoval = true, mappedBy = "document")
     private List<EventTrace> trace;
+
+    public Document() {
+    }
 
     public Long getId() {
         return id;
@@ -167,6 +174,14 @@ public class Document implements Serializable {
 
     public void setAuxiliars(List<DocumentAuxiliar> auxiliars) {
         this.auxiliars = auxiliars;
+    }
+
+    public List<DocumentLegend> getLegends() {
+        return legends;
+    }
+
+    public void setLegends(List<DocumentLegend> legends) {
+        this.legends = legends;
     }
 
     public String getStep() {

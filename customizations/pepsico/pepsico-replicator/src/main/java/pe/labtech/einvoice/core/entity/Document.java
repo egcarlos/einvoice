@@ -31,28 +31,29 @@ public class Document implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DOCUMENT_ID_GENERATOR")
     private Long id;
 
-    @Column(name = "DOCUMENT_TYPE")
+    @Column(name = "DOCUMENT_TYPE", length = 10)
     private String documentType;
 
-    @Column(name = "DOCUMENT_NUMBER")
+    @Column(name = "DOCUMENT_NUMBER", length = 20)
     private String documentNumber;
 
-    @Column(name = "DOCUMENT_DATE")
+    @Column(name = "DOCUMENT_DATE", length = 40)
     private String documentDate;
 
-    @Column(name = "CLIENT_ID")
+    @Column(name = "CLIENT_ID", length = 20)
     private String clientId;
 
-    @Column(name = "PDF_URL")
+    @Column(name = "PDF_URL", length = 1000)
     private String pdfURL;
 
-    @Column(name = "XML_URL")
+    @Column(name = "XML_URL", length = 1000)
     private String xmlURL;
 
-    @Column(name = "SIGNATURE")
+    @Column(name = "SIGNATURE", length = 2000)
     private String signature;
 
-    @Column(name = "HASH")
+    //TODO rename column
+    @Column(name = "HASH", length = 1000)
     private String hash;
 
     @OneToMany(orphanRemoval = true, mappedBy = "document", cascade = CascadeType.ALL)
@@ -64,6 +65,9 @@ public class Document implements Serializable {
     @OneToMany(orphanRemoval = true, mappedBy = "document", cascade = CascadeType.ALL)
     private List<DocumentAuxiliar> auxiliars;
 
+    @OneToMany(orphanRemoval = true, mappedBy = "document", cascade = CascadeType.ALL)
+    private List<DocumentLegend> legends;
+
     @Column(name = "DOCUMENT_STEP")
     private String step;
 
@@ -72,6 +76,9 @@ public class Document implements Serializable {
 
     @OneToMany(orphanRemoval = true, mappedBy = "document")
     private List<EventTrace> trace;
+
+    public Document() {
+    }
 
     public Long getId() {
         return id;
@@ -95,6 +102,14 @@ public class Document implements Serializable {
 
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
+    }
+
+    public String getDocumentDate() {
+        return documentDate;
+    }
+
+    public void setDocumentDate(String documentDate) {
+        this.documentDate = documentDate;
     }
 
     public String getClientId() {
@@ -159,6 +174,14 @@ public class Document implements Serializable {
 
     public void setAuxiliars(List<DocumentAuxiliar> auxiliars) {
         this.auxiliars = auxiliars;
+    }
+
+    public List<DocumentLegend> getLegends() {
+        return legends;
+    }
+
+    public void setLegends(List<DocumentLegend> legends) {
+        this.legends = legends;
     }
 
     public String getStep() {

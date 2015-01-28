@@ -31,7 +31,7 @@ public class DocumentLoader implements DocumentLoaderLocal {
 
     @Override
     public List<Document> loadForSignature() {
-        TypedQuery<Document> query = em.createQuery("SELECT o FROM Document o WHERE o.step IS NULL or (o.step = :step and o.status = :status)", Document.class);
+        TypedQuery<Document> query = em.createQuery("SELECT o FROM Document o WHERE (o.documentNumber like 'F%' or o.documentNumber like 'B%') and o.step IS NULL or (o.step = :step and o.status = :status)", Document.class);
         query.setParameter("step", "SIGN");
         query.setParameter("status", "FIXED");
         List<Document> documents = query.getResultList();
