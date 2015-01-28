@@ -62,3 +62,4 @@ $RECYCLE.BIN/
 /core-components/einvoice-ws-client/target/
 /customizations/pepsico/pepsico-replicator/target/
 /customizations/hv/hv-replicator/target/
+core-components/einvoice-ws-client/src/wsdl/.LCKinvoker.wsdl~
