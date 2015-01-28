@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SignOnLineCmd declare-sunat="0" declare-direct-sunat="0" publish="1" output="PDF">     
+    <parameter value="20101363008" name="idEmisor"/>     
+    <parameter value="01" name="tipoDocumento"/>     
+    <parameter value="" name="estadoDocumento"/>     
+    <documento>         
+        <indicador>C</indicador>         
+        <tipoDocumentoEmisor>6</tipoDocumentoEmisor>         
+        <numeroDocumentoEmisor>20101363008</numeroDocumentoEmisor>         
+        <razonSocialEmisor>Scania del Perú S.A.</razonSocialEmisor>         
+        <nombreComercialEmisor>Scania del Perú S.A.</nombreComercialEmisor>         
+        <tipoDocumento>01</tipoDocumento>         
+        <serieNumero>F014-00008282</serieNumero>         
+        <fechaEmision>2014-10-30T02:00:00-03:00</fechaEmision>         
+        <ubigeoEmisor>150118</ubigeoEmisor>         
+        <direccionEmisor>Autopista Ramiro Prialé Km 7.5 Urb. La capitana</direccionEmisor>         
+        <urbanizacion>La Capitana</urbanizacion>         
+        <provinciaEmisor>LIMA</provinciaEmisor>         
+        <departamentoEmisor>LIMA</departamentoEmisor>         
+        <distritoEmisor>LURIGANCHO</distritoEmisor>         
+        <paisEmisor>PE</paisEmisor>         
+        <correoEmisor>william.laportilla@scania.com</correoEmisor>         
+        <tipoDocumentoAdquiriente>6</tipoDocumentoAdquiriente>         
+        <numeroDocumentoAdquiriente>20101036813</numeroDocumentoAdquiriente>         
+        <razonSocialAdquiriente>BANCO INTERAMERICANO DE FINANZAS</razonSocialAdquiriente>         
+        <lugarDestino>AV. RIVERA NAVARRETE  600, SAN ISIDRO LIMA LIMA</lugarDestino>         
+        <correoAdquiriente>william.laportilla@scania.com</correoAdquiriente>         
+        <tipoMoneda>USD</tipoMoneda>         
+        <totalValorVentaNetoOpGravadas>300840.68</totalValorVentaNetoOpGravadas>         
+        <totalValorVentaNetoOpNoGravada>0.00</totalValorVentaNetoOpNoGravada>         
+        <totalValorVentaNetoOpExoneradas>0.00</totalValorVentaNetoOpExoneradas>         
+        <subTotal>300840.68</subTotal>         
+        <totalIgv>54151.32</totalIgv>         
+        <totalDescuentos>0.00</totalDescuentos>         
+        <totalVenta>354992.00</totalVenta>         
+        <codigoLeyenda_1>1000</codigoLeyenda_1>         
+        <textoLeyenda_1>** TRESCIENTOS CINCUENTA Y CUATRO MIL NOVECIENTOS NOVENTA Y DOS Y 00/100 DOLARES **</textoLeyenda_1>         
+        <codigoAuxiliar40_1>9064</codigoAuxiliar40_1>         
+        <textoAuxiliar40_1>(511) 512-1800</textoAuxiliar40_1>         
+        <codigoAuxiliar40_2>9116</codigoAuxiliar40_2>         
+        <textoAuxiliar40_2>(511) 512-1828</textoAuxiliar40_2>         
+        <codigoAuxiliar40_3>9024</codigoAuxiliar40_3>         
+        <textoAuxiliar40_3>4124</textoAuxiliar40_3>         
+        <codigoAuxiliar40_4>9043</codigoAuxiliar40_4>         
+        <textoAuxiliar40_4>Venta Vehiculos</textoAuxiliar40_4>         
+        <codigoAuxiliar40_5>9095</codigoAuxiliar40_5>         
+        <textoAuxiliar40_5>FACTURA CONTADO</textoAuxiliar40_5>         
+        <codigoAuxiliar40_6>9097</codigoAuxiliar40_6>         
+        <textoAuxiliar40_6>47631</textoAuxiliar40_6>         
+        <codigoAuxiliar40_7>9025</codigoAuxiliar40_7>         
+        <textoAuxiliar40_7>.</textoAuxiliar40_7>         
+        <codigoAuxiliar40_8>9096</codigoAuxiliar40_8>         
+        <textoAuxiliar40_8>354992.0000</textoAuxiliar40_8>         
+        <codigoAuxiliar40_12>9088</codigoAuxiliar40_12>         
+        <textoAuxiliar40_12>20101036813</textoAuxiliar40_12>         
+        <codigoAuxiliar40_13>9030</codigoAuxiliar40_13>         
+        <textoAuxiliar40_13>EMPRESA DE T</textoAuxiliar40_13>         
+        <codigoAuxiliar40_17>9073</codigoAuxiliar40_17>         
+        <textoAuxiliar40_17>3677014</textoAuxiliar40_17>         
+        <codigoAuxiliar40_18>9072</codigoAuxiliar40_18>         
+        <textoAuxiliar40_18>DC1217B028160230</textoAuxiliar40_18>         
+        <codigoAuxiliar250_2>9013</codigoAuxiliar250_2>         
+        <textoAuxiliar250_2>Excluidos de la retención del 6% del IGV por ser Agentes de Retención - Según Art. 5 Inc. B.- Res. Superint. Nro. 037-2002-SUNAT.</textoAuxiliar250_2>         
+        <codigoAuxiliar500_1>9125</codigoAuxiliar500_1>         
+        <textoAuxiliar500_1>El uso de este vehículo está sujeto a las normas de los D.S. Nos. 033-2001-MTC, 058-2003-MTC y 009-2004-MTC, así como a los dispositivos legales que los modifican o amplían. La presenta venta se realiza en concordancia con las condiciones generales de entrega y garantía que el Cliente acepta y conoce.</textoAuxiliar500_1>         
+        <item>             
+            <indicador>D</indicador>             
+            <numeroOrdenItem>1</numeroOrdenItem>             
+            <codigoProducto>316270</codigoProducto>             
+            <descripcion>.</descripcion>             
+            <cantidad>1.00</cantidad>             
+            <unidadMedida>NIU</unidadMedida>             
+            <importeUnitarioSinImpuesto>300840.68</importeUnitarioSinImpuesto>             
+            <importeUnitarioConImpuesto>354992.00</importeUnitarioConImpuesto>             
+            <codigoImporteUnitarioConImpuesto>01</codigoImporteUnitarioConImpuesto>             
+            <importeTotalSinImpuesto>300840.68</importeTotalSinImpuesto>             
+            <importeDescuento>0.00</importeDescuento>             
+            <codigoRazonExoneracion>10</codigoRazonExoneracion>             
+            <importeIgv>54151.32</importeIgv>             
+            <codigoAuxiliar40_1>9037</codigoAuxiliar40_1>             
+            <textoAuxiliar40_1>SCANIA</textoAuxiliar40_1>             
+            <codigoAuxiliar40_2>9038</codigoAuxiliar40_2>             
+            <textoAuxiliar40_2>K410 B6X2</textoAuxiliar40_2>             
+            <codigoAuxiliar40_3>9009</codigoAuxiliar40_3>             
+            <textoAuxiliar40_3>9BSK6X200B3677014</textoAuxiliar40_3>             
+            <codigoAuxiliar40_4>9041</codigoAuxiliar40_4>             
+            <textoAuxiliar40_4>.</textoAuxiliar40_4>             
+            <codigoAuxiliar40_6>9039</codigoAuxiliar40_6>             
+            <textoAuxiliar40_6>3677014</textoAuxiliar40_6>             
+            <codigoAuxiliar40_7>9040</codigoAuxiliar40_7>             
+            <textoAuxiliar40_7>.</textoAuxiliar40_7>             
+            <codigoAuxiliar40_8>9042</codigoAuxiliar40_8>             
+            <textoAuxiliar40_8>2010</textoAuxiliar40_8>             
+            <codigoAuxiliar40_9>9043</codigoAuxiliar40_9>             
+            <textoAuxiliar40_9>2011</textoAuxiliar40_9>             
+            <codigoAuxiliar500_1>9602</codigoAuxiliar500_1>             
+            <textoAuxiliar500_1>Con Carrocería&#xD; Marca         MARCOPOLO&#xD; Modelo       PARADISO 1800DD&#xD; Serie         BUSRDFAWNEB381307POLO&#xD; Color           BLANCO&#xD; Asientos     64 (Incluye conductor)&#xD; &#xD; EMP. TRANSP. CAVASSA</textoAuxiliar500_1>         
+        </item>     
+    </documento> 
+</SignOnLineCmd> 
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ebizResponse>     
+    <genericInvokeResponse>         
+        <commonResponse>             
+            <summaryResult/>             
+            <status>OK</status>             
+            <descriptionStatus>SUCCESFULL</descriptionStatus>         
+        </commonResponse>         
+        <xmlResult>             
+            <document>                 
+                <typeDocument>01</typeDocument>                 
+                <idDocument>F014-00008282</idDocument>                 
+                <status>SIGNED</status>                 
+                <signatureValue> CDhPhZ6C7neTOncJjc22vrZVICG3uuckxYxNQwV7tk5Z5seyPJOyZSc5T55BpdVSvLpCxbMNVoYl n35upxRy/n+kCBi6iQSfUI4BXuf+JLDkPkO7C4+LHMsKq7Rv2zy342gDamkuueL57cWr6XXVr9Mf QB93rhNxXmXCgdCiBbNqc+4n9nokY6r4IUIIYvLs5Cp9tfd/rpRZ/pQ/Vs9tnVDtvigpBDkK/x8n lzsML724WeUM+oPt1D68r94HmmHQWSih0vQclTGNPNMt60NNtnOnfg0MPzvVq9NtHrKI/KSodXfz u5Rm2n6GqioVH9zjHFWlGE22XRY+NvA0WFQDcw== </signatureValue>                 
+                <emisionTime>2014-10-30</emisionTime>                 
+                <hashCode>VaEfCRifk1cMu/1zd8wRFFGBglw=</hashCode>                 
+                <pdfFileUrl>http://test3.alignetsac.com/sfewsperu1/files/x%275A556573616D42526B64724474465A434147756656796445506A4C554D396C43514E4C645665507361517A44356C575A5A6C59786363326E6239415163676C76%27</pdfFileUrl>                 
+                <xmlFileSignUrl>http://test3.alignetsac.com/sfewsperu1/files/x%274F7372717353565334493944705A6F675144475A6A314E5A4C7747544D624333384E65616E59766F486E51357A4F376347375667466D797A48784C4965474339%27</xmlFileSignUrl>                 
+                <tipoDocumentoEmisor>6</tipoDocumentoEmisor>                 
+                <numeroDocumentoEmisor>20101363008</numeroDocumentoEmisor>                 
+                <tipoDocumentoAdquiriente>6</tipoDocumentoAdquiriente>                 
+                <numeroDocumentoAdquiriente>20101036813</numeroDocumentoAdquiriente>                 
+                <razonSocialAdquiriente><![CDATA[BANCO INTERAMERICANO DE FINANZAS]]></razonSocialAdquiriente>                 
+                <razonSocialEmisor><![CDATA[Scania del Perú S.A.]]></razonSocialEmisor>                 
+                <adicionales/>                 
+                <item>                     
+                    <numeroOrdenItem>1</numeroOrdenItem>                     
+                    <codigoProducto>316270</codigoProducto>                     
+                    <adicionales>                         
+                        <adicional>                             
+                            <codigo>9602</codigo>                             
+                            <valor><![CDATA[Con Carrocería Marca         MARCOPOLO Modelo       PARADISO 1800DD Serie         BUSRDFAWNEB381307POLO Color           BLANCO Asientos     64 (Incluye conductor)  EMP. TRANSP. CAVASSA]]></valor>                         
+                        </adicional>                     
+                    </adicionales>                 
+                </item>             
+            </document>         
+        </xmlResult>     
+    </genericInvokeResponse> 
+</ebizResponse> 

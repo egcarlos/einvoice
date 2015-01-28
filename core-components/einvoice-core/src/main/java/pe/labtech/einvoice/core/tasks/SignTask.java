@@ -5,12 +5,6 @@
  */
 package pe.labtech.einvoice.core.tasks;
 
-import com.alignet.einvoice.ebiz.ws.generated.EBizGenericInvoker;
-import com.alignet.einvoice.ebiz.ws.helpers.Builder;
-import com.alignet.einvoice.ebiz.ws.messages.response.DocumentInfo;
-import com.alignet.einvoice.ebiz.ws.messages.response.Response;
-import com.alignet.einvoice.ebiz.ws.messages.response.ResponseMessage;
-import com.alignet.einvoice.ebiz.ws.model.DocumentItem;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -33,6 +27,12 @@ import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
+import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
+import pe.labtech.einvoice.core.ws.helpers.Builder;
+import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
+import pe.labtech.einvoice.core.ws.messages.response.Response;
+import pe.labtech.einvoice.core.ws.messages.response.ResponseMessage;
+import pe.labtech.einvoice.core.ws.model.DocumentItem;
 
 /**
  *
@@ -54,7 +54,7 @@ public class SignTask implements SignTaskLocal {
         try {
             //validar la presencia de los atributos es un tema
             //genear el mapeo de documento a lo otro
-            com.alignet.einvoice.ebiz.ws.model.Document target = new com.alignet.einvoice.ebiz.ws.model.Document();
+            pe.labtech.einvoice.core.ws.model.Document target = new pe.labtech.einvoice.core.ws.model.Document();
 
             Document entity = mapDocument(id, target);
 
@@ -122,7 +122,7 @@ public class SignTask implements SignTaskLocal {
         return response.getResponseBody().getXml().getDocuments().get(0);
     }
 
-    private Document mapDocument(Long id, com.alignet.einvoice.ebiz.ws.model.Document target) {
+    private Document mapDocument(Long id, pe.labtech.einvoice.core.ws.model.Document target) {
         Document entity = loader.loadForWork(id, source -> {
             //mapping principal attributes
             if (source.getAttributes() != null) {

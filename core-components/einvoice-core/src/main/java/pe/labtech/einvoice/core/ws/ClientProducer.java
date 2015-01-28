@@ -5,10 +5,10 @@
  */
 package pe.labtech.einvoice.core.ws;
 
-import com.alignet.einvoice.ebiz.ws.generated.EBizGenericInvokerImplService;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import pe.labtech.einvoice.core.ws.generated.EBizGenericInvokerImplService;
 
 /**
  *

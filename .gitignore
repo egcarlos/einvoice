@@ -59,4 +59,6 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 /core-components/einvoice-core/target/
+/core-components/einvoice-ws-client/target/
 /customizations/pepsico/pepsico-replicator/target/
+/customizations/hv/hv-replicator/target/

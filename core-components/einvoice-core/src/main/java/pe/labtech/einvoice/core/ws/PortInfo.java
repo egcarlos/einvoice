@@ -40,6 +40,9 @@ public class PortInfo {
         this.endpoint = "http://test3.alignetsac.com/sfewsperu/ws/invoker";
         this.user = "avinka";
         this.password = "ebiz";
+        //fixes missing default values
+        this.connectionTimeout = "600000";
+        this.receiveTimeout = "600000";
 
         try {
             PortInfo pi = new Gson().fromJson(new FileReader(file), this.getClass());

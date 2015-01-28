@@ -5,10 +5,6 @@
  */
 package pe.labtech.einvoice.core.tasks;
 
-import com.alignet.einvoice.ebiz.ws.generated.EBizGenericInvoker;
-import com.alignet.einvoice.ebiz.ws.helpers.Builder;
-import com.alignet.einvoice.ebiz.ws.messages.response.DocumentInfo;
-import com.alignet.einvoice.ebiz.ws.messages.response.Response;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -17,6 +13,10 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
+import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
+import pe.labtech.einvoice.core.ws.helpers.Builder;
+import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
+import pe.labtech.einvoice.core.ws.messages.response.Response;
 
 /**
  *
