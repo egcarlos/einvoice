@@ -52,13 +52,13 @@
                     <include>wsdl/**</include>
                 </includes>
             </resource>
-            <resource>
+<!--            <resource>
                 <directory>src/main/resources</directory>
                 <targetPath></targetPath>
                 <includes>
                     <include>**/**</include>
                 </includes>
-            </resource>
+            </resource>-->
         </resources>
     </build>
     <dependencies>
