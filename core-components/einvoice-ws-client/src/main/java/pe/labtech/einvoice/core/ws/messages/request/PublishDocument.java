@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pe.labtech.einvoice.core.ws.messages.request;
 
 import java.util.List;
@@ -11,8 +6,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Describe al comando de publicación de documentos.
  *
- * @author Carlos
+ * @author Labtech (info@labtech.pe)
+ * @version 1.00
+ * @since jan 30 2015
  */
 @XmlRootElement(name = "PublishCmd")
 public class PublishDocument {

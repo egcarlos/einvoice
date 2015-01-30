@@ -26,15 +26,40 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 /**
+ * Clase de utilidad para construir los mensajes Xml usados con el servidor de
+ * facturación electrónica.
  *
- * @author Carlos
+ * @author Labtech (info@labtech.pe)
+ * @version 1.00
+ * @since jan 30 2015
+ *
  */
 public class Builder {
 
+    /**
+     * Construye un mensaje XML para realizar consultas al servidor.
+     *
+     * @param clientId RUC del emisor
+     * @param documentType tipo de documento a consultar
+     * @param documentNumber serie y numero del documento a consultar
+     * @return XML de consulta al servidor
+     */
     public String buildQuery(String clientId, String documentType, String documentNumber) {
         return buildQuery(clientId, documentType, documentNumber, documentNumber);
     }
 
+    /**
+     * Construye un mensaje XML para realizar consultas al servidor. Se debe
+     * considerar que el presente metodo no realiza validaciones sobre los datos
+     * y debe verificarse como mínimo los formatos antes de realizar la
+     * consulta.
+     *
+     * @param clientId RUC del emisor
+     * @param documentType tipo de documento a consultar
+     * @param firstDocument primer documento en el formato F###-########
+     * @param lastDocument ultimo documento en el formato F###-########, la
+     * @return XML de consulta al servidor
+     */
     public String buildQuery(String clientId, String documentType, String firstDocument, String lastDocument) {
         String serial = firstDocument.split("-")[0];
         String firstNumber = firstDocument.split("-")[1];
@@ -51,6 +76,19 @@ public class Builder {
         return marshall(query);
     }
 
+    /**
+     * Construye un requerimiento de firma de un resúmen de comprobantes ya sea
+     * de declaración o de baja.
+     *
+     * El comportamiento por defecto de los resúmens es de declaración directa a
+     * sunat. Esto se verá reflejado en los flags del mensaje.
+     *
+     * @param clientId RUC del emisor
+     * @param documentType tipo de documento a consultar
+     * @param output tipo de salida de la consulta
+     * @param summary objeto representando al resumen de documento
+     * @return XML de consulta al servidor
+     */
     public String buildSignSummary(String clientId, String documentType, String output, Summary summary) {
         SignSummary signSummary = new SignSummary("1", "1", output,
                 Arrays.asList(
@@ -63,6 +101,20 @@ public class Builder {
         return marshall(signSummary);
     }
 
+    /**
+     * Construye un requerimiento de firma de documento (boleta, factura, nota
+     * de crédito o nota de débito).
+     *
+     * @param clientId RUC del emisor
+     * @param documentType tipo de documento
+     * @param output tipo de salida del documento
+     * @param publish bandera de publicacion
+     * @param declare bandera de declaracion
+     * @param directDeclare bandera de declaración directa
+     * @param status estado a asignar al adocumento después del registro
+     * @param documents lista de documentos para firmar
+     * @return
+     */
     public String buildSign(String clientId, String documentType, String output,
             boolean publish, boolean declare, boolean directDeclare, String status, List<Document> documents) {
         SignDocument signDocument = new SignDocument(
@@ -81,10 +133,40 @@ public class Builder {
     }
 
     /**
+     * Construye un requerimiento de firma de documento (boleta, factura, nota
+     * de crédito o nota de débito).
      *
-     * @param clientId
-     * @param documentType
-     * @param documentNumber
+     * @param clientId RUC del emisor
+     * @param documentType tipo de documento
+     * @param output tipo de salida del documento
+     * @param publish bandera de publicacion
+     * @param declare bandera de declaracion
+     * @param directDeclare bandera de declaración directa
+     * @param status estado a asignar al adocumento después del registro
+     * @param documents arreglo de documentos para firmar
+     * @return
+     */
+    public String buildSign(String clientId, String documentType, String output,
+            boolean publish, boolean declare, boolean directDeclare, String status, Document... documents) {
+        return this.buildSign(
+                clientId,
+                documentType,
+                output,
+                publish,
+                declare,
+                directDeclare,
+                status,
+                Arrays.asList(documents)
+        );
+    }
+
+    /**
+     * Construye un mensaje XML para dar la indicación de publicación en el
+     * portal de un documento.
+     *
+     * @param clientId RUC del emisor
+     * @param documentType tipo de documento
+     * @param documentNumber numero de documento
      * @return
      */
     public String buildPublish(String clientId, String documentType, String documentNumber) {
@@ -92,10 +174,12 @@ public class Builder {
     }
 
     /**
+     * Construye un mensaje XML para dar la indicación de publicación en el
+     * portal de un documento.
      *
-     * @param clientId
-     * @param documentType
-     * @param documentNumber
+     * @param clientId RUC del emisor
+     * @param documentType tipo de documento
+     * @param documentNumber numero de documento
      * @param declare bandera que indica si el documento se debe declarar en
      * l&iacute;nea
      * @return
@@ -105,11 +189,15 @@ public class Builder {
     }
 
     /**
+     * Construye un mensaje XML para dar la indicación de publicación en el
+     * portal de un documento. Se debe considerar que el presente metodo no
+     * realiza validaciones sobre los datos y debe verificarse como mínimo los
+     * formatos antes de realizar la consulta.
      *
      * @param clientId
      * @param documentType
-     * @param firstDocument
-     * @param lastDocument
+     * @param firstDocument primer documento en el formato F###-########
+     * @param lastDocument ultimo documento en el formato F###-########, la
      * @return
      */
     public String buildPublish(String clientId, String documentType, String firstDocument, String lastDocument) {
@@ -117,6 +205,10 @@ public class Builder {
     }
 
     /**
+     * Construye un mensaje XML para dar la indicación de publicación 
+     * de un documento. Se debe considerar que el presente metodo no
+     * realiza validaciones sobre los datos y debe verificarse como mínimo los
+     * formatos antes de realizar la consulta.
      *
      * @param clientId RUC del emisor del documento
      * @param documentType tipo de documento
@@ -144,6 +236,10 @@ public class Builder {
     }
 
     /**
+     * Construye un mensaje XML para dar la indicación de declaración 
+     * de un documento. Se debe considerar que el presente metodo no
+     * realiza validaciones sobre los datos y debe verificarse como mínimo los
+     * formatos antes de realizar la consulta.
      *
      * @param clientId RUC del emisor del documento
      * @param documentType tipo de documento
@@ -155,6 +251,10 @@ public class Builder {
     }
 
     /**
+     * Construye un mensaje XML para dar la indicación de declaración 
+     * de un documento. Se debe considerar que el presente metodo no
+     * realiza validaciones sobre los datos y debe verificarse como mínimo los
+     * formatos antes de realizar la consulta.
      *
      * @param clientId RUC del emisor del documento
      * @param documentType tipo de documento
@@ -181,10 +281,12 @@ public class Builder {
     }
 
     /**
+     * Genera el texto XML que representa a un objeto.
      *
-     * @param <T>
-     * @param o
-     * @return
+     * @param <T> tipo genérico de la entidad
+     * @param o objeto a serializar
+     * @return texto xml que representa la entidad
+     * @throws BuilderException cuando ocurre un error en el procesamiento
      */
     public <T> String marshall(T o) {
         try {
@@ -198,18 +300,27 @@ public class Builder {
             return s;
         } catch (JAXBException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException("Unable to marshall " + o + ". Possible caus is... " + ex.getMessage(), ex);
+            throw new BuilderException("Unable to marshall " + o + ". Possible caus is... " + ex.getMessage(), ex);
         }
     }
 
-    public <T> T unmarshall(Class<T> clazz, String text) {
+    /**
+     * Genera el objeto representado por un texto XML.
+     * 
+     * @param <T> tipo genérico de la entidad
+     * @param clazz clase de la entidad a interpretar
+     * @param text texto XML a interpretar
+     * @return entidad leída desde el texto XML
+     * @throws BuilderException cuando ocurre un error en el procesamiento
+     */
+    public <T> T unmarshall(Class<T> clazz, String text) throws BuilderException {
         try {
             JAXBContext context = JAXBContext.newInstance(clazz);
             Unmarshaller u = context.createUnmarshaller();
             T t = (T) u.unmarshal(new StringReader(text));
             return t;
         } catch (JAXBException ex) {
-            throw new RuntimeException("Unable to unmarshall " + text + ". Possible caus is... " + ex.getMessage(), ex);
+            throw new BuilderException("Unable to unmarshall " + text + ". Possible caus is... " + ex.getMessage(), ex);
         }
 
     }
