@@ -23,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "BL_DOCUMENT")
-@SequenceGenerator(name = "DOCUMENT_ID_GENERATOR", sequenceName = "DOCUMENT_SEQ")
+@SequenceGenerator(name = "DOCUMENT_ID_GENERATOR", sequenceName = "BL_DOCUMENT_SEQ")
 public class Document implements Serializable {
 
     @Id

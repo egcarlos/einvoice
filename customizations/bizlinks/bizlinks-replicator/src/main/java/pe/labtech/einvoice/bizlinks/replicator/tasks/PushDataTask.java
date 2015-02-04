@@ -24,7 +24,7 @@ import pe.labtech.einvoice.bizlinks.replicator.entity.Header;
 @Stateless
 public class PushDataTask implements PushDataTaskLocal {
 
-    @PersistenceContext(unitName = "hv_PU")
+    @PersistenceContext(unitName = "bizlinks_PU")
     EntityManager em;
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)

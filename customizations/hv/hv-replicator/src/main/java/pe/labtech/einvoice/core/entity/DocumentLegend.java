@@ -44,6 +44,12 @@ public class DocumentLegend implements Serializable {
         return document;
     }
 
+    public DocumentLegend(String code, Long order, String value) {
+        this.code = code;
+        this.order = order;
+        this.value = value;
+    }
+
     public void setDocument(Document document) {
         this.document = document;
     }

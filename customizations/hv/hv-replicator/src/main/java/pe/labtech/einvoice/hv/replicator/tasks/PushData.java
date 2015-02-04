@@ -38,7 +38,7 @@ public class PushData {
         working = new AtomicBoolean(false);
     }
 
-    @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
+//    @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
     public void handle() {
         if (!working.compareAndSet(false, true)) {
             Logger.getLogger(this.getClass().getSimpleName()).fine("Process busy... waiting");

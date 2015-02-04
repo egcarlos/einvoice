@@ -18,6 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentAttribute;
+import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
+import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
 import pe.labtech.einvoice.core.entity.ItemAuxiliar;
@@ -135,6 +137,26 @@ public class PullDataTask implements PullDataTaskLocal {
 
         d.setAttributes(da);
         d.getAttributes().forEach(child -> child.setDocument(d));
+
+        //agregando los campos de leyenda
+        d.setLegends(
+                Arrays.asList(
+                        new DocumentLegend("1000", 1l, h.getCley1())
+                )
+                .stream()
+                .filter(a -> a.getValue() != null && !"".equals(a.getValue()))
+                .collect(Collectors.toList())
+        );
+
+        d.setAuxiliars(
+                Arrays.asList(
+                        new DocumentAuxiliar("9999", "250", 1l, h.getCaux36())
+                )
+                .stream()
+                .filter(a -> a.getValue() != null && !"".equals(a.getValue()))
+                .collect(Collectors.toList())
+        );
+
         List<Item> items = mapItems(h, d);
         items.forEach(child -> child.setDocument(d));
         d.setItems(items);

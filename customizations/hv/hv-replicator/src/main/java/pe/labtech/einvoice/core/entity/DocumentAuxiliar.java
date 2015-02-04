@@ -42,6 +42,13 @@ public class DocumentAuxiliar implements Serializable {
     public DocumentAuxiliar() {
     }
 
+    public DocumentAuxiliar(String code, String length, Long order, String value) {
+        this.code = code;
+        this.length = length;
+        this.order = order;
+        this.value = value;
+    }
+
     public Document getDocument() {
         return document;
     }
