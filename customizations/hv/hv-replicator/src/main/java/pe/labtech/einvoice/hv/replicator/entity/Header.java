@@ -163,15 +163,18 @@ public class Header implements Serializable {
     private BigDecimal cbonificacion;
     @Column(name = "CHABILITADO")
     private Character chabilitado;
-    @Size(max = 100)
+    @Size(max = 200)
     @Column(name = "CLEY1")
     private String cley1;
-    @Size(max = 100)
+    @Size(max = 200)
     @Column(name = "CLEY2")
     private String cley2;
-    @Size(max = 100)
+    @Size(max = 200)
     @Column(name = "CLEY3")
     private String cley3;
+    @Size(max = 200)
+    @Column(name = "CLEY4")
+    private String cley4;
     @Size(max = 40)
     @Column(name = "CAUX1")
     private String caux1;
@@ -277,7 +280,7 @@ public class Header implements Serializable {
     @Size(max = 100)
     @Column(name = "CAUX35")
     private String caux35;
-    @Size(max = 100)
+    @Size(max = 250)
     @Column(name = "CAUX36")
     private String caux36;
     @Column(name = "CESTADO")
@@ -776,6 +779,14 @@ public class Header implements Serializable {
 
     public void setCley3(String cley3) {
         this.cley3 = cley3;
+    }
+
+    public String getCley4() {
+        return cley4;
+    }
+
+    public void setCley4(String cley4) {
+        this.cley4 = cley4;
     }
 
     public String getCaux1() {

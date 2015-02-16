@@ -21,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "BL_DOCUMENT_ATTR")
-public class DocumentAttribute implements Serializable {
+public class DocumentAttribute implements Serializable, ValueHolder {
 
     @Id
     @ManyToOne
@@ -62,6 +62,10 @@ public class DocumentAttribute implements Serializable {
             df.setMaximumFractionDigits(2);
             df.setMinimumFractionDigits(2);
             df.setGroupingUsed(false);
+            df.setGroupingUsed(false);
+            //TODO USAR EL DECIMAL FORMAT SEPARATOR EN LUGAR DEL REPLACE STRING
+            //new DecimalFormatSymbols().setDecimalSeparator('.');
+            //df.setDecimalFormatSymbols(null);
             this.value = df.format(value).replace(",", ".");
         }
     }

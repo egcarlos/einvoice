@@ -131,6 +131,9 @@ public class SignTask implements SignTaskLocal {
             if (source.getAuxiliars() != null) {
                 source.getAuxiliars().forEach(a -> mapAuxiliar(target, a.getCode(), a.getLength(), a.getOrder(), a.getValue()));
             }
+            if (source.getLegends() != null) {
+                source.getLegends().forEach(a -> mapLegend(target, a.getCode(), a.getOrder(), a.getValue(), a.getAdditional()));
+            }
             if (source.getItems() != null) {
                 List<DocumentItem> items = source.getItems().stream()
                         .sorted((a, b) -> a.getId().compareTo(b.getId()))
@@ -176,6 +179,25 @@ public class SignTask implements SignTaskLocal {
             //TODO can't handle invalid mapping
             Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Can''t map property " + attribute, ex);
         }
+    }
+
+    //BUGFIX CAMPO LEGEND
+    //TODO replicar el mapeo de adicionales a otros deployments
+    private void mapLegend(Object target, String code, Long order, String value, String additional) {
+        if (value == null) {
+            return;
+        }
+        try {
+            String codeKey = "codigoLeyenda_" + order;
+            PropertyUtils.setProperty(target, codeKey, code);
+            String textKey = "textoLeyenda_" + order;
+            PropertyUtils.setProperty(target, textKey, value);
+            String addiKey = "textoAdicionalLeyenda_" + order;
+            PropertyUtils.setProperty(target, addiKey, additional);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+            Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Can''t map legend " + code, ex);
+        }
+
     }
 
     private void mapAuxiliar(Object target, String code, String length, Long order, String value) {

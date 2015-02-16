@@ -22,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "BL_ITEM_ATTR")
-public class ItemAttribute implements Serializable {
+public class ItemAttribute implements Serializable, ValueHolder {
 
     @Id
     @ManyToOne

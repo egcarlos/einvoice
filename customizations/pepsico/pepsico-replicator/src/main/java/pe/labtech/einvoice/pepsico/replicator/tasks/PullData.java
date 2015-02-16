@@ -41,7 +41,7 @@ public class PullData {
     @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
     public void handle() {
         if (!working.compareAndSet(false, true)) {
-            Logger.getLogger(this.getClass().getSimpleName()).info("Process busy... waiting");
+            Logger.getLogger(this.getClass().getSimpleName()).fine("Process busy... waiting");
             //already working, just wait until it ends
             return;
         }

@@ -22,7 +22,6 @@ import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
 import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
-import pe.labtech.einvoice.core.entity.ItemAuxiliar;
 import pe.labtech.einvoice.hv.replicator.entity.Detail;
 import pe.labtech.einvoice.hv.replicator.entity.Header;
 
@@ -141,21 +140,36 @@ public class PullDataTask implements PullDataTaskLocal {
         //agregando los campos de leyenda
         d.setLegends(
                 Arrays.asList(
-                        new DocumentLegend("1000", 1l, h.getCley1())
+                        new DocumentLegend("1000", 1l, h.getCley1()),
+                        //TODO consultar con bizlinks la creación del código
+                        //new DocumentLegend("    ", 1l, h.getCley1()),
+                        new DocumentLegend(
+                                "3000",
+                                3l,
+                                fragment(h.getCley3(), 100, 0),
+                                fragment(h.getCley3(), 100, 1)
+                        ),
+                        new DocumentLegend("3001", 4l, h.getCley4())
                 )
                 .stream()
                 .filter(a -> a.getValue() != null && !"".equals(a.getValue()))
                 .collect(Collectors.toList())
         );
 
+        d.getLegends().forEach(child -> child.setDocument(d));
+
         d.setAuxiliars(
                 Arrays.asList(
+                        new DocumentAuxiliar("9024", "40", 1l, h.getCaux1()),
+                        //TODO consultar con bizlinks la creación del código
+                        //new DocumentAuxiliar("    ", "100", 1l, h.getCaux21()),
                         new DocumentAuxiliar("9999", "250", 1l, h.getCaux36())
                 )
                 .stream()
                 .filter(a -> a.getValue() != null && !"".equals(a.getValue()))
                 .collect(Collectors.toList())
         );
+        d.getAuxiliars().forEach(child -> child.setDocument(d));
 
         List<Item> items = mapItems(h, d);
         items.forEach(child -> child.setDocument(d));
@@ -168,6 +182,20 @@ public class PullDataTask implements PullDataTaskLocal {
         String fecha = h.getCfemision();
         fecha = fecha.substring(6, 10) + "-" + fecha.substring(3, 5) + "-" + fecha.substring(0, 2);
         return fecha;
+    }
+
+    private static String fragment(String source, int length, int index) {
+        if (length <= 0 || source == null) {
+            return null;
+        }
+        String working = source.trim();
+        int beginIndex = index * length;
+        int endIndex = Math.min(beginIndex + length, working.length());
+        if (endIndex <= beginIndex) {
+            return null;
+        }
+        return working.substring(beginIndex, endIndex);
+
     }
 
     private List<Item> mapItems(Header h, Document document) {

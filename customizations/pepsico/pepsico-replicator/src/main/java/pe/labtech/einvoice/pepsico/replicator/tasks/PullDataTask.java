@@ -7,6 +7,7 @@ package pe.labtech.einvoice.pepsico.replicator.tasks;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +22,7 @@ import pe.labtech.einvoice.core.entity.DocumentAttribute;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
 import pe.labtech.einvoice.core.entity.ItemAuxiliar;
+import pe.labtech.einvoice.core.entity.ValueHolder;
 import pe.labtech.einvoice.pepsico.replicator.entity.Detail;
 import pe.labtech.einvoice.pepsico.replicator.entity.Header;
 
@@ -46,7 +48,7 @@ public class PullDataTask implements PullDataTaskLocal {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     @Override
     public void handle() {
-        Logger.getLogger(this.getClass().getSimpleName()).info("Dispatching for data pulling");
+        Logger.getLogger(this.getClass().getSimpleName()).fine("Dispatching for data pulling");
         //accion a ejecutar con cada 
         Consumer<Header> forHeaders = (h) -> {
             h.setCestado('L');
@@ -58,6 +60,9 @@ public class PullDataTask implements PullDataTaskLocal {
 
         List<Header> hs = em.createQuery(HEADER_QUERY, Header.class)
                 .getResultList();
+        if (hs.isEmpty()) {
+            return;
+        }
         Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "pulling items: {0}", hs.size());
         hs.forEach(forHeaders);
     }
@@ -125,7 +130,7 @@ public class PullDataTask implements PullDataTaskLocal {
                 new DocumentAttribute("inHabilitado", h.getChabilitado())
         )
                 .stream()
-                .filter(a -> a.getValue() != null)
+                .filter(a -> updateValue(a) != null)
                 .collect(Collectors.toList());
 
         d.setAttributes(da);
@@ -174,7 +179,7 @@ public class PullDataTask implements PullDataTaskLocal {
                 new ItemAttribute("importeIsc", detail.getDisc())
         )
                 .stream()
-                .filter(a -> a.getValue() != null)
+                .filter(a -> updateValue(a) != null)
                 .collect(Collectors.toList());
 
         attr.forEach(child -> child.setItem(item));
@@ -196,4 +201,24 @@ public class PullDataTask implements PullDataTaskLocal {
         return item;
     }
 
+    //Actualiza los valores leidos de los atributos y auxiliares permitiendo
+    //filtrar todos los que tienen valores nulos
+    private String updateValue(ValueHolder a) {
+        String value = trimToNull(a.getValue());
+        a.setValue(value);
+        return value;
+    }
+
+    public static String trimToNull(final String str) {
+        final String ts = trim(str);
+        return isEmpty(ts) ? null : ts;
+    }
+
+    public static String trim(final String str) {
+        return str == null ? null : str.trim();
+    }
+
+    public static boolean isEmpty(final CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
 }

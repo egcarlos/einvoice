@@ -37,6 +37,9 @@ public class DocumentLegend implements Serializable {
     @Column(name = "AUX_VALUE", length = 1000)
     private String value;
 
+    @Column(name = "AUX_VALUE_ADD", length = 1000)
+    private String additional;
+
     public DocumentLegend() {
     }
 
@@ -48,6 +51,11 @@ public class DocumentLegend implements Serializable {
         this.code = code;
         this.order = order;
         this.value = value;
+    }
+
+    public DocumentLegend(String code, Long order, String value, String additional) {
+        this(code, order, value);
+        this.additional = additional;
     }
 
     public void setDocument(Document document) {
@@ -76,6 +84,14 @@ public class DocumentLegend implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getAdditional() {
+        return additional;
+    }
+
+    public void setAdditional(String additional) {
+        this.additional = additional;
     }
 
     @Override

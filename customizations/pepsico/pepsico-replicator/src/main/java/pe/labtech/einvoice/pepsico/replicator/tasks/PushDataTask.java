@@ -47,7 +47,6 @@ public class PushDataTask implements PushDataTaskLocal {
                         h.setLgFirmaHash(d.getHash());
                         h.setCestado('P');
                     });
-
         };
 
         List<Document> hs = em.createQuery("SELECT o FROM Document o where o.status = :status and o.step = :step", Document.class)
@@ -55,8 +54,10 @@ public class PushDataTask implements PushDataTaskLocal {
                 .setParameter("step", "DECLARE")
                 .getResultList();
 
+        if (hs.isEmpty()) {
+            return;
+        }
         Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "pushing items: {0}", hs.size());
         hs.forEach(forDocuments);
-
     }
 }
