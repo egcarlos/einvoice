@@ -31,7 +31,7 @@ public class PushDataTask implements PushDataTaskLocal {
     @Override
     public void handle() {
 
-        Logger.getLogger(this.getClass().getSimpleName()).info("Dispatching for data pushing");
+        Logger.getLogger(this.getClass().getSimpleName()).fine("Dispatching for data pushing");
         //accion a ejecutar con cada 
         Consumer<Document> forDocuments = (d) -> {
             d.setStatus("COMPLETE-PUSHED");
