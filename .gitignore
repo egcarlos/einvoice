@@ -64,3 +64,5 @@ $RECYCLE.BIN/
 /customizations/hv/hv-replicator/target/
 core-components/einvoice-ws-client/src/wsdl/.LCKinvoker.wsdl~
 /customizations/bizlinks/bizlinks-replicator/target/
+/core-components/einvoice-model/target/
+/core-components/einvoice-ws-clientcdi/target/
