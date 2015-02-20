@@ -4,7 +4,7 @@
 
     <groupId>pe.labtech.einvoice</groupId>
     <artifactId>einvoice-ws-client</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <build>
@@ -52,7 +52,7 @@
                     <include>wsdl/**</include>
                 </includes>
             </resource>
-<!--            <resource>
+            <!--            <resource>
                 <directory>src/main/resources</directory>
                 <targetPath></targetPath>
                 <includes>
