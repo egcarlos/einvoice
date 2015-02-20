@@ -31,15 +31,12 @@ public class DocumentLoader implements DocumentLoaderLocal {
 
     @Override
     public List<Document> loadForSignature() {
-        TypedQuery<Document> query = em.createQuery("SELECT o FROM Document o WHERE (o.documentNumber like 'F%' or o.documentNumber like 'B%') and o.step IS NULL or (o.step = :step and o.status = :status)", Document.class);
-        query.setParameter("step", "SIGN");
-        query.setParameter("status", "FIXED");
+        TypedQuery<Document> query = em.createNamedQuery("Document.loadForSignature", Document.class);
         List<Document> documents = query.getResultList();
-
         documents.forEach(d -> {
             d.setStep("SIGN");
             d.setStatus("DISPATCHING");
-            createEvent(d, "INFO", "Locked for signature");
+            this.createEvent(d, "INFO", "Locked for signature");
         });
         return documents;
     }

@@ -66,3 +66,6 @@ core-components/einvoice-ws-client/src/wsdl/.LCKinvoker.wsdl~
 /customizations/bizlinks/bizlinks-replicator/target/
 /core-components/einvoice-model/target/
 /core-components/einvoice-ws-clientcdi/target/
+/core-components/sync/target/
+/core-components/einvoice-process-signonline/target/
+/core-components/einvoice-process-declare/target/
