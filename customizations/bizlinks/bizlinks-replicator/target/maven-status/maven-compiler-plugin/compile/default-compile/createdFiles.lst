@@ -1,0 +1,12 @@
+pe\labtech\einvoice\bizlinks\replicator\entity\SummaryHeader.class
+pe\labtech\einvoice\bizlinks\replicator\entity\SummaryHeaderPK.class
+pe\labtech\einvoice\bizlinks\replicator\entity\CancelHeaderPK.class
+pe\labtech\einvoice\bizlinks\replicator\entity\CancelDetail.class
+pe\labtech\einvoice\bizlinks\replicator\entity\DocumentDetailPK.class
+pe\labtech\einvoice\bizlinks\replicator\entity\CancelDetailPK.class
+pe\labtech\einvoice\bizlinks\replicator\entity\DocumentDetail.class
+pe\labtech\einvoice\bizlinks\replicator\entity\SummaryDetailPK.class
+pe\labtech\einvoice\bizlinks\replicator\entity\CancelHeader.class
+pe\labtech\einvoice\bizlinks\replicator\entity\DocumentHeader.class
+pe\labtech\einvoice\bizlinks\replicator\entity\DocumentHeaderPK.class
+pe\labtech\einvoice\bizlinks\replicator\entity\SummaryDetail.class

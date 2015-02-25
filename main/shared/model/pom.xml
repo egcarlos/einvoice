@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pe.labtech.einvoice</groupId>
-    <artifactId>bizlinks-replicator</artifactId>
+    <artifactId>einvoice-model</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
-    <name>bizlinks-replicator</name>
+    <name>einvoice-model</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
