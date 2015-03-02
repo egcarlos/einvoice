@@ -60,6 +60,7 @@ $RECYCLE.BIN/
 *.msp
 
 /main/process/declare/target/
+/main/process/replicate/target/
 /main/process/signonline/target/
 /main/process/sync/target/
 /main/releases/core/target/
@@ -68,4 +69,4 @@ $RECYCLE.BIN/
 /main/shared/wsclient/target/
 /main/shared/wsclientcdi/target/
 /main/shared/replication-test/target/
-/main/process/replicate/target/
+/customizations/hv/hv-replicator
