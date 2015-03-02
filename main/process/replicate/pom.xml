@@ -3,54 +3,43 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pe.labtech.einvoice</groupId>
-    <artifactId>einvoice-core</artifactId>
+    <artifactId>einvoice-process-replicate</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>ejb</packaging>
 
-    <name>einvoice-core</name>
+    <name>einvoice-process-replicate</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>einvoice-process-signonline</artifactId>
+            <artifactId>einvoice-model</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>einvoice-process-sync</artifactId>
+            <artifactId>einvoice-model-public</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>einvoice-process-declare</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>einvoice-process-replicate</artifactId>
-            <version>${project.version}</version>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.2</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
+            <artifactId>javaee-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>einvoice-core</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.0.2.Final</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -65,10 +54,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
+                <artifactId>maven-ejb-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <ejbVersion>3.1</ejbVersion>
                 </configuration>
             </plugin>
             <plugin>

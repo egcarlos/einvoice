@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.bizlinks.replicator.entity;
+package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -24,12 +26,25 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "SPE_EINVOICEHEADER")
 @NamedQueries({
-    @NamedQuery(name = "Header.findAll", query = "SELECT h FROM Header h")})
-public class Header implements Serializable {
+    @NamedQuery(
+            name = "DocumentHeader.findIdWithState",
+            query = "SELECT o.id FROM DocumentHeader o where o.bl_estadoRegistro = :status"
+    ),
+    @NamedQuery(
+            name = "DocumentHeader.safeUpdateStatus",
+            query = "UPDATE DocumentHeader o SET o.bl_estadoRegistro = :newstatus WHERE o.bl_estadoRegistro = :oldstatus AND o.id = :id"
+    )
+})
+public class DocumentHeader implements Serializable {
 
     @EmbeddedId
-    private HeaderPK id;
+    private DocumentHeaderPK id;
 
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Basic(optional = false)
+    @Column(name = "razonSocialEmisor", length = 100, nullable = false)
+    private String razonSocialEmisor;
     @Size(max = 100)
     @Column(name = "nombreComercialEmisor", length = 100)
     private String nombreComercialEmisor;
@@ -114,7 +129,7 @@ public class Header implements Serializable {
     @NotNull
     @Size(min = 1, max = 15)
     @Basic(optional = false)
-    @Column(name = "totalValorVentaNetoOpExoneradas", length = 15, nullable = false)
+    @Column(name = "totalValorVentaNetoOpExonerada", length = 15, nullable = false)
     private String totalValorVentaNetoOpExoneradas;
     @Size(max = 18)
     @Column(name = "totalValorVentaNetoOpGratuitas", length = 18)
@@ -146,16 +161,16 @@ public class Header implements Serializable {
     @Column(name = "totalVenta", length = 15, nullable = false)
     private String totalVenta;
     @Size(max = 2)
-    @Column(name = "tipoDocumentoReferenciaPrincipal", length = 2)
+    @Column(name = "tipoDocumentoReferenciaPrincip", length = 2)
     private String tipoDocumentoReferenciaPrincipal;
     @Size(max = 13)
-    @Column(name = "numeroDocumentoReferenciaPrincipal", length = 13)
+    @Column(name = "numeroDocumentoReferenciaPrinc", length = 13)
     private String numeroDocumentoReferenciaPrincipal;
     @Size(max = 2)
-    @Column(name = "tipoDocumentoReferenciaCorregido", length = 2)
+    @Column(name = "tipoDocumentoReferenciaCorregi", length = 2)
     private String tipoDocumentoReferenciaCorregido;
     @Size(max = 13)
-    @Column(name = "numeroDocumentoReferenciaCorregido", length = 13)
+    @Column(name = "numeroDocumentoReferenciaCorre", length = 13)
     private String numeroDocumentoReferenciaCorregido;
     @Size(max = 15)
     @Column(name = "baseImponiblePercepcion", length = 15)
@@ -227,31 +242,31 @@ public class Header implements Serializable {
     @Column(name = "tipoReferenciaAdicional_1", length = 2)
     private String tipoReferenciaAdicional_1;
     @Size(max = 30)
-    @Column(name = "numeroDocumentoReferenciaAdicional_1", length = 30)
+    @Column(name = "numeroDocumentoRefeAdicional_1", length = 30)
     private String numeroDocumentoReferenciaAdicional_1;
     @Size(max = 2)
     @Column(name = "tipoReferenciaAdicional_2", length = 2)
     private String tipoReferenciaAdicional_2;
     @Size(max = 30)
-    @Column(name = "numeroDocumentoReferenciaAdicional_2", length = 30)
+    @Column(name = "numeroDocumentoRefeAdicional_2", length = 30)
     private String numeroDocumentoReferenciaAdicional_2;
     @Size(max = 2)
     @Column(name = "tipoReferenciaAdicional_3", length = 2)
     private String tipoReferenciaAdicional_3;
     @Size(max = 30)
-    @Column(name = "numeroDocumentoReferenciaAdicional_3", length = 30)
+    @Column(name = "numeroDocumentoRefeAdicional_3", length = 30)
     private String numeroDocumentoReferenciaAdicional_3;
     @Size(max = 2)
     @Column(name = "tipoReferenciaAdicional_4", length = 2)
     private String tipoReferenciaAdicional_4;
     @Size(max = 30)
-    @Column(name = "numeroDocumentoReferenciaAdicional_4", length = 30)
+    @Column(name = "numeroDocumentoRefeAdicional_4", length = 30)
     private String numeroDocumentoReferenciaAdicional_4;
     @Size(max = 2)
     @Column(name = "tipoReferenciaAdicional_5", length = 2)
     private String tipoReferenciaAdicional_5;
     @Size(max = 30)
-    @Column(name = "numeroDocumentoReferenciaAdicional_5", length = 30)
+    @Column(name = "numeroDocumentoRefeAdicional_5", length = 30)
     private String numeroDocumentoReferenciaAdicional_5;
     @Size(max = 4)
     @Column(name = "codigoLeyenda_1", length = 4)
@@ -872,37 +887,43 @@ public class Header implements Serializable {
     @Column(name = "textoAuxiliar250_25", length = 250)
     private String textoAuxiliar250_25;
 
+    //CAMPOS DE DATOS
     //CAMPOS DE RESPUESTA
-    @Column(name = "estado", length = 5)
-    private String estado;
-    @Size(max = 1000)
-    @Column(name = "rutaXML")
-    private String crutaxml;
-    @Size(max = 1000)
-    @Column(name = "rutaPDF")
-    private String crutapdf;
-    @Column(name = "estado_proceso")
-    private Character lgProcessStatus;
-    @Size(max = 20)
-    @Column(name = "estado_registro")
-    private String lgRecordStatus;
-    @Size(max = 4000)
-    @Column(name = "firma")
-    private String lgFirma;
-    @Size(max = 4000)
-    @Column(name = "hashFirma")
-    private String lgFirmaHash;
-    @Size(max = 4000)
-    @Column(name = "mensaje_1")
-    private String lgLoadMessages;
-    @Size(max = 4000)
-    @Column(name = "mensaje_2")
-    private String lgServiceResponse;
+    @Column(name = "bl_firma", length = 4000)
+    private String bl_firma;
+    @Column(name = "bl_hashFirma", length = 4000)
+    private String bl_hashFirma;
+    @Column(name = "bl_estadoProceso", length = 40)
+    private String bl_estadoProceso;
+    @Column(name = "bl_estadoRegistro", length = 40)
+    private String bl_estadoRegistro;
+    @Column(name = "bl_mensaje", length = 4000)
+    private String bl_mensaje;
+    @Column(name = "bl_mensajeSunat", length = 4000)
+    private String bl_mensajeSunat;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "bl_pdf")
+    private byte[] bl_pdf;
+    @Column(name = "bl_urlpdf", length = 4000)
+    private String bl_urlpdf;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "bl_xmlubl", length = 4000)
+    private byte[] bl_xmlubl;
+    @Column(name = "bl_urlxmlubl", length = 4000)
+    private String bl_urlxmlubl;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "bl_cdr")
+    private byte[] bl_cdr;
+    @Column(name = "bl_urlcdr", length = 4000)
+    private String bl_urlcdr;
 
-    public Header() {
+    public DocumentHeader() {
     }
 
-    public Header(HeaderPK id) {
+    public DocumentHeader(DocumentHeaderPK id) {
         this.id = id;
     }
 
@@ -921,19 +942,27 @@ public class Header implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Header other = (Header) obj;
+        final DocumentHeader other = (DocumentHeader) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
     }
 
-    public HeaderPK getId() {
+    public DocumentHeaderPK getId() {
         return id;
     }
 
-    public void setId(HeaderPK id) {
+    public void setId(DocumentHeaderPK id) {
         this.id = id;
+    }
+
+    public String getRazonSocialEmisor() {
+        return razonSocialEmisor;
+    }
+
+    public void setRazonSocialEmisor(String razonSocialEmisor) {
+        this.razonSocialEmisor = razonSocialEmisor;
     }
 
     public String getNombreComercialEmisor() {
@@ -3120,76 +3149,100 @@ public class Header implements Serializable {
         this.textoAuxiliar250_25 = textoAuxiliar250_25;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getBl_firma() {
+        return bl_firma;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setBl_firma(String bl_firma) {
+        this.bl_firma = bl_firma;
     }
 
-    public String getCrutaxml() {
-        return crutaxml;
+    public String getBl_hashFirma() {
+        return bl_hashFirma;
     }
 
-    public void setCrutaxml(String crutaxml) {
-        this.crutaxml = crutaxml;
+    public void setBl_hashFirma(String bl_hashFirma) {
+        this.bl_hashFirma = bl_hashFirma;
     }
 
-    public String getCrutapdf() {
-        return crutapdf;
+    public String getBl_estadoProceso() {
+        return bl_estadoProceso;
     }
 
-    public void setCrutapdf(String crutapdf) {
-        this.crutapdf = crutapdf;
+    public void setBl_estadoProceso(String bl_estadoProceso) {
+        this.bl_estadoProceso = bl_estadoProceso;
     }
 
-    public Character getLgProcessStatus() {
-        return lgProcessStatus;
+    public String getBl_estadoRegistro() {
+        return bl_estadoRegistro;
     }
 
-    public void setLgProcessStatus(Character lgProcessStatus) {
-        this.lgProcessStatus = lgProcessStatus;
+    public void setBl_estadoRegistro(String bl_estadoRegistro) {
+        this.bl_estadoRegistro = bl_estadoRegistro;
     }
 
-    public String getLgRecordStatus() {
-        return lgRecordStatus;
+    public String getBl_mensaje() {
+        return bl_mensaje;
     }
 
-    public void setLgRecordStatus(String lgRecordStatus) {
-        this.lgRecordStatus = lgRecordStatus;
+    public void setBl_mensaje(String bl_mensaje) {
+        this.bl_mensaje = bl_mensaje;
     }
 
-    public String getLgFirma() {
-        return lgFirma;
+    public String getBl_mensajeSunat() {
+        return bl_mensajeSunat;
     }
 
-    public void setLgFirma(String lgFirma) {
-        this.lgFirma = lgFirma;
+    public void setBl_mensajeSunat(String bl_mensajeSunat) {
+        this.bl_mensajeSunat = bl_mensajeSunat;
     }
 
-    public String getLgFirmaHash() {
-        return lgFirmaHash;
+    public byte[] getBl_pdf() {
+        return bl_pdf;
     }
 
-    public void setLgFirmaHash(String lgFirmaHash) {
-        this.lgFirmaHash = lgFirmaHash;
+    public void setBl_pdf(byte[] bl_pdf) {
+        this.bl_pdf = bl_pdf;
     }
 
-    public String getLgLoadMessages() {
-        return lgLoadMessages;
+    public String getBl_urlpdf() {
+        return bl_urlpdf;
     }
 
-    public void setLgLoadMessages(String lgLoadMessages) {
-        this.lgLoadMessages = lgLoadMessages;
+    public void setBl_urlpdf(String bl_urlpdf) {
+        this.bl_urlpdf = bl_urlpdf;
     }
 
-    public String getLgServiceResponse() {
-        return lgServiceResponse;
+    public byte[] getBl_xmlubl() {
+        return bl_xmlubl;
     }
 
-    public void setLgServiceResponse(String lgServiceResponse) {
-        this.lgServiceResponse = lgServiceResponse;
+    public void setBl_xmlubl(byte[] bl_xmlubl) {
+        this.bl_xmlubl = bl_xmlubl;
+    }
+
+    public String getBl_urlxmlubl() {
+        return bl_urlxmlubl;
+    }
+
+    public void setBl_urlxmlubl(String bl_urlxmlubl) {
+        this.bl_urlxmlubl = bl_urlxmlubl;
+    }
+
+    public byte[] getBl_cdr() {
+        return bl_cdr;
+    }
+
+    public void setBl_cdr(byte[] bl_cdr) {
+        this.bl_cdr = bl_cdr;
+    }
+
+    public String getBl_urlcdr() {
+        return bl_urlcdr;
+    }
+
+    public void setBl_urlcdr(String bl_urlcdr) {
+        this.bl_urlcdr = bl_urlcdr;
     }
 
 }

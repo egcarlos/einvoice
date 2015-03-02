@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.bizlinks.replicator.entity;
+package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,8 +16,7 @@ import javax.validation.constraints.Size;
  *
  * @author Carlos
  */
-@Embeddable
-public class HeaderPK implements Serializable {
+public class CancelHeaderPK implements Serializable {
 
     @Size(min = 1, max = 1)
     @NotNull
@@ -30,33 +28,27 @@ public class HeaderPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "numeroDocumentoEmisor", length = 20, nullable = false, updatable = false)
     private String numeroDocumentoEmisor;
-    @Size(min = 2, max = 12)
-    @NotNull
-    @Column(name = "tipoDocumento", length = 2, nullable = false, updatable = false)
-    private String tipoDocumento;
-    @Size(min = 13, max = 13)
+    @Size(min = 1, max = 17)
     @NotNull
     @Basic(optional = false)
-    @Column(name = "serieNumero", length = 13, nullable = false, updatable = false)
-    private String serieNumero;
+    @Column(name = "resumenId", length = 17, nullable = false, updatable = false)
+    private String resumenId;
 
-    public HeaderPK() {
+    public CancelHeaderPK() {
     }
 
-    public HeaderPK(String tipoDocumentoEmisor, String numeroDocumentoEmisor, String tipoDocumento, String serieNumero) {
+    public CancelHeaderPK(String tipoDocumentoEmisor, String numeroDocumentoEmisor, String resumenId) {
         this.tipoDocumentoEmisor = tipoDocumentoEmisor;
         this.numeroDocumentoEmisor = numeroDocumentoEmisor;
-        this.tipoDocumento = tipoDocumento;
-        this.serieNumero = serieNumero;
+        this.resumenId = resumenId;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.tipoDocumentoEmisor);
-        hash = 71 * hash + Objects.hashCode(this.numeroDocumentoEmisor);
-        hash = 71 * hash + Objects.hashCode(this.tipoDocumento);
-        hash = 71 * hash + Objects.hashCode(this.serieNumero);
+        hash = 19 * hash + Objects.hashCode(this.tipoDocumentoEmisor);
+        hash = 19 * hash + Objects.hashCode(this.numeroDocumentoEmisor);
+        hash = 19 * hash + Objects.hashCode(this.resumenId);
         return hash;
     }
 
@@ -68,17 +60,14 @@ public class HeaderPK implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final HeaderPK other = (HeaderPK) obj;
+        final CancelHeaderPK other = (CancelHeaderPK) obj;
         if (!Objects.equals(this.tipoDocumentoEmisor, other.tipoDocumentoEmisor)) {
             return false;
         }
         if (!Objects.equals(this.numeroDocumentoEmisor, other.numeroDocumentoEmisor)) {
             return false;
         }
-        if (!Objects.equals(this.tipoDocumento, other.tipoDocumento)) {
-            return false;
-        }
-        if (!Objects.equals(this.serieNumero, other.serieNumero)) {
+        if (!Objects.equals(this.resumenId, other.resumenId)) {
             return false;
         }
         return true;
@@ -100,20 +89,12 @@ public class HeaderPK implements Serializable {
         this.numeroDocumentoEmisor = numeroDocumentoEmisor;
     }
 
-    public String getTipoDocumento() {
-        return tipoDocumento;
+    public String getResumenId() {
+        return resumenId;
     }
 
-    public void setTipoDocumento(String tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-
-    public String getSerieNumero() {
-        return serieNumero;
-    }
-
-    public void setSerieNumero(String serieNumero) {
-        this.serieNumero = serieNumero;
+    public void setResumenId(String resumenId) {
+        this.resumenId = resumenId;
     }
 
 }

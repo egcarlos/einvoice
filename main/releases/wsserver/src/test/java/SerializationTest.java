@@ -89,7 +89,7 @@ public class SerializationTest {
         i.getAttributes().add(new ItemAttribute("unidadMedida", "NIU"));
         i.getAttributes().add(new ItemAttribute("importeUnitarioSinImpuesto", "100.00"));
         i.getAttributes().add(new ItemAttribute("importeUnitarioConImpuesto", "118.00"));
-        i.getAttributes().add(new ItemAttribute("codigoImporteUnitarioConImpues", "01"));
+        i.getAttributes().add(new ItemAttribute("codigoImporteUnitarioConImpuesto", "01"));
         i.getAttributes().add(new ItemAttribute("importeTotalSinImpuesto", "100.00"));
         i.getAttributes().add(new ItemAttribute("codigoRazonExoneracion", "10"));
         i.getAttributes().add(new ItemAttribute("importeIgv", "18.00"));

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.bizlinks.replicator.entity;
+package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -24,13 +24,21 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "SPE_EINVOICEDETAIL")
 @NamedQueries({
-    @NamedQuery(name = "Detail.findAll", query = "SELECT d FROM Detail d")})
-public class Detail implements Serializable {
+    @NamedQuery(
+            name = "DocumentDetail.findForHeaderId",
+            query = "SELECT o FROM DocumentDetail o "
+            + "WHERE o.id.tipoDocumentoEmisor = :tipoDocumentoEmisor "
+            + "AND o.id.numeroDocumentoEmisor = :numeroDocumentoEmisor "
+            + "AND o.id.tipoDocumento = :tipoDocumento "
+            + "AND o.id.serieNumero = :serieNumero"
+    )
+})
+public class DocumentDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private DetailPK detailPK;
+    private DocumentDetailPK id;
     @Size(max = 30)
     @Column(name = "codigoProducto", length = 30)
     private String codigoProducto;
@@ -62,7 +70,8 @@ public class Detail implements Serializable {
     @NotNull
     @Size(min = 1, max = 2)
     @Basic(optional = false)
-    @Column(name = "codigoImporteUnitarioConImpuesto", length = 2, nullable = false)
+//    @Column(name = "codigoImporteUnitarioConImpuesto", length = 2, nullable = false)
+    @Column(name = "codigoImporteUnitarioConImpues", length = 2, nullable = false)
     private String codigoImporteUnitarioConImpuesto;
     @Size(max = 15)
     @Column(name = "importeReferencial", length = 15)
@@ -304,17 +313,17 @@ public class Detail implements Serializable {
     @Column(name = "textoAuxiliar250_10", length = 250)
     private String textoAuxiliar250_10;
 
-    public Detail() {
+    public DocumentDetail() {
     }
 
-    public Detail(DetailPK detailPK) {
-        this.detailPK = detailPK;
+    public DocumentDetail(DocumentDetailPK id) {
+        this.id = id;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + Objects.hashCode(this.detailPK);
+        hash = 41 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -326,19 +335,19 @@ public class Detail implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Detail other = (Detail) obj;
-        if (!Objects.equals(this.detailPK, other.detailPK)) {
+        final DocumentDetail other = (DocumentDetail) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
     }
 
-    public DetailPK getDetailPK() {
-        return detailPK;
+    public DocumentDetailPK getId() {
+        return id;
     }
 
-    public void setDetailPK(DetailPK detailPK) {
-        this.detailPK = detailPK;
+    public void setId(DocumentDetailPK id) {
+        this.id = id;
     }
 
     public String getCodigoProducto() {

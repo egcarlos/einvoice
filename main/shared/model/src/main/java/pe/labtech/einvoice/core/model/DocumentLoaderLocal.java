@@ -17,6 +17,8 @@ import pe.labtech.einvoice.core.entity.Document;
 @Local
 public interface DocumentLoaderLocal {
 
+    <E> E save(E e);
+
     List<Document> loadForSignature();
 
     List<Document> loadForSync();

@@ -120,12 +120,20 @@ public class DocumentLoader implements DocumentLoaderLocal {
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void markSigned(Long id, String pdfURL, String xmlURL, String signature, String hash) {
-        final Document d = em.find(Document.class, id);
-        d.setStatus("COMPLETE");
-        d.setPdfURL(pdfURL);
-        d.setXmlURL(xmlURL);
-        d.setSignature(signature);
-        d.setHash(hash);
+        em.createQuery("UPDATE Document o "
+                + "SET o.status = :status, "
+                + "o.pdfURL = :pdfURL, "
+                + "o.xmlURL = :xmlURL, "
+                + "o.signature = :signature, "
+                + "o.hash = :hash "
+                + "WHERE o.id = :id")
+                .setParameter("id", id)
+                .setParameter("status", "COMPLETE")
+                .setParameter("pdfURL", pdfURL)
+                .setParameter("xmlURL", xmlURL)
+                .setParameter("signature", signature)
+                .setParameter("hash", hash)
+                .executeUpdate();
     }
 
     @Override
@@ -140,6 +148,12 @@ public class DocumentLoader implements DocumentLoaderLocal {
     public void markDeclared(Long id) {
         final Document d = em.find(Document.class, id);
         d.setStatus("COMPLETE");
+    }
+
+    @Override
+    public <E> E save(E e) {
+        em.persist(e);
+        return e;
     }
 
 }

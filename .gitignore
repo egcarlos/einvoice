@@ -67,3 +67,5 @@ $RECYCLE.BIN/
 /main/shared/model/target/
 /main/shared/wsclient/target/
 /main/shared/wsclientcdi/target/
+/main/shared/replication-test/target/
+/main/process/replicate/target/
