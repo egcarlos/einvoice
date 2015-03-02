@@ -44,8 +44,8 @@ public class PortInfo {
         this.connectionTimeout = "600000";
         this.receiveTimeout = "600000";
 
-        try {
-            PortInfo pi = new Gson().fromJson(new FileReader(file), this.getClass());
+        try (FileReader fr = new FileReader(file)) {
+            PortInfo pi = new Gson().fromJson(fr, this.getClass());
             this.endpoint = pi.endpoint;
             this.password = pi.password;
             this.user = pi.user;
