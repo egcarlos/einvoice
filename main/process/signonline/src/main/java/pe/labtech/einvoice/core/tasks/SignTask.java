@@ -11,7 +11,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -23,6 +25,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.Item;
@@ -59,7 +62,16 @@ public class SignTask implements SignTaskLocal {
             Document entity = mapDocument(id, target);
 
             Builder b = new Builder();
-            String request = b.buildSign(entity.getClientId(), entity.getDocumentType(), "PDF", true, false, false, "", Arrays.asList(target));
+            String request = b.buildSign(
+                    buildClientID(entity.getClientId()),
+                    entity.getDocumentType(),
+                    "PDF",
+                    true,
+                    false,
+                    false,
+                    "",
+                    Arrays.asList(target)
+            );
             loader.createEvent(entity, "SIGN_REQUEST", request);
             String response = invoker.invoke(request);
             loader.createEvent(entity, "SIGN_RESPONSE", response);
@@ -72,7 +84,17 @@ public class SignTask implements SignTaskLocal {
 
             DocumentInfo di = getDocumentInfo(r);
             if (isSigned(di)) {
-                loader.markSigned(entity.getId(), di.getPdfFileUrl(), di.getXmlFileSignUrl(), di.getSignatureValue(), di.getHashCode());
+                Map<String, String> responses = BeanUtils.describe(di).entrySet().stream()
+                        .filter(e -> !e.getKey().equals("class"))
+                        .filter(e -> e.getValue() != null)
+                        .collect(
+                                Collectors.toMap(
+                                        e -> e.getKey(),
+                                        e -> e.getValue()
+                                )
+                        );
+
+                loader.markSigned(entity.getId(), di.getSignatureValue(), di.getHashCode(), responses);
             } else if (wasSignedBefore(di)) {
                 loader.markForSync(entity.getId());
             } else {
@@ -213,6 +235,13 @@ public class SignTask implements SignTaskLocal {
             Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Can''t map auxiliar " + code, ex);
         }
 
+    }
+
+    private String buildClientID(String clientId) {
+        if (clientId.contains("-")) {
+            return clientId.split("-")[1];
+        }
+        return clientId;
     }
 
 }

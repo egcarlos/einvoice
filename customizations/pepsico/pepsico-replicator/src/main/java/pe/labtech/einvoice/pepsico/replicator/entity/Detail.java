@@ -24,6 +24,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Detail.findAll", query = "SELECT d FROM Detail d")})
 public class Detail implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected DetailPK detailPK;
@@ -382,5 +383,5 @@ public class Detail implements Serializable {
     public String toString() {
         return "pe.labtech.einvoice.core.replicator.entity.Detail[ detailPK=" + detailPK + " ]";
     }
-    
+
 }

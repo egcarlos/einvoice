@@ -14,34 +14,32 @@ insert into SPE_EINVOICEHEADER(
     totalValorVentaNetoOpGravadas,
     totalValorVentaNetoOpNoGravada,
     totalValorVentaNetoOpExonerada,
+    totalDescuentos,
     totalIgv,
     totalVenta,
     codigoLeyenda_1,
-    textoLeyenda_1,
-    codigoAuxiliar100_1,
-    textoAuxiliar100_1
+    textoLeyenda_1
 ) values (
     '6',
-    '20111111111',
+    '20501827623',
     '01',
-    'F001-00000001',
-    'EMISOR',
-    '2015-01-21',
-    'emisor@foo.bar',
+    'FLT1-00000008',
+    'Telefónica Gestión de Servicios Compartidos Perú S.A.C.',
+    '2015-03-02',
+    'carlos.echeverria@labtech.pe',
     '6',
-    '20222222222',
-    'ADQUIRIENTE',
-    'adquiriente@foo.bar',
+    '20563330709',
+    'LABTECH S.R.L.',
+    'carlos.echeverria@labtech.pe',
     'PEN',
     '100.00',
+    '0.00',
     '0.00',
     '0.00',
     '18.00',
     '118.00',
     '1000',
-    'CIENTO DIECIOCHO Y 00/100 NUEVOS SOLES',
-    '2005',
-    '0.00'
+    'CIENTO DIECIOCHO Y 00/100 NUEVOS SOLES'
 );
 
 insert into SPE_EINVOICEDETAIL (
@@ -62,9 +60,9 @@ insert into SPE_EINVOICEDETAIL (
     importeIgv
 ) values (
     '6',
-    '20111111111',
+    '20501827623',
     '01',
-    'F001-00000001',
+    'FLT1-00000008',
     '1',
     '000001',
     'Articulo',

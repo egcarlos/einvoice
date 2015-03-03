@@ -909,7 +909,7 @@ public class DocumentHeader implements Serializable {
     private String bl_urlpdf;
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "bl_xmlubl", length = 4000)
+    @Column(name = "bl_xmlubl")
     private byte[] bl_xmlubl;
     @Column(name = "bl_urlxmlubl", length = 4000)
     private String bl_urlxmlubl;

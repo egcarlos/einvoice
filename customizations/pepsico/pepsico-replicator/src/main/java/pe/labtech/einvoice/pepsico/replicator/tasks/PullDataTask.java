@@ -7,8 +7,9 @@ package pe.labtech.einvoice.pepsico.replicator.tasks;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -181,8 +182,13 @@ public class PullDataTask implements PullDataTaskLocal {
                 .stream()
                 .filter(a -> updateValue(a) != null)
                 .collect(Collectors.toList());
-
         attr.forEach(child -> child.setItem(item));
+
+        ItemAttribute cir = find(attr, a -> a.getName().equals("codigoImporteReferencial"));
+        ItemAttribute ir = find(attr, a -> a.getName().equals("importeReferencial"));
+        if (cir == null && ir != null) {
+            attr.remove(ir);
+        }
 
         List<ItemAuxiliar> aux = Arrays.asList(
                 new ItemAuxiliar("9000", "100", 1l, detail.getDaux1()),
@@ -220,5 +226,13 @@ public class PullDataTask implements PullDataTaskLocal {
 
     public static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;
+    }
+
+    public <T> T find(List<T> source, Predicate<? super T> predicate) {
+        Optional<T> opt = source.stream().filter(predicate).findAny();
+        if (opt.isPresent()) {
+            return opt.get();
+        }
+        return null;
     }
 }

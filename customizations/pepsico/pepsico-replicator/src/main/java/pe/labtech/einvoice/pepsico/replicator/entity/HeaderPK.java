@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
  */
 @Embeddable
 public class HeaderPK implements Serializable {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -80,5 +81,5 @@ public class HeaderPK implements Serializable {
     public String toString() {
         return "pe.labtech.einvoice.core.replicator.entity.HeaderPK[ cempresa=" + cempresa + ", corden=" + corden + " ]";
     }
-    
+
 }

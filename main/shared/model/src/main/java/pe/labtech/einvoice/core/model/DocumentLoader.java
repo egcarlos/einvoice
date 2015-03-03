@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -17,6 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import pe.labtech.einvoice.core.entity.Document;
+import pe.labtech.einvoice.core.entity.DocumentData;
+import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.entity.EventTrace;
 
 /**
@@ -119,21 +122,23 @@ public class DocumentLoader implements DocumentLoaderLocal {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void markSigned(Long id, String pdfURL, String xmlURL, String signature, String hash) {
-        em.createQuery("UPDATE Document o "
-                + "SET o.status = :status, "
-                + "o.pdfURL = :pdfURL, "
-                + "o.xmlURL = :xmlURL, "
-                + "o.signature = :signature, "
-                + "o.hash = :hash "
-                + "WHERE o.id = :id")
+    public void markSigned(Long id, String signature, String hash, Map<String, String> responses) {
+        //TODO FIX QUERY TO USE RESPONSE ALSO
+        em.createNamedQuery("Document.updateSignature")
                 .setParameter("id", id)
                 .setParameter("status", "COMPLETE")
-                .setParameter("pdfURL", pdfURL)
-                .setParameter("xmlURL", xmlURL)
                 .setParameter("signature", signature)
                 .setParameter("hash", hash)
                 .executeUpdate();
+        Document d = new Document();
+        d.setId(id);
+        responses.forEach((k, v) -> em.persist(new DocumentResponse(d, k, v)));
+        responses.forEach((k, v) -> {
+            if (k.toUpperCase().contains("URL")) {
+                em.persist(new DocumentData(d, k, v, null, "MISSING"));
+            }
+        });
+
     }
 
     @Override

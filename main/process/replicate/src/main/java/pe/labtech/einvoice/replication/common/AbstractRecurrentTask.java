@@ -21,7 +21,7 @@ public abstract class AbstractRecurrentTask {
         flag = new AtomicBoolean(false);
     }
 
-    public void timeout() {
+    protected void timeout() {
         if (!flag.compareAndSet(false, true)) {
             //already busy
             return;

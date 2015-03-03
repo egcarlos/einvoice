@@ -57,8 +57,9 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask {
                         document.getDocumentNumber()
                 );
                 Map<String, String> response = new LinkedHashMap<>();
-                response.put("bl_urlpdf", document.getPdfURL());
-                response.put("bl_urlxmlubl", document.getXmlURL());
+                //FIXME leer de la tabla de resultados
+//                response.put("bl_urlpdf", document.getPdfURL());
+//                response.put("bl_urlxmlubl", document.getXmlURL());
                 response.put("bl_estadoRegistro", "P");
                 response.put("bl_estadoProceso", "DECLARE COMPLETE-PUSHED");
                 response.put("bl_firma", document.getSignature());

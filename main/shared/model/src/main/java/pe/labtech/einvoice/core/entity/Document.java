@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlType;
 @Table(name = "BL_DOCUMENT")
 @SequenceGenerator(name = "DOCUMENT_ID_GENERATOR", sequenceName = "BL_DOCUMENT_SEQ")
 @NamedQueries({
-    @NamedQuery(name = "Document.loadForSignature", query = "SELECT o FROM Document o WHERE (o.documentNumber like 'F%' or o.documentNumber like 'B%') and o.step IS NULL")
+    @NamedQuery(name = "Document.loadForSignature", query = "SELECT o FROM Document o WHERE (o.documentNumber like 'F%' or o.documentNumber like 'B%') and o.step IS NULL"),
+    @NamedQuery(name = "Document.updateSignature", query = "UPDATE Document o SET o.status = :status, o.signature = :signature, o.hash = :hash WHERE o.id = :id")
 })
 @XmlRootElement(name = "document")
 @XmlType(
@@ -66,32 +67,22 @@ public class Document implements Serializable {
     @XmlTransient
     private Long id;
 
-    @Column(name = "DOCUMENT_TYPE", length = 10)
-    private String documentType;
-
-    @Column(name = "DOCUMENT_NUMBER", length = 20)
-    private String documentNumber;
-
-    @Column(name = "DOCUMENT_DATE", length = 40)
-    private String documentDate;
-
-    @Column(name = "CLIENT_ID", length = 20)
+    @Column(name = "CLIENT_ID", length = 20, updatable = false)
     private String clientId;
 
-    @Column(name = "PDF_URL", length = 1000)
-    private String pdfURL;
+    @Column(name = "DOCUMENT_TYPE", length = 10, updatable = false)
+    private String documentType;
 
-    @Column(name = "XML_URL", length = 1000)
-    private String xmlURL;
+    @Column(name = "DOCUMENT_NUMBER", length = 20, updatable = false)
+    private String documentNumber;
 
-    @Column(name = "CDR_URL", length = 1000)
-    private String cdrURL;
+    @Column(name = "DOCUMENT_DATE", length = 40, updatable = false)
+    private String documentDate;
 
-    @Column(name = "SIGNATURE", length = 2000)
+    @Column(name = "SIGNATURE", length = 2000, insertable = false)
     private String signature;
 
-    //TODO rename column
-    @Column(name = "HASH", length = 1000)
+    @Column(name = "DOCUMENT_HASH", length = 1000, insertable = false)
     private String hash;
 
     @XmlElement(name = "att")
@@ -114,15 +105,19 @@ public class Document implements Serializable {
     @XmlTransient
     private List<DocumentResponse> responses;
 
+    @OneToMany(orphanRemoval = true, mappedBy = "document", cascade = CascadeType.ALL)
+    @XmlTransient
+    private List<DocumentData> data;
+
+    @OneToMany(orphanRemoval = true, mappedBy = "document")
+    @XmlTransient
+    private List<EventTrace> trace;
+
     @Column(name = "DOCUMENT_STEP")
     private String step;
 
     @Column(name = "DOCUMENT_STATUS")
     private String status;
-
-    @OneToMany(orphanRemoval = true, mappedBy = "document")
-    @XmlTransient
-    private List<EventTrace> trace;
 
     public Document() {
     }
@@ -187,30 +182,6 @@ public class Document implements Serializable {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
-    }
-
-    public String getPdfURL() {
-        return pdfURL;
-    }
-
-    public void setPdfURL(String pdfURL) {
-        this.pdfURL = pdfURL;
-    }
-
-    public String getXmlURL() {
-        return xmlURL;
-    }
-
-    public void setXmlURL(String xmlURL) {
-        this.xmlURL = xmlURL;
-    }
-
-    public String getCdrURL() {
-        return cdrURL;
-    }
-
-    public void setCdrURL(String cdrURL) {
-        this.cdrURL = cdrURL;
     }
 
     public String getSignature() {
@@ -291,6 +262,14 @@ public class Document implements Serializable {
 
     public void setTrace(List<EventTrace> trace) {
         this.trace = trace;
+    }
+
+    public List<DocumentData> getData() {
+        return data;
+    }
+
+    public void setData(List<DocumentData> data) {
+        this.data = data;
     }
 
 }

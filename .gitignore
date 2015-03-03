@@ -66,7 +66,10 @@ $RECYCLE.BIN/
 /main/releases/core/target/
 /main/releases/wsserver/target/
 /main/shared/model/target/
+/main/shared/model-public/target/
 /main/shared/wsclient/target/
 /main/shared/wsclientcdi/target/
 /main/shared/replication-test/target/
 /customizations/hv/hv-replicator
+/main/shared/commons/target/
+/main/process/download/target/

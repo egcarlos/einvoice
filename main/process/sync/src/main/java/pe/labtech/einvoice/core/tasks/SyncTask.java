@@ -5,12 +5,15 @@
  */
 package pe.labtech.einvoice.core.tasks;
 
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import org.apache.commons.beanutils.BeanUtils;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
@@ -56,7 +59,17 @@ public class SyncTask implements SyncTaskLocal {
 
             DocumentInfo di = getDocumentInfo(r);
             if (isSigned(di)) {
-                loader.markSigned(entity.getId(), di.getPdfFileUrl(), di.getXmlFileSignUrl(), di.getSignatureValue(), di.getHashCode());
+                Map<String, String> responses = BeanUtils.describe(di).entrySet().stream()
+                        .filter(e -> !e.getKey().equals("class"))
+                        .filter(e -> e.getValue() != null)
+                        .collect(
+                                Collectors.toMap(
+                                        e -> e.getKey(),
+                                        e -> e.getValue()
+                                )
+                        );
+
+                loader.markSigned(entity.getId(), di.getSignatureValue(), di.getHashCode(), responses);
             } else {
                 loader.markAsError(id);
             }

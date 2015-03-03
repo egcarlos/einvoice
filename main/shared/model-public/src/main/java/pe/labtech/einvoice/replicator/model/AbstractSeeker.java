@@ -87,6 +87,7 @@ public abstract class AbstractSeeker<H, P, D> implements Seeker<H, P, D> {
 
         Query q = getEntityManager().createQuery(query);
         responses.forEach((k, v) -> q.setParameter(k, v));
+        q.setParameter("id", id);
         q.executeUpdate();
     }
 

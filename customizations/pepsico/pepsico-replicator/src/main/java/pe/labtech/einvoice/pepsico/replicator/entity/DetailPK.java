@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
  */
 @Embeddable
 public class DetailPK implements Serializable {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -116,5 +117,5 @@ public class DetailPK implements Serializable {
     public String toString() {
         return "pe.labtech.einvoice.core.replicator.entity.DetailPK[ cempresa=" + cempresa + ", corden=" + corden + ", did=" + did + ", dcodproducto=" + dcodproducto + " ]";
     }
-    
+
 }

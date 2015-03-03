@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.core.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import javax.ejb.Local;
 import pe.labtech.einvoice.core.entity.Document;
@@ -29,7 +30,7 @@ public interface DocumentLoaderLocal {
 
     void markForSync(Long id);
 
-    void markSigned(Long id, String pdfFileUrl, String xmlFileSignUrl, String signatureValue, String hashCode);
+    void markSigned(Long id, String signature, String hash, Map<String, String> responses);
 
     void markDeclared(Long id);
 

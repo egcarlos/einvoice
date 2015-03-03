@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.replication.invoice;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,13 +44,24 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         document.setDocumentNumber(header.getId().getSerieNumero());
 
         try {
-            List<DocumentAttribute> attrs = BeanUtils.describe(header).entrySet().stream()
+            List<DocumentAttribute> attrs = new LinkedList<>();
+
+//            attrs.add(new DocumentAttribute(document, "indicador", "C"));
+            BeanUtils.describe(header.getId()).entrySet().stream()
+                    .filter(e -> e.getValue() != null)
+                    .filter(e -> !"id".equals(e.getKey()))
+                    .filter(e -> !"class".equals(e.getKey()))
+                    .map(e -> new DocumentAttribute(document, e.getKey(), e.getValue()))
+                    .forEach(a -> attrs.add(a));
+
+            BeanUtils.describe(header).entrySet().stream()
                     .filter(e -> e.getValue() != null)
                     .filter(e -> !"id".equals(e.getKey()))
                     .filter(e -> !"class".equals(e.getKey()))
                     .filter(e -> !e.getKey().startsWith("bl_"))
                     .map(e -> new DocumentAttribute(document, e.getKey(), e.getValue()))
-                    .collect(Collectors.toList());
+                    .forEach(a -> attrs.add(a));
+
             document.setAttributes(attrs);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             logger.log(Level.SEVERE, null, ex);
@@ -69,6 +81,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                         .filter(e -> !e.getKey().startsWith("bl_"))
                         .map(e -> new ItemAttribute(item, e.getKey(), e.getValue()))
                         .collect(Collectors.toList());
+                attrs.add(new ItemAttribute(item, "numeroOrdenItem", "" + item.getId()));
                 item.setAttributes(attrs);
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                 Logger.getLogger(PullInvoiceTask.class.getName()).log(Level.SEVERE, null, ex);

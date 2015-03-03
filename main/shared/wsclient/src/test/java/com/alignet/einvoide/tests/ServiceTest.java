@@ -201,11 +201,11 @@ public class ServiceTest {
     @Test
     public void query() {
         String command = "<ConsultCmd output=\"PDF\">\n"
-                + "    <parameter value=\"20101363008\" name=\"idEmisor\"/>\n"
-                + "    <parameter value=\"BB01\" name=\"serieGrupoDocumento\"/>\n"
-                + "    <parameter value=\"00000001\" name=\"numeroCorrelativoInicio\"/>\n"
-                + "    <parameter value=\"00000001\" name=\"numeroCorrelativoFin\"/>\n"
-                + "    <parameter value=\"03\" name=\"tipoDocumento\"/>\n"
+                + "    <parameter value=\"20502433629\" name=\"idEmisor\"/>\n"
+                + "    <parameter value=\"F001\" name=\"serieGrupoDocumento\"/>\n"
+                + "    <parameter value=\"00000003\" name=\"numeroCorrelativoInicio\"/>\n"
+                + "    <parameter value=\"00000003\" name=\"numeroCorrelativoFin\"/>\n"
+                + "    <parameter value=\"01\" name=\"tipoDocumento\"/>\n"
                 + "</ConsultCmd>";
         EBizGenericInvokerImplService service = new EBizGenericInvokerImplService();
         EBizGenericInvoker port = service.getEBizGenericInvokerImplPort();
@@ -234,7 +234,7 @@ public class ServiceTest {
                 + "        <razonSocialEmisor>PEPSICO ALIMENTOS PERU S.R.L.</razonSocialEmisor>"
                 + "        <nombreComercialEmisor>PEPSICO ALIMENTOS PERU S.R.L.</nombreComercialEmisor>"
                 + "        <tipoDocumento>01</tipoDocumento>"
-                + "        <serieNumero>F001-00000003</serieNumero>"
+                + "        <serieNumero>F001-00000004</serieNumero>"
                 + "        <fechaEmision>2014-11-04T00:00:00-05:00</fechaEmision>"
                 + "        <ubigeoEmisor>150137</ubigeoEmisor>"
                 + "        <direccionEmisor>AV. FRANCISCO BOLOGNESI 550</direccionEmisor>"

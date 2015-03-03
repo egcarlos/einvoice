@@ -24,6 +24,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "Header.findAll", query = "SELECT h FROM Header h")})
 public class Header implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected HeaderPK headerPK;
@@ -1189,5 +1190,5 @@ public class Header implements Serializable {
     public String toString() {
         return "pe.labtech.einvoice.core.replicator.entity.Header[ headerPK=" + headerPK + " ]";
     }
-    
+
 }
