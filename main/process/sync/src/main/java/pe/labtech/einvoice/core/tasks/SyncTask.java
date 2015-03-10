@@ -37,23 +37,21 @@ public class SyncTask implements SyncTaskLocal {
     @Asynchronous
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
-    public void handle(Long id) {
+    public void handle(Document document) {
         try {
-
-            Document entity = loader.loadForWork(id, null);
 
             Builder b = new Builder();
 
-            String request = b.buildQuery(entity.getClientId(), entity.getDocumentType(), entity.getDocumentNumber());
-            loader.createEvent(entity, "QUERY_REQUEST", request);
+            String request = b.buildQuery(document.getClientId().split("-")[1], document.getDocumentType(), document.getDocumentNumber());
+            loader.createEvent(document, "QUERY_REQUEST", request);
 
             String response = invoker.invoke(request);
-            loader.createEvent(entity, "QUERY_RESPONSE", response);
+            loader.createEvent(document, "QUERY_RESPONSE", response);
 
             Response r = b.unmarshall(Response.class, response);
 
             if (isInvalid(r)) {
-                loader.markAsError(id);
+                loader.markAsError(document.getId());
                 return;
             }
 
@@ -69,12 +67,12 @@ public class SyncTask implements SyncTaskLocal {
                                 )
                         );
 
-                loader.markSigned(entity.getId(), di.getSignatureValue(), di.getHashCode(), responses);
+                loader.markSigned(document.getId(), di.getSignatureValue(), di.getHashCode(), responses);
             } else {
-                loader.markAsError(id);
+                loader.markAsError(document.getId());
             }
         } catch (Exception ex) {
-            loader.markAsError(id, ex);
+            loader.markAsError(document.getId(), ex);
         }
 
     }

@@ -37,7 +37,7 @@ public class DeclareTask implements DeclareTaskLocal {
             Document document = loader.loadForWork(id, null);
 
             Builder builder = new Builder();
-            String request = builder.buildDeclare(document.getClientId(), document.getDocumentType(), document.getDocumentNumber());
+            String request = builder.buildDeclare(document.getClientId().split("-")[1], document.getDocumentType(), document.getDocumentNumber());
 
             loader.createEvent(document, "DECLARE_REQUEST", request);
 

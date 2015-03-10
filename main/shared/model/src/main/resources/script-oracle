@@ -1,0 +1,247 @@
+--------------------------------------------------------
+-- Archivo creado  - martes-marzo-03-2015   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Sequence BL_DOCUMENT_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "BL_DOCUMENT_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 50 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+--------------------------------------------------------
+--  DDL for Sequence BL_MESSAGE_TRACE_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "BL_MESSAGE_TRACE_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 50 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+--------------------------------------------------------
+--  DDL for Sequence DOCUMENT_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "DOCUMENT_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 50 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+--------------------------------------------------------
+--  DDL for Table BL_DOCUMENT
+--------------------------------------------------------
+
+  CREATE TABLE "BL_DOCUMENT" 
+   (	"DOCUMENT_ID" NUMBER(19,0), 
+	"CLIENT_ID" VARCHAR2(20 CHAR), 
+	"DOCUMENT_DATE" VARCHAR2(40 CHAR), 
+	"DOCUMENT_NUMBER" VARCHAR2(20 CHAR), 
+	"DOCUMENT_TYPE" VARCHAR2(10 CHAR), 
+	"HASH" VARCHAR2(1000 CHAR), 
+	"PDF_URL" VARCHAR2(1000 CHAR), 
+	"SIGNATURE" VARCHAR2(2000 CHAR), 
+	"DOCUMENT_STATUS" VARCHAR2(255 CHAR), 
+	"DOCUMENT_STEP" VARCHAR2(255 CHAR), 
+	"XML_URL" VARCHAR2(1000 CHAR)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table BL_DOCUMENT_ATTR
+--------------------------------------------------------
+
+  CREATE TABLE "BL_DOCUMENT_ATTR" 
+   (	"ATTR_NAME" VARCHAR2(255 CHAR), 
+	"ATTR_VALUE" VARCHAR2(255 CHAR), 
+	"DOCUMENT_ID" NUMBER(19,0)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table BL_DOCUMENT_AUX
+--------------------------------------------------------
+
+  CREATE TABLE "BL_DOCUMENT_AUX" 
+   (	"AUX_NAME" VARCHAR2(255 CHAR), 
+	"AUX_LENGTH" VARCHAR2(255 CHAR), 
+	"AUX_ORDER" NUMBER(19,0), 
+	"AUX_VALUE" VARCHAR2(255 CHAR), 
+	"DOCUMENT_ID" NUMBER(19,0)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table BL_DOCUMENT_DATA
+--------------------------------------------------------
+
+  CREATE TABLE "BL_DOCUMENT_DATA" 
+   (	"DATA_NAME" VARCHAR2(50 CHAR), 
+	"RAW_DATA" BLOB, 
+	"SOURCE" VARCHAR2(1000 CHAR), 
+	"STATUS" VARCHAR2(20 CHAR), 
+	"DOCUMENT_ID" NUMBER(19,0)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table BL_DOCUMENT_LEG
+--------------------------------------------------------
+
+  CREATE TABLE "BL_DOCUMENT_LEG" 
+   (	"AUX_NAME" VARCHAR2(50 CHAR), 
+	"AUX_ORDER" NUMBER(19,0), 
+	"AUX_VALUE" VARCHAR2(1000 CHAR), 
+	"DOCUMENT_ID" NUMBER(19,0)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table BL_DOCUMENT_RESP
+--------------------------------------------------------
+
+  CREATE TABLE "BL_DOCUMENT_RESP" 
+   (	"ATTR_NAME" VARCHAR2(50 CHAR), 
+	"ATTR_VALUE" VARCHAR2(1000 CHAR), 
+	"DOCUMENT_ID" NUMBER(19,0)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table BL_ITEM
+--------------------------------------------------------
+
+  CREATE TABLE "BL_ITEM" 
+   (	"ITEM_ID" NUMBER(19,0), 
+	"DOCUMENT_ID" NUMBER(19,0)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table BL_ITEM_ATTR
+--------------------------------------------------------
+
+  CREATE TABLE "BL_ITEM_ATTR" 
+   (	"ATTR_NAME" VARCHAR2(255 CHAR), 
+	"ATTR_VALUE" VARCHAR2(255 CHAR), 
+	"ITEM_ID" NUMBER(19,0), 
+	"DOCUMENT_ID" NUMBER(19,0)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table BL_ITEM_AUX
+--------------------------------------------------------
+
+  CREATE TABLE "BL_ITEM_AUX" 
+   (	"AUX_NAME" VARCHAR2(255 CHAR), 
+	"AUX_LENGTH" VARCHAR2(255 CHAR), 
+	"AUX_ORDER" NUMBER(19,0), 
+	"AUX_VALUE" VARCHAR2(255 CHAR), 
+	"ITEM_ID" NUMBER(19,0), 
+	"DOCUMENT_ID" NUMBER(19,0)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table BL_MESSAGE_TRACE
+--------------------------------------------------------
+
+  CREATE TABLE "BL_MESSAGE_TRACE" 
+   (	"ID" NUMBER(19,0), 
+	"MESSAGE_TIME" TIMESTAMP (6), 
+	"MESSAGE_VALUE" CLOB, 
+	"MESSAGE_TYPE" VARCHAR2(255 CHAR), 
+	"DOCUMENT_ID" NUMBER(19,0)
+   ) ;
+--------------------------------------------------------
+--  Constraints for Table BL_DOCUMENT_LEG
+--------------------------------------------------------
+
+  ALTER TABLE "BL_DOCUMENT_LEG" ADD PRIMARY KEY ("DOCUMENT_ID", "AUX_NAME") ENABLE;
+  ALTER TABLE "BL_DOCUMENT_LEG" MODIFY ("DOCUMENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_DOCUMENT_LEG" MODIFY ("AUX_NAME" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table BL_ITEM
+--------------------------------------------------------
+
+  ALTER TABLE "BL_ITEM" ADD PRIMARY KEY ("ITEM_ID", "DOCUMENT_ID") ENABLE;
+  ALTER TABLE "BL_ITEM" MODIFY ("DOCUMENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_ITEM" MODIFY ("ITEM_ID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table BL_MESSAGE_TRACE
+--------------------------------------------------------
+
+  ALTER TABLE "BL_MESSAGE_TRACE" ADD PRIMARY KEY ("ID") ENABLE;
+  ALTER TABLE "BL_MESSAGE_TRACE" MODIFY ("ID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table BL_DOCUMENT
+--------------------------------------------------------
+
+  ALTER TABLE "BL_DOCUMENT" ADD PRIMARY KEY ("DOCUMENT_ID") ENABLE;
+  ALTER TABLE "BL_DOCUMENT" MODIFY ("DOCUMENT_ID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table BL_DOCUMENT_ATTR
+--------------------------------------------------------
+
+  ALTER TABLE "BL_DOCUMENT_ATTR" ADD PRIMARY KEY ("ATTR_NAME", "DOCUMENT_ID") ENABLE;
+  ALTER TABLE "BL_DOCUMENT_ATTR" MODIFY ("DOCUMENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_DOCUMENT_ATTR" MODIFY ("ATTR_NAME" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table BL_ITEM_ATTR
+--------------------------------------------------------
+
+  ALTER TABLE "BL_ITEM_ATTR" ADD PRIMARY KEY ("ATTR_NAME", "ITEM_ID", "DOCUMENT_ID") ENABLE;
+  ALTER TABLE "BL_ITEM_ATTR" MODIFY ("DOCUMENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_ITEM_ATTR" MODIFY ("ITEM_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_ITEM_ATTR" MODIFY ("ATTR_NAME" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table SPE_EINVOICEDETAIL
+--------------------------------------------------------
+
+  ALTER TABLE "SPE_EINVOICEDETAIL" ADD PRIMARY KEY ("CEMPRESA", "CORDEN", "DCODPRODUCTO", "DID") ENABLE;
+  ALTER TABLE "SPE_EINVOICEDETAIL" MODIFY ("DID" NOT NULL ENABLE);
+  ALTER TABLE "SPE_EINVOICEDETAIL" MODIFY ("DCODPRODUCTO" NOT NULL ENABLE);
+  ALTER TABLE "SPE_EINVOICEDETAIL" MODIFY ("CORDEN" NOT NULL ENABLE);
+  ALTER TABLE "SPE_EINVOICEDETAIL" MODIFY ("CEMPRESA" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table BL_DOCUMENT_DATA
+--------------------------------------------------------
+
+  ALTER TABLE "BL_DOCUMENT_DATA" ADD PRIMARY KEY ("DATA_NAME", "DOCUMENT_ID") ENABLE;
+  ALTER TABLE "BL_DOCUMENT_DATA" MODIFY ("DOCUMENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_DOCUMENT_DATA" MODIFY ("DATA_NAME" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table BL_DOCUMENT_RESP
+--------------------------------------------------------
+
+  ALTER TABLE "BL_DOCUMENT_RESP" ADD PRIMARY KEY ("ATTR_NAME", "DOCUMENT_ID") ENABLE;
+  ALTER TABLE "BL_DOCUMENT_RESP" MODIFY ("DOCUMENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_DOCUMENT_RESP" MODIFY ("ATTR_NAME" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table BL_ITEM_AUX
+--------------------------------------------------------
+
+  ALTER TABLE "BL_ITEM_AUX" ADD PRIMARY KEY ("ITEM_ID", "DOCUMENT_ID", "AUX_NAME") ENABLE;
+  ALTER TABLE "BL_ITEM_AUX" MODIFY ("DOCUMENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_ITEM_AUX" MODIFY ("ITEM_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_ITEM_AUX" MODIFY ("AUX_NAME" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table BL_DOCUMENT_AUX
+--------------------------------------------------------
+
+  ALTER TABLE "BL_DOCUMENT_AUX" ADD PRIMARY KEY ("DOCUMENT_ID", "AUX_NAME") ENABLE;
+  ALTER TABLE "BL_DOCUMENT_AUX" MODIFY ("DOCUMENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "BL_DOCUMENT_AUX" MODIFY ("AUX_NAME" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Ref Constraints for Table BL_DOCUMENT_ATTR
+--------------------------------------------------------
+
+  ALTER TABLE "BL_DOCUMENT_ATTR" ADD CONSTRAINT "FK_EB6AX0W3LJ5WYCRJ36N76WGWV" FOREIGN KEY ("DOCUMENT_ID")
+	  REFERENCES "BL_DOCUMENT" ("DOCUMENT_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table BL_DOCUMENT_AUX
+--------------------------------------------------------
+
+  ALTER TABLE "BL_DOCUMENT_AUX" ADD CONSTRAINT "FK_MJ4FYXV2UHID08WJIPAMX1SDL" FOREIGN KEY ("DOCUMENT_ID")
+	  REFERENCES "BL_DOCUMENT" ("DOCUMENT_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table BL_DOCUMENT_LEG
+--------------------------------------------------------
+
+  ALTER TABLE "BL_DOCUMENT_LEG" ADD CONSTRAINT "FK_DXI66UK6AM81RQDSDUF3E4DLH" FOREIGN KEY ("DOCUMENT_ID")
+	  REFERENCES "BL_DOCUMENT" ("DOCUMENT_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table BL_ITEM
+--------------------------------------------------------
+
+  ALTER TABLE "BL_ITEM" ADD CONSTRAINT "FK_QR8QNDJCXBHB9GLI1SCJB9VL0" FOREIGN KEY ("DOCUMENT_ID")
+	  REFERENCES "BL_DOCUMENT" ("DOCUMENT_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table BL_ITEM_ATTR
+--------------------------------------------------------
+
+  ALTER TABLE "BL_ITEM_ATTR" ADD CONSTRAINT "FK_E5VXP0T6S1A5DHAQ01U7C58B1" FOREIGN KEY ("ITEM_ID", "DOCUMENT_ID")
+	  REFERENCES "BL_ITEM" ("ITEM_ID", "DOCUMENT_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table BL_ITEM_AUX
+--------------------------------------------------------
+
+  ALTER TABLE "BL_ITEM_AUX" ADD CONSTRAINT "FK_O71QG0MUEWNXMWJK8QSEBY1VF" FOREIGN KEY ("ITEM_ID", "DOCUMENT_ID")
+	  REFERENCES "BL_ITEM" ("ITEM_ID", "DOCUMENT_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table BL_MESSAGE_TRACE
+--------------------------------------------------------
+
+  ALTER TABLE "BL_MESSAGE_TRACE" ADD CONSTRAINT "FK_NIO06S6YL1SRL63QDUU5GYQJ1" FOREIGN KEY ("DOCUMENT_ID")
+	  REFERENCES "BL_DOCUMENT" ("DOCUMENT_ID") ENABLE;

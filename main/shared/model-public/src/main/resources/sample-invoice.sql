@@ -1,3 +1,7 @@
+delete SPE_EINVOICEDETAIL;
+
+delete SPE_EINVOICEHEADER;
+
 insert into SPE_EINVOICEHEADER(
     tipoDocumentoEmisor,
     numeroDocumentoEmisor,
@@ -23,7 +27,7 @@ insert into SPE_EINVOICEHEADER(
     '6',
     '20501827623',
     '01',
-    'FLT1-00000008',
+    'FLT1-00000010',
     'Telefónica Gestión de Servicios Compartidos Perú S.A.C.',
     '2015-03-02',
     'carlos.echeverria@labtech.pe',
@@ -62,7 +66,7 @@ insert into SPE_EINVOICEDETAIL (
     '6',
     '20501827623',
     '01',
-    'FLT1-00000008',
+    'FLT1-00000010',
     '1',
     '000001',
     'Articulo',

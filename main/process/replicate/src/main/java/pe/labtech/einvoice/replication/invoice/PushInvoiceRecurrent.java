@@ -8,6 +8,7 @@ package pe.labtech.einvoice.replication.invoice;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
@@ -15,9 +16,10 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.entity.Document;
+import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.model.InvoiceSeekerLocal;
-import pe.labtech.einvoice.replication.common.AbstractRecurrentTask;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 import pe.labtech.einvoice.replicator.model.SeekHeaderLocal;
 
@@ -28,7 +30,7 @@ import pe.labtech.einvoice.replicator.model.SeekHeaderLocal;
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-public class PushInvoiceRecurrent extends AbstractRecurrentTask {
+public class PushInvoiceRecurrent extends AbstractRecurrentTask<Document> {
 
     @EJB
     private PullInvoiceTaskLocal task;
@@ -46,27 +48,39 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask {
     }
 
     @Override
-    public void doWork() {
-        List<Document> documents = seeker.pullDocuments("DECLARE", "COMPLETE");
-        documents.forEach(document -> {
-            if (seeker.markSynkronized(document.getId(), "DECLARE", "COMPLETE", "COMPLETE-PUSHED")) {
-                DocumentHeaderPK id = new DocumentHeaderPK(
-                        document.getClientId().split("-")[0],
-                        document.getClientId().split("-")[1],
-                        document.getDocumentType(),
-                        document.getDocumentNumber()
-                );
-                Map<String, String> response = new LinkedHashMap<>();
-                //FIXME leer de la tabla de resultados
-//                response.put("bl_urlpdf", document.getPdfURL());
-//                response.put("bl_urlxmlubl", document.getXmlURL());
-                response.put("bl_estadoRegistro", "P");
-                response.put("bl_estadoProceso", "DECLARE COMPLETE-PUSHED");
-                response.put("bl_firma", document.getSignature());
-                response.put("bl_hashFirma", document.getHash());
-                pusher.update(id, response);
-            }
-        });
+    @PostConstruct
+    public void init() {
+        super.init();
+        this.findTasks = () -> seeker.pullDocuments("DECLARE", "COMPLETE");
+        this.tryLock = t -> seeker.markSynkronized(t.getId(), "DECLARE", "COMPLETE", "COMPLETE-PUSHED");
+        this.getId = t -> t.getClientId() + "-" + t.getDocumentType() + "-" + t.getDocumentNumber() + "[replicate]";
+        this.consumer = t -> doWork(t);
+    }
+
+    private void doWork(Document document) {
+        DocumentHeaderPK id = new DocumentHeaderPK(
+                document.getClientId().split("-")[0],
+                document.getClientId().split("-")[1],
+                document.getDocumentType(),
+                document.getDocumentNumber()
+        );
+        Map<String, String> response = new LinkedHashMap<>();
+
+        String pdfFileUrl = seeker.pullDocumentResponse(document, "pdfFileUrl");
+        if (pdfFileUrl != null) {
+            response.put("bl_urlpdf", pdfFileUrl);
+        }
+
+        String xmlFileSignUrl = seeker.pullDocumentResponse(document, "xmlFileSignUrl");
+        if (xmlFileSignUrl != null) {
+            response.put("bl_urlxmlubl", xmlFileSignUrl);
+        }
+
+        response.put("bl_estadoRegistro", "P");
+        response.put("bl_estadoProceso", "DECLARE COMPLETE-PUSHED");
+        response.put("bl_firma", document.getSignature());
+        response.put("bl_hashFirma", document.getHash());
+        pusher.update(id, response);
     }
 
 }

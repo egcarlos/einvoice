@@ -12,6 +12,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import pe.labtech.einvoice.core.entity.Document;
+import pe.labtech.einvoice.core.entity.DocumentResponse;
 
 /**
  *
@@ -34,6 +35,35 @@ public class InvoiceSeeker implements InvoiceSeekerLocal {
                 .setParameter("step", step)
                 .setParameter("status", status)
                 .getResultList();
+    }
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public List<DocumentResponse> pullDocumentResponse(Document document) {
+        return em
+                .createQuery(
+                        "SELECT o FROM DocumentResponse o WHERE o.document = :document",
+                        DocumentResponse.class
+                )
+                .setParameter("document", document)
+                .getResultList();
+    }
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public String pullDocumentResponse(Document document, String name) {
+        List<String> s = em
+                .createQuery(
+                        "SELECT o.value FROM DocumentResponse o WHERE o.document = :document AND o.name = :name",
+                        String.class
+                )
+                .setParameter("document", document)
+                .setParameter("name", name)
+                .getResultList();
+        if (s.isEmpty()) {
+            return null;
+        }
+        return s.get(0);
     }
 
     @Override

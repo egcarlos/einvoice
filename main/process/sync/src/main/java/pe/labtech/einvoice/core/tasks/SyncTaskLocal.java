@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.core.tasks;
 
 import javax.ejb.Local;
+import pe.labtech.einvoice.core.entity.Document;
 
 /**
  *
@@ -14,6 +15,6 @@ import javax.ejb.Local;
 @Local
 public interface SyncTaskLocal {
 
-    void handle(Long id);
+    void handle(Document document);
 
 }
