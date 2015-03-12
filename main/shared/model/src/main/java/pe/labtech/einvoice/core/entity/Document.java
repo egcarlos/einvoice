@@ -124,9 +124,9 @@ public class Document implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.id);
-        return hash;
+        int _hash = 5;
+        _hash = 89 * _hash + Objects.hashCode(this.id);
+        return _hash;
     }
 
     @Override

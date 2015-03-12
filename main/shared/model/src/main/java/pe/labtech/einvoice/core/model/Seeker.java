@@ -18,4 +18,6 @@ public interface Seeker {
 
     boolean markSynkronized(Long id, String step, String oldstatus, String newstatus);
 
+    boolean markSynkronized(Long id, String oldstep, String oldstatus, String newstep, String newstatus);
+
 }

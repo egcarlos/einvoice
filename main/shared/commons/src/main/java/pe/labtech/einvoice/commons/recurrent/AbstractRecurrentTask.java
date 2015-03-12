@@ -53,7 +53,7 @@ public abstract class AbstractRecurrentTask<T> {
             logger.fine(() -> "Task " + this.getClass().getSimpleName() + ": " + tasks.size() + " tasks found.");
             tasks.forEach(t -> {
                 if (tryLock.apply(t)) {
-                    logger.fine(() -> "Task " + this.getClass().getSimpleName() + ": " + getId.apply(t) + " tasks found.");
+                    logger.info(() -> "Task " + this.getClass().getSimpleName() + ": " + getId.apply(t) + " dispatching.");
                     consumer.accept(t);
                 }
             });

@@ -78,4 +78,16 @@ public class InvoiceSeeker implements InvoiceSeekerLocal {
                 .executeUpdate() == 1;
     }
 
+    @Override
+    public boolean markSynkronized(Long id, String oldstep, String oldstatus, String newstep, String newstatus) {
+        return em
+                .createQuery("UPDATE Document o SET o.step = :newstep, o.status = :newstatus WHERE o.step = :oldstep AND o.id = :id AND o.status = :oldstatus")
+                .setParameter("id", id)
+                .setParameter("oldstep", oldstep)
+                .setParameter("oldstatus", oldstatus)
+                .setParameter("newstep", newstep)
+                .setParameter("newstatus", newstatus)
+                .executeUpdate() == 1;
+    }
+
 }

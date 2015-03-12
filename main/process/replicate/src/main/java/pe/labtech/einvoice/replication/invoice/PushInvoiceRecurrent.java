@@ -6,7 +6,6 @@
 package pe.labtech.einvoice.replication.invoice;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
@@ -18,7 +17,6 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.entity.Document;
-import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.model.InvoiceSeekerLocal;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 import pe.labtech.einvoice.replicator.model.SeekHeaderLocal;
@@ -31,9 +29,6 @@ import pe.labtech.einvoice.replicator.model.SeekHeaderLocal;
 @TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class PushInvoiceRecurrent extends AbstractRecurrentTask<Document> {
-
-    @EJB
-    private PullInvoiceTaskLocal task;
 
     @EJB
     private InvoiceSeekerLocal seeker;
