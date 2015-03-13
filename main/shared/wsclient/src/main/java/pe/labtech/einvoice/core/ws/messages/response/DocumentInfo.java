@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
     "barCodeFileUrl",
     "pdfFileUrl",
     "xmlFileSignUrl",
+    "xmlFileSunatUrl",
     "tipoDocumentoEmisor",
     "numeroDocumentoEmisor",
     "tipoDocumentoAdquiriente",
@@ -75,6 +76,7 @@ public class DocumentInfo {
     private String barCodeFileUrl;
     private String pdfFileUrl;
     private String xmlFileSignUrl;
+    private String xmlFileSunatUrl;
 
     //MENSAJES DEL PROCESO Y VALIDACIONES
     private List<ResponseMessage> messages;
@@ -303,6 +305,14 @@ public class DocumentInfo {
 
     public void setXmlFileSignUrl(String xmlFileSignUrl) {
         this.xmlFileSignUrl = xmlFileSignUrl;
+    }
+
+    public String getXmlFileSunatUrl() {
+        return xmlFileSunatUrl;
+    }
+
+    public void setXmlFileSunatUrl(String xmlFileSunatUrl) {
+        this.xmlFileSunatUrl = xmlFileSunatUrl;
     }
 
     public List<ResponseMessage> getMessages() {

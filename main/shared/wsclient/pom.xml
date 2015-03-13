@@ -4,7 +4,7 @@
 
     <groupId>pe.labtech.einvoice</groupId>
     <artifactId>einvoice-ws-client</artifactId>
-    <version>1.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <build>
