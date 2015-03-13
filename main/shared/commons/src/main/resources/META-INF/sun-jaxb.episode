@@ -1,0 +1,1948 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bindings version="2.1" xmlns="http://java.sun.com/xml/ns/jaxb">
+  <!--
+
+Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.2.11 
+Visite <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
+Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
+Generado el: 2015.03.12 a las 09:30:38 PM COT 
+
+  -->
+  <bindings scd="x-schema::tns" xmlns:tns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
+    <schemaBindings map="false">
+      <package name="oasis.names.specification.ubl.schema.xsd.invoice_2"/>
+    </schemaBindings>
+    <bindings scd="~tns:InvoiceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2">
+    <schemaBindings map="false">
+      <package name="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2"/>
+    </schemaBindings>
+    <bindings scd="~tns:RelatedItemType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.RelatedItemType"/>
+    </bindings>
+    <bindings scd="~tns:ContactType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ContactType"/>
+    </bindings>
+    <bindings scd="~tns:CustomerPartyType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType"/>
+    </bindings>
+    <bindings scd="~tns:SupplierPartyType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType"/>
+    </bindings>
+    <bindings scd="~tns:PackageType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PackageType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:ItemIdentificationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemIdentificationType"/>
+    </bindings>
+    <bindings scd="~tns:ItemPropertyType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType"/>
+    </bindings>
+    <bindings scd="~tns:TemperatureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TemperatureType"/>
+    </bindings>
+    <bindings scd="~tns:AddressType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType"/>
+    </bindings>
+    <bindings scd="~tns:AddressLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressLineType"/>
+    </bindings>
+    <bindings scd="~tns:PartyType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType"/>
+    </bindings>
+    <bindings scd="~tns:AirTransportType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AirTransportType"/>
+    </bindings>
+    <bindings scd="~tns:AllowanceChargeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType"/>
+    </bindings>
+    <bindings scd="~tns:PriceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PriceType"/>
+    </bindings>
+    <bindings scd="~tns:MonetaryTotalType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType"/>
+    </bindings>
+    <bindings scd="~tns:TaxCategoryType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxCategoryType"/>
+    </bindings>
+    <bindings scd="~tns:AttachmentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AttachmentType"/>
+    </bindings>
+    <bindings scd="~tns:BillingReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.BillingReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:BillingReferenceLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.BillingReferenceLineType"/>
+    </bindings>
+    <bindings scd="~tns:BranchType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.BranchType"/>
+    </bindings>
+    <bindings scd="~tns:LineItemType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LineItemType"/>
+    </bindings>
+    <bindings scd="~tns:CardAccountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CardAccountType"/>
+    </bindings>
+    <bindings scd="~tns:CatalogueItemSpecificationUpdateLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CatalogueItemSpecificationUpdateLineType"/>
+    </bindings>
+    <bindings scd="~tns:CatalogueLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CatalogueLineType"/>
+    </bindings>
+    <bindings scd="~tns:LineReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LineReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:CataloguePricingUpdateLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CataloguePricingUpdateLineType"/>
+    </bindings>
+    <bindings scd="~tns:CatalogueReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CatalogueReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:CatalogueRequestLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CatalogueRequestLineType"/>
+    </bindings>
+    <bindings scd="~tns:ClassificationCategoryType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ClassificationCategoryType"/>
+    </bindings>
+    <bindings scd="~tns:CertificateOfOriginApplicationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CertificateOfOriginApplicationType"/>
+    </bindings>
+    <bindings scd="~tns:ClassificationSchemeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ClassificationSchemeType"/>
+    </bindings>
+    <bindings scd="~tns:CommodityClassificationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CommodityClassificationType"/>
+    </bindings>
+    <bindings scd="~tns:CommunicationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CommunicationType"/>
+    </bindings>
+    <bindings scd="~tns:ConsignmentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ConsignmentType"/>
+    </bindings>
+    <bindings scd="~tns:GoodsItemType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.GoodsItemType"/>
+    </bindings>
+    <bindings scd="~tns:ContractType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ContractType"/>
+    </bindings>
+    <bindings scd="~tns:CorporateRegistrationSchemeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CorporateRegistrationSchemeType"/>
+    </bindings>
+    <bindings scd="~tns:CountryType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CountryType"/>
+    </bindings>
+    <bindings scd="~tns:CreditAccountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CreditAccountType"/>
+    </bindings>
+    <bindings scd="~tns:CreditNoteLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CreditNoteLineType"/>
+    </bindings>
+    <bindings scd="~tns:StatusType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.StatusType"/>
+    </bindings>
+    <bindings scd="~tns:DebitNoteLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DebitNoteLineType"/>
+    </bindings>
+    <bindings scd="~tns:LanguageType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LanguageType"/>
+    </bindings>
+    <bindings scd="~tns:DeliveryType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DeliveryType"/>
+    </bindings>
+    <bindings scd="~tns:LocationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LocationType"/>
+    </bindings>
+    <bindings scd="~tns:DeliveryTermsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DeliveryTermsType"/>
+    </bindings>
+    <bindings scd="~tns:DeliveryUnitType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DeliveryUnitType"/>
+    </bindings>
+    <bindings scd="~tns:DespatchType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DespatchType"/>
+    </bindings>
+    <bindings scd="~tns:DespatchLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DespatchLineType"/>
+    </bindings>
+    <bindings scd="~tns:DimensionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DimensionType"/>
+    </bindings>
+    <bindings scd="~tns:ResponseType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ResponseType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentDistributionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentDistributionType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentResponseType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentResponseType"/>
+    </bindings>
+    <bindings scd="~tns:EndorsementType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.EndorsementType"/>
+    </bindings>
+    <bindings scd="~tns:EndorserPartyType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.EndorserPartyType"/>
+    </bindings>
+    <bindings scd="~tns:PeriodType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PeriodType"/>
+    </bindings>
+    <bindings scd="~tns:ExchangeRateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ExchangeRateType"/>
+    </bindings>
+    <bindings scd="~tns:ExternalReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ExternalReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:TransportationServiceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TransportationServiceType"/>
+    </bindings>
+    <bindings scd="~tns:FinancialAccountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.FinancialAccountType"/>
+    </bindings>
+    <bindings scd="~tns:FinancialInstitutionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.FinancialInstitutionType"/>
+    </bindings>
+    <bindings scd="~tns:GoodsItemContainerType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.GoodsItemContainerType"/>
+    </bindings>
+    <bindings scd="~tns:HazardousGoodsTransitType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.HazardousGoodsTransitType"/>
+    </bindings>
+    <bindings scd="~tns:HazardousItemType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.HazardousItemType"/>
+    </bindings>
+    <bindings scd="~tns:InvoiceLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType"/>
+    </bindings>
+    <bindings scd="~tns:ItemType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemType"/>
+    </bindings>
+    <bindings scd="~tns:ItemComparisonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemComparisonType"/>
+    </bindings>
+    <bindings scd="~tns:ItemInstanceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemInstanceType"/>
+    </bindings>
+    <bindings scd="~tns:ItemLocationQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemLocationQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:ItemPropertyGroupType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyGroupType"/>
+    </bindings>
+    <bindings scd="~tns:LineResponseType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LineResponseType"/>
+    </bindings>
+    <bindings scd="~tns:LocationCoordinateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LocationCoordinateType"/>
+    </bindings>
+    <bindings scd="~tns:LotIdentificationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LotIdentificationType"/>
+    </bindings>
+    <bindings scd="~tns:MaritimeTransportType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MaritimeTransportType"/>
+    </bindings>
+    <bindings scd="~tns:OrderedShipmentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderedShipmentType"/>
+    </bindings>
+    <bindings scd="~tns:OrderLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderLineType"/>
+    </bindings>
+    <bindings scd="~tns:OrderLineReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderLineReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:OrderReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:PartyIdentificationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyIdentificationType"/>
+    </bindings>
+    <bindings scd="~tns:PartyLegalEntityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyLegalEntityType"/>
+    </bindings>
+    <bindings scd="~tns:PartyNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyNameType"/>
+    </bindings>
+    <bindings scd="~tns:PartyTaxSchemeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyTaxSchemeType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PaymentType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentMeansType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PaymentMeansType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentTermsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PaymentTermsType"/>
+    </bindings>
+    <bindings scd="~tns:PersonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PersonType"/>
+    </bindings>
+    <bindings scd="~tns:PhysicalAttributeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PhysicalAttributeType"/>
+    </bindings>
+    <bindings scd="~tns:PriceListType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PriceListType"/>
+    </bindings>
+    <bindings scd="~tns:PricingReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PricingReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:QuotationLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.QuotationLineType"/>
+    </bindings>
+    <bindings scd="~tns:RailTransportType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.RailTransportType"/>
+    </bindings>
+    <bindings scd="~tns:ReceiptLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ReceiptLineType"/>
+    </bindings>
+    <bindings scd="~tns:ReminderLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ReminderLineType"/>
+    </bindings>
+    <bindings scd="~tns:RemittanceAdviceLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.RemittanceAdviceLineType"/>
+    </bindings>
+    <bindings scd="~tns:ShipmentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ShipmentType"/>
+    </bindings>
+    <bindings scd="~tns:RequestForQuotationLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.RequestForQuotationLineType"/>
+    </bindings>
+    <bindings scd="~tns:RoadTransportType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.RoadTransportType"/>
+    </bindings>
+    <bindings scd="~tns:SecondaryHazardType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SecondaryHazardType"/>
+    </bindings>
+    <bindings scd="~tns:ShipmentStageType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ShipmentStageType"/>
+    </bindings>
+    <bindings scd="~tns:SignatureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SignatureType"/>
+    </bindings>
+    <bindings scd="~tns:StatementLineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.StatementLineType"/>
+    </bindings>
+    <bindings scd="~tns:StowageType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.StowageType"/>
+    </bindings>
+    <bindings scd="~tns:TaxSchemeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSchemeType"/>
+    </bindings>
+    <bindings scd="~tns:TaxSubtotalType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType"/>
+    </bindings>
+    <bindings scd="~tns:TaxTotalType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType"/>
+    </bindings>
+    <bindings scd="~tns:TradingTermsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TradingTermsType"/>
+    </bindings>
+    <bindings scd="~tns:TransactionConditionsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TransactionConditionsType"/>
+    </bindings>
+    <bindings scd="~tns:TransportEquipmentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TransportEquipmentType"/>
+    </bindings>
+    <bindings scd="~tns:TransportEquipmentSealType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TransportEquipmentSealType"/>
+    </bindings>
+    <bindings scd="~tns:TransportEventType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TransportEventType"/>
+    </bindings>
+    <bindings scd="~tns:TransportHandlingUnitType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TransportHandlingUnitType"/>
+    </bindings>
+    <bindings scd="~tns:TransportMeansType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TransportMeansType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+    <schemaBindings map="false">
+      <package name="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2"/>
+    </schemaBindings>
+    <bindings scd="~tns:AcceptedIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AcceptedIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:AccountIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountIDType"/>
+    </bindings>
+    <bindings scd="~tns:AccountingCostType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountingCostType"/>
+    </bindings>
+    <bindings scd="~tns:AccountingCostCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountingCostCodeType"/>
+    </bindings>
+    <bindings scd="~tns:AccountNumberIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountNumberIDType"/>
+    </bindings>
+    <bindings scd="~tns:AccountTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ActionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ActionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ActualDeliveryDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ActualDeliveryDateType"/>
+    </bindings>
+    <bindings scd="~tns:ActualDeliveryTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ActualDeliveryTimeType"/>
+    </bindings>
+    <bindings scd="~tns:ActualDespatchDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ActualDespatchDateType"/>
+    </bindings>
+    <bindings scd="~tns:ActualDespatchTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ActualDespatchTimeType"/>
+    </bindings>
+    <bindings scd="~tns:AdditionalAccountIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalAccountIDType"/>
+    </bindings>
+    <bindings scd="~tns:AdditionalInformationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalInformationType"/>
+    </bindings>
+    <bindings scd="~tns:AdditionalStreetNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalStreetNameType"/>
+    </bindings>
+    <bindings scd="~tns:AddressFormatCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AddressFormatCodeType"/>
+    </bindings>
+    <bindings scd="~tns:AddressTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AddressTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:AdValoremIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdValoremIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:AgencyIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AgencyIDType"/>
+    </bindings>
+    <bindings scd="~tns:AgencyNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AgencyNameType"/>
+    </bindings>
+    <bindings scd="~tns:AircraftIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AircraftIDType"/>
+    </bindings>
+    <bindings scd="~tns:AllowanceChargeReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceChargeReasonType"/>
+    </bindings>
+    <bindings scd="~tns:AllowanceChargeReasonCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceChargeReasonCodeType"/>
+    </bindings>
+    <bindings scd="~tns:AllowanceTotalAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceTotalAmountType"/>
+    </bindings>
+    <bindings scd="~tns:AmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AmountType"/>
+    </bindings>
+    <bindings scd="~tns:ApplicationIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ApplicationIDType"/>
+    </bindings>
+    <bindings scd="~tns:ApplicationStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ApplicationStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ApprovalStatusType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ApprovalStatusType"/>
+    </bindings>
+    <bindings scd="~tns:AttributeIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AttributeIDType"/>
+    </bindings>
+    <bindings scd="~tns:BackOrderAllowedIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BackOrderAllowedIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:BackorderQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BackorderQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:BackorderReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BackorderReasonType"/>
+    </bindings>
+    <bindings scd="~tns:BalanceAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BalanceAmountType"/>
+    </bindings>
+    <bindings scd="~tns:BalanceBroughtForwardIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BalanceBroughtForwardIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:BaseAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BaseAmountType"/>
+    </bindings>
+    <bindings scd="~tns:BaseQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BaseQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:BaseUnitMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BaseUnitMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:BatchQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BatchQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:BlockNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BlockNameType"/>
+    </bindings>
+    <bindings scd="~tns:BrandNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BrandNameType"/>
+    </bindings>
+    <bindings scd="~tns:BuildingNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BuildingNameType"/>
+    </bindings>
+    <bindings scd="~tns:BuildingNumberType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BuildingNumberType"/>
+    </bindings>
+    <bindings scd="~tns:CalculationRateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CalculationRateType"/>
+    </bindings>
+    <bindings scd="~tns:CalculationSequenceNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CalculationSequenceNumericType"/>
+    </bindings>
+    <bindings scd="~tns:CancellationNoteType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CancellationNoteType"/>
+    </bindings>
+    <bindings scd="~tns:CanonicalizationMethodType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CanonicalizationMethodType"/>
+    </bindings>
+    <bindings scd="~tns:CardChipCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CardChipCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CardTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CardTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CargoTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CargoTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CarrierAssignedIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CarrierAssignedIDType"/>
+    </bindings>
+    <bindings scd="~tns:CatalogueIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CatalogueIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:CategoryNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CategoryNameType"/>
+    </bindings>
+    <bindings scd="~tns:CertificateTypeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CertificateTypeType"/>
+    </bindings>
+    <bindings scd="~tns:ChannelType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChannelType"/>
+    </bindings>
+    <bindings scd="~tns:ChannelCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChannelCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ChargeableWeightMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeableWeightMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:ChargeIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:ChargeTotalAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeTotalAmountType"/>
+    </bindings>
+    <bindings scd="~tns:ChipApplicationIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChipApplicationIDType"/>
+    </bindings>
+    <bindings scd="~tns:CityNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CityNameType"/>
+    </bindings>
+    <bindings scd="~tns:CitySubdivisionNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CitySubdivisionNameType"/>
+    </bindings>
+    <bindings scd="~tns:ClassifiedIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ClassifiedIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:CodeValueType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CodeValueType"/>
+    </bindings>
+    <bindings scd="~tns:CommodityCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CommodityCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CompanyIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CompanyIDType"/>
+    </bindings>
+    <bindings scd="~tns:CompletionIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CompletionIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:ConditionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ConditionType"/>
+    </bindings>
+    <bindings scd="~tns:ConditionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ConditionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ConditionsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ConditionsType"/>
+    </bindings>
+    <bindings scd="~tns:ConsumerUnitQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ConsumerUnitQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:ContentUnitQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ContentUnitQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:ContractSubdivisionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ContractSubdivisionType"/>
+    </bindings>
+    <bindings scd="~tns:ContractTypeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ContractTypeType"/>
+    </bindings>
+    <bindings scd="~tns:ContractTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ContractTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CoordinateSystemCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CoordinateSystemCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CopiesNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CopiesNumericType"/>
+    </bindings>
+    <bindings scd="~tns:CopyIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CopyIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:CorporateRegistrationTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CorporateRegistrationTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CountrySubentityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CountrySubentityType"/>
+    </bindings>
+    <bindings scd="~tns:CountrySubentityCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CountrySubentityCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CreditAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CreditAmountType"/>
+    </bindings>
+    <bindings scd="~tns:CreditedQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CreditedQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:CreditLineAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CreditLineAmountType"/>
+    </bindings>
+    <bindings scd="~tns:CurrencyBaseRateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CurrencyBaseRateType"/>
+    </bindings>
+    <bindings scd="~tns:CurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CustomerAssignedAccountIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomerAssignedAccountIDType"/>
+    </bindings>
+    <bindings scd="~tns:CustomerReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomerReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:CustomizationIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomizationIDType"/>
+    </bindings>
+    <bindings scd="~tns:CustomsIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomsIDType"/>
+    </bindings>
+    <bindings scd="~tns:CustomsImportClassifiedIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomsImportClassifiedIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:CustomsStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomsStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CustomsTariffQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomsTariffQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:CV2IDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CV2IDType"/>
+    </bindings>
+    <bindings scd="~tns:DamageRemarksType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DamageRemarksType"/>
+    </bindings>
+    <bindings scd="~tns:DataSendingCapabilityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DataSendingCapabilityType"/>
+    </bindings>
+    <bindings scd="~tns:DateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DateType"/>
+    </bindings>
+    <bindings scd="~tns:DebitAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DebitAmountType"/>
+    </bindings>
+    <bindings scd="~tns:DebitedQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DebitedQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:DebitLineAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DebitLineAmountType"/>
+    </bindings>
+    <bindings scd="~tns:DeclaredCarriageValueAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DeclaredCarriageValueAmountType"/>
+    </bindings>
+    <bindings scd="~tns:DeclaredCustomsValueAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DeclaredCustomsValueAmountType"/>
+    </bindings>
+    <bindings scd="~tns:DeclaredForCarriageValueAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DeclaredForCarriageValueAmountType"/>
+    </bindings>
+    <bindings scd="~tns:DeclaredStatisticsValueAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DeclaredStatisticsValueAmountType"/>
+    </bindings>
+    <bindings scd="~tns:DegreesMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DegreesMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:DeliveredQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DeliveredQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:DeliveryDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DeliveryDateType"/>
+    </bindings>
+    <bindings scd="~tns:DeliveryInstructionsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DeliveryInstructionsType"/>
+    </bindings>
+    <bindings scd="~tns:DeliveryTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DeliveryTimeType"/>
+    </bindings>
+    <bindings scd="~tns:DepartmentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DepartmentType"/>
+    </bindings>
+    <bindings scd="~tns:DescriptionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DescriptionType"/>
+    </bindings>
+    <bindings scd="~tns:DescriptionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DescriptionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:DespatchAdviceTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DespatchAdviceTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:DespatchDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DespatchDateType"/>
+    </bindings>
+    <bindings scd="~tns:DespatchTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DespatchTimeType"/>
+    </bindings>
+    <bindings scd="~tns:DirectionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DirectionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:DiscountPercentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DiscountPercentType"/>
+    </bindings>
+    <bindings scd="~tns:DispositionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DispositionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:DistrictType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DistrictType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentBinaryObjectType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentBinaryObjectType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentCurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentCurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentHashType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentHashType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentIDType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentTypeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentTypeType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:DurationMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DurationMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:ElectronicMailType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ElectronicMailType"/>
+    </bindings>
+    <bindings scd="~tns:EmbeddedDocumentBinaryObjectType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EmbeddedDocumentBinaryObjectType"/>
+    </bindings>
+    <bindings scd="~tns:EmergencyProceduresCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EmergencyProceduresCodeType"/>
+    </bindings>
+    <bindings scd="~tns:EndDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EndDateType"/>
+    </bindings>
+    <bindings scd="~tns:EndpointIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EndpointIDType"/>
+    </bindings>
+    <bindings scd="~tns:EndTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EndTimeType"/>
+    </bindings>
+    <bindings scd="~tns:EstimatedDespatchDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EstimatedDespatchDateType"/>
+    </bindings>
+    <bindings scd="~tns:EstimatedDespatchTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EstimatedDespatchTimeType"/>
+    </bindings>
+    <bindings scd="~tns:EventCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EventCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ExchangeMarketIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ExchangeMarketIDType"/>
+    </bindings>
+    <bindings scd="~tns:ExemptionReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ExemptionReasonType"/>
+    </bindings>
+    <bindings scd="~tns:ExemptionReasonCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ExemptionReasonCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ExpiryDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ExpiryDateType"/>
+    </bindings>
+    <bindings scd="~tns:ExpiryTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ExpiryTimeType"/>
+    </bindings>
+    <bindings scd="~tns:ExtendedIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ExtendedIDType"/>
+    </bindings>
+    <bindings scd="~tns:ExtensionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ExtensionType"/>
+    </bindings>
+    <bindings scd="~tns:FactorNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FactorNumericType"/>
+    </bindings>
+    <bindings scd="~tns:FamilyNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FamilyNameType"/>
+    </bindings>
+    <bindings scd="~tns:FirstNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FirstNameType"/>
+    </bindings>
+    <bindings scd="~tns:FloorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FloorType"/>
+    </bindings>
+    <bindings scd="~tns:FreeOfChargeIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FreeOfChargeIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:FreeOnBoardValueAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FreeOnBoardValueAmountType"/>
+    </bindings>
+    <bindings scd="~tns:FreightRateClassCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FreightRateClassCodeType"/>
+    </bindings>
+    <bindings scd="~tns:FullnessIndicationCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.FullnessIndicationCodeType"/>
+    </bindings>
+    <bindings scd="~tns:GoodsItemQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.GoodsItemQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:GrossVolumeMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.GrossVolumeMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:GrossWeightMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.GrossWeightMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:HandlingCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.HandlingCodeType"/>
+    </bindings>
+    <bindings scd="~tns:HandlingInstructionsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.HandlingInstructionsType"/>
+    </bindings>
+    <bindings scd="~tns:HazardClassIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.HazardClassIDType"/>
+    </bindings>
+    <bindings scd="~tns:HazardousCategoryCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.HazardousCategoryCodeType"/>
+    </bindings>
+    <bindings scd="~tns:HazardousRegulationCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.HazardousRegulationCodeType"/>
+    </bindings>
+    <bindings scd="~tns:HazardousRiskIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.HazardousRiskIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:HolderNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.HolderNameType"/>
+    </bindings>
+    <bindings scd="~tns:IDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType"/>
+    </bindings>
+    <bindings scd="~tns:IdentificationCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IdentificationCodeType"/>
+    </bindings>
+    <bindings scd="~tns:IdentificationIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IdentificationIDType"/>
+    </bindings>
+    <bindings scd="~tns:IndicationIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IndicationIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:IndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:InformationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InformationType"/>
+    </bindings>
+    <bindings scd="~tns:InhalationToxicityZoneCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InhalationToxicityZoneCodeType"/>
+    </bindings>
+    <bindings scd="~tns:InhouseMailType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InhouseMailType"/>
+    </bindings>
+    <bindings scd="~tns:InspectionMethodCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InspectionMethodCodeType"/>
+    </bindings>
+    <bindings scd="~tns:InstructionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InstructionType"/>
+    </bindings>
+    <bindings scd="~tns:InstructionIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InstructionIDType"/>
+    </bindings>
+    <bindings scd="~tns:InstructionNoteType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InstructionNoteType"/>
+    </bindings>
+    <bindings scd="~tns:InstructionsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InstructionsType"/>
+    </bindings>
+    <bindings scd="~tns:InsurancePremiumAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InsurancePremiumAmountType"/>
+    </bindings>
+    <bindings scd="~tns:InsuranceValueAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InsuranceValueAmountType"/>
+    </bindings>
+    <bindings scd="~tns:InvoiceAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoiceAmountType"/>
+    </bindings>
+    <bindings scd="~tns:InvoicedQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoicedQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:InvoiceTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoiceTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:InvoicingPartyReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoicingPartyReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:IssueDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDateType"/>
+    </bindings>
+    <bindings scd="~tns:IssueNumberIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueNumberIDType"/>
+    </bindings>
+    <bindings scd="~tns:IssuerIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssuerIDType"/>
+    </bindings>
+    <bindings scd="~tns:IssueTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueTimeType"/>
+    </bindings>
+    <bindings scd="~tns:ItemClassificationCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ItemClassificationCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ItemUpdateRequestIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ItemUpdateRequestIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:JobIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.JobIDType"/>
+    </bindings>
+    <bindings scd="~tns:JobTitleType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.JobTitleType"/>
+    </bindings>
+    <bindings scd="~tns:JourneyIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.JourneyIDType"/>
+    </bindings>
+    <bindings scd="~tns:KeywordType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.KeywordType"/>
+    </bindings>
+    <bindings scd="~tns:LanguageIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LanguageIDType"/>
+    </bindings>
+    <bindings scd="~tns:LastRevisionDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LastRevisionDateType"/>
+    </bindings>
+    <bindings scd="~tns:LastRevisionTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LastRevisionTimeType"/>
+    </bindings>
+    <bindings scd="~tns:LatestDeliveryDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LatestDeliveryDateType"/>
+    </bindings>
+    <bindings scd="~tns:LatestDeliveryTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LatestDeliveryTimeType"/>
+    </bindings>
+    <bindings scd="~tns:LatitudeDegreesMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LatitudeDegreesMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:LatitudeDirectionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LatitudeDirectionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:LatitudeMinutesMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LatitudeMinutesMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:LeadTimeMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LeadTimeMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:LegalStatusIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LegalStatusIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:LengthMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LengthMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:LicensePlateIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LicensePlateIDType"/>
+    </bindings>
+    <bindings scd="~tns:LifeCycleStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LifeCycleStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:LineType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineType"/>
+    </bindings>
+    <bindings scd="~tns:LineAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineAmountType"/>
+    </bindings>
+    <bindings scd="~tns:LineCountNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineCountNumericType"/>
+    </bindings>
+    <bindings scd="~tns:LineExtensionAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineExtensionAmountType"/>
+    </bindings>
+    <bindings scd="~tns:LineIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineIDType"/>
+    </bindings>
+    <bindings scd="~tns:LineStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:LoadingLengthMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LoadingLengthMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:LocaleCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LocaleCodeType"/>
+    </bindings>
+    <bindings scd="~tns:LocationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LocationType"/>
+    </bindings>
+    <bindings scd="~tns:LocationIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LocationIDType"/>
+    </bindings>
+    <bindings scd="~tns:LogoReferenceIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LogoReferenceIDType"/>
+    </bindings>
+    <bindings scd="~tns:LongitudeDegreesMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LongitudeDegreesMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:LongitudeDirectionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LongitudeDirectionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:LongitudeMinutesMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LongitudeMinutesMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:LossRiskType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LossRiskType"/>
+    </bindings>
+    <bindings scd="~tns:LossRiskResponsibilityCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LossRiskResponsibilityCodeType"/>
+    </bindings>
+    <bindings scd="~tns:LotNumberIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LotNumberIDType"/>
+    </bindings>
+    <bindings scd="~tns:LowerOrangeHazardPlacardIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LowerOrangeHazardPlacardIDType"/>
+    </bindings>
+    <bindings scd="~tns:MailType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MailType"/>
+    </bindings>
+    <bindings scd="~tns:ManufactureDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ManufactureDateType"/>
+    </bindings>
+    <bindings scd="~tns:ManufactureTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ManufactureTimeType"/>
+    </bindings>
+    <bindings scd="~tns:MarkAttentionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MarkAttentionType"/>
+    </bindings>
+    <bindings scd="~tns:MarkAttentionIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MarkAttentionIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:MarkCareType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MarkCareType"/>
+    </bindings>
+    <bindings scd="~tns:MarkCareIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MarkCareIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:MarkingIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MarkingIDType"/>
+    </bindings>
+    <bindings scd="~tns:MarksType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MarksType"/>
+    </bindings>
+    <bindings scd="~tns:MathematicOperatorCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MathematicOperatorCodeType"/>
+    </bindings>
+    <bindings scd="~tns:MaximumBackorderQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MaximumBackorderQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:MaximumCopiesNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MaximumCopiesNumericType"/>
+    </bindings>
+    <bindings scd="~tns:MaximumMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MaximumMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:MaximumOrderQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MaximumOrderQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:MaximumQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MaximumQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:MeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MeasureType"/>
+    </bindings>
+    <bindings scd="~tns:MedicalFirstAidGuideCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MedicalFirstAidGuideCodeType"/>
+    </bindings>
+    <bindings scd="~tns:MiddleNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MiddleNameType"/>
+    </bindings>
+    <bindings scd="~tns:MinimumBackorderQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MinimumBackorderQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:MinimumMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MinimumMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:MinimumOrderQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MinimumOrderQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:MinimumQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MinimumQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:MinutesMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MinutesMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:ModelNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ModelNameType"/>
+    </bindings>
+    <bindings scd="~tns:MultiplierFactorNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MultiplierFactorNumericType"/>
+    </bindings>
+    <bindings scd="~tns:NameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NameType"/>
+    </bindings>
+    <bindings scd="~tns:NameSuffixType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NameSuffixType"/>
+    </bindings>
+    <bindings scd="~tns:NationalityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NationalityType"/>
+    </bindings>
+    <bindings scd="~tns:NationalityIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NationalityIDType"/>
+    </bindings>
+    <bindings scd="~tns:NatureCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NatureCodeType"/>
+    </bindings>
+    <bindings scd="~tns:NetNetWeightMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NetNetWeightMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:NetVolumeMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NetVolumeMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:NetWeightMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NetWeightMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:NetworkIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NetworkIDType"/>
+    </bindings>
+    <bindings scd="~tns:NoteType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType"/>
+    </bindings>
+    <bindings scd="~tns:NumberIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NumberIDType"/>
+    </bindings>
+    <bindings scd="~tns:OccurrenceDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OccurrenceDateType"/>
+    </bindings>
+    <bindings scd="~tns:OccurrenceTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OccurrenceTimeType"/>
+    </bindings>
+    <bindings scd="~tns:OnCarriageIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OnCarriageIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:OrangeHazardPlacardIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OrangeHazardPlacardIDType"/>
+    </bindings>
+    <bindings scd="~tns:OrderableIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OrderableIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:OrderableUnitType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OrderableUnitType"/>
+    </bindings>
+    <bindings scd="~tns:OrderableUnitFactorRateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OrderableUnitFactorRateType"/>
+    </bindings>
+    <bindings scd="~tns:OrderIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OrderIDType"/>
+    </bindings>
+    <bindings scd="~tns:OrderQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OrderQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:OrderQuantityIncrementNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OrderQuantityIncrementNumericType"/>
+    </bindings>
+    <bindings scd="~tns:OrganizationDepartmentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OrganizationDepartmentType"/>
+    </bindings>
+    <bindings scd="~tns:OriginalJobIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OriginalJobIDType"/>
+    </bindings>
+    <bindings scd="~tns:OtherInstructionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OtherInstructionType"/>
+    </bindings>
+    <bindings scd="~tns:OutstandingQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OutstandingQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:OutstandingReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OutstandingReasonType"/>
+    </bindings>
+    <bindings scd="~tns:OversupplyQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OversupplyQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:OwnerTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.OwnerTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PackageLevelCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PackageLevelCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PackageQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PackageQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:PackagesQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PackagesQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:PackagingTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PackagingTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PackingCriteriaCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PackingCriteriaCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PackingMaterialType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PackingMaterialType"/>
+    </bindings>
+    <bindings scd="~tns:PackLevelCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PackLevelCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PackQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PackQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:PackSizeNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PackSizeNumericType"/>
+    </bindings>
+    <bindings scd="~tns:PaidAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaidAmountType"/>
+    </bindings>
+    <bindings scd="~tns:PaidDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaidDateType"/>
+    </bindings>
+    <bindings scd="~tns:PaidTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaidTimeType"/>
+    </bindings>
+    <bindings scd="~tns:ParentDocumentIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ParentDocumentIDType"/>
+    </bindings>
+    <bindings scd="~tns:ParentDocumentTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ParentDocumentTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PartialDeliveryIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PartialDeliveryIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:PayableAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayableAmountType"/>
+    </bindings>
+    <bindings scd="~tns:PayableRoundingAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayableRoundingAmountType"/>
+    </bindings>
+    <bindings scd="~tns:PayerReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayerReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentAlternativeCurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentAlternativeCurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentAmountType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentChannelCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentChannelCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentCurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentCurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentDueDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentDueDateType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentIDType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentMeansCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentMeansCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentMeansIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentMeansIDType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentNoteType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentNoteType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentOrderReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentOrderReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:PenaltySurchargePercentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PenaltySurchargePercentType"/>
+    </bindings>
+    <bindings scd="~tns:PercentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentType"/>
+    </bindings>
+    <bindings scd="~tns:PerUnitAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PerUnitAmountType"/>
+    </bindings>
+    <bindings scd="~tns:PlacardEndorsementType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PlacardEndorsementType"/>
+    </bindings>
+    <bindings scd="~tns:PlacardNotationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PlacardNotationType"/>
+    </bindings>
+    <bindings scd="~tns:PlotIdentificationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PlotIdentificationType"/>
+    </bindings>
+    <bindings scd="~tns:PositionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PositionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PostalZoneType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PostalZoneType"/>
+    </bindings>
+    <bindings scd="~tns:PostboxType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PostboxType"/>
+    </bindings>
+    <bindings scd="~tns:PreCarriageIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PreCarriageIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:PreferenceCriterionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PreferenceCriterionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PrepaidAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PrepaidAmountType"/>
+    </bindings>
+    <bindings scd="~tns:PrepaidIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PrepaidIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:PrepaidPaymentReferenceIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PrepaidPaymentReferenceIDType"/>
+    </bindings>
+    <bindings scd="~tns:PreviousJobIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PreviousJobIDType"/>
+    </bindings>
+    <bindings scd="~tns:PreviousVersionIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PreviousVersionIDType"/>
+    </bindings>
+    <bindings scd="~tns:PriceAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceAmountType"/>
+    </bindings>
+    <bindings scd="~tns:PriceChangeReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceChangeReasonType"/>
+    </bindings>
+    <bindings scd="~tns:PriceTypeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceTypeType"/>
+    </bindings>
+    <bindings scd="~tns:PriceTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PricingCurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PricingCurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PricingUpdateRequestIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PricingUpdateRequestIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:PrimaryAccountNumberIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PrimaryAccountNumberIDType"/>
+    </bindings>
+    <bindings scd="~tns:PrintQualifierType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PrintQualifierType"/>
+    </bindings>
+    <bindings scd="~tns:PriorityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriorityType"/>
+    </bindings>
+    <bindings scd="~tns:ProductTraceIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ProductTraceIDType"/>
+    </bindings>
+    <bindings scd="~tns:ProfileIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ProfileIDType"/>
+    </bindings>
+    <bindings scd="~tns:ProviderTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ProviderTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:QualifierType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.QualifierType"/>
+    </bindings>
+    <bindings scd="~tns:QuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.QuantityType"/>
+    </bindings>
+    <bindings scd="~tns:RailCarIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RailCarIDType"/>
+    </bindings>
+    <bindings scd="~tns:ReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReasonType"/>
+    </bindings>
+    <bindings scd="~tns:ReceivedDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReceivedDateType"/>
+    </bindings>
+    <bindings scd="~tns:ReceivedQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReceivedQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:ReferenceType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReferenceType"/>
+    </bindings>
+    <bindings scd="~tns:ReferenceDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReferenceDateType"/>
+    </bindings>
+    <bindings scd="~tns:ReferenceEventCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReferenceEventCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ReferenceIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReferenceIDType"/>
+    </bindings>
+    <bindings scd="~tns:ReferenceTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReferenceTimeType"/>
+    </bindings>
+    <bindings scd="~tns:RefrigerationOnIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RefrigerationOnIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:RegionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RegionType"/>
+    </bindings>
+    <bindings scd="~tns:RegistrationIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RegistrationIDType"/>
+    </bindings>
+    <bindings scd="~tns:RegistrationNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RegistrationNameType"/>
+    </bindings>
+    <bindings scd="~tns:RegistrationNationalityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RegistrationNationalityType"/>
+    </bindings>
+    <bindings scd="~tns:RegistrationNationalityIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RegistrationNationalityIDType"/>
+    </bindings>
+    <bindings scd="~tns:RejectActionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RejectActionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:RejectedQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RejectedQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:RejectionNoteType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RejectionNoteType"/>
+    </bindings>
+    <bindings scd="~tns:RejectReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RejectReasonType"/>
+    </bindings>
+    <bindings scd="~tns:RejectReasonCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RejectReasonCodeType"/>
+    </bindings>
+    <bindings scd="~tns:RemarksType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RemarksType"/>
+    </bindings>
+    <bindings scd="~tns:ReminderSequenceNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReminderSequenceNumericType"/>
+    </bindings>
+    <bindings scd="~tns:ReminderTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReminderTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:RequestedDespatchDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RequestedDespatchDateType"/>
+    </bindings>
+    <bindings scd="~tns:RequestedDespatchTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RequestedDespatchTimeType"/>
+    </bindings>
+    <bindings scd="~tns:RequestedInvoiceCurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RequestedInvoiceCurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:RequiredCustomsIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RequiredCustomsIDType"/>
+    </bindings>
+    <bindings scd="~tns:ResponseCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ResponseCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ResponseDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ResponseDateType"/>
+    </bindings>
+    <bindings scd="~tns:ResponseTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ResponseTimeType"/>
+    </bindings>
+    <bindings scd="~tns:ReturnabilityIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReturnabilityIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:ReturnableMaterialIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ReturnableMaterialIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:RevisionDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RevisionDateType"/>
+    </bindings>
+    <bindings scd="~tns:RevisionTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RevisionTimeType"/>
+    </bindings>
+    <bindings scd="~tns:RoleCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RoleCodeType"/>
+    </bindings>
+    <bindings scd="~tns:RoomType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RoomType"/>
+    </bindings>
+    <bindings scd="~tns:RoundingAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RoundingAmountType"/>
+    </bindings>
+    <bindings scd="~tns:SalesOrderIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SalesOrderIDType"/>
+    </bindings>
+    <bindings scd="~tns:SalesOrderLineIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SalesOrderLineIDType"/>
+    </bindings>
+    <bindings scd="~tns:SchemeURIType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SchemeURIType"/>
+    </bindings>
+    <bindings scd="~tns:SealingPartyTypeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SealingPartyTypeType"/>
+    </bindings>
+    <bindings scd="~tns:SealIssuerTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SealIssuerTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:SealStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SealStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:SequenceIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SequenceIDType"/>
+    </bindings>
+    <bindings scd="~tns:SequenceNumberIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SequenceNumberIDType"/>
+    </bindings>
+    <bindings scd="~tns:SequenceNumericType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SequenceNumericType"/>
+    </bindings>
+    <bindings scd="~tns:SerialIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SerialIDType"/>
+    </bindings>
+    <bindings scd="~tns:SettlementDiscountPercentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SettlementDiscountPercentType"/>
+    </bindings>
+    <bindings scd="~tns:ShippingMarksType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ShippingMarksType"/>
+    </bindings>
+    <bindings scd="~tns:ShippingOrderIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ShippingOrderIDType"/>
+    </bindings>
+    <bindings scd="~tns:ShippingPriorityLevelCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ShippingPriorityLevelCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ShortageActionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ShortageActionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ShortQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ShortQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:SignatureMethodType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SignatureMethodType"/>
+    </bindings>
+    <bindings scd="~tns:SizeTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SizeTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:SourceCurrencyBaseRateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SourceCurrencyBaseRateType"/>
+    </bindings>
+    <bindings scd="~tns:SourceCurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SourceCurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:SpecialInstructionsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SpecialInstructionsType"/>
+    </bindings>
+    <bindings scd="~tns:SpecialTermsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SpecialTermsType"/>
+    </bindings>
+    <bindings scd="~tns:SplitConsignmentIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SplitConsignmentIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:StartDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StartDateType"/>
+    </bindings>
+    <bindings scd="~tns:StartTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StartTimeType"/>
+    </bindings>
+    <bindings scd="~tns:StatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:StatusReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StatusReasonType"/>
+    </bindings>
+    <bindings scd="~tns:StatusReasonCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StatusReasonCodeType"/>
+    </bindings>
+    <bindings scd="~tns:StreetNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StreetNameType"/>
+    </bindings>
+    <bindings scd="~tns:SubstitutionStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SubstitutionStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:SummaryDescriptionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SummaryDescriptionType"/>
+    </bindings>
+    <bindings scd="~tns:SupplierAssignedAccountIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SupplierAssignedAccountIDType"/>
+    </bindings>
+    <bindings scd="~tns:SurchargePercentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.SurchargePercentType"/>
+    </bindings>
+    <bindings scd="~tns:TargetCurrencyBaseRateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TargetCurrencyBaseRateType"/>
+    </bindings>
+    <bindings scd="~tns:TargetCurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TargetCurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TariffClassCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TariffClassCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TariffCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TariffCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TariffDescriptionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TariffDescriptionType"/>
+    </bindings>
+    <bindings scd="~tns:TaxableAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxableAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TaxAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TaxCurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxCurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TaxEvidenceIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxEvidenceIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:TaxExclusiveAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxExclusiveAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TaxExemptionReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxExemptionReasonType"/>
+    </bindings>
+    <bindings scd="~tns:TaxExemptionReasonCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxExemptionReasonCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TaxInclusiveAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxInclusiveAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TaxLevelCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxLevelCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TaxPointDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxPointDateType"/>
+    </bindings>
+    <bindings scd="~tns:TaxTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TechnicalNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TechnicalNameType"/>
+    </bindings>
+    <bindings scd="~tns:TelefaxType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TelefaxType"/>
+    </bindings>
+    <bindings scd="~tns:TelephoneType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TelephoneType"/>
+    </bindings>
+    <bindings scd="~tns:TermsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TermsType"/>
+    </bindings>
+    <bindings scd="~tns:TextType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TextType"/>
+    </bindings>
+    <bindings scd="~tns:TierRangeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TierRangeType"/>
+    </bindings>
+    <bindings scd="~tns:TierRatePercentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TierRatePercentType"/>
+    </bindings>
+    <bindings scd="~tns:TimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TimeType"/>
+    </bindings>
+    <bindings scd="~tns:TimezoneOffsetType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TimezoneOffsetType"/>
+    </bindings>
+    <bindings scd="~tns:TimingComplaintType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TimingComplaintType"/>
+    </bindings>
+    <bindings scd="~tns:TimingComplaintCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TimingComplaintCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TitleType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TitleType"/>
+    </bindings>
+    <bindings scd="~tns:ToOrderIndicatorType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ToOrderIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:TotalBalanceAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalBalanceAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TotalCreditAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalCreditAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TotalDebitAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalDebitAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TotalGoodsItemQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalGoodsItemQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:TotalInvoiceAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalInvoiceAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TotalPackageQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalPackageQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:TotalPackagesQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalPackagesQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:TotalPaymentAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalPaymentAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TotalTaxAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalTaxAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TotalTransportHandlingUnitQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TotalTransportHandlingUnitQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:TrackingIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TrackingIDType"/>
+    </bindings>
+    <bindings scd="~tns:TradingRestrictionsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TradingRestrictionsType"/>
+    </bindings>
+    <bindings scd="~tns:TrainIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TrainIDType"/>
+    </bindings>
+    <bindings scd="~tns:TransactionCurrencyTaxAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransactionCurrencyTaxAmountType"/>
+    </bindings>
+    <bindings scd="~tns:TransitDirectionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransitDirectionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportAuthorizationCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransportAuthorizationCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportEmergencyCardCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransportEmergencyCardCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportEquipmentTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransportEquipmentTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportEventTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransportEventTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportHandlingUnitQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransportHandlingUnitQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:TransportHandlingUnitTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransportHandlingUnitTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportMeansTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransportMeansTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportModeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransportModeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportServiceCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TransportServiceCodeType"/>
+    </bindings>
+    <bindings scd="~tns:UBLVersionIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UBLVersionIDType"/>
+    </bindings>
+    <bindings scd="~tns:UNDGCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UNDGCodeType"/>
+    </bindings>
+    <bindings scd="~tns:UnitType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UnitType"/>
+    </bindings>
+    <bindings scd="~tns:UnitQuantityType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UnitQuantityType"/>
+    </bindings>
+    <bindings scd="~tns:UpperOrangeHazardPlacardIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UpperOrangeHazardPlacardIDType"/>
+    </bindings>
+    <bindings scd="~tns:URIType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.URIType"/>
+    </bindings>
+    <bindings scd="~tns:UUIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UUIDType"/>
+    </bindings>
+    <bindings scd="~tns:ValidationDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValidationDateType"/>
+    </bindings>
+    <bindings scd="~tns:ValidationTimeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValidationTimeType"/>
+    </bindings>
+    <bindings scd="~tns:ValidatorIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValidatorIDType"/>
+    </bindings>
+    <bindings scd="~tns:ValidityStartDateType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValidityStartDateType"/>
+    </bindings>
+    <bindings scd="~tns:ValueType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueType"/>
+    </bindings>
+    <bindings scd="~tns:ValueAmountType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueAmountType"/>
+    </bindings>
+    <bindings scd="~tns:VersionIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.VersionIDType"/>
+    </bindings>
+    <bindings scd="~tns:VesselIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.VesselIDType"/>
+    </bindings>
+    <bindings scd="~tns:VesselNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.VesselNameType"/>
+    </bindings>
+    <bindings scd="~tns:VolumeMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.VolumeMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:WarrantyInformationType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.WarrantyInformationType"/>
+    </bindings>
+    <bindings scd="~tns:WebsiteURIType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.WebsiteURIType"/>
+    </bindings>
+    <bindings scd="~tns:WeightMeasureType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.WeightMeasureType"/>
+    </bindings>
+    <bindings scd="~tns:XPathType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.XPathType"/>
+    </bindings>
+    <bindings scd="~tns:ZoneType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ZoneType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2">
+    <schemaBindings map="false">
+      <package name="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2"/>
+    </schemaBindings>
+    <bindings scd="~tns:AmountType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.AmountType"/>
+    </bindings>
+    <bindings scd="~tns:BinaryObjectType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.BinaryObjectType"/>
+    </bindings>
+    <bindings scd="~tns:GraphicType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.GraphicType"/>
+    </bindings>
+    <bindings scd="~tns:PictureType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.PictureType"/>
+    </bindings>
+    <bindings scd="~tns:SoundType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.SoundType"/>
+    </bindings>
+    <bindings scd="~tns:VideoType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.VideoType"/>
+    </bindings>
+    <bindings scd="~tns:CodeType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.CodeType"/>
+    </bindings>
+    <bindings scd="~tns:IdentifierType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.IdentifierType"/>
+    </bindings>
+    <bindings scd="~tns:MeasureType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.MeasureType"/>
+    </bindings>
+    <bindings scd="~tns:QuantityType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.QuantityType"/>
+    </bindings>
+    <bindings scd="~tns:TextType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.TextType"/>
+    </bindings>
+    <bindings scd="~tns:NameType">
+      <class ref="un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.NameType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2">
+    <schemaBindings map="false">
+      <package name="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2"/>
+    </schemaBindings>
+    <bindings scd="~tns:AllowanceChargeReasonCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.AllowanceChargeReasonCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ChannelCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.ChannelCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ChipCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.ChipCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ContainerSizeTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.ContainerSizeTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CountryIdentificationCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.CountryIdentificationCodeType"/>
+    </bindings>
+    <bindings scd="~tns:CurrencyCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.CurrencyCodeType"/>
+    </bindings>
+    <bindings scd="~tns:DocumentStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.DocumentStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:LatitudeDirectionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.LatitudeDirectionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:LineStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.LineStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:LongitudeDirectionCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.LongitudeDirectionCodeType"/>
+    </bindings>
+    <bindings scd="~tns:OperatorCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.OperatorCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PackagingTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.PackagingTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentMeansCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.PaymentMeansCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PortCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.PortCodeType"/>
+    </bindings>
+    <bindings scd="~tns:SubstitutionStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.SubstitutionStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportationStatusCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.TransportationStatusCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportEquipmentTypeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.TransportEquipmentTypeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:TransportModeCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.TransportModeCodeType"/>
+    </bindings>
+    <bindings scd="~tns:UnitOfMeasureCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.qualifieddatatypes_2.UnitOfMeasureCodeType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2">
+    <schemaBindings map="false">
+      <package name="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2"/>
+    </schemaBindings>
+    <bindings scd="~tns:UBLExtensionsType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionsType"/>
+    </bindings>
+    <bindings scd="~tns:UBLExtensionType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionType"/>
+    </bindings>
+    <bindings scd="~tns:ExtensionAgencyIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionAgencyIDType"/>
+    </bindings>
+    <bindings scd="~tns:ExtensionAgencyNameType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionAgencyNameType"/>
+    </bindings>
+    <bindings scd="~tns:ExtensionAgencyURIType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionAgencyURIType"/>
+    </bindings>
+    <bindings scd="~tns:ExtensionContentType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionContentType"/>
+    </bindings>
+    <bindings scd="~tns:ExtensionReasonType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionReasonType"/>
+    </bindings>
+    <bindings scd="~tns:ExtensionReasonCodeType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionReasonCodeType"/>
+    </bindings>
+    <bindings scd="~tns:ExtensionURIType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionURIType"/>
+    </bindings>
+    <bindings scd="~tns:ExtensionVersionIDType">
+      <class ref="oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionVersionIDType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:un:unece:uncefact:codelist:specification:IANAMIMEMediaType:2003">
+    <schemaBindings map="false">
+      <package name="un.unece.uncefact.codelist.specification.ianamimemediatype._2003"/>
+    </schemaBindings>
+    <bindings scd="~tns:BinaryObjectMimeCodeContentType">
+      <typesafeEnumClass ref="un.unece.uncefact.codelist.specification.ianamimemediatype._2003.BinaryObjectMimeCodeContentType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:un:unece:uncefact:codelist:specification:54217:2001">
+    <schemaBindings map="false">
+      <package name="un.unece.uncefact.codelist.specification._54217._2001"/>
+    </schemaBindings>
+    <bindings scd="~tns:CurrencyCodeContentType">
+      <typesafeEnumClass ref="un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType"/>
+    </bindings>
+  </bindings>
+</bindings>
+
