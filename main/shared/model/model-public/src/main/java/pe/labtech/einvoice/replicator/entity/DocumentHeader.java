@@ -919,6 +919,18 @@ public class DocumentHeader implements Serializable {
     private byte[] bl_cdr;
     @Column(name = "bl_urlcdr", length = 4000)
     private String bl_urlcdr;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "bl_xml")
+    private byte[] bl_xml;
+
+    public byte[] getBl_xml() {
+        return bl_xml;
+    }
+
+    public void setBl_xml(byte[] bl_xml) {
+        this.bl_xml = bl_xml;
+    }
 
     public DocumentHeader() {
     }

@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -34,6 +36,20 @@ import javax.xml.bind.annotation.XmlValue;
             "name"
         }
 )
+@NamedQueries({
+    @NamedQuery(
+            name = "DocumentResponse.findById",
+            query = "SELECT o FROM DocumentResponse o WHERE o.document = :document AND o.name = :name"
+    ),
+    @NamedQuery(
+            name = "DocumentResponse.findPending",
+            query = "SELECT o FROM DocumentResponse o WHERE o.replicate = TRUE"
+    ),
+    @NamedQuery(
+            name = "DocumentResponse.tryLock",
+            query = "UPDATE DocumentResponse o SET o.replicate = FALSE WHERE o.replicate = TRUE AND o.document = :document AND o.name = :name"
+    )
+})
 public class DocumentResponse implements Serializable {
 
     @Id
@@ -53,7 +69,7 @@ public class DocumentResponse implements Serializable {
 
     @Column(name = "REPLICATE")
     @XmlTransient
-    private boolean replicate;
+    private Boolean replicate;
 
     public DocumentResponse() {
     }
@@ -92,6 +108,13 @@ public class DocumentResponse implements Serializable {
         this.value = value;
     }
 
+    public DocumentResponse(Document document, String name, String value, boolean replicate) {
+        this.document = document;
+        this.name = name;
+        this.value = value;
+        this.replicate = replicate;
+    }
+
     public Document getDocument() {
         return document;
     }
@@ -116,11 +139,11 @@ public class DocumentResponse implements Serializable {
         this.value = value;
     }
 
-    public boolean isReplicate() {
+    public Boolean isReplicate() {
         return replicate;
     }
 
-    public void setReplicate(boolean replicate) {
+    public void setReplicate(Boolean replicate) {
         this.replicate = replicate;
     }
 

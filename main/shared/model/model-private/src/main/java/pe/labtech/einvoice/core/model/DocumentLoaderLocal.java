@@ -30,7 +30,7 @@ public interface DocumentLoaderLocal {
 
     void markForSync(Long id);
 
-    void markSigned(Long id, String signature, String hash, Map<String, String> responses);
+    void markSigned(Long id, String status, String signature, String hash, Map<String, String> responses);
 
     void markDeclared(Long id);
 

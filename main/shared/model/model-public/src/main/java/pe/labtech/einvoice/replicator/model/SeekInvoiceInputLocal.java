@@ -15,6 +15,6 @@ import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
  * @author Carlos
  */
 @Local
-public interface SeekHeaderLocal extends Seeker<DocumentHeader, DocumentHeaderPK, DocumentDetail> {
+public interface SeekInvoiceInputLocal extends Seeker<DocumentHeader, DocumentHeaderPK, DocumentDetail> {
 
 }

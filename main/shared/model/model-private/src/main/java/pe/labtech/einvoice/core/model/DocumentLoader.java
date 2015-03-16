@@ -7,9 +7,11 @@ package pe.labtech.einvoice.core.model;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -122,23 +124,91 @@ public class DocumentLoader implements DocumentLoaderLocal {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void markSigned(Long id, String signature, String hash, Map<String, String> responses) {
-        //TODO FIX QUERY TO USE RESPONSE ALSO
-        em.createNamedQuery("Document.updateSignature")
-                .setParameter("id", id)
-                .setParameter("status", "COMPLETE")
-                .setParameter("signature", signature)
-                .setParameter("hash", hash)
-                .executeUpdate();
+    public void markSigned(Long id, String status, String signature, String hash, Map<String, String> responses) {
         Document d = new Document();
         d.setId(id);
-        responses.forEach((k, v) -> em.persist(new DocumentResponse(d, k, v)));
+
+        responses.put("integratedStatus", MessageFormat.format(
+                "{0}/{1}/{2}",
+                responses.get("status"),
+                responses.get("documentStatus"),
+                responses.get("sunatStatus")
+        ));
+
+        em.createNamedQuery("Document.updateSignature")
+                .setParameter("id", id)
+                .setParameter("status", status)
+                .setParameter("signature", responses.get("signatureValue"))
+                .setParameter("hash", responses.get("hashCode"))
+                .executeUpdate();
+
         responses.forEach((k, v) -> {
-            if (k.toUpperCase().contains("URL")) {
-                em.persist(new DocumentData(d, k, v, null, "MISSING"));
+            //protege de un bug de implementación de la plataforma de bizlinks
+            if (k.equals("xmlFileSunatUrl")) {
+                final String sunatStatus = responses.get("sunatStatus");
+                if (sunatStatus == null) {
+                    return;
+                }
+                if (!sunatStatus.startsWith("RC") && !sunatStatus.startsWith("AC")) {
+                    return;
+                }
+            }
+
+            List<DocumentResponse> list = em
+                    .createNamedQuery(
+                            "DocumentResponse.findById",
+                            DocumentResponse.class
+                    )
+                    .setParameter("document", d)
+                    .setParameter("name", k)
+                    .getResultList();
+
+            if (list.isEmpty()) {
+                DocumentResponse dr = new DocumentResponse(d, k, v);
+                checkReplicable(k, dr);
+                em.persist(dr);
+            } else {
+                DocumentResponse dr = list.get(0);
+
+                if (!Objects.equals(v, dr.getValue())) {
+                    checkReplicable(k, dr);
+                    dr.setValue(v);
+                }
             }
         });
 
+        //FIX Synchcronization issue refered to defer creation of sunatSignURL
+        responses.forEach((k, v) -> {
+            if (k.toUpperCase().contains("URL")) {
+                List<DocumentData> list = em
+                        .createNamedQuery(
+                                "DocumentData.findById",
+                                DocumentData.class
+                        )
+                        .setParameter("document", d)
+                        .setParameter("name", k)
+                        .getResultList();
+                if (list.isEmpty()) {
+                    em.persist(new DocumentData(d, k, v, null, "MISSING"));
+                }
+            }
+        });
+
+    }
+
+    private void checkReplicable(String k, DocumentResponse documentResponse) {
+        switch (k) {
+            case "pdfFileUrl":
+            case "xmlFileSignUrl":
+            case "xmlFileSunatUrl":
+            case "integratedStatus":
+            case "hashCode":
+            case "signatureValue":
+                documentResponse.setReplicate(true);
+                break;
+            default:
+                documentResponse.setReplicate(false);
+        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -26,11 +27,13 @@ public abstract class AbstractSeeker<H, P, D> implements Seeker<H, P, D> {
     protected final Class<H> headerClass;
     protected final Class<P> keyClass;
     protected final Class<D> detailClass;
+    protected final BiConsumer<TypedQuery<D>, P> setParameters;
 
-    public AbstractSeeker(Class<H> headerClass, Class<P> keyClass, Class<D> detailClass) {
+    public AbstractSeeker(Class<H> headerClass, Class<P> keyClass, Class<D> detailClass, BiConsumer<TypedQuery<D>, P> setParameters) {
         this.headerClass = headerClass;
         this.keyClass = keyClass;
         this.detailClass = detailClass;
+        this.setParameters = setParameters;
     }
 
     protected abstract EntityManager getEntityManager();
@@ -66,7 +69,7 @@ public abstract class AbstractSeeker<H, P, D> implements Seeker<H, P, D> {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<D> findDetails(P id) {
         TypedQuery<D> q = getEntityManager().createNamedQuery(detailClass.getSimpleName() + ".findForHeaderId", detailClass);
-        setDetailParameters(q, id);
+        setParameters.accept(q, id);
         return q.getResultList();
     }
 
@@ -90,7 +93,5 @@ public abstract class AbstractSeeker<H, P, D> implements Seeker<H, P, D> {
         q.setParameter("id", id);
         q.executeUpdate();
     }
-
-    protected abstract void setDetailParameters(TypedQuery<D> q, P id);
 
 }

@@ -15,7 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -30,6 +33,20 @@ import javax.xml.bind.annotation.XmlType;
             "name"
         }
 )
+@NamedQueries({
+    @NamedQuery(
+            name = "DocumentData.findById",
+            query = "SELECT o FROM DocumentData o WHERE o.document = :document AND o.name = :name"
+    ),
+    @NamedQuery(
+            name = "DocumentData.findPending",
+            query = "SELECT o FROM DocumentData o WHERE o.replicate = TRUE"
+    ),
+    @NamedQuery(
+            name = "DocumentData.tryLock",
+            query = "UPDATE DocumentData o SET o.replicate = FALSE WHERE o.replicate = TRUE AND o.document = :document AND o.name = :name"
+    )
+})
 public class DocumentData implements Serializable {
 
     @Id
@@ -51,6 +68,10 @@ public class DocumentData implements Serializable {
 
     @Column(name = "STATUS", length = 20)
     private String status;
+
+    @Column(name = "REPLICATE")
+    @XmlTransient
+    private Boolean replicate;
 
     public DocumentData() {
     }
@@ -127,6 +148,14 @@ public class DocumentData implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Boolean getReplicate() {
+        return replicate;
+    }
+
+    public void setReplicate(Boolean replicate) {
+        this.replicate = replicate;
     }
 
 }

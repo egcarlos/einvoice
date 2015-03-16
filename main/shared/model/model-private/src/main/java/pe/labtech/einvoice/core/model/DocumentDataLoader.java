@@ -42,6 +42,7 @@ public class DocumentDataLoader implements DocumentDataLoaderLocal {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Override
     public boolean lock(DocumentData data) {
         return em
                 .createQuery(
@@ -53,9 +54,11 @@ public class DocumentDataLoader implements DocumentDataLoaderLocal {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Override
     public void release(DocumentData data, byte[] rawdata) {
         data = em.merge(data);
         data.setData(rawdata);
+        data.setReplicate(Boolean.TRUE);
         data.setStatus("LOADED");
     }
 
