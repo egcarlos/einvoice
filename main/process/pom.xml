@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pe.labtech.einvoice.process</groupId>
+    <artifactId>einvoice-process-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>einvoice-process</name>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>pe.labtech.einvoice</groupId>
+                <artifactId>einvoice-commons</artifactId>
+                <version>${einvoice.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pe.labtech.einvoice.model</groupId>
+                <artifactId>einvoice-model-private</artifactId>
+                <version>${einvoice.model.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pe.labtech.einvoice.model</groupId>
+                <artifactId>einvoice-model-public</artifactId>
+                <version>${einvoice.model.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pe.labtech.einvoice.ws</groupId>
+                <artifactId>einvoice-ws-client</artifactId>
+                <version>${einvoice.ws.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pe.labtech.einvoice.ws</groupId>
+                <artifactId>einvoice-ws-clientcdi</artifactId>
+                <version>${einvoice.ws.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.9.2</version>
+            </dependency>
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>7.0</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+        
+    </dependencyManagement>
+    
+    <modules>
+        <module>declare</module>
+        <module>download</module>
+        <module>replicate</module>
+        <module>signonline</module>
+        <module>sync</module>
+    </modules>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <einvoice.commons.version>1.0-SNAPSHOT</einvoice.commons.version>
+        <einvoice.model.version>1.0-SNAPSHOT</einvoice.model.version>
+        <einvoice.ws.version>1.0.1</einvoice.ws.version>
+    </properties>
+
+</project>

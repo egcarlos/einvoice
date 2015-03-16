@@ -12,33 +12,34 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <einvoice.process.version>1.0-SNAPSHOT</einvoice.process.version>
     </properties>
     
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-signonline</artifactId>
-            <version>${project.version}</version>
+            <version>${einvoice.process.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-sync</artifactId>
-            <version>${project.version}</version>
+            <version>${einvoice.process.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-declare</artifactId>
-            <version>${project.version}</version>
+            <version>${einvoice.process.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-replicate</artifactId>
-            <version>${project.version}</version>
+            <version>${einvoice.process.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-download</artifactId>
-            <version>${project.version}</version>
+            <version>${einvoice.process.version}</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
