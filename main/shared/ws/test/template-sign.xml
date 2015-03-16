@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SignOnLineCmd declare-sunat="0" declare-direct-sunat="0" publish="1" output="PDF">
+    <parameter value="20501827623" name="idEmisor"/>
+    <parameter value="03" name="tipoDocumento"/>
+    <parameter value="" name="estadoDocumento"/>
+    <documento>
+        <indicador>C</indicador>
+        <tipoDocumentoEmisor>6</tipoDocumentoEmisor>
+        <numeroDocumentoEmisor>20501827623</numeroDocumentoEmisor>
+        <razonSocialEmisor>Telefónica Gestión de Servicios Compartidos Perú S.A.C.</razonSocialEmisor>
+        <nombreComercialEmisor>T-GESTIONA</nombreComercialEmisor>
+        <tipoDocumento>03</tipoDocumento>
+        <serieNumero>BLT1-00000001</serieNumero>
+        <fechaEmision>2015-03-15T00:00:00-05:00</fechaEmision>
+        <ubigeoEmisor>150137</ubigeoEmisor>
+        <direccionEmisor>AV. FRANCISCO BOLOGNESI 550</direccionEmisor>
+        <urbanizacion>LOS FICUS</urbanizacion>
+        <provinciaEmisor>LIMA</provinciaEmisor>
+        <departamentoEmisor>LIMA</departamentoEmisor>
+        <distritoEmisor>SANTA ANITA</distritoEmisor>
+        <paisEmisor>PE</paisEmisor>
+        <correoEmisor>fe.peru@pepsico.com</correoEmisor>
+        <tipoDocumentoAdquiriente>1</tipoDocumentoAdquiriente>
+        <numeroDocumentoAdquiriente>42855502</numeroDocumentoAdquiriente>
+        <razonSocialAdquiriente>Carlos Echeverria</razonSocialAdquiriente>
+        <lugarDestino>MZ B LT 15 AV EL PORVENIR SAN JUAN LURIGANCHO</lugarDestino>
+        <correoAdquiriente>carlos.echeverria@labtech.pe</correoAdquiriente>
+        <tipoMoneda>PEN</tipoMoneda>
+        <totalValorVentaNetoOpGravadas>100.00</totalValorVentaNetoOpGravadas>
+        <totalValorVentaNetoOpNoGravada>0.00</totalValorVentaNetoOpNoGravada>
+        <totalValorVentaNetoOpExoneradas>0.00</totalValorVentaNetoOpExoneradas>
+        <totalValorVentaNetoOpGratuitas>0.00</totalValorVentaNetoOpGratuitas>
+        <descuentosGlobales>0.00</descuentosGlobales>
+        <subTotal>100.00</subTotal>
+        <totalIgv>18.00</totalIgv>
+        <totalIsc>0.00</totalIsc>
+        <totalOtrosTributos>0.00</totalOtrosTributos>
+        <totalOtrosCargos>0.00</totalOtrosCargos>
+        <totalDescuentos>0.00</totalDescuentos>
+        <totalVenta>118.00</totalVenta>
+        <inHabilitado>1</inHabilitado>
+        <totalBonificacion>0.00</totalBonificacion>
+        <item>
+            <numeroOrdenItem>1</numeroOrdenItem>
+            <codigoProducto>8039</codigoProducto>
+            <descripcion>NATUCHIPS CAMOTE X40GRX63</descripcion>
+            <cantidad>1.00</cantidad>
+            <unidadMedida>NIU</unidadMedida>
+            <importeUnitarioSinImpuesto>100.00</importeUnitarioSinImpuesto>
+            <importeUnitarioConImpuesto>118.00</importeUnitarioConImpuesto>
+            <codigoImporteUnitarioConImpuesto>01</codigoImporteUnitarioConImpuesto>
+            <importeTotalSinImpuesto>100.00</importeTotalSinImpuesto>
+            <importeDescuento>0.00</importeDescuento>
+            <importeCargo>0.00</importeCargo>
+            <codigoRazonExoneracion>10</codigoRazonExoneracion>
+            <importeIgv>18.00</importeIgv>
+        </item>
+    </documento>
+</SignOnLineCmd>

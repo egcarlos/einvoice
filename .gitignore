@@ -73,3 +73,10 @@ $RECYCLE.BIN/
 /customizations/hv/hv-replicator
 /main/shared/commons/target/
 /main/process/download/target/
+
+#ignores for ws client
+/main/shared/ws/target/
+/main/shared/ws/client/src/wsdl/.LCKinvoker.wsdl~
+/main/shared/ws/client/target/
+/main/shared/ws/clientcdi/target/
+/main/shared/ws/test/target/

@@ -1,0 +1,7 @@
+<ConsultCmd output="PDF">
+    <parameter value="20501827623" name="idEmisor" />
+    <parameter value="BLT1"        name="serieGrupoDocumento" />
+    <parameter value="00000001"    name="numeroCorrelativoInicio" />
+    <parameter value="00000001"    name="numeroCorrelativoFin" />
+    <parameter value="03"          name="tipoDocumento" />
+</ConsultCmd>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SignOnLineSummaryCmd declare-sunat="1" replicate="" output="">
+    <parameter value="20501827623" name="idEmisor"/>
+    <parameter value="RC" name="tipoDocumento"/>
+    <documento>
+        <tipoDocumentoEmisor>6</tipoDocumentoEmisor>
+        <numeroDocumentoEmisor>20501827623</numeroDocumentoEmisor>
+        <resumenId>RC-20150315-001</resumenId>
+        <fechaEmisionComprobante>2015-03-15T00:00:00-05:00</fechaEmisionComprobante>
+        <fechaGeneracionResumen>2015-03-15T00:00:00-05:00</fechaGeneracionResumen>
+        <razonSocialEmisor>Telefónica Gestión de Servicios Compartidos Perú S.A.C.</razonSocialEmisor>
+        <correoEmisor>fe.peru@pepsico.com</correoEmisor>
+        <resumenTipo>RC</resumenTipo>
+        <ResumenItem>
+            <numeroFila>1</numeroFila>
+            <tipoDocumento>03</tipoDocumento>
+            <tipoMoneda>USD</tipoMoneda>
+            <serieGrupoDocumento>BLT1</serieGrupoDocumento>
+            <numeroCorrelativoInicio>00000001</numeroCorrelativoInicio>
+            <numeroCorrelativoFin>00000001</numeroCorrelativoFin>
+            <totalValorVentaOpGravadasConIgv>100.00</totalValorVentaOpGravadasConIgv>
+            <totalValorVentaOpInafectasIgv>0.00</totalValorVentaOpInafectasIgv>
+            <totalOtrosTributos>0.00</totalOtrosTributos>
+            <totalIgv>18.00</totalIgv>
+            <totalVenta>118.00</totalVenta>
+            <totalIsc>0.00</totalIsc>
+            <totalOtrosCargos>0.00</totalOtrosCargos>
+            <totalValorVentaOpExoneradasIgv>0.00</totalValorVentaOpExoneradasIgv>
+            <totalValorVentaOpExoneradasConIgv>0.00</totalValorVentaOpExoneradasConIgv>
+        </ResumenItem>
+    </documento>
+</SignOnLineSummaryCmd>
