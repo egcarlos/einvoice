@@ -17,7 +17,7 @@ import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.InvoiceSeekerLocal;
-import pe.labtech.einvoice.core.tasks.DeclareTaskLocal;
+import pe.labtech.einvoice.core.tasks.SyncTaskLocal;
 
 /**
  *
@@ -27,27 +27,28 @@ import pe.labtech.einvoice.core.tasks.DeclareTaskLocal;
 @Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DeclareRecurrent extends AbstractRecurrentTask<Document> {
+public class LongSyncTimer extends AbstractRecurrentTask<Document> {
 
     @EJB
-    private InvoiceSeekerLocal seeker;
-
-    @EJB
-    private DeclareTaskLocal task;
+    InvoiceSeekerLocal seeker;
 
     @PostConstruct
     @Override
     public void init() {
         super.init();
-        this.findTasks = () -> seeker.pullDocuments("SIGN", "COMPLETE");
-        this.tryLock = t -> seeker.markSynkronized(t.getId(), "SIGN", "COMPLETE", "DECLARE", "DISPATCHING");
-        this.getId = t -> t.getClientId() + "-" + t.getDocumentType() + "-" + t.getDocumentNumber() + "[declare]";
-        this.consumer = t -> task.handle(t.getId());
+        this.findTasks = () -> seeker.pullDocuments("DECLARE", "SYNC");
+        this.tryLock = t -> seeker.markSynkronized(t.getId(), "DECLARE", "SYNC", "SYNCING");
+        this.getId = t -> t.getClientId() + "-" + t.getDocumentType() + "-" + t.getDocumentNumber() + "[replicate]";
+        this.consumer = t -> task.handle(t);
     }
 
-    @Schedule(hour = "*", minute = "*", second = "*/15", persistent = false)
+    @EJB
+    private SyncTaskLocal task;
+
     @Override
-    protected void timeout() {
+    @Schedule(hour = "*", minute = "*/15", persistent = false)
+    public void timeout() {
         super.timeout();
     }
+
 }

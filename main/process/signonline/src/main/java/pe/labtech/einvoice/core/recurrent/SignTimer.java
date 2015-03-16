@@ -5,10 +5,6 @@
  */
 package pe.labtech.einvoice.core.recurrent;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
@@ -18,8 +14,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.entity.Document;
-import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
+import pe.labtech.einvoice.core.model.InvoiceSeekerLocal;
 import pe.labtech.einvoice.core.tasks.SignTaskLocal;
 
 /**
@@ -30,46 +27,27 @@ import pe.labtech.einvoice.core.tasks.SignTaskLocal;
 @Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SignTimer {
-
-    private AtomicBoolean working;
-    private final Logger logger = Logger.getLogger(this.getClass().getSimpleName());
-
-    @PostConstruct
-    public void init() {
-        Logger.getLogger("SignTimer").info("Task created");
-        working = new AtomicBoolean(false);
-    }
+public class SignTimer extends AbstractRecurrentTask<Document> {
 
     @EJB
-    private DocumentLoaderLocal loader;
-
+    InvoiceSeekerLocal seeker;
     @EJB
     private SignTaskLocal task;
 
+    @PostConstruct
+    @Override
+    public void init() {
+        super.init();
+        super.findTasks = () -> seeker.pullDocuments("PULL", "LOADED");
+        super.tryLock = t -> seeker.markSynkronized(t.getId(), "PULL", "LOADED", "SIGN", "SIGNING");
+        super.getId = t -> t.getClientId() + "-" + t.getDocumentType() + "-" + t.getDocumentNumber() + "[sign]";
+        super.consumer = t -> task.handle(t);
+    }
+
+    @Override
     @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
-    public void doWork() {
-        if (!working.compareAndSet(false, true)) {
-            logger.fine("Process busy... waiting");
-            return;
-        }
-        logger.fine("Dispatching for signature");
-        try {
-            List<Document> documents = find();
-            documents.forEach(d -> relay(d));
-        } catch (Exception ex) {
-            Logger.getLogger(this.getClass().getSimpleName()).log(Level.SEVERE, ex, () -> "Error on relay");
-        } finally {
-            working.set(false);
-        }
+    public void timeout() {
+        super.timeout();
     }
 
-    private List<Document> find() {
-        return loader.loadForSignature();
-    }
-
-    private void relay(Document d) {
-        logger.log(Level.INFO, "relaying document {0}-{1}", new Object[]{d.getDocumentType(), d.getDocumentNumber()});
-        task.handle(d.getId());
-    }
 }

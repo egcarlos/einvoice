@@ -11,11 +11,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -30,12 +31,15 @@ import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
+import pe.labtech.einvoice.core.model.InvoiceSeeker;
+import pe.labtech.einvoice.core.model.InvoiceSeekerLocal;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 import pe.labtech.einvoice.core.ws.helpers.Builder;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.core.ws.messages.response.Response;
 import pe.labtech.einvoice.core.ws.messages.response.ResponseMessage;
 import pe.labtech.einvoice.core.ws.model.DocumentItem;
+import pe.labtech.einvoice.core.ws.model.SummaryItem;
 
 /**
  *
@@ -50,35 +54,33 @@ public class SignTask implements SignTaskLocal {
     @Inject
     EBizGenericInvoker invoker;
 
+    @EJB
+    InvoiceSeekerLocal seeker;
+
+    Builder b = new Builder();
+
     @Asynchronous
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
-    public void handle(Long id) {
+    public void handle(Document document) {
+        String number = document.getDocumentNumber();
+        String request;
+        if (number.startsWith("F") || number.startsWith("B")) {
+            request = buildSignCommand(document.getId());
+        } else if (number.startsWith("RC") || number.startsWith("RA")) {
+            request = buildSignSummaryCommand(document.getId());
+        } else {
+            return; //invalid markar el error del documento
+        }
+
         try {
-            //validar la presencia de los atributos es un tema
-            //genear el mapeo de documento a lo otro
-            pe.labtech.einvoice.core.ws.model.Document target = new pe.labtech.einvoice.core.ws.model.Document();
-
-            Document entity = mapDocument(id, target);
-
-            Builder b = new Builder();
-            String request = b.buildSign(
-                    buildClientID(entity.getClientId()),
-                    entity.getDocumentType(),
-                    "PDF",
-                    true,
-                    false,
-                    false,
-                    "",
-                    Arrays.asList(target)
-            );
-            loader.createEvent(entity, "SIGN_REQUEST", request);
+            loader.createEvent(document, "SIGN_REQUEST", request);
             String response = invoker.invoke(request);
-            loader.createEvent(entity, "SIGN_RESPONSE", response);
+            loader.createEvent(document, "SIGN_RESPONSE", response);
             Response r = b.unmarshall(Response.class, response);
 
             if (isInvalid(r)) {
-                loader.markAsError(id);
+                loader.markAsError(document.getId());
                 return;
             }
 
@@ -94,16 +96,67 @@ public class SignTask implements SignTaskLocal {
                                 )
                         );
 
-                loader.markSigned(entity.getId(), di.getSignatureValue(), di.getHashCode(), responses);
+                loader.markSigned(document.getId(), "SYNC", di.getSignatureValue(), di.getHashCode(), responses);
             } else if (wasSignedBefore(di)) {
-                loader.markForSync(entity.getId());
+                loader.markForSync(document.getId());
             } else {
-                loader.markAsError(id);
+                loader.markAsError(document.getId());
             }
-        } catch (Exception ex) {
-            loader.markAsError(id, ex);
+        } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+            loader.markAsError(document.getId(), ex);
         }
 
+    }
+
+    private String buildSignCommand(Long id) {
+        pe.labtech.einvoice.core.ws.model.Document target = new pe.labtech.einvoice.core.ws.model.Document();
+        Document entity = loader.loadForWork(id, source -> {
+            this.map(source, () -> target, () -> new DocumentItem(), (d, il) -> d.setItems(il));
+        });
+        return b.buildSign(
+                buildClientID(entity.getClientId()), entity.getDocumentType(),
+                "PDF", true, false, false, "",
+                Arrays.asList(target)
+        );
+    }
+
+    private String buildSignSummaryCommand(Long id) {
+        pe.labtech.einvoice.core.ws.model.Summary target = new pe.labtech.einvoice.core.ws.model.Summary();
+        Document entity = loader.loadForWork(id, source -> {
+            this.map(source, () -> target, () -> new SummaryItem(), (d, il) -> d.setItems(il));
+        });
+        return b.buildSignSummary(buildClientID(entity.getClientId()), entity.getDocumentType(), "", target);
+    }
+
+    private <D, I> D map(Document source, Supplier<D> d, Supplier<I> i, BiConsumer<D, List<I>> set) {
+        D target = d.get();
+        if (source.getAttributes() != null) {
+            source.getAttributes().forEach(a -> mapAttribute(target, a.getName(), a.getValue()));
+        }
+        if (source.getAuxiliars() != null) {
+            source.getAuxiliars().forEach(a -> mapAuxiliar(target, a.getCode(), a.getLength(), a.getOrder(), a.getValue()));
+        }
+        if (source.getLegends() != null) {
+            source.getLegends().forEach(a -> mapLegend(target, a.getCode(), a.getOrder(), a.getValue(), a.getAdditional()));
+        }
+        if (source.getItems() != null) {
+            List<I> items = source.getItems().stream()
+                    .sorted((a, b) -> a.getId().compareTo(b.getId()))
+                    .map(item -> mapItem(item, i.get()))
+                    .collect(Collectors.toList());
+            set.accept(target, items);
+        }
+        return target;
+    }
+
+    private <I> I mapItem(Item source, I target) {
+        if (source.getAttributes() != null) {
+            source.getAttributes().forEach(a -> mapAttribute(target, a.getName(), a.getValue()));
+        }
+        if (source.getAuxiliars() != null) {
+            source.getAuxiliars().forEach(a -> mapAuxiliar(target, a.getCode(), a.getLength(), a.getOrder(), a.getValue()));
+        }
+        return target;
     }
 
     private static boolean isInvalid(Response response) {
@@ -144,37 +197,11 @@ public class SignTask implements SignTaskLocal {
         return response.getResponseBody().getXml().getDocuments().get(0);
     }
 
-    private Document mapDocument(Long id, pe.labtech.einvoice.core.ws.model.Document target) {
-        Document entity = loader.loadForWork(id, source -> {
-            //mapping principal attributes
-            if (source.getAttributes() != null) {
-                source.getAttributes().forEach(a -> mapAttribute(target, a.getName(), a.getValue()));
-            }
-            if (source.getAuxiliars() != null) {
-                source.getAuxiliars().forEach(a -> mapAuxiliar(target, a.getCode(), a.getLength(), a.getOrder(), a.getValue()));
-            }
-            if (source.getLegends() != null) {
-                source.getLegends().forEach(a -> mapLegend(target, a.getCode(), a.getOrder(), a.getValue(), a.getAdditional()));
-            }
-            if (source.getItems() != null) {
-                List<DocumentItem> items = source.getItems().stream()
-                        .sorted((a, b) -> a.getId().compareTo(b.getId()))
-                        .map(i -> mapItem(i)).collect(Collectors.toList());
-                target.setItems(items);
-            }
-        });
-        return entity;
-    }
-
-    private DocumentItem mapItem(Item source) {
-        DocumentItem target = new DocumentItem();
-        if (source.getAttributes() != null) {
-            source.getAttributes().forEach(a -> mapAttribute(target, a.getName(), a.getValue()));
+    private String buildClientID(String clientId) {
+        if (clientId.contains("-")) {
+            return clientId.split("-")[1];
         }
-        if (source.getAuxiliars() != null) {
-            source.getAuxiliars().forEach(a -> mapAuxiliar(target, a.getCode(), a.getLength(), a.getOrder(), a.getValue()));
-        }
-        return target;
+        return clientId;
     }
 
     private void mapAttribute(final Object target, final String attribute, final String value) {
@@ -203,8 +230,6 @@ public class SignTask implements SignTaskLocal {
         }
     }
 
-    //BUGFIX CAMPO LEGEND
-    //TODO replicar el mapeo de adicionales a otros deployments
     private void mapLegend(Object target, String code, Long order, String value, String additional) {
         if (value == null) {
             return;
@@ -235,13 +260,6 @@ public class SignTask implements SignTaskLocal {
             Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Can''t map auxiliar " + code, ex);
         }
 
-    }
-
-    private String buildClientID(String clientId) {
-        if (clientId.contains("-")) {
-            return clientId.split("-")[1];
-        }
-        return clientId;
     }
 
 }

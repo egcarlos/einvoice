@@ -67,7 +67,15 @@ public class SyncTask implements SyncTaskLocal {
                                 )
                         );
 
-                loader.markSigned(document.getId(), di.getSignatureValue(), di.getHashCode(), responses);
+                final String status = di.getSunatStatus();
+                final String step = document.getStep();
+                if (step == null || step.equals("SIGN")) {
+                    loader.markSigned(document.getId(), "COMPLETE", di.getSignatureValue(), di.getHashCode(), responses);
+                } else if ((status != null && (status.startsWith("AC") || status.startsWith("RC")))) {
+                    loader.markSigned(document.getId(), "COMPLETE", di.getSignatureValue(), di.getHashCode(), responses);
+                } else {
+                    loader.markSigned(document.getId(), "SYNC", di.getSignatureValue(), di.getHashCode(), responses);
+                }
             } else {
                 loader.markAsError(document.getId());
             }

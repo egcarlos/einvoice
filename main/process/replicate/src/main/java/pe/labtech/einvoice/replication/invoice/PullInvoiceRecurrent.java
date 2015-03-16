@@ -18,7 +18,7 @@ import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
-import pe.labtech.einvoice.replicator.model.SeekHeaderLocal;
+import pe.labtech.einvoice.replicator.model.SeekInvoiceInputLocal;
 
 /**
  *
@@ -33,7 +33,7 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
     private PullInvoiceTaskLocal task;
 
     @EJB
-    private SeekHeaderLocal seeker;
+    private SeekInvoiceInputLocal seeker;
 
     @PostConstruct
     @Override

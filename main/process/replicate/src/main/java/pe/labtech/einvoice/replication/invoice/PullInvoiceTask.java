@@ -90,7 +90,8 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
             return item;
         }).collect(Collectors.toList());
         document.setItems(items);
-
+        document.setStep("PULL");
+        document.setStatus("LOADED");
         loader.save(document);
     }
 

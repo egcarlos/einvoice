@@ -46,7 +46,7 @@ public class DeclareTask implements DeclareTaskLocal {
             loader.createEvent(document, "DECLARE_RESPONSE", response);
 
             //TODO create the document info element and analize
-            loader.markDeclared(id);
+            loader.markForSync(id);
 
         } catch (Exception ex) {
             loader.markAsError(id, ex);

@@ -25,6 +25,10 @@
             <artifactId>einvoice-ws-clientcdi</artifactId>
         </dependency>
         <dependency>
+            <groupId>pe.labtech.einvoice</groupId>
+            <artifactId>einvoice-commons</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
         </dependency>
