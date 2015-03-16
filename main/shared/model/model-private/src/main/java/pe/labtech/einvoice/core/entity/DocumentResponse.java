@@ -51,6 +51,10 @@ public class DocumentResponse implements Serializable {
     @XmlValue
     private String value;
 
+    @Column(name = "REPLICATE")
+    @XmlTransient
+    private boolean replicate;
+
     public DocumentResponse() {
     }
 
@@ -110,6 +114,14 @@ public class DocumentResponse implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public boolean isReplicate() {
+        return replicate;
+    }
+
+    public void setReplicate(boolean replicate) {
+        this.replicate = replicate;
     }
 
 }

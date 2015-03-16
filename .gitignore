@@ -80,3 +80,5 @@ $RECYCLE.BIN/
 /main/shared/ws/client/target/
 /main/shared/ws/clientcdi/target/
 /main/shared/ws/test/target/
+/main/shared/model/model-private/target/
+/main/shared/model/model-public/target/
