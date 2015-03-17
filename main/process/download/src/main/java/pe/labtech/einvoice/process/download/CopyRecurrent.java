@@ -51,8 +51,7 @@ public class CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
         this.consumer = t -> {
             try {
                 File dir = buildDirectory(t);
-                URL url = new URL(t.getSource());
-                String fileName = getFileName(url, t);
+                String fileName = getFileName(t);
                 File file = getFile(dir, fileName);
                 byte[] data = loader.readData(t);
                 writeData(file, data);
@@ -72,7 +71,11 @@ public class CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
         return dir;
     }
 
-    private String getFileName(URL url, DocumentData t) throws IOException {
+    private String getFileName(DocumentData t) throws IOException {
+        if (t.getSource() == null) {
+            return buildFileName(t);
+        }
+        URL url = new URL(t.getSource());
         String fileName = urlFileName(url);
         if (fileName == null) {
             fileName = buildFileName(t);

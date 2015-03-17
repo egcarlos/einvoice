@@ -180,6 +180,16 @@ public class DocumentLoader implements DocumentLoaderLocal {
         //FIX Synchcronization issue refered to defer creation of sunatSignURL
         responses.forEach((k, v) -> {
             if (k.toUpperCase().contains("URL")) {
+                //protege de un bug de implementación de la plataforma de bizlinks
+                if (k.equals("xmlFileSunatUrl")) {
+                    final String sunatStatus = responses.get("sunatStatus");
+                    if (sunatStatus == null) {
+                        return;
+                    }
+                    if (!sunatStatus.startsWith("RC") && !sunatStatus.startsWith("AC")) {
+                        return;
+                    }
+                }
                 List<DocumentData> list = em
                         .createNamedQuery(
                                 "DocumentData.findById",
