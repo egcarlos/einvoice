@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
     ),
     @NamedQuery(
             name = "DocumentData.findPending",
-            query = "SELECT o FROM DocumentData o WHERE o.replicate = TRUE"
+            query = "SELECT o FROM DocumentData o WHERE o.replicate = TRUE AND o.data <> NULL"
     ),
     @NamedQuery(
             name = "DocumentData.tryLock",

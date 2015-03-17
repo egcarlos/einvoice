@@ -70,7 +70,7 @@ public class PushDataRecurrent extends AbstractRecurrentTask<DocumentData> {
                 .executeUpdate() == 1
         );
 
-        this.getId = t -> t.getDocument().getClientId() + "-" + t.getDocument().getDocumentType() + "-" + t.getDocument().getDocumentNumber() + "[" + t.getName() + "replicate]";
+        this.getId = t -> t.getDocument().getClientId() + "-" + t.getDocument().getDocumentType() + "-" + t.getDocument().getDocumentNumber() + "[" + t.getName() + ":replicate]";
         this.consumer = t -> manager.handle(e -> {
             String targetField = mapName(t);
             if (targetField == null) {
