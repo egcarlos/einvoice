@@ -5,11 +5,7 @@
  */
 package pe.labtech.einvoice.process.download;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
@@ -23,6 +19,7 @@ import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.model.DocumentDataLoaderLocal;
+import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.*;
 
 /**
  *
@@ -31,7 +28,7 @@ import pe.labtech.einvoice.core.model.DocumentDataLoaderLocal;
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class DownloadRecurrent extends AbstractRecurrentTask<DocumentData> implements DownloadTaskLocal {
+public class DownloadRecurrent extends AbstractRecurrentTask<DocumentData> {
 
     @EJB
     DocumentDataLoaderLocal loader;
@@ -44,70 +41,19 @@ public class DownloadRecurrent extends AbstractRecurrentTask<DocumentData> imple
     @PostConstruct
     public void init() {
         super.init();
-        this.findTasks = () -> loader.findMissing();
-        this.tryLock = t -> loader.lock(t);
+        this.findTasks = () -> loader.find(DATA_MISSING);
+        this.tryLock = t -> loader.changeStatus(t, DATA_MISSING, DATA_DOWNLOADING);
         this.getId = t -> t.getDocument().getClientId() + "-" + t.getDocument().getDocumentType() + "-" + t.getDocument().getDocumentNumber() + "[download:" + t.getName() + "]";
         this.consumer = t -> {
             try {
-                File dir = buildDirectory(t);
                 URL url = new URL(t.getSource());
-                String fileName = getFileName(url);
-
-                if (fileName == null) {
-                    return;
-                }
-
-                File file = new File(dir, fileName);
-                if (file.exists()) {
-                    file.delete();
-                }
-
                 byte[] data = loader.download(url);
-
-                try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
-                    bos.write(data);
-                    bos.flush();
-                    bos.close();
-                }
-
-                loader.release(t, data);
+                loader.addData(t, data);
+                loader.changeStatus(t, DATA_DOWNLOADING, DATA_LOADED);
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
             }
         };
-    }
-
-    private File buildDirectory(DocumentData t) {
-        File dir = new File("../downloads/" + t.getDocument().getClientId() + "/" + t.getDocument().getDocumentType() + "-" + t.getDocument().getDocumentNumber());
-        if (!dir.exists()) {
-            dir.mkdirs();
-            dir.mkdirs();
-        }
-        return dir;
-    }
-
-    private String getFileName(URL url) throws IOException {
-        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
-        try {
-            String disposition = uc.getHeaderField("Content-Disposition");
-            if (disposition != null) {
-                //get the file name
-                disposition = disposition.trim();
-                String n = disposition.split("=")[1];
-                if (n.startsWith("\"")) {
-                    n = n.substring(1);
-                }
-                if (n.endsWith("\"")) {
-                    n = n.substring(0, n.length() - 1);
-                }
-                return n;
-            }
-            return null;
-        } finally {
-            if (uc != null) {
-                uc.disconnect();
-            }
-        }
     }
 
     //TODO ajustar el tiempo de llamada luego de pruebas

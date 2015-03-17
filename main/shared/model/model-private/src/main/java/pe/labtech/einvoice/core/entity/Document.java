@@ -34,6 +34,10 @@ import javax.xml.bind.annotation.XmlType;
 @Table(name = "BL_DOCUMENT")
 @SequenceGenerator(name = "DOCUMENT_ID_GENERATOR", sequenceName = "BL_DOCUMENT_SEQ")
 @NamedQueries({
+    @NamedQuery(
+            name = "Document.findByStepAndStatus",
+            query = "SELECT o FROM Document o WHERE o.step = :step AND o.status = :status"
+    ),
     @NamedQuery(name = "Document.loadForSignature", query = "SELECT o FROM Document o WHERE (o.documentNumber like 'F%' or o.documentNumber like 'B%') and o.step IS NULL"),
     @NamedQuery(name = "Document.updateSignature", query = "UPDATE Document o SET o.status = :status, o.signature = :signature, o.hash = :hash WHERE o.id = :id")
 })

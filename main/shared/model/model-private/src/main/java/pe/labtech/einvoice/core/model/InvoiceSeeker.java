@@ -28,8 +28,8 @@ public class InvoiceSeeker implements InvoiceSeekerLocal {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Document> pullDocuments(String step, String status) {
         return em
-                .createQuery(
-                        "SELECT o FROM Document o WHERE o.step = :step AND o.status = :status",
+                .createNamedQuery(
+                        "Document.findByStepAndStatus",
                         Document.class
                 )
                 .setParameter("step", step)

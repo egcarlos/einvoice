@@ -17,11 +17,20 @@ import pe.labtech.einvoice.core.entity.DocumentData;
 @Local
 public interface DocumentDataLoaderLocal {
 
-    List<DocumentData> findMissing();
+    String DATA_MISSING = "MISSING";
+    String DATA_DOWNLOADING = "DOWNLOADING";
+    String DATA_LOADED = "LOADED";
+    String DATA_COPYING = "COPYING";
+    String DATA_COPIED = "COPIED";
 
-    boolean lock(DocumentData data);
+    List<DocumentData> find(String status);
+
+    boolean changeStatus(DocumentData data, String oldstatus, String newstatus);
+
+    byte[] readData(DocumentData data);
+
+    boolean addData(DocumentData data, byte[] rawdata);
 
     byte[] download(URL url);
 
-    void release(DocumentData data, byte[] rawdata);
 }

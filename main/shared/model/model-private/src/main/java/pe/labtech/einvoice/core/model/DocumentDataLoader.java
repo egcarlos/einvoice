@@ -34,32 +34,54 @@ public class DocumentDataLoader implements DocumentDataLoaderLocal {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<DocumentData> findMissing() {
-        return em.createQuery(
-                "SELECT d FROM DocumentData d WHERE d.status = 'MISSING'",
-                DocumentData.class
-        ).getResultList();
-    }
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    @Override
-    public boolean lock(DocumentData data) {
+    public List<DocumentData> find(String status) {
         return em
                 .createQuery(
-                        "UPDATE DocumentData d SET d.status = 'LOADING' WHERE d.status = 'MISSING' AND d.document.id = :id AND d.name = :name"
+                        "SELECT d FROM DocumentData d WHERE d.status = :status",
+                        DocumentData.class
+                )
+                .setParameter("status", status)
+                .getResultList();
+    }
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public boolean changeStatus(DocumentData data, String oldstatus, String newstatus) {
+        return em
+                .createQuery(
+                        "UPDATE DocumentData d SET d.status = :newstatus WHERE d.status = :oldstatus AND d.document.id = :id AND d.name = :name"
                 )
                 .setParameter("id", data.getDocument().getId())
                 .setParameter("name", data.getName())
+                .setParameter("oldstatus", oldstatus)
+                .setParameter("newstatus", newstatus)
                 .executeUpdate() == 1;
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     @Override
-    public void release(DocumentData data, byte[] rawdata) {
-        data = em.merge(data);
-        data.setData(rawdata);
-        data.setReplicate(Boolean.TRUE);
-        data.setStatus("LOADED");
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public byte[] readData(DocumentData data) {
+        return em
+                .createQuery(
+                        "SELECT d FROM DocumentData d WHERE d.document.id = :id AND d.name = :name",
+                        DocumentData.class
+                )
+                .setParameter("id", data.getDocument().getId())
+                .setParameter("name", data.getName())
+                .getSingleResult()
+                .getData();
+    }
+
+    @Override
+    public boolean addData(DocumentData data, byte[] rawdata) {
+        return em
+                .createQuery(
+                        "UPDATE DocumentData d SET d.data = :data WHERE d.document.id = :id AND d.name = :name"
+                )
+                .setParameter("id", data.getDocument().getId())
+                .setParameter("name", data.getName())
+                .setParameter("data", rawdata)
+                .executeUpdate() == 1;
     }
 
     @Override

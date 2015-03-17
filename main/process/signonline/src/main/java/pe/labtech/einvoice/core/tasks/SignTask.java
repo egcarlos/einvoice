@@ -29,10 +29,11 @@ import javax.inject.Inject;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.core.entity.Document;
+import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
-import pe.labtech.einvoice.core.model.InvoiceSeeker;
 import pe.labtech.einvoice.core.model.InvoiceSeekerLocal;
+import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 import pe.labtech.einvoice.core.ws.helpers.Builder;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
@@ -40,6 +41,7 @@ import pe.labtech.einvoice.core.ws.messages.response.Response;
 import pe.labtech.einvoice.core.ws.messages.response.ResponseMessage;
 import pe.labtech.einvoice.core.ws.model.DocumentItem;
 import pe.labtech.einvoice.core.ws.model.SummaryItem;
+import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.*;
 
 /**
  *
@@ -57,6 +59,9 @@ public class SignTask implements SignTaskLocal {
     @EJB
     InvoiceSeekerLocal seeker;
 
+    @EJB
+    PrivateDatabaseManagerLocal db;
+
     Builder b = new Builder();
 
     @Asynchronous
@@ -73,6 +78,30 @@ public class SignTask implements SignTaskLocal {
             return; //invalid markar el error del documento
         }
 
+        //save request
+        db.handle(e -> {
+            List<DocumentData> list = e.createNamedQuery("DocumentData.findById", DocumentData.class)
+                    .setParameter("document", document)
+                    .setParameter("name", "signXml")
+                    .getResultList();
+
+            if (list.isEmpty()) {
+                final DocumentData data = new DocumentData();
+                data.setDocument(document);
+                data.setName("signXml");
+                data.setData(request.getBytes());
+                data.setStatus(DATA_LOADED);
+                data.setReplicate(Boolean.TRUE);
+                e.persist(data);
+            } else {
+                final DocumentData data = list.get(0);
+                data.setData(request.getBytes());
+                data.setReplicate(Boolean.TRUE);
+                data.setStatus(DATA_LOADED);
+            }
+        });
+
+        //the command should be persisted in the target entity... use document replication techniques
         try {
             loader.createEvent(document, "SIGN_REQUEST", request);
             String response = invoker.invoke(request);

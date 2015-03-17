@@ -136,6 +136,8 @@ public class PushDataRecurrent extends AbstractRecurrentTask<DocumentData> {
                 return "bl_cdr";
             case "xmlText":
                 return "bl_xml";
+            case "signXml":
+                return "bl_xml";
         }
         return null;
     }
