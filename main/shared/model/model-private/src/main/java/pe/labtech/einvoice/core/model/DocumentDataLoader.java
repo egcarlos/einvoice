@@ -76,7 +76,7 @@ public class DocumentDataLoader implements DocumentDataLoaderLocal {
     public boolean addData(DocumentData data, byte[] rawdata) {
         return em
                 .createQuery(
-                        "UPDATE DocumentData d SET d.data = :data WHERE d.document.id = :id AND d.name = :name"
+                        "UPDATE DocumentData d SET d.data = :data, d.replicate = TRUE WHERE d.document.id = :id AND d.name = :name"
                 )
                 .setParameter("id", data.getDocument().getId())
                 .setParameter("name", data.getName())
