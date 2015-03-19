@@ -63,7 +63,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <einvoice.commons.version>1.0-SNAPSHOT</einvoice.commons.version>
         <einvoice.model.version>1.0-SNAPSHOT</einvoice.model.version>
-        <einvoice.ws.version>1.0.1</einvoice.ws.version>
+        <einvoice.ws.version>1.0.2-SNAPSHOT</einvoice.ws.version>
     </properties>
 
 </project>

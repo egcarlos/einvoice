@@ -5,6 +5,7 @@
  */
 package pe.labtech.einvoice.core.tasks;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.ejb.Asynchronous;
@@ -56,33 +57,43 @@ public class SyncTask implements SyncTaskLocal {
             }
 
             DocumentInfo di = getDocumentInfo(r);
+            Map<String, String> responses = describe(di);
             if (isSigned(di)) {
-                Map<String, String> responses = BeanUtils.describe(di).entrySet().stream()
-                        .filter(e -> !e.getKey().equals("class"))
-                        .filter(e -> e.getValue() != null)
-                        .collect(
-                                Collectors.toMap(
-                                        e -> e.getKey(),
-                                        e -> e.getValue()
-                                )
-                        );
-
                 final String status = di.getSunatStatus();
                 final String step = document.getStep();
-                if (step == null || step.equals("SIGN")) {
+                if (step == null || "SIGN".equals(step)) {
+                    //was in sign phase and now it's completed
                     loader.markSigned(document.getId(), "COMPLETE", di.getSignatureValue(), di.getHashCode(), responses);
-                } else if ((status != null && (status.startsWith("AC") || status.startsWith("RC")))) {
-                    loader.markSigned(document.getId(), "COMPLETE", di.getSignatureValue(), di.getHashCode(), responses);
-                } else {
-                    loader.markSigned(document.getId(), "SYNC", di.getSignatureValue(), di.getHashCode(), responses);
+                } else if ("DECLARE".equals(step)) {
+                    if ((status != null && (status.startsWith("AC") || status.startsWith("RC")))) {
+                        responses.put("recordStatus", "P");
+                        loader.markSigned(document.getId(), "COMPLETE", di.getSignatureValue(), di.getHashCode(), responses);
+                    } else {
+                        //longtime sync since is not completed
+                        loader.markSigned(document.getId(), "SYNC", di.getSignatureValue(), di.getHashCode(), responses);
+                    }
                 }
+                //any other case is inconsistent and presumes model modified while running
             } else {
-                loader.markAsError(document.getId());
+                loader.markSigned(document.getId(), "ERROR", di.getSignatureValue(), di.getHashCode(), responses);
             }
         } catch (Exception ex) {
             loader.markAsError(document.getId(), ex);
         }
 
+    }
+
+    private Map<String, String> describe(DocumentInfo di) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        Map<String, String> responses = BeanUtils.describe(di).entrySet().stream()
+                .filter(e -> !e.getKey().equals("class"))
+                .filter(e -> e.getValue() != null)
+                .collect(
+                        Collectors.toMap(
+                                e -> e.getKey(),
+                                e -> e.getValue()
+                        )
+                );
+        return responses;
     }
 
     private static boolean isInvalid(Response response) {

@@ -5,6 +5,10 @@
  */
 package pe.labtech.einvoice.core.ws.messages.response;
 
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -36,6 +40,19 @@ public class ResponseMessage {
         this.detailCode = detailCode;
         this.detailDescription = detailDescription;
         this.detailList = detailList;
+    }
+
+    @Override
+    public String toString() {
+        BiFunction nvl = (v, n) -> v == null ? n : v;
+        return MessageFormat.format(
+                "{0}.{2}-> {1}: {3} ({4})",
+                nvl.apply(statusCode, "-"),
+                nvl.apply(statusDescription, "-"),
+                nvl.apply(detailCode, "N/D"),
+                nvl.apply(detailDescription, "N/D"),
+                nvl.apply(detailList, "-")
+        );
     }
 
     @XmlElement(name = "codeStatus")

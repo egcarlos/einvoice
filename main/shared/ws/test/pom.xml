@@ -4,7 +4,7 @@
     <parent>
         <groupId>pe.labtech.einvoice.ws</groupId>
         <artifactId>einvoice-ws-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>einvoice-ws-clienttest</artifactId>
     <packaging>jar</packaging>

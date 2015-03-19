@@ -125,6 +125,8 @@ public class PushResponseRecurrent extends AbstractRecurrentTask<DocumentRespons
                 return "bl_hashFirma";
             case "integratedStatus":
                 return "bl_estadoProceso";
+            case "recordStatus":
+                return "bl_estadoRegistro";
             case "pdfFileUrl":
                 return "bl_urlpdf";
             case "signatureValue":
@@ -133,6 +135,10 @@ public class PushResponseRecurrent extends AbstractRecurrentTask<DocumentRespons
                 return "bl_urlxmlubl";
             case "xmlFileSunatUrl":
                 return "bl_urlcdr";
+            case "sunatMessage":
+                return "bl_mensajeSunat";
+            case "messages":
+                return "bl_mensaje";
         }
         return null;
     }

@@ -9,6 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
@@ -136,7 +138,7 @@ public class SubmitFrame extends javax.swing.JFrame {
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         proportion = 1d * jSplitPane1.getDividerLocation() / jSplitPane1.getWidth();
-                        System.out.println(proportion);
+//                        System.out.println(proportion);
                     }
 
                 }));
@@ -172,8 +174,12 @@ public class SubmitFrame extends javax.swing.JFrame {
                 Logger.getLogger(SubmitFrame.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ExecutionException ex) {
                 //falla del proceso
-                Throwable real = ex.getCause();
-                target.setText(real.toString());
+                StringWriter sw = new StringWriter();
+                try (PrintWriter pw = new PrintWriter(sw)) {
+                    ex.getCause().printStackTrace(pw);
+                }
+                target.setText(sw.toString());
+
             }
         });
 

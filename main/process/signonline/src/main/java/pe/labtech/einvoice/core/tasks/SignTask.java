@@ -78,6 +78,48 @@ public class SignTask implements SignTaskLocal {
             return; //invalid markar el error del documento
         }
 
+        saveRequest(document, request);
+
+        try {
+            loader.createEvent(document, "SIGN_REQUEST", request);
+            String response = invoker.invoke(request);
+            loader.createEvent(document, "SIGN_RESPONSE", response);
+            Response r = b.unmarshall(Response.class, response);
+
+            if (isInvalid(r)) {
+                loader.markAsError(document.getId());
+                return;
+            }
+
+            DocumentInfo di = getDocumentInfo(r);
+            Map<String, String> responses = describe(di);
+            if (isSigned(di)) {
+                loader.markSigned(document.getId(), "SYNC", di.getSignatureValue(), di.getHashCode(), responses);
+            } else if (wasSignedBefore(di)) {
+                loader.markForSync(document.getId());
+            } else {                
+                loader.markSigned(document.getId(), "ERROR", di.getSignatureValue(), di.getHashCode(), responses);
+            }
+        } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+            loader.markAsError(document.getId(), ex);
+        }
+
+    }
+
+    private Map<String, String> describe(DocumentInfo di) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Map<String, String> responses = BeanUtils.describe(di).entrySet().stream()
+                .filter(e -> !e.getKey().equals("class"))
+                .filter(e -> e.getValue() != null)
+                .collect(
+                        Collectors.toMap(
+                                e -> e.getKey(),
+                                e -> e.getValue()
+                        )
+                );
+        return responses;
+    }
+
+    private void saveRequest(Document document, String request) {
         //save request
         db.handle(e -> {
             List<DocumentData> list = e.createNamedQuery("DocumentData.findById", DocumentData.class)
@@ -100,41 +142,6 @@ public class SignTask implements SignTaskLocal {
                 data.setStatus(DATA_LOADED);
             }
         });
-
-        //the command should be persisted in the target entity... use document replication techniques
-        try {
-            loader.createEvent(document, "SIGN_REQUEST", request);
-            String response = invoker.invoke(request);
-            loader.createEvent(document, "SIGN_RESPONSE", response);
-            Response r = b.unmarshall(Response.class, response);
-
-            if (isInvalid(r)) {
-                loader.markAsError(document.getId());
-                return;
-            }
-
-            DocumentInfo di = getDocumentInfo(r);
-            if (isSigned(di)) {
-                Map<String, String> responses = BeanUtils.describe(di).entrySet().stream()
-                        .filter(e -> !e.getKey().equals("class"))
-                        .filter(e -> e.getValue() != null)
-                        .collect(
-                                Collectors.toMap(
-                                        e -> e.getKey(),
-                                        e -> e.getValue()
-                                )
-                        );
-
-                loader.markSigned(document.getId(), "SYNC", di.getSignatureValue(), di.getHashCode(), responses);
-            } else if (wasSignedBefore(di)) {
-                loader.markForSync(document.getId());
-            } else {
-                loader.markAsError(document.getId());
-            }
-        } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-            loader.markAsError(document.getId(), ex);
-        }
-
     }
 
     private String buildSignCommand(Long id) {
