@@ -4,7 +4,7 @@
 
     <groupId>pe.labtech.einvoice.ws</groupId>
     <artifactId>einvoice-ws-parent</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
     <name>einvoice-ws</name>
     
