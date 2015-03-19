@@ -143,7 +143,7 @@ public class ServiceTest {
         EBizGenericInvoker port = service.getEBizGenericInvokerImplPort();
 
         Map<String, Object> rc = ((BindingProvider) port).getRequestContext();
-        rc.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://test3.alignetsac.com/sfewsperu1/ws/invoker?wsdl");
+        rc.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://test3.alignetsac.com/sfewsperu/ws/invoker?wsdl");
         rc.put(BindingProvider.USERNAME_PROPERTY, "avinka");
         rc.put(BindingProvider.PASSWORD_PROPERTY, "ebiz");
 

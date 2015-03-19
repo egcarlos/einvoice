@@ -8,6 +8,7 @@ package pe.labtech.einvoice.core.ws;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +22,8 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PortInfo {
 
-    private static final Logger logger = Logger.getLogger("PortInfo");
+    private static final String FILE_NAME = "portinfo.json";
+    private static final Logger logger = Logger.getLogger(PortInfo.class.getName());
 
     private String endpoint;
     private String user;
@@ -32,17 +34,34 @@ public class PortInfo {
     //TODO move to a factory method
     @PostConstruct
     public void init() {
-        final File file = new File("portinfo.json");
+        //since is the first load set the default values first
+        setDefaults();
+        //and then try to load from disk
+        load();
+    }
+
+    public void persist() {
+        final File file = new File(FILE_NAME);
+        final String filepath = file.getAbsolutePath();
+        logger.log(Level.INFO, () -> "saving port info to: " + filepath);
+        try (FileWriter fw = new FileWriter(file)) {
+            new Gson().toJson(this, fw);
+            fw.flush();
+        } catch (IOException ex) {
+            logger.log(Level.INFO, null, () -> "Can't persist values to " + filepath + ", check logs." + ex.getMessage());
+        }
+    }
+
+    public void load() {
+        final File file = new File(FILE_NAME);
         final String filepath = file.getAbsolutePath();
         logger.log(Level.INFO, () -> "loading port info from: " + filepath);
 
-        //valores por defecto
-        this.endpoint = "http://test3.alignetsac.com/sfewsperu/ws/invoker";
-        this.user = "avinka";
-        this.password = "ebiz";
-        //fixes missing default values
-        this.connectionTimeout = "600000";
-        this.receiveTimeout = "600000";
+        //if file does not exit keep current values
+        if (!file.exists()) {
+            logger.log(Level.INFO, null, () -> "File " + filepath + " is missing, default values loaded.");
+            return;
+        }
 
         try (FileReader fr = new FileReader(file)) {
             PortInfo pi = new Gson().fromJson(fr, this.getClass());
@@ -53,9 +72,19 @@ public class PortInfo {
             this.receiveTimeout = pi.receiveTimeout;
             logger.info("Port values captured from file");
         } catch (IOException ex) {
-            logger.log(Level.INFO, null, () -> "Invalid file, keeping default values. " + ex.getMessage());
+            logger.log(Level.INFO, null, () -> "File " + filepath + " is invalid, keeping current values." + ex.getMessage());
         }
 
+    }
+
+    private void setDefaults() {
+        //valores por defecto
+        this.endpoint = "http://test3.alignetsac.com/sfewsperu/ws/invoker";
+        this.user = "avinka";
+        this.password = "ebiz";
+        //fixes missing default values
+        this.connectionTimeout = "600000";
+        this.receiveTimeout = "600000";
     }
 
     /**
