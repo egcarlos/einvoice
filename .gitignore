@@ -73,3 +73,4 @@ $RECYCLE.BIN/
 /main/einvoice-ws/ws-client/target
 /main/einvoice-ws/ws-clientcdi/target
 /main/einvoice-ws/ws-clienttest/target
+/main/einvoice-process/process-copy/target/

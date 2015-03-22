@@ -59,6 +59,7 @@
         <module>process-download</module>
         <module>process-replicate</module>
         <module>process-signonline</module>
+        <module>process-copy</module>
     </modules>
     
     <properties>
