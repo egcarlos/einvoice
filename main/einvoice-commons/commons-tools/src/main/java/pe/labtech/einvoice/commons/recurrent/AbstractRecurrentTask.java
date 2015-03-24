@@ -5,6 +5,7 @@
  */
 package pe.labtech.einvoice.commons.recurrent;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -64,4 +65,11 @@ public abstract class AbstractRecurrentTask<T> {
         }
     }
 
+    public static String buildTaskId(String clientId, String documentType, String documentNumber, String taskName) {
+        return MessageFormat.format("{0}-{1}-{2}[{3}]", clientId, documentType, documentNumber, taskName);
+    }
+
+    public static String buildTaskId(String clientId, String documentType, String documentNumber, String taskName, String qualifier) {
+        return MessageFormat.format("{0}-{1}-{2}[{3}:{4}]", clientId, documentType, documentNumber, taskName, qualifier);
+    }
 }

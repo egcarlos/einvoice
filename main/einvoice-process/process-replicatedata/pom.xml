@@ -2,76 +2,41 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pe.labtech.einvoice</groupId>
-    <artifactId>einvoice-core</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
-
-    <name>einvoice-core</name>
+    <parent>
+        <groupId>pe.labtech.einvoice.process</groupId>
+        <artifactId>einvoice-process-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>einvoice-process-replicatedata</artifactId>
+    <packaging>ejb</packaging>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <einvoice.process.version>1.0-SNAPSHOT</einvoice.process.version>
     </properties>
-    
+
     <dependencies>
         <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-signonline</artifactId>
-            <version>${einvoice.process.version}</version>
+            <groupId>pe.labtech.einvoice.model</groupId>
+            <artifactId>einvoice-model-private</artifactId>
         </dependency>
         <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-sync</artifactId>
-            <version>${einvoice.process.version}</version>
+            <groupId>pe.labtech.einvoice.model</groupId>
+            <artifactId>einvoice-model-public</artifactId>
         </dependency>
         <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-declare</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-replicate</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-replicatedata</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-replicateresponse</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-download</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-copy</artifactId>
-            <version>${einvoice.process.version}</version>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
+            <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>einvoice-core</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.0.2.Final</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -86,10 +51,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
+                <artifactId>maven-ejb-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <ejbVersion>3.1</ejbVersion>
                 </configuration>
             </plugin>
             <plugin>

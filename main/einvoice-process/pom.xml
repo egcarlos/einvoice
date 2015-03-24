@@ -60,6 +60,8 @@
         <module>process-replicate</module>
         <module>process-signonline</module>
         <module>process-copy</module>
+        <module>process-replicatedata</module>
+        <module>process-replicateresponse</module>
     </modules>
     
     <properties>
