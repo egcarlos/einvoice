@@ -17,6 +17,7 @@ import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
@@ -37,6 +38,7 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
  * @author Carlos
  */
 @Singleton
+@Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
 public class BL_CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
