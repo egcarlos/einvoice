@@ -42,6 +42,12 @@ public class CancelDetail implements Serializable {
     @Column(name = "numeroDocumentoBaja", length = 8)
     private String numeroDocumentoBaja;
 
+    @Size(max = 200)
+    @NotNull
+    @Basic
+    @Column(name = "motivoBaja", length = 200)
+    private String motivoBaja;
+
     public CancelDetail() {
     }
 
@@ -97,6 +103,14 @@ public class CancelDetail implements Serializable {
 
     public void setNumeroDocumentoBaja(String numeroDocumentoBaja) {
         this.numeroDocumentoBaja = numeroDocumentoBaja;
+    }
+
+    public String getMotivoBaja() {
+        return motivoBaja;
+    }
+
+    public void setMotivoBaja(String motivoBaja) {
+        this.motivoBaja = motivoBaja;
     }
 
 }
