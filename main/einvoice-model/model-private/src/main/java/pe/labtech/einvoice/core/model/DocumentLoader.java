@@ -207,6 +207,7 @@ public class DocumentLoader implements DocumentLoaderLocal {
     }
 
     private void checkReplicable(String k, DocumentResponse documentResponse) {
+        //TODO trasladar a la base de datos
         switch (k) {
             case "pdfFileUrl":
             case "xmlFileSignUrl":
@@ -214,6 +215,9 @@ public class DocumentLoader implements DocumentLoaderLocal {
             case "integratedStatus":
             case "hashCode":
             case "signatureValue":
+            case "messages":
+            case "sunatMessage":
+            case "recordStatus":
                 documentResponse.setReplicate(true);
                 break;
             default:
