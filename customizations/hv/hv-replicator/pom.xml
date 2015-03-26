@@ -70,6 +70,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.0.2.Final</version>
+                <configuration>
+                    <filename>${project.build.finalName}.jar</filename>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

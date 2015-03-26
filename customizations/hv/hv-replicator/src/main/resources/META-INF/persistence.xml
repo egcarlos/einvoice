@@ -4,9 +4,9 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>java:/einvoiceDS</jta-data-source>
         <properties>
-            <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <!--<property name="hibernate.format_sql" value="true"/>-->
+            <!--<property name="hibernate.show_sql" value="true"/>-->
+            <!--<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>-->
         </properties>
     </persistence-unit>
 </persistence>

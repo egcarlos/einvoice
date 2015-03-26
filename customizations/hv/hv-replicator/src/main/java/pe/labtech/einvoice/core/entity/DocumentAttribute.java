@@ -38,6 +38,11 @@ public class DocumentAttribute implements Serializable {
     public DocumentAttribute() {
     }
 
+    @Override
+    public String toString() {
+        return "DocumentAttribute{" + "document=" + document + ", name=" + name + ", value=" + value + '}';
+    }
+
     public DocumentAttribute(String name, String value) {
         this.name = name;
         if (value != null) {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.hv.replicator.entity;
+package pe.labtech.einvoice.hv.replicator.entity.old;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
  * @author Carlos
  */
 @Embeddable
-public class DetailPK implements Serializable {
+public class HeaderPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
@@ -40,27 +40,14 @@ public class DetailPK implements Serializable {
     @Column(name = "NUM_RECAUDACION")
     private Integer numeroRecaudacion;
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 3)
-    @Column(name = "NUM_LINEA")
-    private String did;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
-    @Column(name = "DCODPRODUCTO")
-    private String dcodproducto;
-
-    public DetailPK() {
+    public HeaderPK() {
     }
 
-    public DetailPK(String codigoCompania, String codigoLocalidad, String codigoTiposRecaudacion, Integer numeroRecaudacion, String did, String dcodproducto) {
+    public HeaderPK(String codigoCompania, String codigoLocalidad, String codigoTiposRecaudacion, Integer numeroRecaudacion) {
         this.codigoCompania = codigoCompania;
         this.codigoLocalidad = codigoLocalidad;
         this.codigoTiposRecaudacion = codigoTiposRecaudacion;
         this.numeroRecaudacion = numeroRecaudacion;
-        this.did = did;
-        this.dcodproducto = dcodproducto;
     }
 
     public String getCodigoCompania() {
@@ -95,31 +82,13 @@ public class DetailPK implements Serializable {
         this.numeroRecaudacion = numeroRecaudacion;
     }
 
-    public String getDid() {
-        return did;
-    }
-
-    public void setDid(String did) {
-        this.did = did;
-    }
-
-    public String getDcodproducto() {
-        return dcodproducto;
-    }
-
-    public void setDcodproducto(String dcodproducto) {
-        this.dcodproducto = dcodproducto;
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.codigoCompania);
-        hash = 53 * hash + Objects.hashCode(this.codigoLocalidad);
-        hash = 53 * hash + Objects.hashCode(this.codigoTiposRecaudacion);
-        hash = 53 * hash + Objects.hashCode(this.numeroRecaudacion);
-        hash = 53 * hash + Objects.hashCode(this.did);
-        hash = 53 * hash + Objects.hashCode(this.dcodproducto);
+        hash = 47 * hash + Objects.hashCode(this.codigoCompania);
+        hash = 47 * hash + Objects.hashCode(this.codigoLocalidad);
+        hash = 47 * hash + Objects.hashCode(this.codigoTiposRecaudacion);
+        hash = 47 * hash + Objects.hashCode(this.numeroRecaudacion);
         return hash;
     }
 
@@ -131,7 +100,7 @@ public class DetailPK implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final DetailPK other = (DetailPK) obj;
+        final HeaderPK other = (HeaderPK) obj;
         if (!Objects.equals(this.codigoCompania, other.codigoCompania)) {
             return false;
         }
@@ -142,12 +111,6 @@ public class DetailPK implements Serializable {
             return false;
         }
         if (!Objects.equals(this.numeroRecaudacion, other.numeroRecaudacion)) {
-            return false;
-        }
-        if (!Objects.equals(this.did, other.did)) {
-            return false;
-        }
-        if (!Objects.equals(this.dcodproducto, other.dcodproducto)) {
             return false;
         }
         return true;

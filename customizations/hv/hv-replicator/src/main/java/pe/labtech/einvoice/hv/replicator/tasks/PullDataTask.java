@@ -22,8 +22,8 @@ import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
 import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
-import pe.labtech.einvoice.hv.replicator.entity.Detail;
-import pe.labtech.einvoice.hv.replicator.entity.Header;
+import pe.labtech.einvoice.hv.replicator.entity.old.Detail;
+import pe.labtech.einvoice.hv.replicator.entity.old.Header;
 
 /**
  *
@@ -98,7 +98,7 @@ public class PullDataTask implements PullDataTaskLocal {
                 new DocumentAttribute("razonSocialAdquiriente", h.getCrsocialusuario()),
                 new DocumentAttribute("lugarDestino", h.getCdireccionusuario()),
                 new DocumentAttribute("correoAdquiriente", h.getCcorreousuario()),
-                new DocumentAttribute("tipoMoneda", h.getCmoneda()),
+                new DocumentAttribute("tipoMoneda", h.getCmoneda() == null ? h.getCmonedancreditodebito() : h.getCmoneda()),
                 new DocumentAttribute("motivoDocumento", h.getCmotncreditodebito()),
                 new DocumentAttribute("totalValorVentaNetoOpGravadas", h.getCvventagravada()),
                 new DocumentAttribute("totalValorVentaNetoOpNoGravada", h.getCvventanogravada()),
@@ -112,7 +112,6 @@ public class PullDataTask implements PullDataTaskLocal {
                 new DocumentAttribute("totalDescuentos", h.getCdescuento()),
                 new DocumentAttribute("descuentosGlobales", h.getCdescuentoglobal()),
                 new DocumentAttribute("totalVenta", h.getCtotal()),
-                new DocumentAttribute("tipoMoneda", h.getCmonedancreditodebito()),
                 new DocumentAttribute("tipoDocumentoReferenciaPrincipal", h.getCtipncreditodebito1()),
                 new DocumentAttribute("numeroDocumentoReferenciaPrincipal", h.getCcomprobanteafecto1()),
                 new DocumentAttribute("tipoDocumentoReferenciaCorregido", h.getCtipncreditodebito2()),

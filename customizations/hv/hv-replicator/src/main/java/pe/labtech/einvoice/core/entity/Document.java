@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.core.entity;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -78,6 +79,17 @@ public class Document implements Serializable {
     private List<EventTrace> trace;
 
     public Document() {
+    }
+
+    @Override
+    public String toString() {
+        return MessageFormat.format(
+                "Document[id={0},  clientId={1}, documentType={2}, documentNumber={3}]",
+                id,
+                clientId,
+                documentType,
+                documentNumber
+        );
     }
 
     public Long getId() {

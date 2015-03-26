@@ -76,3 +76,4 @@ $RECYCLE.BIN/
 /main/einvoice-process/process-copy/target/
 /main/einvoice-process/process-replicatedata/target/
 /main/einvoice-process/process-replicateresponse/target/
+/customizations/hv/hv-replicator/target/

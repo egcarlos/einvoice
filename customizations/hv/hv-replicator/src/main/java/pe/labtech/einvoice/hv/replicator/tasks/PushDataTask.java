@@ -15,7 +15,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import pe.labtech.einvoice.core.entity.Document;
-import pe.labtech.einvoice.hv.replicator.entity.Header;
+import pe.labtech.einvoice.hv.replicator.entity.old.Header;
 
 /**
  *
