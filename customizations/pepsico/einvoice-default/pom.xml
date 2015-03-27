@@ -3,28 +3,80 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pe.labtech.einvoice</groupId>
-    <artifactId>pepsico-replicator</artifactId>
+    <artifactId>einvoice-core</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>ejb</packaging>
+    <packaging>war</packaging>
 
-    <name>pepsico-replicator</name>
+    <name>pepsico-core</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <einvoice.process.version>1.0-SNAPSHOT</einvoice.process.version>
     </properties>
-
+    
     <dependencies>
+        <!--        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-signonline</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-sync</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-declare</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-replicate</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-replicatedata</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-replicateresponse</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-download</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-copy</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>pepsico-replicator</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
+            <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <finalName>einvoice-core</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.0.2.Final</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -38,19 +90,11 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.0.2.Final</version>
-                <configuration>
-                    <filename>${project.build.finalName}.jar</filename>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-ejb-plugin</artifactId>
+                <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <ejbVersion>3.1</ejbVersion>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
             <plugin>
