@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlValue;
         }
 )
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DocumentAttribute implements Serializable {
+public class DocumentAttribute implements Serializable, ValueHolder {
 
     @Id
     @ManyToOne

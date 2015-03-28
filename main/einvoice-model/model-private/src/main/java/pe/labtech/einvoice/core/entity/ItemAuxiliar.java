@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlValue;
             "order"
         }
 )
-public class ItemAuxiliar implements Serializable {
+public class ItemAuxiliar implements Serializable, ValueHolder {
 
     @Id
     @ManyToOne

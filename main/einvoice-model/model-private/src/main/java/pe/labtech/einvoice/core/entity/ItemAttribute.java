@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlValue;
         }
 )
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ItemAttribute implements Serializable {
+public class ItemAttribute implements Serializable, ValueHolder {
 
     @Id
     @ManyToOne

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.pepsico.replicator.entity;
+package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
  * @author Carlos
  */
 @Embeddable
-public class DetailPK implements Serializable {
+public class DocumentHeaderPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
@@ -28,25 +28,13 @@ public class DetailPK implements Serializable {
     @NotNull
     @Column(name = "CORDEN")
     private long corden;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 3)
-    @Column(name = "DID")
-    private String did;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
-    @Column(name = "DCODPRODUCTO")
-    private String dcodproducto;
 
-    public DetailPK() {
+    public DocumentHeaderPK() {
     }
 
-    public DetailPK(String cempresa, long corden, String did, String dcodproducto) {
+    public DocumentHeaderPK(String cempresa, long corden) {
         this.cempresa = cempresa;
         this.corden = corden;
-        this.did = did;
-        this.dcodproducto = dcodproducto;
     }
 
     public String getCempresa() {
@@ -65,49 +53,25 @@ public class DetailPK implements Serializable {
         this.corden = corden;
     }
 
-    public String getDid() {
-        return did;
-    }
-
-    public void setDid(String did) {
-        this.did = did;
-    }
-
-    public String getDcodproducto() {
-        return dcodproducto;
-    }
-
-    public void setDcodproducto(String dcodproducto) {
-        this.dcodproducto = dcodproducto;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (cempresa != null ? cempresa.hashCode() : 0);
         hash += (int) corden;
-        hash += (did != null ? did.hashCode() : 0);
-        hash += (dcodproducto != null ? dcodproducto.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DetailPK)) {
+        if (!(object instanceof DocumentHeaderPK)) {
             return false;
         }
-        DetailPK other = (DetailPK) object;
+        DocumentHeaderPK other = (DocumentHeaderPK) object;
         if ((this.cempresa == null && other.cempresa != null) || (this.cempresa != null && !this.cempresa.equals(other.cempresa))) {
             return false;
         }
         if (this.corden != other.corden) {
-            return false;
-        }
-        if ((this.did == null && other.did != null) || (this.did != null && !this.did.equals(other.did))) {
-            return false;
-        }
-        if ((this.dcodproducto == null && other.dcodproducto != null) || (this.dcodproducto != null && !this.dcodproducto.equals(other.dcodproducto))) {
             return false;
         }
         return true;
@@ -115,7 +79,7 @@ public class DetailPK implements Serializable {
 
     @Override
     public String toString() {
-        return "pe.labtech.einvoice.core.replicator.entity.DetailPK[ cempresa=" + cempresa + ", corden=" + corden + ", did=" + did + ", dcodproducto=" + dcodproducto + " ]";
+        return "pe.labtech.einvoice.core.replicator.entity.HeaderPK[ cempresa=" + cempresa + ", corden=" + corden + " ]";
     }
 
 }

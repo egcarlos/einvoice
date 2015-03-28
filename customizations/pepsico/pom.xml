@@ -11,6 +11,7 @@
     <modules>
         <module>process-replicate</module>
         <module>einvoice-default</module>
+        <module>model-public</module>
     </modules>
     
     <properties>

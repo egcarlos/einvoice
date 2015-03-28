@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.pepsico.replicator.entity;
+package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -21,13 +19,11 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "SPE_EINVOICEHEADER")
-@NamedQueries({
-    @NamedQuery(name = "Header.findAll", query = "SELECT h FROM Header h")})
-public class Header implements Serializable {
+public class DocumentHeader implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected HeaderPK headerPK;
+    protected DocumentHeaderPK headerPK;
     @Column(name = "CTIPDOCUMENTOEMISOR")
     private Character ctipdocumentoemisor;
     @Size(max = 11)
@@ -315,22 +311,22 @@ public class Header implements Serializable {
     @Column(name = "LG_SERVICE_RESPONSE")
     private String lgServiceResponse;
 
-    public Header() {
+    public DocumentHeader() {
     }
 
-    public Header(HeaderPK headerPK) {
+    public DocumentHeader(DocumentHeaderPK headerPK) {
         this.headerPK = headerPK;
     }
 
-    public Header(String cempresa, long corden) {
-        this.headerPK = new HeaderPK(cempresa, corden);
+    public DocumentHeader(String cempresa, long corden) {
+        this.headerPK = new DocumentHeaderPK(cempresa, corden);
     }
 
-    public HeaderPK getHeaderPK() {
+    public DocumentHeaderPK getHeaderPK() {
         return headerPK;
     }
 
-    public void setHeaderPK(HeaderPK headerPK) {
+    public void setHeaderPK(DocumentHeaderPK headerPK) {
         this.headerPK = headerPK;
     }
 
@@ -1176,10 +1172,10 @@ public class Header implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Header)) {
+        if (!(object instanceof DocumentHeader)) {
             return false;
         }
-        Header other = (Header) object;
+        DocumentHeader other = (DocumentHeader) object;
         if ((this.headerPK == null && other.headerPK != null) || (this.headerPK != null && !this.headerPK.equals(other.headerPK))) {
             return false;
         }

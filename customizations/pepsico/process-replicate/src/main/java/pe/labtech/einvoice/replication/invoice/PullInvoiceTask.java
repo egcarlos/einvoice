@@ -3,76 +3,63 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.pepsico.replicator.tasks;
+package pe.labtech.einvoice.replication.invoice;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.ejb.Asynchronous;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentAttribute;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
 import pe.labtech.einvoice.core.entity.ItemAuxiliar;
 import pe.labtech.einvoice.core.entity.ValueHolder;
-import pe.labtech.einvoice.pepsico.replicator.entity.Detail;
-import pe.labtech.einvoice.pepsico.replicator.entity.Header;
+import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.entity.DocumentDetail;
+import pe.labtech.einvoice.replicator.entity.DocumentHeader;
+import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
+import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
  *
  * @author Carlos
  */
 @Stateless
-public class PullDataTask implements PullDataTaskLocal {
+public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
-    private static final String HEADER_QUERY = "SELECT o FROM Header o WHERE o.cestado = 'A'";
-    private static final String DETAIL_QUERY = "SELECT o "
-            + "FROM Detail o "
-            + "WHERE "
-            + " o.detailPK.cempresa = :empresa "
-            + " and o.detailPK.corden = :orden "
-            + "ORDER BY"
-            + " o.detailPK.did";
+    private static final String DETAIL_QUERY = "SELECT o  FROM Detail o WHERE  o.detailPK.cempresa = :empresa  and o.detailPK.corden = :orden ORDER BY o.detailPK.did";
 
-    @PersistenceContext(unitName = "pepsico_PU")
-    EntityManager em;
+    @EJB
+    private PublicDatabaseManagerLocal publicDB;
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @EJB
+    private PrivateDatabaseManagerLocal privateDB;
+
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
-    public void handle() {
-        Logger.getLogger(this.getClass().getSimpleName()).fine("Dispatching for data pulling");
-        //accion a ejecutar con cada 
-        Consumer<Header> forHeaders = (h) -> {
-            h.setCestado('L');
-            Document document = mapHeader(h);
-            List<Item> items = mapItems(h, document);
-            document.setItems(items);
-            em.persist(document);
-        };
-
-        List<Header> hs = em.createQuery(HEADER_QUERY, Header.class)
-                .getResultList();
-        if (hs.isEmpty()) {
-            return;
-        }
-        Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "pulling items: {0}", hs.size());
-        hs.forEach(forHeaders);
+    @Asynchronous
+    public void handle(DocumentHeaderPK t) {
+        DocumentHeader h = publicDB.seek(e -> e.find(DocumentHeader.class, t));
+        Document document = mapHeader(h);
+        List<Item> items = mapItems(h, document);
+        document.setItems(items);
+        document.setStep("PULL");
+        document.setStatus("LOADED");
+        privateDB.handle(e -> e.persist(document));
     }
 
-    private Document mapHeader(Header h) {
+    private Document mapHeader(DocumentHeader h) {
         Document d = new Document();
-        d.setClientId(h.getCdocumentoemisor());
-        d.setDocumentType(h.getCtipcomprobante());
-        d.setDocumentNumber(h.getCcomprobante());
+        d.setClientId(h.getCtipdocumentoemisor() + "-" + h.getCdocumentoemisor().trim());
+        d.setDocumentType(h.getCtipcomprobante().trim());
+        d.setDocumentNumber(h.getCcomprobante().trim());
         //creacion de los atributos
         List<DocumentAttribute> da = Arrays.asList(
                 new DocumentAttribute("indicador", "C"),
@@ -112,7 +99,6 @@ public class PullDataTask implements PullDataTaskLocal {
                 new DocumentAttribute("totalDescuentos", h.getCdescuento()),
                 new DocumentAttribute("descuentosGlobales", h.getCdescuentoglobal()),
                 new DocumentAttribute("totalVenta", h.getCtotal()),
-                //                new DocumentAttribute("tipoMoneda", h.getCmonedancreditodebito()),
                 new DocumentAttribute("tipoDocumentoReferenciaPrincipal", h.getCtipncreditodebito1()),
                 new DocumentAttribute("numeroDocumentoReferenciaPrincipal", h.getCcomprobanteafecto1()),
                 new DocumentAttribute("tipoDocumentoReferenciaCorregido", h.getCtipncreditodebito2()),
@@ -142,20 +128,21 @@ public class PullDataTask implements PullDataTaskLocal {
         return d;
     }
 
-    private List<Item> mapItems(Header h, Document document) {
+    private List<Item> mapItems(DocumentHeader h, Document document) {
         //como capturar el detalle
-        List<Item> items = em
-                .createQuery(DETAIL_QUERY, Detail.class)
+        List<Item> items = publicDB.seek(e -> e
+                .createQuery("SELECT o  FROM DocumentDetail o WHERE  o.detailPK.cempresa = :empresa  and o.detailPK.corden = :orden ORDER BY o.detailPK.did", DocumentDetail.class)
                 .setParameter("empresa", h.getHeaderPK().getCempresa())
                 .setParameter("orden", h.getHeaderPK().getCorden())
                 .getResultList()
                 .stream()
                 .map(d -> mapDetailToItem(d, document))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+        );
         return items;
     }
 
-    private Item mapDetailToItem(Detail detail, Document document) {
+    private Item mapDetailToItem(DocumentDetail detail, Document document) {
         Item item = new Item();
         item.setDocument(document);
         item.setId(Long.parseLong(detail.getDetailPK().getDid().trim(), 10));

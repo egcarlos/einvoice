@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.pepsico.replicator.tasks;
+package pe.labtech.einvoice.replication.invoice;
 
 import javax.ejb.Local;
+import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 
 /**
  *
  * @author Carlos
  */
 @Local
-public interface PullDataTaskLocal {
+public interface PullInvoiceTaskLocal {
 
-    void handle();
+    void handle(DocumentHeaderPK t);
 }

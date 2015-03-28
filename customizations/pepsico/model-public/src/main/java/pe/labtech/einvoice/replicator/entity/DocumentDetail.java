@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.pepsico.replicator.entity;
+package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -21,13 +19,11 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "SPE_EINVOICEDETAIL")
-@NamedQueries({
-    @NamedQuery(name = "Detail.findAll", query = "SELECT d FROM Detail d")})
-public class Detail implements Serializable {
+public class DocumentDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected DetailPK detailPK;
+    protected DocumentDetailPK detailPK;
     @Size(max = 1700)
     @Column(name = "DDESPRODUCTO")
     private String ddesproducto;
@@ -108,22 +104,22 @@ public class Detail implements Serializable {
     @Column(name = "DAUX14")
     private String daux14;
 
-    public Detail() {
+    public DocumentDetail() {
     }
 
-    public Detail(DetailPK detailPK) {
+    public DocumentDetail(DocumentDetailPK detailPK) {
         this.detailPK = detailPK;
     }
 
-    public Detail(String cempresa, long corden, String did, String dcodproducto) {
-        this.detailPK = new DetailPK(cempresa, corden, did, dcodproducto);
+    public DocumentDetail(String cempresa, long corden, String did, String dcodproducto) {
+        this.detailPK = new DocumentDetailPK(cempresa, corden, did, dcodproducto);
     }
 
-    public DetailPK getDetailPK() {
+    public DocumentDetailPK getDetailPK() {
         return detailPK;
     }
 
-    public void setDetailPK(DetailPK detailPK) {
+    public void setDetailPK(DocumentDetailPK detailPK) {
         this.detailPK = detailPK;
     }
 
@@ -369,10 +365,10 @@ public class Detail implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Detail)) {
+        if (!(object instanceof DocumentDetail)) {
             return false;
         }
-        Detail other = (Detail) object;
+        DocumentDetail other = (DocumentDetail) object;
         if ((this.detailPK == null && other.detailPK != null) || (this.detailPK != null && !this.detailPK.equals(other.detailPK))) {
             return false;
         }
