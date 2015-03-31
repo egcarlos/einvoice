@@ -118,7 +118,7 @@ public class DocumentLoader implements DocumentLoaderLocal {
         ex.printStackTrace(pw);
         pw.flush();
         pw.close();
-        createEvent(d, "INFO", "error on " + d.getStep() + "\n" + sw.toString());
+        createEvent(d, "ERROR", "error on " + d.getStep() + "\n" + sw.toString());
         return d;
     }
 

@@ -34,8 +34,6 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 @Stateless
 public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
-    private static final String DETAIL_QUERY = "SELECT o  FROM Detail o WHERE  o.detailPK.cempresa = :empresa  and o.detailPK.corden = :orden ORDER BY o.detailPK.did";
-
     @EJB
     private PublicDatabaseManagerLocal publicDB;
 

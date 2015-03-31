@@ -32,6 +32,7 @@
     <modules>
         <module>commons-tools</module>
         <module>commons-ubl</module>
+        <module>commons-constants</module>
     </modules>
     
     <properties>

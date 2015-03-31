@@ -5,12 +5,16 @@
  */
 package pe.labtech.einvoice.core.tasks;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +30,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.xml.ws.soap.SOAPFaultException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.core.entity.Document;
@@ -87,6 +92,7 @@ public class SignTask implements SignTaskLocal {
             Response r = b.unmarshall(Response.class, response);
 
             if (isInvalid(r)) {
+                loader.createEvent(document, "ERROR", "Invalid response structure");
                 loader.markAsError(document.getId());
                 return;
             }
@@ -97,13 +103,35 @@ public class SignTask implements SignTaskLocal {
                 loader.markSigned(document.getId(), "SYNC", di.getSignatureValue(), di.getHashCode(), responses);
             } else if (wasSignedBefore(di)) {
                 loader.markForSync(document.getId());
-            } else {                
+            } else {
                 loader.markSigned(document.getId(), "ERROR", di.getSignatureValue(), di.getHashCode(), responses);
             }
+        } catch (SOAPFaultException ex) {
+            Map<String, String> responses = new HashMap<>();
+            responses.put("messages", "Soap Fault raised!");
+            loader.markSigned(document.getId(), "RETRY", null, null, responses);
+            String message = exToString(ex, "Document will retry");
+            loader.createEvent(document, "WARN", message);
         } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             loader.markAsError(document.getId(), ex);
         }
 
+    }
+
+    private String exToString(SOAPFaultException ex, String... headers) {
+        try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
+            Arrays.stream(headers).forEach(s -> pw.println(s));
+            pw.println();
+            pw.println(ex.getMessage());
+            pw.println();
+            pw.println("Stack Trace");
+            ex.printStackTrace(pw);
+            pw.flush();
+            pw.close();
+            return sw.toString();
+        } catch (IOException ioex) {
+            throw new RuntimeException(ioex);
+        }
     }
 
     private Map<String, String> describe(DocumentInfo di) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
