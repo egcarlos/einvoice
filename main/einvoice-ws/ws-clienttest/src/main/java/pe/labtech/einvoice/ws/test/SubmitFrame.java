@@ -168,6 +168,8 @@ public class SubmitFrame extends javax.swing.JFrame {
 
         port.invokeAsync(source.getText(), t -> {
             try {
+                this.submit.setEnabled(false);
+                this.target.setText("");
                 InvokeResponse resp = t.get();
                 target.setText(resp.getReturn());
             } catch (InterruptedException ex) {
@@ -179,7 +181,8 @@ public class SubmitFrame extends javax.swing.JFrame {
                     ex.getCause().printStackTrace(pw);
                 }
                 target.setText(sw.toString());
-
+            } finally {
+                this.submit.setEnabled(true);
             }
         });
 

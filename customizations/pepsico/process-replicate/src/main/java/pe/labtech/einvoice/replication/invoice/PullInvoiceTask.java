@@ -17,6 +17,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentAttribute;
+import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
 import pe.labtech.einvoice.core.entity.ItemAuxiliar;
@@ -116,13 +117,34 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         )
                 .stream()
                 .filter(a -> updateValue(a) != null)
+                .map(a -> {
+                    a.setDocument(d);
+                    return a;
+                })
+                .collect(Collectors.toList());
+
+        //CLEY1 -> 1000
+        //CLEY2 -> 1002
+        //CLEY3 -> 2000
+        List<DocumentLegend> dl = Arrays.asList(
+                new DocumentLegend("1000", 1l, h.getCley1()),
+                new DocumentLegend("1002", 1l, h.getCley2()),
+                new DocumentLegend("2000", 1l, h.getCley3())
+        )
+                .stream()
+                .filter(a -> updateValue(a) != null)
+                .map(a -> {
+                    a.setDocument(d);
+                    return a;
+                })
                 .collect(Collectors.toList());
 
         d.setAttributes(da);
-        d.getAttributes().forEach(child -> child.setDocument(d));
-        List<Item> items = mapItems(h, d);
-        items.forEach(child -> child.setDocument(d));
-        d.setItems(items);
+        d.setLegends(dl);
+
+        d.setItems(
+                mapItems(h, d)
+        );
         return d;
     }
 
@@ -134,15 +156,19 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 .setParameter("orden", h.getHeaderPK().getCorden())
                 .getResultList()
                 .stream()
-                .map(d -> mapDetailToItem(d, document))
+                .map(a -> mapDetailToItem(a))
+                .map(a -> {
+                    a.setDocument(document);
+                    return a;
+                })
                 .collect(Collectors.toList())
         );
         return items;
     }
 
-    private Item mapDetailToItem(DocumentDetail detail, Document document) {
+    private Item mapDetailToItem(DocumentDetail detail) {
         Item item = new Item();
-        item.setDocument(document);
+//        item.setDocument(document);
         item.setId(Long.parseLong(detail.getDetailPK().getDid().trim(), 10));
 
         List<ItemAttribute> attr = Arrays.asList(

@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlValue;
             "additional"
         }
 )
-public class DocumentLegend implements Serializable {
+public class DocumentLegend implements Serializable, ValueHolder {
 
     @Id
     @ManyToOne
