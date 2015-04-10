@@ -61,9 +61,9 @@ public class Builder {
      * @return XML de consulta al servidor
      */
     public String buildQuery(String clientId, String documentType, String firstDocument, String lastDocument) {
-        String serial = firstDocument.split("-")[0];
-        String firstNumber = firstDocument.split("-")[1];
-        String lastNumber = lastDocument.split("-")[1];
+        String serial = extractGroup(firstDocument);
+        String firstNumber = extractNumber(firstDocument);
+        String lastNumber = extractNumber(lastDocument);
         QueryDocument query = new QueryDocument(
                 "PDF",
                 Arrays.asList(
@@ -205,10 +205,10 @@ public class Builder {
     }
 
     /**
-     * Construye un mensaje XML para dar la indicación de publicación 
-     * de un documento. Se debe considerar que el presente metodo no
-     * realiza validaciones sobre los datos y debe verificarse como mínimo los
-     * formatos antes de realizar la consulta.
+     * Construye un mensaje XML para dar la indicación de publicación de un
+     * documento. Se debe considerar que el presente metodo no realiza
+     * validaciones sobre los datos y debe verificarse como mínimo los formatos
+     * antes de realizar la consulta.
      *
      * @param clientId RUC del emisor del documento
      * @param documentType tipo de documento
@@ -220,9 +220,9 @@ public class Builder {
      * @return
      */
     public String buildPublish(String clientId, String documentType, String firstDocument, String lastDocument, boolean declare) {
-        String serial = firstDocument.split("-")[0];
-        String firstNumber = firstDocument.split("-")[1];
-        String lastNumber = lastDocument.split("-")[1];
+        String serial = extractGroup(firstDocument);
+        String firstNumber = extractNumber(firstDocument);
+        String lastNumber = extractNumber(lastDocument);
         PublishDocument publish = new PublishDocument(declare ? "1" : "0", Arrays.asList(
                 new CommandParameter("idEmisor", clientId),
                 new CommandParameter("tipoDocumento", documentType),
@@ -236,10 +236,10 @@ public class Builder {
     }
 
     /**
-     * Construye un mensaje XML para dar la indicación de declaración 
-     * de un documento. Se debe considerar que el presente metodo no
-     * realiza validaciones sobre los datos y debe verificarse como mínimo los
-     * formatos antes de realizar la consulta.
+     * Construye un mensaje XML para dar la indicación de declaración de un
+     * documento. Se debe considerar que el presente metodo no realiza
+     * validaciones sobre los datos y debe verificarse como mínimo los formatos
+     * antes de realizar la consulta.
      *
      * @param clientId RUC del emisor del documento
      * @param documentType tipo de documento
@@ -251,10 +251,10 @@ public class Builder {
     }
 
     /**
-     * Construye un mensaje XML para dar la indicación de declaración 
-     * de un documento. Se debe considerar que el presente metodo no
-     * realiza validaciones sobre los datos y debe verificarse como mínimo los
-     * formatos antes de realizar la consulta.
+     * Construye un mensaje XML para dar la indicación de declaración de un
+     * documento. Se debe considerar que el presente metodo no realiza
+     * validaciones sobre los datos y debe verificarse como mínimo los formatos
+     * antes de realizar la consulta.
      *
      * @param clientId RUC del emisor del documento
      * @param documentType tipo de documento
@@ -264,9 +264,9 @@ public class Builder {
      * @return
      */
     public String buildDeclare(String clientId, String documentType, String firstDocument, String lastDocument) {
-        String serial = firstDocument.split("-")[0];
-        String firstNumber = firstDocument.split("-")[1];
-        String lastNumber = lastDocument.split("-")[1];
+        String serial = extractGroup(firstDocument);
+        String firstNumber = extractNumber(firstDocument);
+        String lastNumber = extractNumber(lastDocument);
 
         DeclareDocument declare = new DeclareDocument(Arrays.asList(
                 new CommandParameter("idEmisor", clientId),
@@ -278,6 +278,16 @@ public class Builder {
         ));
 
         return this.marshall(declare);
+    }
+
+    private String extractNumber(String firstDocument) {
+        int i = firstDocument.lastIndexOf("-");
+        return firstDocument.substring(i + 1);
+    }
+
+    private String extractGroup(String firstDocument) {
+        int i = firstDocument.lastIndexOf("-");
+        return firstDocument.substring(0, i);
     }
 
     /**
@@ -306,7 +316,7 @@ public class Builder {
 
     /**
      * Genera el objeto representado por un texto XML.
-     * 
+     *
      * @param <T> tipo genérico de la entidad
      * @param clazz clase de la entidad a interpretar
      * @param text texto XML a interpretar
