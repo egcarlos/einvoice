@@ -56,7 +56,6 @@ public class SummaryItem {
     protected String numeroCorrelativoFin;
     protected BigDecimal totalValorVentaOpGravadasConIgv;
     protected BigDecimal totalValorVentaOpExoneradasIgv;
-    protected BigDecimal totalValorVentaOpExoneradasConIgv;
     protected BigDecimal totalValorVentaOpInafectasIgv;
     protected BigDecimal totalValorVentaOpGratuitas;
     protected BigDecimal totalIsc;
@@ -146,14 +145,6 @@ public class SummaryItem {
 
     public void setTotalValorVentaOpExoneradasIgv(BigDecimal totalValorVentaOpExoneradasIgv) {
         this.totalValorVentaOpExoneradasIgv = totalValorVentaOpExoneradasIgv;
-    }
-
-    public BigDecimal getTotalValorVentaOpExoneradasConIgv() {
-        return totalValorVentaOpExoneradasConIgv;
-    }
-
-    public void setTotalValorVentaOpExoneradasConIgv(BigDecimal totalValorVentaOpExoneradasConIgv) {
-        this.totalValorVentaOpExoneradasConIgv = totalValorVentaOpExoneradasConIgv;
     }
 
     public BigDecimal getTotalValorVentaOpInafectasIgv() {
