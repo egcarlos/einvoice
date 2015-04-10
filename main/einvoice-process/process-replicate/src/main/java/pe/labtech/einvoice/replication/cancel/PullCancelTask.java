@@ -23,9 +23,6 @@ import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.CancelDetail;
 import pe.labtech.einvoice.replicator.entity.CancelHeader;
 import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
-import pe.labtech.einvoice.replicator.entity.SummaryDetail;
-import pe.labtech.einvoice.replicator.entity.SummaryHeader;
-import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
 import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
@@ -62,7 +59,7 @@ public class PullCancelTask implements PullCancelTaskLocal {
 
         Document document = new Document();
         document.setClientId(header.getId().getTipoDocumentoEmisor() + "-" + header.getId().getNumeroDocumentoEmisor());
-        document.setDocumentType("RC");
+        document.setDocumentType("RA");
         document.setDocumentNumber(header.getId().getResumenId());
 
         try {
