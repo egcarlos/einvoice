@@ -6,15 +6,20 @@
 package pe.labtech.einvoice.commons.ubl;
 
 import java.math.BigDecimal;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalInformationType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentCurrencyCodeType;
-import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionContentType;
-import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionType;
-import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionsType;
-import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
-import sunat.names.specification.ubl.peru.schema.xsd.AdditionalAmount;
-import sunat.names.specification.ubl.peru.schema.xsd.AdditionalInformation;
-import sunat.names.specification.ubl.peru.schema.xsd.AdditionalProperty;
+import java.util.Arrays;
+import pe.labtech.ubl.model.Invoice;
+import pe.labtech.ubl.model.aggregate.AccountingParty;
+import pe.labtech.ubl.model.aggregate.Address;
+import pe.labtech.ubl.model.aggregate.Party;
+import pe.labtech.ubl.model.aggregate.PartyLegalEntity;
+import pe.labtech.ubl.model.aggregate.Signature;
+import pe.labtech.ubl.model.basic.Amount;
+import pe.labtech.ubl.model.extensions.ExtensionContent;
+import pe.labtech.ubl.model.extensions.UBLExtension;
+import pe.labtech.ubl.model.extensions.UBLExtensions;
+import pe.labtech.ubl.model.sunat.AdditionalInformation;
+import pe.labtech.ubl.model.sunat.AdditionalMonetaryTotal;
+import pe.labtech.ubl.model.sunat.AdditionalProperty;
 
 /**
  *
@@ -22,76 +27,101 @@ import sunat.names.specification.ubl.peru.schema.xsd.AdditionalProperty;
  */
 public class InvoiceBuilder {
 
-    private InvoiceType invoice;
+    private Invoice invoice;
 
-    private AdditionalInformation sunatAdditionalInformation;
-
-    public void init() {
-        invoice = new InvoiceType();
-
-        //building ubl extensions part
-        invoice.setUBLExtensions(new UBLExtensionsType());
-        
-        //SUNAT extension
-        final UBLExtensionType sunatExtension = new UBLExtensionType("SUNAT");
-        sunatAdditionalInformation = new AdditionalInformation();
-        sunatExtension.setExtensionContent(new ExtensionContentType());
-        sunatExtension.getExtensionContent().setAdditionalInformationSunat(sunatAdditionalInformation);
-        invoice.getUBLExtensions().getUBLExtension().add(sunatExtension);
-
-        //ebiz extension
-        final UBLExtensionType ebizExtension = new UBLExtensionType("EBIZ");
-        invoice.getUBLExtensions().getUBLExtension().add(ebizExtension);
-        ebizExtension.setExtensionContent(new ExtensionContentType());
-        ebizExtension.getExtensionContent().setAdditionalInformationCBC(new AdditionalInformationType());
-
-        //signature holder
-        final UBLExtensionType signExtension = new UBLExtensionType();
-        signExtension.setExtensionContent(new ExtensionContentType());
-        invoice.getUBLExtensions().getUBLExtension().add(signExtension);
-        
+    public InvoiceBuilder init(final String invoiceType, final String invoiceNumber, final String invoiceDate, final String currency, final String supplierType, final String supplierId, final String supplierName, final String clientType, final String clientId, final String clientName) {
+        InvoiceBuilder ib = new InvoiceBuilder();
+        ib.invoice = createInvoice(invoiceType, invoiceNumber, invoiceDate, currency, supplierType, supplierId, supplierName, clientType, clientId, clientName);
+        return ib;
     }
 
-    public InvoiceBuilder initialize() {
-        this.init();
-        return this;
-    }
-
-    public InvoiceBuilder setCurrency(String currency) {
-        DocumentCurrencyCodeType c = new DocumentCurrencyCodeType();
-        c.setValue(currency);
-        invoice.setDocumentCurrencyCode(c);
-        return this;
-    }
-
-    public InvoiceBuilder addAmountTotal(String id, String currency, String value) {
-        if (value != null) {
-            sunatAdditionalInformation.getAdditionalMonetaryTotals().add(
-                    new AdditionalAmount(id, currency, new BigDecimal(value))
+    public InvoiceBuilder addAmount(String id, BigDecimal amount) {
+        if (amount != null && id != null) {
+            AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
+                    id,
+                    null,
+                    null,
+                    new Amount(invoice.getDocumentCurrencyCode(), amount),
+                    null,
+                    null
             );
+            invoice
+                    .getUBLExtensions()
+                    .getUBLExtension()
+                    .get(0)
+                    .getExtensionContent()
+                    .getSunatAdditionalInformation()
+                    .getAdditionalMonetaryTotal()
+                    .add(amt);
         }
         return this;
     }
 
-    public InvoiceBuilder addAmountTotal(String id, String value) {
-        return this.addAmountTotal(
-                id,
-                this.getInvoice().getDocumentCurrencyCode().getValue(),
-                value
-        );
-    }
-
-    public InvoiceBuilder addAmountProperty(String id, String value) {
-        if (value != null) {
-            sunatAdditionalInformation.getAdditionalProperties().add(
-                    new AdditionalProperty(id, value)
-            );
+    public InvoiceBuilder addNote(String id, String value) {
+        if (id != null && value != null) {
+            AdditionalProperty ap = new AdditionalProperty(id, null, value);
+            invoice
+                    .getUBLExtensions()
+                    .getUBLExtension()
+                    .get(0)
+                    .getExtensionContent()
+                    .getSunatAdditionalInformation()
+                    .getAdditionalProperty()
+                    .add(ap);
         }
         return this;
     }
 
-    public InvoiceType getInvoice() {
+    public Invoice compile() {
+        //TODO agregar todo el resto
         return invoice;
     }
 
+    private static Invoice createInvoice(final String invoiceType, final String invoiceNumber, final String invoiceDate, final String currency, final String supplierType, final String supplierId, final String supplierName, final String clientType, final String clientId, final String clientName) {
+        Invoice i = new Invoice();
+        i.setUBLExtensions(new UBLExtensions());
+        i.getUBLExtensions().setUBLExtension(
+                Arrays.asList(
+                        new UBLExtension("SUNAT", new ExtensionContent(new AdditionalInformation(), null)),
+                        new UBLExtension("EBIZ", new ExtensionContent(null, new AdditionalInformation())),
+                        new UBLExtension(new ExtensionContent())
+                )
+        );
+        //valores constantes
+        i.setUBLVersionID("2.0");
+        i.setCustomizationID("1.0");
+        //valores variables pero mandatorios
+        i.setID(invoiceNumber);
+        i.setIssueDate(invoiceDate);
+        i.setInvoiceTypeCode(invoiceType);
+        //el valor de la moneda del documento es mandatorio antes de iniciar todo el proceso
+        i.setDocumentCurrencyCode(currency);
+        //estructura obligatoria
+        i.setSignature(new Signature());
+        i.getSignature().setID("IDSignKG");
+        i.getSignature().setSignatoryParty(new Party(supplierId, supplierName));
+        //datos del emisor
+        i.setAccountingSupplierParty(
+                new AccountingParty(
+                        supplierType,
+                        supplierId,
+                        new Party(
+                                new Address(),
+                                new PartyLegalEntity(supplierName)
+                        )
+                )
+        );
+        //datos del cliente
+        i.setAccountingCustomerParty(
+                new AccountingParty(
+                        clientType,
+                        clientId,
+                        new Party(
+                                new Address(),
+                                new PartyLegalEntity(clientName)
+                        )
+                )
+        );
+        return i;
+    }
 }

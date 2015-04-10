@@ -14,6 +14,7 @@ import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
+import static pe.labtech.einvoice.commons.recurrent.RecurrentTask.buildTaskId;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
@@ -67,7 +68,7 @@ public class PushDataRecurrent extends AbstractRecurrentTask<DocumentData> {
                 t.getDocument().getDocumentNumber(),
                 "replicate",
                 t.getName());
-        
+
         this.consumer = t -> manager.handle(e -> {
             String targetField = mapResponseName(t.getName());
             if (targetField == null) {

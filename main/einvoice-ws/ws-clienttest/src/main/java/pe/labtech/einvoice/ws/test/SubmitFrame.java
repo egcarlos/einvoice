@@ -79,7 +79,7 @@ public class SubmitFrame extends javax.swing.JFrame {
 
         jSplitPane1.setLeftComponent(targetScroll);
 
-        submit.setText("jButton1");
+        submit.setText("Enviar");
         submit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submitActionPerformed(evt);
