@@ -9,12 +9,12 @@ import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
-import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
 import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
@@ -53,5 +53,11 @@ public class PullCancelRecurrent extends AbstractRecurrentTask<CancelHeaderPK> {
         this.consumer = t -> {
             task.replicate(t);
         };
+    }
+    
+    @Override
+    @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
+    public void timeout() {
+        super.timeout();
     }
 }

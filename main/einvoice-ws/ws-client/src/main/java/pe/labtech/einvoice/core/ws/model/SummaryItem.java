@@ -18,25 +18,28 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
         name = "ResumenItem",
         propOrder = {
+            //campos de identificación
             "indicador",
             "numeroFila",
             "tipoDocumento",
             "tipoMoneda",
+            //campos para baja de documentos
             "serieDocumentoBaja",
             "numeroDocumentoBaja",
             "motivoBaja",
+            //campos para resumen de documentos
             "serieGrupoDocumento",
             "numeroCorrelativoInicio",
             "numeroCorrelativoFin",
             "totalValorVentaOpGravadasConIgv",
             "totalValorVentaOpInafectasIgv",
+            "totalValorVentaOpGratuitas",
             "totalOtrosTributos",
             "totalIgv",
             "totalVenta",
             "totalIsc",
             "totalOtrosCargos",
-            "totalValorVentaOpExoneradasIgv",
-            "totalValorVentaOpExoneradasConIgv"
+            "totalValorVentaOpExoneradasIgv"
         }
 )
 public class SummaryItem {
@@ -55,6 +58,7 @@ public class SummaryItem {
     protected BigDecimal totalValorVentaOpExoneradasIgv;
     protected BigDecimal totalValorVentaOpExoneradasConIgv;
     protected BigDecimal totalValorVentaOpInafectasIgv;
+    protected BigDecimal totalValorVentaOpGratuitas;
     protected BigDecimal totalIsc;
     protected BigDecimal totalIgv;
     public BigDecimal totalOtrosTributos;
@@ -158,6 +162,14 @@ public class SummaryItem {
 
     public void setTotalValorVentaOpInafectasIgv(BigDecimal totalValorVentaOpInafectasIgv) {
         this.totalValorVentaOpInafectasIgv = totalValorVentaOpInafectasIgv;
+    }
+
+    public BigDecimal getTotalValorVentaOpGratuitas() {
+        return totalValorVentaOpGratuitas;
+    }
+
+    public void setTotalValorVentaOpGratuitas(BigDecimal totalValorVentaOpGratuitas) {
+        this.totalValorVentaOpGratuitas = totalValorVentaOpGratuitas;
     }
 
     public BigDecimal getTotalIsc() {
