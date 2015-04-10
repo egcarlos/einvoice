@@ -108,7 +108,7 @@ public class ServiceTest {
 
         si1.setTotalValorVentaOpGravadasConIgv(BigDecimal.ZERO);
         si1.setTotalValorVentaOpExoneradasIgv(BigDecimal.ZERO);
-        si1.setTotalValorVentaOpExoneradasConIgv(BigDecimal.ZERO);
+//        si1.setTotalValorVentaOpExoneradasConIgv(BigDecimal.ZERO);
         si1.setTotalValorVentaOpInafectasIgv(BigDecimal.ZERO);
         si1.setTotalVenta(BigDecimal.ZERO);
         si1.setTotalOtrosTributos(BigDecimal.ZERO);
