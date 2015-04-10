@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.replication.invoice;
+package pe.labtech.einvoice.replication.summary;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -19,29 +19,48 @@ import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentAttribute;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
-import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
-import pe.labtech.einvoice.replicator.entity.DocumentDetail;
-import pe.labtech.einvoice.replicator.entity.DocumentHeader;
+import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.entity.SummaryDetail;
+import pe.labtech.einvoice.replicator.entity.SummaryHeader;
+import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
+import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
  *
  * @author Carlos
  */
 @Stateless
-public class PullInvoiceTask implements PullInvoiceTaskLocal {
+public class PullSummaryTask implements PullSummaryTaskLocal {
 
-    static final Logger logger = Logger.getLogger(PullInvoiceTask.class.getName());
+    static final Logger logger = Logger.getLogger(PullSummaryTask.class.getName());
 
     @EJB
-    private DocumentLoaderLocal loader;
+    private PublicDatabaseManagerLocal pub;
+
+    @EJB
+    private PrivateDatabaseManagerLocal prv;
 
     @Override
     @Asynchronous
-    public void replicate(DocumentHeader header, List<DocumentDetail> details) {
+    public void replicate(SummaryHeaderPK id) {
+        //recuperar la cabecera
+        SummaryHeader header = pub.seek(e -> e.find(SummaryHeader.class, id));
+        //recuperar los detalles
+        List<SummaryDetail> details = pub.seek(e -> e
+                .createQuery(
+                        "SELECT o FROM SummaryDetail o WHERE o.id.tipoDocumentoEmisor = :tde AND o.id.numeroDocumentoEmisor = :nde AND o.id.resumenId = ri",
+                        SummaryDetail.class
+                )
+                .setParameter("tde", id.getTipoDocumentoEmisor())
+                .setParameter("nde", id.getNumeroDocumentoEmisor())
+                .setParameter("ri", id.getResumenId())
+                .getResultList()
+        );
+
         Document document = new Document();
         document.setClientId(header.getId().getTipoDocumentoEmisor() + "-" + header.getId().getNumeroDocumentoEmisor());
-        document.setDocumentType(header.getId().getTipoDocumento());
-        document.setDocumentNumber(header.getId().getSerieNumero());
+        document.setDocumentType("RC");
+        document.setDocumentNumber(header.getId().getResumenId());
 
         try {
             List<DocumentAttribute> attrs = new LinkedList<>();
@@ -63,7 +82,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         List<Item> items = details.stream().map(detail -> {
             Item item = new Item();
             item.setDocument(document);
-            item.setId(Long.parseLong(detail.getId().getNumeroOrdenItem().trim(), 10));
+            item.setId(Long.parseLong(detail.getId().getNumeroFila().trim(), 10));
 
             try {
                 List<ItemAttribute> attrs = BeanUtils.describe(detail).entrySet().stream()
@@ -73,18 +92,20 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                         .filter(e -> !e.getKey().startsWith("bl_"))
                         .map(e -> new ItemAttribute(item, e.getKey(), e.getValue()))
                         .collect(Collectors.toList());
-                attrs.add(new ItemAttribute(item, "numeroOrdenItem", "" + item.getId()));
+                attrs.add(new ItemAttribute(item, "numeroFila", "" + item.getId()));
                 item.setAttributes(attrs);
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-                Logger.getLogger(PullInvoiceTask.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PullSummaryTask.class.getName()).log(Level.SEVERE, null, ex);
                 //TODO mark as error
             }
             return item;
         }).collect(Collectors.toList());
+        
         document.setItems(items);
         document.setStep("PULL");
         document.setStatus("LOADED");
-        loader.save(document);
+        
+        prv.handle(e -> e.persist(document));
     }
 
     DocumentAttribute generate(Object source, String property) {
