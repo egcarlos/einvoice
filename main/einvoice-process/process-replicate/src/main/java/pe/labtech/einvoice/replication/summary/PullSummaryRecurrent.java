@@ -38,10 +38,11 @@ public class PullSummaryRecurrent extends AbstractRecurrentTask<SummaryHeaderPK>
         super.init();
         this.findTasks = () -> db.seek(e -> e
                 .createQuery(
-                        "SELECT o.id FROM SummaryHeader o WHERE o.bl_estadoRegistro = 'A'",
+                        "SELECT o.id FROM SummaryHeader o WHERE o.bl_estadoRegistro = 'A' ORDER BY o.fechaEmisionComprobante ASC",
                         SummaryHeaderPK.class
                 )
-                .getResultList());
+                .getResultList()
+        );
         this.tryLock = t -> db.seek(e -> e
                 .createQuery(
                         "UPDATE SummaryHeader o SET o.bl_estadoRegistro = 'L' WHERE o.bl_estadoRegistro = 'A' AND o.id = :id"

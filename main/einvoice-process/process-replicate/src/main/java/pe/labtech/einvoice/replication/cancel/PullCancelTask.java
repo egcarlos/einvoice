@@ -48,7 +48,7 @@ public class PullCancelTask implements PullCancelTaskLocal {
         //recuperar los detalles
         List<CancelDetail> details = pub.seek(e -> e
                 .createQuery(
-                        "SELECT o FROM CancelDetail o WHERE o.id.tipoDocumentoEmisor = :tde AND o.id.numeroDocumentoEmisor = :nde AND o.id.resumenId = ri",
+                        "SELECT o FROM CancelDetail o WHERE o.id.tipoDocumentoEmisor = :tde AND o.id.numeroDocumentoEmisor = :nde AND o.id.resumenId = :ri",
                         CancelDetail.class
                 )
                 .setParameter("tde", id.getTipoDocumentoEmisor())
