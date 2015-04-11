@@ -1,19 +1,19 @@
 
---borrado del esquema privado
---drop table BL_DOCUMENT cascade constraints;
---drop table BL_DOCUMENT_ATTR cascade constraints;
---drop table BL_DOCUMENT_AUX cascade constraints;
---drop table BL_DOCUMENT_DATA cascade constraints;
---drop table BL_DOCUMENT_LEG cascade constraints;
---drop table BL_DOCUMENT_RESP cascade constraints;
---drop table BL_ITEM cascade constraints;
---drop table BL_ITEM_ATTR cascade constraints;
---drop table BL_ITEM_AUX cascade constraints;
---drop table BL_MESSAGE_TRACE cascade constraints;
---drop table CF_KEYSTORE cascade constraints;
---drop table CF_SECURITYVALUES cascade constraints;
---drop sequence BL_DOCUMENT_SEQ;
---drop sequence BL_MESSAGE_TRACE_SEQ
+-- borrado del esquema privado
+-- drop table BL_DOCUMENT cascade constraints;
+-- drop table BL_DOCUMENT_ATTR cascade constraints;
+-- drop table BL_DOCUMENT_AUX cascade constraints;
+-- drop table BL_DOCUMENT_DATA cascade constraints;
+-- drop table BL_DOCUMENT_LEG cascade constraints;
+-- drop table BL_DOCUMENT_RESP cascade constraints;
+-- drop table BL_ITEM cascade constraints;
+-- drop table BL_ITEM_ATTR cascade constraints;
+-- drop table BL_ITEM_AUX cascade constraints;
+-- drop table BL_MESSAGE_TRACE cascade constraints;
+-- drop table CF_KEYSTORE cascade constraints;
+-- drop table CF_SECURITYVALUES cascade constraints;
+-- drop sequence BL_DOCUMENT_SEQ;
+-- drop sequence BL_MESSAGE_TRACE_SEQ;
 
 create table BL_DOCUMENT (
     DOCUMENT_ID number(19,0) not null,

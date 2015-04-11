@@ -65,6 +65,12 @@ public class PullCancelTask implements PullCancelTaskLocal {
         try {
             List<DocumentAttribute> attrs = new LinkedList<>();
 
+            BeanUtils.describe(header.getId()).entrySet().stream()
+                    .filter(e -> e.getValue() != null)
+                    .filter(e -> !"class".equals(e.getKey()))
+                    .map(e -> new DocumentAttribute(document, e.getKey(), e.getValue()))
+                    .forEach(a -> attrs.add(a));
+
             BeanUtils.describe(header).entrySet().stream()
                     .filter(e -> e.getValue() != null)
                     .filter(e -> !"id".equals(e.getKey()))

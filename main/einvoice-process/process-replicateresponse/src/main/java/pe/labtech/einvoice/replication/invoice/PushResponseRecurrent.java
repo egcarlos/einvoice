@@ -5,6 +5,10 @@
  */
 package pe.labtech.einvoice.replication.invoice;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
@@ -13,7 +17,10 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.persistence.Query;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
+import pe.labtech.einvoice.commons.recurrent.RecurrentTask;
+import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
@@ -28,13 +35,23 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-public class PushResponseRecurrent extends AbstractRecurrentTask<DocumentResponse> {
+public class PushResponseRecurrent extends AbstractRecurrentTask<Document> {
 
     @EJB
     PublicDatabaseManagerLocal manager;
 
     @EJB
     PrivateDatabaseManagerLocal privateManager;
+
+    /**
+     * Bloquear una respuesta de documento para ser replicada
+     */
+    private Function<DocumentResponse, Boolean> tryLockSingle;
+
+    /**
+     * Retorna los document response pendientes de repplicar en un documento.
+     */
+    private Function<Document, List<DocumentResponse>> findTasksSingle;
 
     @Override
     @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
@@ -48,49 +65,57 @@ public class PushResponseRecurrent extends AbstractRecurrentTask<DocumentRespons
         super.init();
 
         this.findTasks = () -> privateManager.seek(e -> e
-                .createNamedQuery(
-                        "DocumentResponse.findPending",
-                        DocumentResponse.class
+                .createQuery(
+                        "SELECT DISTINCT o.document FROM DocumentResponse o WHERE o.replicate = TRUE",
+                        Document.class
                 )
                 .getResultList()
         );
 
-        this.tryLock = t -> privateManager.seek(e -> e
-                .createNamedQuery("DocumentResponse.tryLock")
-                .setParameter("document", t.getDocument())
-                .setParameter("name", t.getName())
-                .executeUpdate() == 1
-        );
-
-        this.getId = t -> t.getDocument().getClientId() + "-" + t.getDocument().getDocumentType() + "-" + t.getDocument().getDocumentNumber() + "[" + t.getName() + "replicate] <- " + t.getValue();
+        this.tryLock = t -> true;
+        this.getId = t -> RecurrentTask.buildTaskId(t.getClientId(), t.getDocumentType(), t.getDocumentNumber(), "replicate response");
         this.consumer = t -> manager.handle(e -> {
-            String targetField = mapName(t);
-            if (targetField == null) {
+            //obtenemos los pares de campo y valor a replicar en el caso.
+            Map<String, String> responses = this.findTasksSingle
+                    .apply(t)
+                    .stream()
+                    .filter(r -> this.tryLockSingle.apply(r))
+                    .filter(r -> mapName(r) != null)
+                    .collect(
+                            Collectors.toMap(
+                                    r -> mapName(r),
+                                    r -> r.getValue()
+                            )
+                    );
+
+            //cortocircuito si no hay
+            if (responses.isEmpty()) {
                 return;
             }
 
+            //obtener nombre de entidad e id de registro
             String targetEntity;
             Object id;
             if (isInvoice(t)) {
                 id = new DocumentHeaderPK(
-                        t.getDocument().getClientId().split("-")[0],
-                        t.getDocument().getClientId().split("-")[1],
-                        t.getDocument().getDocumentType(),
-                        t.getDocument().getDocumentNumber()
+                        t.getClientId().split("-")[0],
+                        t.getClientId().split("-")[1],
+                        t.getDocumentType(),
+                        t.getDocumentNumber()
                 );
                 targetEntity = "DocumentHeader";
             } else if (isInvoiceSummary(t)) {
                 id = new SummaryHeaderPK(
-                        t.getDocument().getClientId().split("-")[0],
-                        t.getDocument().getClientId().split("-")[1],
-                        t.getDocument().getDocumentNumber()
+                        t.getClientId().split("-")[0],
+                        t.getClientId().split("-")[1],
+                        t.getDocumentNumber()
                 );
                 targetEntity = "SummaryHeader";
             } else if (isCancelSummary(t)) {
                 id = new CancelHeaderPK(
-                        t.getDocument().getClientId().split("-")[0],
-                        t.getDocument().getClientId().split("-")[1],
-                        t.getDocument().getDocumentNumber()
+                        t.getClientId().split("-")[0],
+                        t.getClientId().split("-")[1],
+                        t.getDocumentNumber()
                 );
                 targetEntity = "CancelHeader";
             } else {
@@ -98,24 +123,48 @@ public class PushResponseRecurrent extends AbstractRecurrentTask<DocumentRespons
                 return;
             }
 
-            e
-                    .createQuery("UPDATE " + targetEntity + " d SET d." + targetField + " = :param WHERE d.id = :id")
-                    .setParameter("param", t.getValue())
-                    .setParameter("id", id)
-                    .executeUpdate();
+            //computar el segmento del set que es variable
+            String setPart = responses.entrySet().stream()
+                    .map(d -> "d." + d.getKey() + " = :" + d.getKey())
+                    .reduce(null, (a, b) -> a == null ? b : a + ", " + b);
+
+            logger.info(() -> this.tm("sending " + responses));
+            final String queryString = "UPDATE " + targetEntity + " d SET " + setPart + " WHERE d.id = :id";
+//            logger.info(() -> this.tm("queryString " + queryString));
+
+            Query query = e.createQuery(queryString);
+            responses.forEach((k, v) -> query.setParameter(k, v));
+            query.setParameter("id", id);
+            query.executeUpdate();
         });
+
+        this.findTasksSingle = t -> privateManager.seek(e -> e
+                .createQuery(
+                        "SELECT o FROM DocumentResponse o WHERE o.replicate = TRUE AND o.document = :document",
+                        DocumentResponse.class
+                )
+                .setParameter("document", t)
+                .getResultList()
+        );
+
+        this.tryLockSingle = t -> privateManager.seek(e -> e
+                .createNamedQuery("DocumentResponse.tryLock")
+                .setParameter("document", t.getDocument())
+                .setParameter("name", t.getName())
+                .executeUpdate() == 1
+        );
     }
 
-    private static boolean isCancelSummary(DocumentResponse t) {
-        return t.getDocument().getDocumentNumber().startsWith("RA");
+    private static boolean isCancelSummary(Document t) {
+        return t.getDocumentNumber().startsWith("RA");
     }
 
-    private static boolean isInvoiceSummary(DocumentResponse t) {
-        return t.getDocument().getDocumentNumber().startsWith("RC");
+    private static boolean isInvoiceSummary(Document t) {
+        return t.getDocumentNumber().startsWith("RC");
     }
 
-    private static boolean isInvoice(DocumentResponse t) {
-        return t.getDocument().getDocumentNumber().startsWith("F") | t.getDocument().getDocumentNumber().startsWith("B");
+    private static boolean isInvoice(Document t) {
+        return t.getDocumentNumber().startsWith("F") | t.getDocumentNumber().startsWith("B");
     }
 
     private String mapName(DocumentResponse t) {

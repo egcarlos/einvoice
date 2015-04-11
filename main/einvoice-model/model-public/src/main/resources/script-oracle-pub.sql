@@ -1,5 +1,5 @@
 
-
+-- borrado del esquema publico
 -- drop table SPE_CANCELDETAIL cascade constraints;
 -- drop table SPE_CANCELHEADER cascade constraints;
 -- drop table SPE_EINVOICEDETAIL cascade constraints;

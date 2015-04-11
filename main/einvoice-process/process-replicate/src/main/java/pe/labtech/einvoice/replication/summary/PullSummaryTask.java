@@ -48,7 +48,7 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
         //recuperar los detalles
         List<SummaryDetail> details = pub.seek(e -> e
                 .createQuery(
-                        "SELECT o FROM SummaryDetail o WHERE o.id.tipoDocumentoEmisor = :tde AND o.id.numeroDocumentoEmisor = :nde AND o.id.resumenId = ri",
+                        "SELECT o FROM SummaryDetail o WHERE o.id.tipoDocumentoEmisor = :tde AND o.id.numeroDocumentoEmisor = :nde AND o.id.resumenId = :ri",
                         SummaryDetail.class
                 )
                 .setParameter("tde", id.getTipoDocumentoEmisor())
@@ -64,6 +64,15 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
 
         try {
             List<DocumentAttribute> attrs = new LinkedList<>();
+
+            /*
+             * para garantizar que copie los datos del identificador
+             */
+            BeanUtils.describe(header.getId()).entrySet().stream()
+                    .filter(e -> e.getValue() != null)
+                    .filter(e -> !"class".equals(e.getKey()))
+                    .map(e -> new DocumentAttribute(document, e.getKey(), e.getValue()))
+                    .forEach(a -> attrs.add(a));
 
             BeanUtils.describe(header).entrySet().stream()
                     .filter(e -> e.getValue() != null)
@@ -100,11 +109,11 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
             }
             return item;
         }).collect(Collectors.toList());
-        
+
         document.setItems(items);
         document.setStep("PULL");
         document.setStatus("LOADED");
-        
+
         prv.handle(e -> e.persist(document));
     }
 

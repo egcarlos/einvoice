@@ -284,6 +284,8 @@ public class SignTask implements SignTaskLocal {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 sdf.setTimeZone(TimeZone.getTimeZone("GMT-5:00"));
                 PropertyUtils.setProperty(target, attribute, sdf.parse(value));
+            } else if (Long.class.isAssignableFrom(propertyType)) {
+                PropertyUtils.setProperty(target, attribute, new Long(value));
             } else {
                 //direct
                 PropertyUtils.setProperty(target, attribute, value);
