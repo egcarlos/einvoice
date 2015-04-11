@@ -62,10 +62,19 @@ public class BL_HandleFile implements Closeable {
     }
 
     public void generateFileAndSendFilesToSftp() {
+//        Calendar c = Calendar.getInstance();
+//        String dd = c.get(Calendar.DATE) + "";
+//        String mm = c.get(Calendar.MONTH + 1) + "";
+//        String yy = c.get(Calendar.YEAR) + "";
+        
         Calendar c = Calendar.getInstance();
-        String dd = c.get(Calendar.DATE) + "";
-        String mm = c.get(Calendar.MONTH + 1) + "";
-        String yy = c.get(Calendar.YEAR) + "";
+	int dd = c.get(Calendar.DATE) ;
+	int mm = c.get(Calendar.MONTH) ;
+	int yy = c.get(Calendar.YEAR) ;
+	        
+	String dia = dd <= 9 ? "0"+dd : dd+"";
+	String mes = (mm>= 0 || mm <= 8) ? "0"+(mm+1) : (mm+1)+"";
+	String anio = yy+"";
 
         FileWriter fichero = null;
         BufferedWriter bw = null;
@@ -77,19 +86,28 @@ public class BL_HandleFile implements Closeable {
 
             for (Object o : listDocument) {
                 if (o instanceof DocumentHeader) {
-                    sendFilesToSftp((DocumentHeader) o);
-                    generateFile((DocumentHeader) o, fichero, bw);
+                    if(((DocumentHeader) o).getBl_cdr() != null){
+                        sendFilesToSftp((DocumentHeader) o);
+                        generateFile((DocumentHeader) o, fichero, bw);
+                    }
+                    
                 } else if (o instanceof SummaryHeader) {
-                    sendFilesToSftp((SummaryHeader) o);
-                    generateFile((SummaryHeader) o, fichero, bw);
+                    if(((SummaryHeader) o).getBl_cdr() != null){
+                        sendFilesToSftp((SummaryHeader) o);
+                        generateFile((SummaryHeader) o, fichero, bw);
+                    }
+                    
                 } else if (o instanceof CancelHeader) {
-                    sendFilesToSftp((CancelHeader) o);
-                    generateFile((CancelHeader) o, fichero, bw);
+                    if(((CancelHeader) o).getBl_cdr() != null){
+                        sendFilesToSftp((CancelHeader) o);
+                        generateFile((CancelHeader) o, fichero, bw);
+                    }
                 }
 
             }
             bw.close();
             sftp.put(new FileInputStream(f), f.getName());
+            f.delete();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,7 +186,7 @@ public class BL_HandleFile implements Closeable {
         //s.append(dh.getCodigoAuxiliar40_3()).append("|").append(dh.getFechaEmisionComprobante());
         s.append(" ").append("|").append(dh.getFechaEmisionComprobante());
 
-        bw.write(s.append("\n").toString());
+        bw.write(s.append("\r\n").toString());
     }
 
     private void sendFilesToSftp(CancelHeader dh) {
@@ -234,7 +252,7 @@ public class BL_HandleFile implements Closeable {
         //s.append(dh.getCodigoAuxiliar40_3()).append("|").append(dh.getFechaEmisionComprobante());
         s.append(" ").append("|").append(dh.getFechaEmisionComprobante());
 
-        bw.write(s.append("\n").toString());
+        bw.write(s.append("\r\n").toString());
     }
 
     private void sendFilesToSftp(DocumentHeader dh) {
@@ -309,7 +327,7 @@ public class BL_HandleFile implements Closeable {
         s.append(dh.getCodigoAuxiliar40_3()).append("|").append(dh.getFechaEmision());
 
         //logger.log(Level.WARNING, "Validando linea de archivo............."+s.toString());
-        bw.write(s.append("\n").toString());
+        bw.write(s.append("\r\n").toString());
     }
 
     private void buildFile(byte[] rawData, String fileName) {
