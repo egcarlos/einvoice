@@ -62,6 +62,7 @@
         <module>process-copy</module>
         <module>process-replicatedata</module>
         <module>process-replicateresponse</module>
+        <module>process-replicatesummary</module>
     </modules>
     
     <properties>

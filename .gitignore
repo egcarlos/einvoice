@@ -84,3 +84,4 @@ $RECYCLE.BIN/
 /customizations/pepsico/model-public/target/
 /main/einvoice-commons/commons-constants/target/
 /customizations/pepsico/einvoice-process-replicateresponse/target/
+/main/einvoice-process/process-replicatesummary/target/
