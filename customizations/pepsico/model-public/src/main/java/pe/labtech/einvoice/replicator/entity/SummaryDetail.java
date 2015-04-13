@@ -61,8 +61,8 @@ public class SummaryDetail implements Serializable {
     @Column(name = "numeroCorrelativoFin", length = 8)
     private String numeroCorrelativoFin;
     @Size(max = 15)
-    @Column(name = "totalValorVentaOpExoneraConIgv", length = 15)
-    private String totalValorVentaOpExoneradasConIgv;
+    @Column(name = "totalValorVentaOpGravadaConIgv", length = 15)
+    private String totalValorVentaOpGravadasConIgv;
     @Size(max = 15)
     @Column(name = "totalValorVentaOpExoneradasIgv", length = 15)
     private String totalValorVentaOpExoneradasIgv;
@@ -161,12 +161,12 @@ public class SummaryDetail implements Serializable {
         this.numeroCorrelativoFin = numeroCorrelativoFin;
     }
 
-    public String getTotalValorVentaOpExoneradasConIgv() {
-        return totalValorVentaOpExoneradasConIgv;
+    public String getTotalValorVentaOpGravadasConIgv() {
+        return totalValorVentaOpGravadasConIgv;
     }
 
-    public void setTotalValorVentaOpExoneradasConIgv(String totalValorVentaOpExoneradasConIgv) {
-        this.totalValorVentaOpExoneradasConIgv = totalValorVentaOpExoneradasConIgv;
+    public void setTotalValorVentaOpGravadasConIgv(String totalValorVentaOpGravadasConIgv) {
+        this.totalValorVentaOpGravadasConIgv = totalValorVentaOpGravadasConIgv;
     }
 
     public String getTotalValorVentaOpExoneradasIgv() {

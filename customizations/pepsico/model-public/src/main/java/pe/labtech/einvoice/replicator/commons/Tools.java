@@ -66,6 +66,12 @@ public class Tools {
         return documentNumber.startsWith("F") | documentNumber.startsWith("B");
     }
 
+    /**
+     * Campos usados para la replicación de datos de respuesta.
+     *
+     * @param name nombre del atributo en la base de datos
+     * @return nombre del campo en la base de datos
+     */
     public static String mapResponseName(String name) {
         switch (name) {
             case "pdfFileUrl":

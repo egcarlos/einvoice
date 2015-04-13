@@ -5,7 +5,6 @@
  */
 package pe.labtech.einvoice.replicator.commons;
 
-import java.text.MessageFormat;
 import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
