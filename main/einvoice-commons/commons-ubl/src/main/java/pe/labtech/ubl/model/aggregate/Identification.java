@@ -15,17 +15,24 @@ import pe.labtech.ubl.model.Namespaces;
  * @author carloseg
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Country {
+public class Identification {
 
     @XmlElement(namespace = Namespaces.CBC)
-    private String IdentificationCode;
+    private String ID;
 
-    public String getIdentificationCode() {
-        return IdentificationCode;
+    public Identification() {
     }
 
-    public void setIdentificationCode(String IdentificationCode) {
-        this.IdentificationCode = IdentificationCode;
+    public Identification(String ID) {
+        this.ID = ID;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
 }

@@ -9,9 +9,14 @@ import java.math.BigDecimal;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.junit.Test;
+import org.w3c.dom.Document;
 import pe.labtech.einvoice.commons.ubl.InvoiceBuilder;
+import pe.labtech.einvoice.commons.ubl.InvoiceLineBuilder;
 import pe.labtech.ubl.model.Invoice;
 import pe.labtech.ubl.model.InvoicePrefixMapper;
 
@@ -22,7 +27,7 @@ import pe.labtech.ubl.model.InvoicePrefixMapper;
 public class IntegralTest {
 
     @Test
-    public void jbcontext() throws JAXBException {
+    public void jbcontext() throws JAXBException, ParserConfigurationException {
         JAXBContext jbc = JAXBContext.newInstance(Invoice.class);
         Marshaller m = jbc.createMarshaller();
         m.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, new InvoicePrefixMapper());
@@ -46,12 +51,26 @@ public class IntegralTest {
                 .addAmount("1002", BigDecimal.valueOf(0, 2))
                 .addAmount("1003", BigDecimal.valueOf(0, 2))
                 .addAmount("2005", BigDecimal.valueOf(0, 2))
-                .addNote("1000", "Son ciento dieciocho y 00/100 Nuevos Soles")
+                .addNote("1000", "CIENTO DIECIOCHO Y 00/100 NUEVOS SOLES")
+                .addCustomNote("9999", "COMENTARIO")
+                .addTax("1000", "IGV", "VAT", BigDecimal.valueOf(1800, 2))
+                .addTotalCharge(null)
+                .addTotalPayable(BigDecimal.valueOf(11800, 2))
+                .addLine(
+                        new InvoiceLineBuilder()
+                        .init("1", BigDecimal.ONE, "NIU", "IH-107", "articulo 1", "PEN", BigDecimal.valueOf(10000, 2), "01", BigDecimal.valueOf(11800, 2), BigDecimal.valueOf(10000, 2))
+                        .addTax("1000", "IGV", "VAT", BigDecimal.valueOf(1800, 2), "10", null)
+                        .compile()
+                )
                 .compile();
 
-        
-
         m.marshal(invoice, System.out);
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document xmlInvoice = db.newDocument();
+        m.marshal(invoice, xmlInvoice);
     }
 
 }

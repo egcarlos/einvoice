@@ -26,6 +26,15 @@ public class TaxCategory {
     @XmlElement(namespace = Namespaces.CAC)
     private TaxScheme TaxScheme;
 
+    public TaxCategory() {
+    }
+
+    public TaxCategory(String TaxExemptionReasonCode, String TierRange, TaxScheme TaxScheme) {
+        this.TaxExemptionReasonCode = TaxExemptionReasonCode;
+        this.TierRange = TierRange;
+        this.TaxScheme = TaxScheme;
+    }
+
     public String getTaxExemptionReasonCode() {
         return TaxExemptionReasonCode;
     }

@@ -24,6 +24,14 @@ public class TaxSubtotal {
     @XmlElement(namespace = Namespaces.CAC)
     private TaxCategory TaxCategory;
 
+    public TaxSubtotal() {
+    }
+
+    public TaxSubtotal(Amount TaxAmount, TaxCategory TaxCategory) {
+        this.TaxAmount = TaxAmount;
+        this.TaxCategory = TaxCategory;
+    }
+
     public Amount getTaxAmount() {
         return TaxAmount;
     }

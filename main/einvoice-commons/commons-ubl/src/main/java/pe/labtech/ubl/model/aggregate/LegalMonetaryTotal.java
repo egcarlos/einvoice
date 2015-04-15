@@ -5,6 +5,7 @@
  */
 package pe.labtech.ubl.model.aggregate;
 
+import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -29,6 +30,18 @@ public class LegalMonetaryTotal {
      */
     @XmlElement(namespace = Namespaces.CBC)
     private Amount PayableAmount;
+
+    public LegalMonetaryTotal() {
+    }
+
+    public LegalMonetaryTotal(String currencyID, BigDecimal ChargeTotalAmount, BigDecimal PayableAmount) {
+        if (ChargeTotalAmount != null) {
+            this.ChargeTotalAmount = new Amount(currencyID, ChargeTotalAmount);
+        }
+        if (PayableAmount != null) {
+            this.PayableAmount = new Amount(currencyID, PayableAmount);
+        }
+    }
 
     public Amount getChargeTotalAmount() {
         return ChargeTotalAmount;

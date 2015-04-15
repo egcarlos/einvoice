@@ -20,7 +20,6 @@ import pe.labtech.einvoice.core.entity.DocumentAttribute;
 import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
-import pe.labtech.einvoice.core.entity.ItemAuxiliar;
 import pe.labtech.einvoice.core.entity.ValueHolder;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
@@ -174,7 +173,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         List<ItemAttribute> attr = Arrays.asList(
                 new ItemAttribute("numeroOrdenItem", detail.getDetailPK().getDid()),
                 new ItemAttribute("codigoProducto", detail.getDetailPK().getDcodproducto()),
-                new ItemAttribute("descripcion", detail.getDdesproducto()),
+                new ItemAttribute("descripcion", detail.getDdesproducto() + " " + detail.getDaux3()),
                 new ItemAttribute("cantidad", detail.getDcanproducto()),
                 new ItemAttribute("unidadMedida", detail.getDuniproducto()),
                 new ItemAttribute("importeUnitarioSinImpuesto", detail.getDvventaunitario()),
@@ -201,20 +200,18 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
             attr.remove(ir);
         }
 
-        List<ItemAuxiliar> aux = Arrays.asList(
-                new ItemAuxiliar("9000", "100", 1l, detail.getDaux1()),
-                new ItemAuxiliar("9001", "100", 2l, detail.getDaux2()),
-                new ItemAuxiliar("9147", "100", 3l, detail.getDaux3()),
-                new ItemAuxiliar("9148", "100", 4l, detail.getDaux4())
-        )
-                .stream()
-                .filter(a -> a.getValue() != null)
-                .collect(Collectors.toList());
-
-        aux.forEach(child -> child.setItem(item));
-
+//        List<ItemAuxiliar> aux = Arrays.asList(
+//                new ItemAuxiliar("9000", "100", 1l, detail.getDaux1()),
+//                new ItemAuxiliar("9001", "100", 2l, detail.getDaux2()),
+//                new ItemAuxiliar("9147", "100", 3l, detail.getDaux3()),
+//                new ItemAuxiliar("9148", "100", 4l, detail.getDaux4())
+//        )
+//                .stream()
+//                .filter(a -> a.getValue() != null)
+//                .collect(Collectors.toList());
+//        aux.forEach(child -> child.setItem(item));
+//        item.setAuxiliars(aux);
         item.setAttributes(attr);
-        item.setAuxiliars(aux);
         return item;
     }
 

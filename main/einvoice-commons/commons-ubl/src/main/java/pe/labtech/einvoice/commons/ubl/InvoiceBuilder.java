@@ -10,9 +10,15 @@ import java.util.Arrays;
 import pe.labtech.ubl.model.Invoice;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
 import pe.labtech.ubl.model.aggregate.Address;
+import pe.labtech.ubl.model.aggregate.InvoiceLine;
+import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
 import pe.labtech.ubl.model.aggregate.Party;
 import pe.labtech.ubl.model.aggregate.PartyLegalEntity;
 import pe.labtech.ubl.model.aggregate.Signature;
+import pe.labtech.ubl.model.aggregate.TaxCategory;
+import pe.labtech.ubl.model.aggregate.TaxScheme;
+import pe.labtech.ubl.model.aggregate.TaxSubtotal;
+import pe.labtech.ubl.model.aggregate.TaxTotal;
 import pe.labtech.ubl.model.basic.Amount;
 import pe.labtech.ubl.model.extensions.ExtensionContent;
 import pe.labtech.ubl.model.extensions.UBLExtension;
@@ -25,7 +31,7 @@ import pe.labtech.ubl.model.sunat.AdditionalProperty;
  *
  * @author Carlos
  */
-public class InvoiceBuilder {
+public class InvoiceBuilder implements Builder<Invoice> {
 
     private Invoice invoice;
 
@@ -59,7 +65,6 @@ public class InvoiceBuilder {
 
     public InvoiceBuilder addNote(String id, String value) {
         if (id != null && value != null) {
-            AdditionalProperty ap = new AdditionalProperty(id, null, value);
             invoice
                     .getUBLExtensions()
                     .getUBLExtension()
@@ -67,7 +72,21 @@ public class InvoiceBuilder {
                     .getExtensionContent()
                     .getSunatAdditionalInformation()
                     .getAdditionalProperty()
-                    .add(ap);
+                    .add(new AdditionalProperty(id, null, value));
+        }
+        return this;
+    }
+
+    public InvoiceBuilder addCustomNote(String id, String value) {
+        if (id != null && value != null) {
+            invoice
+                    .getUBLExtensions()
+                    .getUBLExtension()
+                    .get(1)
+                    .getExtensionContent()
+                    .getBasicAdditionalInformation()
+                    .getAdditionalProperty()
+                    .add(new AdditionalProperty(id, null, value));
         }
         return this;
     }
@@ -80,7 +99,7 @@ public class InvoiceBuilder {
     private static Invoice createInvoice(final String invoiceType, final String invoiceNumber, final String invoiceDate, final String currency, final String supplierType, final String supplierId, final String supplierName, final String clientType, final String clientId, final String clientName) {
         Invoice i = new Invoice();
         i.setUBLExtensions(new UBLExtensions());
-        i.getUBLExtensions().setUBLExtension(
+        i.getUBLExtensions().getUBLExtension().addAll(
                 Arrays.asList(
                         new UBLExtension("SUNAT", new ExtensionContent(new AdditionalInformation(), null)),
                         new UBLExtension("EBIZ", new ExtensionContent(null, new AdditionalInformation())),
@@ -117,11 +136,66 @@ public class InvoiceBuilder {
                         clientType,
                         clientId,
                         new Party(
-                                new Address(),
+                                null,
                                 new PartyLegalEntity(clientName)
                         )
                 )
         );
         return i;
+    }
+
+    public InvoiceBuilder addTax(String id, String name, String typeCode, BigDecimal amount) {
+        TaxTotal tt = new TaxTotal();
+        tt.setTaxAmount(new Amount(this.invoice.getDocumentCurrencyCode(), amount));
+
+        TaxSubtotal tst = new TaxSubtotal();
+        tst.setTaxAmount(new Amount(this.invoice.getDocumentCurrencyCode(), amount));
+        TaxCategory tc = new TaxCategory();
+        TaxScheme ts = new TaxScheme();
+        ts.setID(id);
+        ts.setName(name);
+        ts.setTaxTypeCode(typeCode);
+        tc.setTaxScheme(ts);
+        tst.setTaxCategory(tc);
+        tt.setTaxSubtotal(tst);
+        this.invoice.getTaxTotal().add(tt);
+        return this;
+    }
+
+    public InvoiceBuilder addTotalCharge(BigDecimal amount) {
+        if (amount != null) {
+            final String currency = this.invoice.getDocumentCurrencyCode();
+            if (this.invoice.getLegalMonetaryTotal() == null) {
+                this.invoice.setLegalMonetaryTotal(
+                        new LegalMonetaryTotal(currency, amount, null)
+                );
+            } else {
+                this.invoice.getLegalMonetaryTotal().setChargeTotalAmount(
+                        new Amount(currency, amount)
+                );
+            }
+        }
+        return this;
+    }
+
+    public InvoiceBuilder addTotalPayable(BigDecimal amount) {
+        if (amount != null) {
+            final String currency = this.invoice.getDocumentCurrencyCode();
+            if (this.invoice.getLegalMonetaryTotal() == null) {
+                this.invoice.setLegalMonetaryTotal(
+                        new LegalMonetaryTotal(currency, null, amount)
+                );
+            } else {
+                this.invoice.getLegalMonetaryTotal().setPayableAmount(
+                        new Amount(currency, amount)
+                );
+            }
+        }
+        return this;
+    }
+
+    public InvoiceBuilder addLine(InvoiceLine line) {
+        invoice.getInvoiceLine().add(line);
+        return this;
     }
 }

@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
+import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
 
 /**
  *
@@ -79,7 +80,13 @@ public class Invoice {
     private List<TaxTotal> TaxTotal;
 
     @XmlElement(namespace = Namespaces.CAC)
+    private LegalMonetaryTotal LegalMonetaryTotal;
+
+    @XmlElement(namespace = Namespaces.CAC)
     private List<InvoiceLine> InvoiceLine;
+
+    public Invoice() {
+    }
 
     public UBLExtensions getUBLExtensions() {
         return UBLExtensions;
@@ -186,6 +193,14 @@ public class Invoice {
 
     public void setTaxTotal(List<TaxTotal> TaxTotal) {
         this.TaxTotal = TaxTotal;
+    }
+
+    public LegalMonetaryTotal getLegalMonetaryTotal() {
+        return LegalMonetaryTotal;
+    }
+
+    public void setLegalMonetaryTotal(LegalMonetaryTotal LegalMonetaryTotal) {
+        this.LegalMonetaryTotal = LegalMonetaryTotal;
     }
 
     public List<InvoiceLine> getInvoiceLine() {

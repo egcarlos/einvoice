@@ -5,6 +5,8 @@
  */
 package pe.labtech.ubl.model.aggregate;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import pe.labtech.ubl.model.Namespaces;
 import pe.labtech.ubl.model.basic.Amount;
@@ -13,6 +15,7 @@ import pe.labtech.ubl.model.basic.Amount;
  *
  * @author carloseg
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class TaxTotal {
 
     @XmlElement(namespace = Namespaces.CBC)
@@ -20,6 +23,14 @@ public class TaxTotal {
 
     @XmlElement(namespace = Namespaces.CAC)
     private TaxSubtotal TaxSubtotal;
+
+    public TaxTotal() {
+    }
+
+    public TaxTotal(Amount TaxAmount, TaxSubtotal TaxSubtotal) {
+        this.TaxAmount = TaxAmount;
+        this.TaxSubtotal = TaxSubtotal;
+    }
 
     public Amount getTaxAmount() {
         return TaxAmount;

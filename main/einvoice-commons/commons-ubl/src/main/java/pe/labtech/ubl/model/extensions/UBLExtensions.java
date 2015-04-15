@@ -5,6 +5,7 @@
  */
 package pe.labtech.ubl.model.extensions;
 
+import java.util.LinkedList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import pe.labtech.ubl.model.Namespaces;
@@ -18,7 +19,20 @@ public class UBLExtensions {
     @XmlElement(namespace = Namespaces.EXT)
     private List<UBLExtension> UBLExtension;
 
+    public UBLExtensions() {
+    }
+
+    public UBLExtensions(List<UBLExtension> UBLExtension) {
+        this.UBLExtension = new LinkedList<>();
+        if (UBLExtension != null) {
+            this.UBLExtension.addAll(UBLExtension);
+        }
+    }
+
     public List<UBLExtension> getUBLExtension() {
+        if (UBLExtension == null) {
+            UBLExtension = new LinkedList<>();
+        }
         return UBLExtension;
     }
 
