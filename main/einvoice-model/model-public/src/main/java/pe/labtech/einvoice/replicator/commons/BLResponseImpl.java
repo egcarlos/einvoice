@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -18,36 +19,49 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class BLResponseImpl implements BLResponse {
 
+    @XmlTransient
     @Column(name = "bl_firma", length = 4000)
     private String bl_firma;
+    @XmlTransient
     @Column(name = "bl_hashFirma", length = 4000)
     private String bl_hashFirma;
+    @XmlTransient
     @Column(name = "bl_estadoProceso", length = 40)
     private String bl_estadoProceso;
+    @XmlTransient
     @Column(name = "bl_estadoRegistro", length = 40)
     private String bl_estadoRegistro;
+    @XmlTransient
     @Column(name = "bl_mensaje", length = 4000)
     private String bl_mensaje;
+    @XmlTransient
     @Column(name = "bl_mensajeSunat", length = 4000)
     private String bl_mensajeSunat;
+    @XmlTransient
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "bl_pdf")
     private byte[] bl_pdf;
+    @XmlTransient
     @Column(name = "bl_urlpdf", length = 4000)
     private String bl_urlpdf;
+    @XmlTransient
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "bl_xmlubl", length = 4000)
     private byte[] bl_xmlubl;
+    @XmlTransient
     @Column(name = "bl_urlxmlubl", length = 4000)
     private String bl_urlxmlubl;
+    @XmlTransient
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "bl_cdr")
     private byte[] bl_cdr;
+    @XmlTransient
     @Column(name = "bl_urlcdr", length = 4000)
     private String bl_urlcdr;
+    @XmlTransient
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "bl_xml")
