@@ -19,4 +19,6 @@ public interface PullInvoiceTaskLocal {
 
     void replicate(DocumentHeader header, List<DocumentDetail> details);
 
+    void replicate(DocumentHeader header, List<DocumentDetail> details, String step, String status);
+
 }

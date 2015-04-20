@@ -38,6 +38,10 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
     @Override
     @Asynchronous
     public void replicate(DocumentHeader header, List<DocumentDetail> details) {
+        this.replicate(header, details, "PULL", "LOADED");
+    }
+
+    public void replicate(DocumentHeader header, List<DocumentDetail> details, String step, String status) {
         Document document = new Document();
         document.setClientId(header.getId().getTipoDocumentoEmisor() + "-" + header.getId().getNumeroDocumentoEmisor());
         document.setDocumentType(header.getId().getTipoDocumento());
@@ -46,12 +50,14 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         try {
             List<DocumentAttribute> attrs = new LinkedList<>();
 
+            //mapeo automático de la llave primaria
             BeanUtils.describe(header.getId()).entrySet().stream()
                     .filter(e -> e.getValue() != null)
                     .filter(e -> !"class".equals(e.getKey()))
                     .map(e -> new DocumentAttribute(document, e.getKey(), e.getValue()))
                     .forEach(a -> attrs.add(a));
-            
+
+            //mapeo automático del cuerpo
             BeanUtils.describe(header).entrySet().stream()
                     .filter(e -> e.getValue() != null)
                     .filter(e -> !"id".equals(e.getKey()))
@@ -63,7 +69,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
             document.setAttributes(attrs);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             logger.log(Level.SEVERE, null, ex);
-            //TODO mark as error
+            //TODO mark as error... y decidir que hacer luego con el mapeo!
         }
 
         List<Item> items = details.stream().map(detail -> {
@@ -88,19 +94,9 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
             return item;
         }).collect(Collectors.toList());
         document.setItems(items);
-        document.setStep("PULL");
-        document.setStatus("LOADED");
+        document.setStep(step);
+        document.setStatus(status);
         loader.save(document);
-    }
-
-    DocumentAttribute generate(Object source, String property) {
-        try {
-            String value = BeanUtils.getProperty(source, property);
-            return new DocumentAttribute(property, value);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-            logger.log(Level.WARNING, null, ex);
-            return new DocumentAttribute(property, (String) null);
-        }
     }
 
 }
