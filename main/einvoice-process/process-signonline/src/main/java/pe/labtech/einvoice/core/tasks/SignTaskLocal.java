@@ -7,6 +7,7 @@ package pe.labtech.einvoice.core.tasks;
 
 import javax.ejb.Local;
 import pe.labtech.einvoice.core.entity.Document;
+import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 
 /**
  *
@@ -17,4 +18,5 @@ public interface SignTaskLocal {
 
     void handle(Document document);
 
+    DocumentInfo handle(Long id);
 }

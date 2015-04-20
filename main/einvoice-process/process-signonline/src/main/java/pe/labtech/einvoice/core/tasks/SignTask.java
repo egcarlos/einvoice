@@ -73,6 +73,17 @@ public class SignTask implements SignTaskLocal {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
     public void handle(Document document) {
+        sign(document);
+    }
+
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @Override
+    public DocumentInfo handle(Long id) {
+        Document document = db.seek(e -> e.find(Document.class, id));
+        return sign(document);
+    }
+
+    private DocumentInfo sign(Document document) {
         String number = document.getDocumentNumber();
         String request;
         if (number.startsWith("F") || number.startsWith("B")) {
@@ -80,7 +91,7 @@ public class SignTask implements SignTaskLocal {
         } else if (number.startsWith("RC") || number.startsWith("RA")) {
             request = buildSignSummaryCommand(document.getId());
         } else {
-            return; //invalid markar el error del documento
+            return null; //invalid markar el error del documento
         }
 
         saveRequest(document, request);
@@ -94,7 +105,7 @@ public class SignTask implements SignTaskLocal {
             if (isInvalid(r)) {
                 loader.createEvent(document, "ERROR", "Invalid response structure");
                 loader.markAsError(document.getId());
-                return;
+                return null;
             }
 
             DocumentInfo di = getDocumentInfo(r);
@@ -106,6 +117,7 @@ public class SignTask implements SignTaskLocal {
             } else {
                 loader.markSigned(document.getId(), "ERROR", di.getSignatureValue(), di.getHashCode(), responses);
             }
+            return di;
         } catch (SOAPFaultException ex) {
             Map<String, String> responses = new HashMap<>();
             responses.put("messages", "Soap Fault raised!");
@@ -115,7 +127,7 @@ public class SignTask implements SignTaskLocal {
         } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             loader.markAsError(document.getId(), ex);
         }
-
+        return null;
     }
 
     private String exToString(SOAPFaultException ex, String... headers) {
