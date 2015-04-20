@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Carlos
  */
-public interface Header<I extends Detail> {
+public interface Header<I extends Detail> extends BLResponse {
 
     /**
      * Retorna de lista de items asociados al objeto.
