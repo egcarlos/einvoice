@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Carlos
  */
-public interface Header<I> {
+public interface Header<I extends Detail> {
 
     /**
      * Retorna de lista de items asociados al objeto.
