@@ -7,7 +7,7 @@ package org.netbeans.rest.application.config;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
-import pe.labtech.einvoice.api.restful.GenericResource;
+import pe.labtech.einvoice.api.restful.InvoiceResource;
 
 /**
  *
@@ -20,7 +20,7 @@ public class ApplicationConfig extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
         addRestResourceClasses(resources);
-        resources.add(GenericResource.class);
+        resources.add(InvoiceResource.class);
         return resources;
     }
 
@@ -30,7 +30,7 @@ public class ApplicationConfig extends Application {
      * out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(pe.labtech.einvoice.api.restful.GenericResource.class);
+        resources.add(pe.labtech.einvoice.api.restful.InvoiceResource.class);
     }
 
 }
