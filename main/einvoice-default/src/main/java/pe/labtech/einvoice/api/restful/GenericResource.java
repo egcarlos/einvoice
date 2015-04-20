@@ -5,32 +5,24 @@
  */
 package pe.labtech.einvoice.api.restful;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
-import org.apache.commons.beanutils.PropertyUtils;
-import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.tasks.SignTaskLocal;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.replication.invoice.PullInvoiceTaskLocal;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
-import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
  * REST Web Service

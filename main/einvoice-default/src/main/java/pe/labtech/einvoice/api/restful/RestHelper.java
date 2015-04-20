@@ -64,6 +64,7 @@ public class RestHelper implements RestHelperLocal {
         return pub.seek(e -> e.find(clazz, id));
     }
 
+    @Override
     public void saveNewData(Header content) {
         //Grabar los nuevos datos en la BD
         pub.handle(e -> {
@@ -76,6 +77,7 @@ public class RestHelper implements RestHelperLocal {
         });
     }
 
+    @Override
     public void cleanOldData(DocumentHeaderPK id) {
         //si no hay hash se puede volver a generar la firma
         //se debe borrar las existencias anteriores
