@@ -131,8 +131,10 @@ public class GenericResource {
         pull.replicate(content, details, "PULL", "LOADED-WS");
 
         //firmar
-        //retornar la respuesta
         Long id = help.findDocumentId(issuerType, issuerId, documentType, documentNumber);
+        sign.handle(id);
+
+        //retornar la respuesta
         return help.buildDocumentInfo(id);
     }
 

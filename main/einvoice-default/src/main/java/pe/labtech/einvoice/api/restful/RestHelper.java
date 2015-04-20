@@ -52,9 +52,11 @@ public class RestHelper implements RestHelperLocal {
                         "SELECT MAX(D.id) FROM Document D WHERE D.clientId = :clientId AND D.documentType = :documentType AND D.documentNumber = :documentNumber",
                         Long.class
                 )
+                //issuer type and issuer id are built in order to reflect database
                 .setParameter("clientId", issuerType + "-" + issuerId)
                 .setParameter("documentType", documentType)
-                .setParameter("documentNumber", documentNumber)
+                //for summaries prepend the document type
+                .setParameter("documentNumber", (documentType.startsWith("R") ? documentType : "") + documentNumber)
                 .getSingleResult());
         return id;
     }
