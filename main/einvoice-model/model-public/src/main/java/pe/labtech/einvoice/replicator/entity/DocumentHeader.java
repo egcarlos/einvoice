@@ -6,6 +6,8 @@
 package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -16,6 +18,7 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -37,9 +40,11 @@ import javax.validation.constraints.Size;
 })
 public class DocumentHeader implements Serializable {
 
+    //LLAVE PRIMARIA
     @EmbeddedId
     private DocumentHeaderPK id;
 
+    //CAMPOS DE DATOS
     @NotNull
     @Size(min = 1, max = 100)
     @Basic(optional = false)
@@ -887,7 +892,6 @@ public class DocumentHeader implements Serializable {
     @Column(name = "textoAuxiliar250_25", length = 250)
     private String textoAuxiliar250_25;
 
-    //CAMPOS DE DATOS
     //CAMPOS DE RESPUESTA
     @Column(name = "bl_firma", length = 4000)
     private String bl_firma;
@@ -924,13 +928,9 @@ public class DocumentHeader implements Serializable {
     @Column(name = "bl_xml")
     private byte[] bl_xml;
 
-    public byte[] getBl_xml() {
-        return bl_xml;
-    }
-
-    public void setBl_xml(byte[] bl_xml) {
-        this.bl_xml = bl_xml;
-    }
+    //CAMPO EXCLUSIVO DEL XML
+    @Transient
+    private List<DocumentDetail> item;
 
     public DocumentHeader() {
     }
@@ -3255,6 +3255,25 @@ public class DocumentHeader implements Serializable {
 
     public void setBl_urlcdr(String bl_urlcdr) {
         this.bl_urlcdr = bl_urlcdr;
+    }
+
+    public byte[] getBl_xml() {
+        return bl_xml;
+    }
+
+    public void setBl_xml(byte[] bl_xml) {
+        this.bl_xml = bl_xml;
+    }
+
+    public List<DocumentDetail> getItem() {
+        if (item == null) {
+            item = new LinkedList<>();
+        }
+        return item;
+    }
+
+    public void setItem(List<DocumentDetail> item) {
+        this.item = item;
     }
 
 }
