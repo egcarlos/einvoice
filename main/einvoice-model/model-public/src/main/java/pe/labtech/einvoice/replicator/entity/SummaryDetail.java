@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import pe.labtech.einvoice.replicator.commons.Detail;
 
 /**
  *
@@ -29,7 +30,7 @@ import javax.validation.constraints.Size;
             query = "SELECT o  FROM SummaryDetail o"
     )
 })
-public class SummaryDetail implements Serializable {
+public class SummaryDetail implements Serializable, Detail {
 
     @EmbeddedId
     private SummaryDetailPK id;

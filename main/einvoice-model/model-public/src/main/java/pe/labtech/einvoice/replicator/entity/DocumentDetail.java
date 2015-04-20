@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import pe.labtech.einvoice.replicator.commons.Detail;
 
 /**
  *
@@ -33,7 +34,7 @@ import javax.validation.constraints.Size;
             + "AND o.id.serieNumero = :serieNumero"
     )
 })
-public class DocumentDetail implements Serializable {
+public class DocumentDetail implements Serializable, Detail {
 
     private static final long serialVersionUID = 1L;
 

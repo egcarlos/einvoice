@@ -13,14 +13,15 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import pe.labtech.einvoice.replicator.commons.BLResponse;
+import pe.labtech.einvoice.replicator.commons.BLResponseImpl;
+import pe.labtech.einvoice.replicator.commons.Header;
 
 /**
  *
@@ -38,7 +39,7 @@ import javax.validation.constraints.Size;
             query = "UPDATE DocumentHeader o SET o.bl_estadoRegistro = :newstatus WHERE o.bl_estadoRegistro = :oldstatus AND o.id = :id"
     )
 })
-public class DocumentHeader implements Serializable {
+public class DocumentHeader extends BLResponseImpl implements Serializable, BLResponse, Header<DocumentDetail> {
 
     //LLAVE PRIMARIA
     @EmbeddedId
@@ -891,46 +892,6 @@ public class DocumentHeader implements Serializable {
     @Size(max = 250)
     @Column(name = "textoAuxiliar250_25", length = 250)
     private String textoAuxiliar250_25;
-
-    //CAMPOS DE RESPUESTA
-    @Column(name = "bl_firma", length = 4000)
-    private String bl_firma;
-    @Column(name = "bl_hashFirma", length = 4000)
-    private String bl_hashFirma;
-    @Column(name = "bl_estadoProceso", length = 40)
-    private String bl_estadoProceso;
-    @Column(name = "bl_estadoRegistro", length = 40)
-    private String bl_estadoRegistro;
-    @Column(name = "bl_mensaje", length = 4000)
-    private String bl_mensaje;
-    @Column(name = "bl_mensajeSunat", length = 4000)
-    private String bl_mensajeSunat;
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "bl_pdf")
-    private byte[] bl_pdf;
-    @Column(name = "bl_urlpdf", length = 4000)
-    private String bl_urlpdf;
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "bl_xmlubl")
-    private byte[] bl_xmlubl;
-    @Column(name = "bl_urlxmlubl", length = 4000)
-    private String bl_urlxmlubl;
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "bl_cdr")
-    private byte[] bl_cdr;
-    @Column(name = "bl_urlcdr", length = 4000)
-    private String bl_urlcdr;
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "bl_xml")
-    private byte[] bl_xml;
-
-    //CAMPO EXCLUSIVO DEL XML
-    @Transient
-    private List<DocumentDetail> item;
 
     public DocumentHeader() {
     }
@@ -3161,110 +3122,11 @@ public class DocumentHeader implements Serializable {
         this.textoAuxiliar250_25 = textoAuxiliar250_25;
     }
 
-    public String getBl_firma() {
-        return bl_firma;
-    }
+    //CAMPO EXCLUSIVO DEL XML
+    @Transient
+    private List<DocumentDetail> item;
 
-    public void setBl_firma(String bl_firma) {
-        this.bl_firma = bl_firma;
-    }
-
-    public String getBl_hashFirma() {
-        return bl_hashFirma;
-    }
-
-    public void setBl_hashFirma(String bl_hashFirma) {
-        this.bl_hashFirma = bl_hashFirma;
-    }
-
-    public String getBl_estadoProceso() {
-        return bl_estadoProceso;
-    }
-
-    public void setBl_estadoProceso(String bl_estadoProceso) {
-        this.bl_estadoProceso = bl_estadoProceso;
-    }
-
-    public String getBl_estadoRegistro() {
-        return bl_estadoRegistro;
-    }
-
-    public void setBl_estadoRegistro(String bl_estadoRegistro) {
-        this.bl_estadoRegistro = bl_estadoRegistro;
-    }
-
-    public String getBl_mensaje() {
-        return bl_mensaje;
-    }
-
-    public void setBl_mensaje(String bl_mensaje) {
-        this.bl_mensaje = bl_mensaje;
-    }
-
-    public String getBl_mensajeSunat() {
-        return bl_mensajeSunat;
-    }
-
-    public void setBl_mensajeSunat(String bl_mensajeSunat) {
-        this.bl_mensajeSunat = bl_mensajeSunat;
-    }
-
-    public byte[] getBl_pdf() {
-        return bl_pdf;
-    }
-
-    public void setBl_pdf(byte[] bl_pdf) {
-        this.bl_pdf = bl_pdf;
-    }
-
-    public String getBl_urlpdf() {
-        return bl_urlpdf;
-    }
-
-    public void setBl_urlpdf(String bl_urlpdf) {
-        this.bl_urlpdf = bl_urlpdf;
-    }
-
-    public byte[] getBl_xmlubl() {
-        return bl_xmlubl;
-    }
-
-    public void setBl_xmlubl(byte[] bl_xmlubl) {
-        this.bl_xmlubl = bl_xmlubl;
-    }
-
-    public String getBl_urlxmlubl() {
-        return bl_urlxmlubl;
-    }
-
-    public void setBl_urlxmlubl(String bl_urlxmlubl) {
-        this.bl_urlxmlubl = bl_urlxmlubl;
-    }
-
-    public byte[] getBl_cdr() {
-        return bl_cdr;
-    }
-
-    public void setBl_cdr(byte[] bl_cdr) {
-        this.bl_cdr = bl_cdr;
-    }
-
-    public String getBl_urlcdr() {
-        return bl_urlcdr;
-    }
-
-    public void setBl_urlcdr(String bl_urlcdr) {
-        this.bl_urlcdr = bl_urlcdr;
-    }
-
-    public byte[] getBl_xml() {
-        return bl_xml;
-    }
-
-    public void setBl_xml(byte[] bl_xml) {
-        this.bl_xml = bl_xml;
-    }
-
+    @Override
     public List<DocumentDetail> getItem() {
         if (item == null) {
             item = new LinkedList<>();
@@ -3272,6 +3134,7 @@ public class DocumentHeader implements Serializable {
         return item;
     }
 
+    @Override
     public void setItem(List<DocumentDetail> item) {
         this.item = item;
     }

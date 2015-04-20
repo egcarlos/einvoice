@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import pe.labtech.einvoice.replicator.commons.Detail;
 
 /**
  *
@@ -21,7 +22,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "SPE_CANCELDETAIL")
-public class CancelDetail implements Serializable {
+public class CancelDetail implements Serializable, Detail {
 
     @EmbeddedId
     private CancelDetailPK id;
