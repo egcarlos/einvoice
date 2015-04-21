@@ -13,12 +13,11 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 import pe.labtech.einvoice.replicator.commons.BLResponse;
 import pe.labtech.einvoice.replicator.commons.BLResponseImpl;
 import pe.labtech.einvoice.replicator.commons.Header;
@@ -27,6 +26,7 @@ import pe.labtech.einvoice.replicator.commons.Header;
  *
  * @author Carlos
  */
+@XmlRootElement
 @Entity
 @Table(name = "SPE_SUMMARYHEADER")
 public class SummaryHeader extends BLResponseImpl implements Serializable, BLResponse, Header<SummaryDetail> {

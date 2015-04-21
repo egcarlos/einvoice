@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 import pe.labtech.einvoice.replicator.commons.BLResponse;
 import pe.labtech.einvoice.replicator.commons.BLResponseImpl;
 import pe.labtech.einvoice.replicator.commons.Header;
@@ -25,6 +26,7 @@ import pe.labtech.einvoice.replicator.commons.Header;
  *
  * @author Carlos
  */
+@XmlRootElement
 @Entity
 @Table(name = "SPE_CANCELHEADER")
 public class CancelHeader extends BLResponseImpl implements Serializable, BLResponse, Header<CancelDetail> {
