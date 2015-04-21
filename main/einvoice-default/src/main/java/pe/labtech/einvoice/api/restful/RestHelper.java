@@ -15,6 +15,8 @@ import pe.labtech.einvoice.replicator.commons.Header;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
+import static pe.labtech.einvoice.api.restful.Tools.*;
+import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 
 /**
  *
@@ -26,7 +28,7 @@ public class RestHelper implements RestHelperLocal {
     @EJB
     private PublicDatabaseManagerLocal pub;
     @EJB
-    private PublicDatabaseManagerLocal priv;
+    private PrivateDatabaseManagerLocal priv;
 
     @Override
     public DocumentInfo buildDocumentInfo(Long id) {
@@ -40,7 +42,7 @@ public class RestHelper implements RestHelperLocal {
                         )
                         .setParameter("id", id)
                         .getResultList()
-                        .forEach(r -> RestHelperLocal.tryset(di, r.getName(), r.getValue())));
+                        .forEach(r -> tryset(di, r.getName(), r.getValue())));
         return di;
     }
 

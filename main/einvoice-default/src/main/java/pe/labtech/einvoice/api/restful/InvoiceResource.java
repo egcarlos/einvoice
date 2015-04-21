@@ -5,6 +5,7 @@
  */
 package pe.labtech.einvoice.api.restful;
 
+import java.io.StringWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -17,12 +18,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.xml.bind.JAXB;
 import pe.labtech.einvoice.core.tasks.SignTaskLocal;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.replication.invoice.PullInvoiceTaskLocal;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
+import static pe.labtech.einvoice.api.restful.Tools.*;
+import pe.labtech.einvoice.replicator.entity.DocumentDetailPK;
 
 /**
  * REST Web Service
@@ -59,7 +63,7 @@ public class InvoiceResource {
      * @return an instance of pe.labtech.einvoice.core.ws.model.Document
      */
     @GET
-    @Path("{issuerType}/{issuerId}/{documentType}/{documentId}")
+    @Path("{issuerType}/{issuerId}/{documentType}/{documentNumber}")
     @Produces("application/xml")
     public DocumentInfo getXml(
             @PathParam("issuerType") String issuerType,
@@ -72,13 +76,13 @@ public class InvoiceResource {
         DocumentHeader dh = help.findPublic(DocumentHeader.class, dhp);
         //si no se encuentra retornar missing
         if (dh == null) {
-            return RestHelperLocal.invalid(issuerType, issuerId, documentType, documentNumber, "MISSING");
+            return invalid(issuerType, issuerId, documentType, documentNumber, "MISSING");
         }
         //buscar el mapeo de datos
         Long id = help.findDocumentId(issuerType, issuerId, documentType, documentNumber);
         //si no se encuentra retornar invalid
         if (id == null) {
-            return RestHelperLocal.invalid(issuerType, issuerId, documentType, documentNumber, "INVALID");
+            return invalid(issuerType, issuerId, documentType, documentNumber, "INVALID");
         }
         //retornar la respuesta
         return help.buildDocumentInfo(id);
@@ -97,6 +101,7 @@ public class InvoiceResource {
     @PUT
     @Path("{issuerType}/{issuerId}/{documentType}/{documentNumber}")
     @Consumes({"application/xml"})
+    @Produces("application/xml")
     public DocumentInfo putXml(
             @PathParam("issuerType") String issuerType,
             @PathParam("issuerId") String issuerId,
@@ -111,7 +116,7 @@ public class InvoiceResource {
         DocumentHeader old = help.findPublic(DocumentHeader.class, content.getId());
         //criterio si el anterior existe y el hash es valido hacer retorno de corto
         if (old != null && old.getBl_hashFirma() != null && !old.getBl_hashFirma().isEmpty()) {
-            return RestHelperLocal.invalid(
+            return invalid(
                     issuerType,
                     issuerId,
                     documentType,
@@ -149,6 +154,19 @@ public class InvoiceResource {
                         documentNumber
                 )
         );
+        long i = 0l;
+        for (DocumentDetail item : content.getItem()) {
+            item.setId(buildDocumentDetailPK(content.getId(), ++i));
+        }
     }
 
+    private DocumentDetailPK buildDocumentDetailPK(DocumentHeaderPK id, long i) {
+        DocumentDetailPK pk = new DocumentDetailPK();
+        pk.setTipoDocumentoEmisor(id.getTipoDocumentoEmisor());
+        pk.setNumeroDocumentoEmisor(id.getNumeroDocumentoEmisor());
+        pk.setTipoDocumento(id.getTipoDocumento());
+        pk.setSerieNumero(id.getSerieNumero());
+        pk.setNumeroOrdenItem("" + i);
+        return pk;
+    }
 }
