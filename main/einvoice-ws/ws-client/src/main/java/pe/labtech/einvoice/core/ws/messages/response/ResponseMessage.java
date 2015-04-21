@@ -6,9 +6,7 @@
 package pe.labtech.einvoice.core.ws.messages.response;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
