@@ -19,6 +19,9 @@ import pe.labtech.ubl.model.basic.Amount;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class LegalMonetaryTotal {
 
+    @XmlElement(namespace = Namespaces.CBC)
+    private Amount AllowanceTotalAmount;
+
     /**
      * Importe total de los cargos aplicados al total de la factura.
      */
@@ -34,13 +37,12 @@ public class LegalMonetaryTotal {
     public LegalMonetaryTotal() {
     }
 
-    public LegalMonetaryTotal(String currencyID, BigDecimal ChargeTotalAmount, BigDecimal PayableAmount) {
-        if (ChargeTotalAmount != null) {
-            this.ChargeTotalAmount = new Amount(currencyID, ChargeTotalAmount);
-        }
-        if (PayableAmount != null) {
-            this.PayableAmount = new Amount(currencyID, PayableAmount);
-        }
+    public Amount getAllowanceTotalAmount() {
+        return AllowanceTotalAmount;
+    }
+
+    public void setAllowanceTotalAmount(Amount AllowanceTotalAmount) {
+        this.AllowanceTotalAmount = AllowanceTotalAmount;
     }
 
     public Amount getChargeTotalAmount() {

@@ -162,34 +162,47 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
+    public InvoiceBuilder addTotalAllowance(BigDecimal amount) {
+        if (amount != null) {
+            if (this.invoice.getLegalMonetaryTotal() == null) {
+                this.invoice.setLegalMonetaryTotal(new LegalMonetaryTotal());
+            }
+            this.invoice.getLegalMonetaryTotal().setAllowanceTotalAmount(
+                    new Amount(
+                            this.invoice.getDocumentCurrencyCode(),
+                            amount
+                    )
+            );
+        }
+        return this;
+    }
+
     public InvoiceBuilder addTotalCharge(BigDecimal amount) {
         if (amount != null) {
-            final String currency = this.invoice.getDocumentCurrencyCode();
             if (this.invoice.getLegalMonetaryTotal() == null) {
-                this.invoice.setLegalMonetaryTotal(
-                        new LegalMonetaryTotal(currency, amount, null)
-                );
-            } else {
-                this.invoice.getLegalMonetaryTotal().setChargeTotalAmount(
-                        new Amount(currency, amount)
-                );
+                this.invoice.setLegalMonetaryTotal(new LegalMonetaryTotal());
             }
+            this.invoice.getLegalMonetaryTotal().setChargeTotalAmount(
+                    new Amount(
+                            this.invoice.getDocumentCurrencyCode(),
+                            amount
+                    )
+            );
         }
         return this;
     }
 
     public InvoiceBuilder addTotalPayable(BigDecimal amount) {
         if (amount != null) {
-            final String currency = this.invoice.getDocumentCurrencyCode();
             if (this.invoice.getLegalMonetaryTotal() == null) {
-                this.invoice.setLegalMonetaryTotal(
-                        new LegalMonetaryTotal(currency, null, amount)
-                );
-            } else {
-                this.invoice.getLegalMonetaryTotal().setPayableAmount(
-                        new Amount(currency, amount)
-                );
+                this.invoice.setLegalMonetaryTotal(new LegalMonetaryTotal());
             }
+            this.invoice.getLegalMonetaryTotal().setPayableAmount(
+                    new Amount(
+                            this.invoice.getDocumentCurrencyCode(),
+                            amount
+                    )
+            );
         }
         return this;
     }
