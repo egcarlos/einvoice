@@ -23,7 +23,7 @@ import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.SummaryDetail;
 import pe.labtech.einvoice.replicator.entity.SummaryHeader;
 import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
-import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
  *
@@ -35,13 +35,12 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
     static final Logger logger = Logger.getLogger(PullSummaryTask.class.getName());
 
     @EJB
-    private PublicDatabaseManagerLocal pub;
+    private SummaryDatabaseManagerLocal pub;
 
     @EJB
     private PrivateDatabaseManagerLocal prv;
 
     @Override
-    @Asynchronous
     public void replicate(SummaryHeaderPK id) {
         //recuperar la cabecera
         SummaryHeader header = pub.seek(e -> e.find(SummaryHeader.class, id));

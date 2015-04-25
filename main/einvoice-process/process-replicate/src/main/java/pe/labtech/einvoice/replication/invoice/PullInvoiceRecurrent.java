@@ -18,7 +18,7 @@ import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
-import pe.labtech.einvoice.replicator.model.SeekInvoiceInputLocal;
+import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
  *
@@ -33,26 +33,46 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
     private PullInvoiceTaskLocal task;
 
     @EJB
-    private SeekInvoiceInputLocal seeker;
+    private PublicDatabaseManagerLocal pub;
 
     @PostConstruct
     @Override
     public void init() {
         super.init();
-        this.findTasks = () -> seeker.pullHeaders("A");
-        this.tryLock = t -> seeker.markForProcess(t, "A", "L");
+        this.findTasks = () -> pub.seek(e -> e
+                .createQuery(
+                        "SELECT O.id FROM DocumentHeader O WHERE o.bl_estadoRegistro = 'A' ORDER BY O.id.tipoDocumento ASC, O.id.serieNumero",
+                        DocumentHeaderPK.class
+                )
+                .setMaxResults(10000)
+                .getResultList()
+        );
+        this.tryLock = t -> pub.seek(e -> e
+                .createQuery(
+                        "UPDATE DocumentHeader O SET o.bl_estadoRegistro = 'L' WHERE o.id = :id and o.bl_estadoRegistro = 'A'"
+                )
+                .setParameter("id", t)
+                .executeUpdate() == 1
+        );
         this.getId = t -> t.getTipoDocumentoEmisor() + "-" + t.getNumeroDocumentoEmisor() + "-" + t.getTipoDocumento() + "-" + t.getSerieNumero();
         this.consumer = t -> {
-            DocumentHeader head = seeker.findById(t);
-            System.out.println(head);
-            List<DocumentDetail> details = seeker.findDetails(t);
-            details.forEach(d -> System.out.println(d));
-            task.replicate(head, details);
+            DocumentHeader header = pub.seek(e -> e.find(DocumentHeader.class, t));
+            List<DocumentDetail> details = pub.seek(e -> e
+                    .createQuery(
+                            "SELECT O FROM DocumentDetail O WHERE O.id.tipoDocumentoEmisor = :tde AND O.id.numeroDocumentoEmisor = :nde AND O.id.tipoDocumento = :td AND O.id.serieNumero = :sn",
+                            DocumentDetail.class
+                    )
+                    .setParameter("tde", t.getTipoDocumentoEmisor())
+                    .setParameter("nde", t.getNumeroDocumentoEmisor())
+                    .setParameter("td", t.getTipoDocumento())
+                    .setParameter("sn", t.getSerieNumero())
+                    .getResultList());
+            task.replicate(header, details);
         };
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
+    @Schedule(hour = "*", minute = "*", second = "*/1", persistent = false)
     public void timeout() {
         super.timeout();
     }

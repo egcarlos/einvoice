@@ -15,7 +15,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
-import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
  *
@@ -30,7 +30,7 @@ public class PullCancelRecurrent extends AbstractRecurrentTask<CancelHeaderPK> {
     private PullCancelTaskLocal task;
 
     @EJB
-    private PublicDatabaseManagerLocal db;
+    private SummaryDatabaseManagerLocal db;
 
     @PostConstruct
     @Override
@@ -54,9 +54,9 @@ public class PullCancelRecurrent extends AbstractRecurrentTask<CancelHeaderPK> {
             task.replicate(t);
         };
     }
-    
+
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
+    @Schedule(hour = "*/1", minute = "0", second = "0", persistent = false)
     public void timeout() {
         super.timeout();
     }

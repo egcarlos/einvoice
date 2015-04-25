@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.replication.invoice;
+package pe.labtech.einvoice.replication.cancel;
 
 import java.util.List;
 import java.util.Map;
@@ -23,8 +23,8 @@ import pe.labtech.einvoice.commons.recurrent.RecurrentTask;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
-import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
-import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManager;
 
 /**
  *
@@ -33,14 +33,14 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-public class PushDocumentRecurrent extends AbstractRecurrentTask<Document> {
+public class PushCancelRecurrent extends AbstractRecurrentTask<Document> {
 
-    private static final String DOCUMENT_QUERY = "SELECT DISTINCT o.document FROM DocumentResponse o WHERE (o.document.documentNumber LIKE 'F%' OR o.document.documentNumber LIKE 'B%') AND o.replicate = TRUE";
+    private static final String DOCUMENT_QUERY = "SELECT DISTINCT o.document FROM DocumentResponse o WHERE o.document.documentNumber LIKE 'RA%' AND o.replicate = TRUE";
 
     private static final String DOCUMENT_RESPONSE_QEURY = "SELECT o FROM DocumentResponse o WHERE o.replicate = TRUE AND o.document = :document";
 
     @EJB
-    PublicDatabaseManagerLocal manager;
+    SummaryDatabaseManager manager;
 
     @EJB
     PrivateDatabaseManagerLocal privateManager;
@@ -56,7 +56,7 @@ public class PushDocumentRecurrent extends AbstractRecurrentTask<Document> {
     private Function<Document, List<DocumentResponse>> findTasksSingle;
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/1", persistent = false)
+    @Schedule(hour = "*/1", minute = "0", second = "0", persistent = false)
     public void timeout() {
         super.timeout();
     }
@@ -65,9 +65,13 @@ public class PushDocumentRecurrent extends AbstractRecurrentTask<Document> {
     @PostConstruct
     public void init() {
         super.init();
-        this.findTasks = () -> privateManager.seek(e -> e.createQuery(DOCUMENT_QUERY, Document.class).setMaxResults(10000).getResultList());
+
+        this.findTasks = () -> privateManager.seek(e -> e.createQuery(DOCUMENT_QUERY, Document.class).getResultList());
+
         this.tryLock = t -> true;
+
         this.getId = t -> RecurrentTask.buildTaskId(t.getClientId(), t.getDocumentType(), t.getDocumentNumber(), "replicate response");
+
         this.consumer = t -> manager.handle(e -> {
             Map<String, String> responses = this.findTasksSingle.apply(t).stream()
                     .filter(r -> this.tryLockSingle.apply(r))
@@ -78,7 +82,7 @@ public class PushDocumentRecurrent extends AbstractRecurrentTask<Document> {
                 return;
             }
 
-            DocumentHeaderPK id = createId(t);
+            CancelHeaderPK id = createId(t);
             String setPart = responses.entrySet().stream()
                     .map(d -> "d." + d.getKey() + " = :" + d.getKey())
                     .reduce(null, (a, b) -> a == null ? b : a + ", " + b);
@@ -86,10 +90,13 @@ public class PushDocumentRecurrent extends AbstractRecurrentTask<Document> {
             logger.info(() -> this.tm("sending " + responses));
 
             Query query = e.createQuery(
-                    "UPDATE DocumentHeader d SET " + setPart + " WHERE d.id = :id"
+                    "UPDATE CancelHeader d SET " + setPart + " WHERE d.id = :id"
             );
-            responses.forEach((k, v) -> query.setParameter(k, v));
-            query.setParameter("id", id).executeUpdate();
+            responses
+                    .forEach((k, v) -> query.setParameter(k, v));
+            query
+                    .setParameter("id", id)
+                    .executeUpdate();
         });
 
         this.findTasksSingle = t -> privateManager.seek(e -> e.createQuery(DOCUMENT_RESPONSE_QEURY, DocumentResponse.class).setParameter("document", t).getResultList());
@@ -102,18 +109,16 @@ public class PushDocumentRecurrent extends AbstractRecurrentTask<Document> {
         );
     }
 
-    private DocumentHeaderPK createId(Document t) {
-        DocumentHeaderPK id = new DocumentHeaderPK(
+    private CancelHeaderPK createId(Document t) {
+        CancelHeaderPK id = new CancelHeaderPK(
                 t.getClientId().split("-")[0],
                 t.getClientId().split("-")[1],
-                t.getDocumentType(),
                 t.getDocumentNumber()
         );
         return id;
     }
 
     private String mapName(DocumentResponse t) {
-
         switch (t.getName()) {
             case "hashCode":
                 return "bl_hashFirma";

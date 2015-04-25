@@ -15,7 +15,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
-import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
  *
@@ -30,7 +30,7 @@ public class PullSummaryRecurrent extends AbstractRecurrentTask<SummaryHeaderPK>
     private PullSummaryTaskLocal task;
 
     @EJB
-    private PublicDatabaseManagerLocal db;
+    private SummaryDatabaseManagerLocal db;
 
     @PostConstruct
     @Override
@@ -57,7 +57,7 @@ public class PullSummaryRecurrent extends AbstractRecurrentTask<SummaryHeaderPK>
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
+    @Schedule(hour = "*/1", minute = "0", second = "0", persistent = false)
     public void timeout() {
         super.timeout();
     }

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import org.apache.commons.beanutils.BeanUtils;
@@ -23,7 +22,7 @@ import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.CancelDetail;
 import pe.labtech.einvoice.replicator.entity.CancelHeader;
 import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
-import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
  *
@@ -35,13 +34,12 @@ public class PullCancelTask implements PullCancelTaskLocal {
     static final Logger logger = Logger.getLogger(PullCancelTask.class.getName());
 
     @EJB
-    private PublicDatabaseManagerLocal pub;
+    private SummaryDatabaseManagerLocal pub;
 
     @EJB
     private PrivateDatabaseManagerLocal prv;
 
     @Override
-    @Asynchronous
     public void replicate(CancelHeaderPK id) {
         //recuperar la cabecera
         CancelHeader header = pub.seek(e -> e.find(CancelHeader.class, id));
