@@ -86,3 +86,6 @@ $RECYCLE.BIN/
 /customizations/pepsico/einvoice-process-replicateresponse/target/
 /main/einvoice-process/process-replicatesummary/target/
 /main/einvoice-commons/commons-configuration/target/
+/customizations/hv/model-public/target/
+/main/einvoice-model/model-summary/target/
+/main/einvoice-model/model-commons/target/
