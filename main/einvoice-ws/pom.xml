@@ -24,6 +24,7 @@
         <module>ws-client</module>
         <module>ws-clientcdi</module>
         <module>ws-clienttest</module>
+        <module>ws-bom</module>
     </modules>
     
     <properties>
