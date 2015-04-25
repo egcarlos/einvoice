@@ -32,6 +32,7 @@ public class SecurityValues implements Serializable {
 
     @Column(name = "ALIAS", length = 100)
     private String alias;
+
     @Column(name = "PROTECTION", length = 100)
     private String protection;
 

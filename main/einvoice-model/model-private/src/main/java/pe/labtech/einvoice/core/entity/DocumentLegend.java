@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlValue;
             "additional"
         }
 )
-public class DocumentLegend implements Serializable, ValueHolder {
+public class DocumentLegend implements Serializable, Coded, ValueHolder {
 
     @Id
     @ManyToOne
@@ -105,10 +105,12 @@ public class DocumentLegend implements Serializable, ValueHolder {
         this.order = order;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public void setValue(String value) {
         this.value = value;
     }

@@ -5,11 +5,7 @@
  */
 package pe.labtech.einvoice.replicator.model;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -17,21 +13,16 @@ import javax.persistence.PersistenceContext;
  *
  * @author Carlos
  */
+@Database("public")
 @Stateless
-public class PublicDatabaseManager implements PublicDatabaseManagerLocal {
+public class PublicDatabaseManager extends DatabaseManagerImpl implements PublicDatabaseManagerLocal {
 
     @PersistenceContext(unitName = "replicator_PU")
     private EntityManager em;
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public <T> T seek(Function<EntityManager, T> function) {
-        return function.apply(em);
+    public EntityManager getEntityManager() {
+        return em;
     }
 
-    @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void handle(Consumer<EntityManager> consumer) {
-        consumer.accept(em);
-    }
 }

@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.XmlType;
             query = "UPDATE DocumentData o SET o.replicate = FALSE WHERE o.replicate = TRUE AND o.document = :document AND o.name = :name"
     )
 })
-public class DocumentData implements Serializable {
+public class DocumentData implements Serializable, Named {
 
     @Id
     @ManyToOne
@@ -118,10 +118,12 @@ public class DocumentData implements Serializable {
         this.document = document;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }

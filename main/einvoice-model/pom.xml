@@ -32,6 +32,9 @@
     <modules>
         <module>model-private</module>
         <module>model-public</module>
+        <module>model-summary</module>
+        <module>model-commons</module>
+        <module>model-bom</module>
     </modules>
     
     <properties>

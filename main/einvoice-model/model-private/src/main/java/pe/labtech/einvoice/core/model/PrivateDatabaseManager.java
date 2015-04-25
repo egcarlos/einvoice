@@ -5,33 +5,26 @@
  */
 package pe.labtech.einvoice.core.model;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import pe.labtech.einvoice.replicator.model.Database;
+import pe.labtech.einvoice.replicator.model.DatabaseManagerImpl;
 
 /**
  *
  * @author Carlos
  */
+@Database("private")
 @Stateless
-public class PrivateDatabaseManager implements PrivateDatabaseManagerLocal {
+public class PrivateDatabaseManager extends DatabaseManagerImpl implements PrivateDatabaseManagerLocal {
 
     @PersistenceContext(unitName = "einvoice_PU")
     private EntityManager em;
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public <T> T seek(Function<EntityManager, T> function) {
-        return function.apply(em);
+    public EntityManager getEntityManager() {
+        return em;
     }
 
-    @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void handle(Consumer<EntityManager> consumer) {
-        consumer.accept(em);
-    }
 }

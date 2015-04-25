@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlValue;
             query = "UPDATE DocumentResponse o SET o.replicate = FALSE WHERE o.replicate = TRUE AND o.document = :document AND o.name = :name"
     )
 })
-public class DocumentResponse implements Serializable {
+public class DocumentResponse implements Named, ValueHolder, Serializable {
 
     @Id
     @ManyToOne
@@ -123,18 +123,22 @@ public class DocumentResponse implements Serializable {
         this.document = document;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public void setValue(String value) {
         this.value = value;
     }

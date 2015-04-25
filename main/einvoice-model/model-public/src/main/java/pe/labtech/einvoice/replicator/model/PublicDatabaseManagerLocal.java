@@ -15,10 +15,6 @@ import javax.persistence.EntityManager;
  * @author Carlos
  */
 @Local
-public interface PublicDatabaseManagerLocal {
-
-    <T> T seek(Function<EntityManager, T> function);
-
-    void handle(Consumer<EntityManager> consumer);
+public interface PublicDatabaseManagerLocal extends DatabaseManager {
 
 }

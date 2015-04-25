@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.core.entity;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -205,6 +206,9 @@ public class Document implements Serializable {
     }
 
     public List<Item> getItems() {
+        if (this.items == null) {
+            this.items = new LinkedList<>();
+        }
         return items;
     }
 

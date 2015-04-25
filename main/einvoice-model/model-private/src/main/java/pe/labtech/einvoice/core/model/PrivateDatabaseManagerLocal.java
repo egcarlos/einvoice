@@ -5,20 +5,14 @@
  */
 package pe.labtech.einvoice.core.model;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.ejb.Local;
-import javax.persistence.EntityManager;
+import pe.labtech.einvoice.replicator.model.DatabaseManager;
 
 /**
  *
  * @author Carlos
  */
 @Local
-public interface PrivateDatabaseManagerLocal {
-
-    <T> T seek(Function<EntityManager, T> function);
-
-    void handle(Consumer<EntityManager> consumer);
+public interface PrivateDatabaseManagerLocal extends DatabaseManager {
 
 }

@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlValue;
             "order"
         }
 )
-public class DocumentAuxiliar implements Serializable, ValueHolder {
+public class DocumentAuxiliar implements Serializable, Coded, ValueHolder {
 
     @Id
     @ManyToOne
@@ -68,6 +68,13 @@ public class DocumentAuxiliar implements Serializable, ValueHolder {
         this.value = value;
     }
 
+    public DocumentAuxiliar(String code, String length, Long order, String value) {
+        this.code = code;
+        this.length = length;
+        this.order = order;
+        this.value = value;
+    }
+
     public Document getDocument() {
         return document;
     }
@@ -76,10 +83,12 @@ public class DocumentAuxiliar implements Serializable, ValueHolder {
         this.document = document;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
 
+    @Override
     public void setCode(String code) {
         this.code = code;
     }
@@ -100,10 +109,12 @@ public class DocumentAuxiliar implements Serializable, ValueHolder {
         this.order = order;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public void setValue(String value) {
         this.value = value;
     }

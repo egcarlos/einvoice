@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlValue;
             "order"
         }
 )
-public class ItemAuxiliar implements Serializable, ValueHolder {
+public class ItemAuxiliar implements Serializable, Coded, ValueHolder {
 
     @Id
     @ManyToOne
@@ -83,10 +83,12 @@ public class ItemAuxiliar implements Serializable, ValueHolder {
         this.item = item;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
 
+    @Override
     public void setCode(String code) {
         this.code = code;
     }
@@ -107,10 +109,12 @@ public class ItemAuxiliar implements Serializable, ValueHolder {
         this.order = order;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public void setValue(String value) {
         this.value = value;
     }

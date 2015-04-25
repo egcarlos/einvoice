@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlValue;
         }
 )
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DocumentAttribute implements Serializable, ValueHolder {
+public class DocumentAttribute implements Serializable, Named, ValueHolder {
 
     @Id
     @ManyToOne
@@ -96,18 +96,22 @@ public class DocumentAttribute implements Serializable, ValueHolder {
         this.document = document;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public void setValue(String value) {
         this.value = value;
     }

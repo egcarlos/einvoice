@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlValue;
         }
 )
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ItemAttribute implements Serializable, ValueHolder {
+public class ItemAttribute implements Serializable, Named, ValueHolder {
 
     @Id
     @ManyToOne
@@ -100,18 +100,22 @@ public class ItemAttribute implements Serializable, ValueHolder {
         this.item = item;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getValue() {
         return value;
     }
 
+    @Override
     public void setValue(String value) {
         this.value = value;
     }
