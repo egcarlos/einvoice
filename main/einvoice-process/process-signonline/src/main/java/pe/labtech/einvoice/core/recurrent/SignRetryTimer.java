@@ -17,6 +17,7 @@ import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.InvoiceSeekerLocal;
+import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.SignTaskLocal;
 
 /**
@@ -27,25 +28,39 @@ import pe.labtech.einvoice.core.tasks.SignTaskLocal;
 @Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SignRetryTimer extends AbstractRecurrentTask<Document> {
+public class SignRetryTimer extends AbstractRecurrentTask<Long> {
 
     @EJB
-    InvoiceSeekerLocal seeker;
-    @EJB
     private SignTaskLocal task;
+
+    @EJB
+    private PrivateDatabaseManagerLocal prv;
 
     @PostConstruct
     @Override
     public void init() {
         super.init();
-        super.findTasks = () -> seeker.pullDocuments("SIGN", "RETRY");
-        super.tryLock = t -> seeker.markSynkronized(t.getId(), "PULL", "LOADED", "SIGN", "SIGNING");
-        super.getId = t -> t.getClientId() + "-" + t.getDocumentType() + "-" + t.getDocumentNumber() + "[sign]";
+        super.findTasks = () -> prv.seek(e -> e
+                .createQuery(
+                        "SELECT D.id FROM Document D WHERE d.step = 'SIGN' AND d.status = 'RETRY'",
+                        Long.class
+                )
+                .setMaxResults(10000)
+                .getResultList()
+        );
+        super.tryLock = t -> prv.seek(e -> e
+                .createQuery(
+                        "UPDATE Document D SET D.step = 'SIGN', D.status = 'SIGNING' WHERE D.id = :id AND D.step = 'SIGN' AND D.status = 'RETRY'"
+                )
+                .setParameter("id", t)
+                .executeUpdate() == 1
+        );
+        super.getId = t -> "Document[id:" + t + "].sign()";
         super.consumer = t -> task.handle(t);
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/30", persistent = false)
+    @Schedule(hour = "*", minute = "*/1", second = "0", persistent = false)
     public void timeout() {
         super.timeout();
     }

@@ -18,21 +18,6 @@
     <dependencies>
         <dependency>
             <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-signonline</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-sync</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-declare</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-replicate</artifactId>
             <version>${einvoice.process.version}</version>
         </dependency>
@@ -43,22 +28,27 @@
         </dependency>
         <dependency>
             <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-replicatedata</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-replicateresponse</artifactId>
             <version>${einvoice.process.version}</version>
         </dependency>
         <dependency>
             <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-download</artifactId>
+            <artifactId>einvoice-process-replicateresponsesummary</artifactId>
             <version>${einvoice.process.version}</version>
         </dependency>
         <dependency>
             <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-copy</artifactId>
+            <artifactId>einvoice-process-replicatedata</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-replicatedatasummary</artifactId>
+            <version>${einvoice.process.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-signonline</artifactId>
             <version>${einvoice.process.version}</version>
         </dependency>
         <dependency>

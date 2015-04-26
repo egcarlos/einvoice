@@ -57,7 +57,7 @@ public class PullSummaryRecurrent extends AbstractRecurrentTask<SummaryHeaderPK>
     }
 
     @Override
-    @Schedule(hour = "*/1", minute = "0", second = "0", persistent = false)
+    @Schedule(hour = "*", minute = "*", second = "*/3", persistent = false)
     public void timeout() {
         super.timeout();
     }

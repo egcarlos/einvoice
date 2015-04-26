@@ -56,11 +56,14 @@
         <module>process-replicateresponsesummary</module>
         <module>process-replicatedata</module>
         <module>process-replicatedatasummary</module>
+        
+        <!-- work -->
+        
         <!--<module>process-download</module>-->
+        <module>process-signonline</module>
         
         <!--<module>process-declare</module>-->
         <!--<module>process-sync</module>-->
-        <!--<module>process-signonline</module>-->
         <!--<module>process-copy</module>-->
     </modules>
     

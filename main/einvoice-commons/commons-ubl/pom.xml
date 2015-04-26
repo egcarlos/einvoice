@@ -16,6 +16,11 @@
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.moxy</artifactId>
         </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.model</groupId>
+            <artifactId>einvoice-model-commons</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     
     <!--<build>

@@ -15,8 +15,10 @@ import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
+import pe.labtech.einvoice.commons.recurrent.RecurrentTask;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.InvoiceSeekerLocal;
+import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.SignTaskLocal;
 
 /**
@@ -27,10 +29,11 @@ import pe.labtech.einvoice.core.tasks.SignTaskLocal;
 @Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SignTimer extends AbstractRecurrentTask<Document> {
+public class SignTimer extends AbstractRecurrentTask<Long> {
 
     @EJB
-    InvoiceSeekerLocal seeker;
+    private PrivateDatabaseManagerLocal prv;
+
     @EJB
     private SignTaskLocal task;
 
@@ -38,9 +41,22 @@ public class SignTimer extends AbstractRecurrentTask<Document> {
     @Override
     public void init() {
         super.init();
-        super.findTasks = () -> seeker.pullDocuments("PULL", "LOADED");
-        super.tryLock = t -> seeker.markSynkronized(t.getId(), "PULL", "LOADED", "SIGN", "SIGNING");
-        super.getId = t -> t.getClientId() + "-" + t.getDocumentType() + "-" + t.getDocumentNumber() + "[sign]";
+        super.findTasks = () -> prv.seek(e -> e
+                .createQuery(
+                        "SELECT D.id FROM Document D WHERE d.step = 'PULL' AND d.status = 'LOADED'",
+                        Long.class
+                )
+                .setMaxResults(10000)
+                .getResultList()
+        );
+        super.tryLock = t -> prv.seek(e -> e
+                .createQuery(
+                        "UPDATE Document D SET D.step = 'SIGN', D.status = 'SIGNING' WHERE D.id = :id AND D.step = 'PULL' AND D.status = 'LOADED'"
+                )
+                .setParameter("id", t)
+                .executeUpdate() == 1
+        );
+        super.getId = t -> "Document[id:" + t + "].sign()";
         super.consumer = t -> task.handle(t);
     }
 
