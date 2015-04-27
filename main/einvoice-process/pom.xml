@@ -67,6 +67,8 @@
         <!--<module>process-copy</module>-->
         <module>process-sync</module>
         <module>process-declare</module>
+        <module>process-copy</module>
+        <module>process-download</module>
     </modules>
     
     <properties>

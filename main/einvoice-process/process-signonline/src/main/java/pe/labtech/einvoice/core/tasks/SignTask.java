@@ -62,7 +62,7 @@ public class SignTask implements SignTaskLocal {
                     return this.offlineInvoice.handle(document);
                 case Summary:
                 case Cancel:
-                    return this.offlineSummary.handle(document);
+                    return this.onlineSummary.handle(document);
             }
         } else {
             //no hay un keystore... firma online
