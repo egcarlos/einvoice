@@ -19,6 +19,7 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.xml.ws.WebServiceException;
 import javax.xml.ws.soap.SOAPFaultException;
 import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.core.entity.Document;
@@ -64,12 +65,13 @@ public class Commons {
                 loader.markSigned(document.getId(), "ERROR", di.getSignatureValue(), di.getHashCode(), responses);
             }
             return di;
-        } catch (SOAPFaultException ex) {
+        } catch (WebServiceException ex) {
             Map<String, String> responses = new HashMap<>();
             responses.put("messages", "Soap Fault raised!");
             loader.markSigned(document.getId(), "RETRY", null, null, responses);
             String message = Tools.exToString(ex, "Document will retry");
             loader.createEvent(document, "WARN", message);
+            //TODO create a synthetic document info
             return null;
         } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             loader.markAsError(document.getId(), ex);

@@ -23,6 +23,14 @@ public class DocumentReference {
     @XmlElement(namespace = Namespaces.CBC)
     private String DocumentTypeCode;
 
+    public DocumentReference() {
+    }
+
+    public DocumentReference(String ID, String DocumentTypeCode) {
+        this.ID = ID;
+        this.DocumentTypeCode = DocumentTypeCode;
+    }
+
     public String getID() {
         return ID;
     }

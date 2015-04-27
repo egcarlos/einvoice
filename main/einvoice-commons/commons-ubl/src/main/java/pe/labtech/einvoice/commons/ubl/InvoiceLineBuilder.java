@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.commons.ubl;
 
 import java.math.BigDecimal;
+import pe.labtech.ubl.model.aggregate.AllowanceCharge;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
 import pe.labtech.ubl.model.aggregate.Item;
 import pe.labtech.ubl.model.aggregate.Price;
@@ -72,19 +73,28 @@ public class InvoiceLineBuilder implements Builder<InvoiceLine> {
 
     public InvoiceLineBuilder addTax(String taxID, String taxName, String taxCode, BigDecimal amount, String erc, String tr) {
         String currency = this.item.getLineExtensionAmount().getCurrencyID();
-        this.item.getTaxTotal().add(
-                new TaxTotal(
-                        new Amount(currency, amount),
-                        new TaxSubtotal(
-                                new Amount(currency, amount),
-                                new TaxCategory(
-                                        erc,
-                                        tr,
-                                        new TaxScheme(taxID, taxName, taxCode)
-                                )
-                        )
-                )
-        );
+        if (amount != null) {
+            this.item.getTaxTotal().add(
+                    new TaxTotal(
+                            new Amount(currency, amount),
+                            new TaxSubtotal(
+                                    new Amount(currency, amount),
+                                    new TaxCategory(
+                                            erc,
+                                            tr,
+                                            new TaxScheme(taxID, taxName, taxCode)
+                                    )
+                            )
+                    )
+            );
+        }
+        return this;
+    }
+
+    public InvoiceLineBuilder addAllowance(BigDecimal allowance) {
+        if (allowance != null) {
+            item.setAllowanceCharge(new AllowanceCharge("false", new Amount(item.getLineExtensionAmount().getCurrencyID(), allowance)));
+        }
         return this;
     }
 }

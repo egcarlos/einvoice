@@ -54,7 +54,7 @@ public class IntegralTest {
                 .addNote("1000", "CIENTO DIECIOCHO Y 00/100 NUEVOS SOLES")
                 .addCustomNote("9999", "COMENTARIO")
                 .addTax("1000", "IGV", "VAT", BigDecimal.valueOf(1800, 2))
-                .addTotalCharge(null)
+//                .addTotalCharge(()null)
                 .addTotalPayable(BigDecimal.valueOf(11800, 2))
                 .addLine(
                         new InvoiceLineBuilder()

@@ -10,10 +10,13 @@ import java.util.Arrays;
 import pe.labtech.ubl.model.Invoice;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
 import pe.labtech.ubl.model.aggregate.Address;
+import pe.labtech.ubl.model.aggregate.Country;
+import pe.labtech.ubl.model.aggregate.DocumentReference;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
 import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
 import pe.labtech.ubl.model.aggregate.Party;
 import pe.labtech.ubl.model.aggregate.PartyLegalEntity;
+import pe.labtech.ubl.model.aggregate.PartyName;
 import pe.labtech.ubl.model.aggregate.Signature;
 import pe.labtech.ubl.model.aggregate.TaxCategory;
 import pe.labtech.ubl.model.aggregate.TaxScheme;
@@ -39,6 +42,13 @@ public class InvoiceBuilder implements Builder<Invoice> {
         InvoiceBuilder ib = new InvoiceBuilder();
         ib.invoice = createInvoice(invoiceType, invoiceNumber, invoiceDate, currency, supplierType, supplierId, supplierName, clientType, clientId, clientName);
         return ib;
+    }
+
+    public InvoiceBuilder addAmount(String id, String amount) {
+        if (amount == null) {
+            return this;
+        }
+        return this.addAmount(id, new BigDecimal(amount));
     }
 
     public InvoiceBuilder addAmount(String id, BigDecimal amount) {
@@ -144,6 +154,13 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return i;
     }
 
+    public InvoiceBuilder addTax(String id, String name, String typeCode, String amount) {
+        if (amount == null) {
+            return this;
+        }
+        return addTax(id, name, typeCode, new BigDecimal(amount));
+    }
+
     public InvoiceBuilder addTax(String id, String name, String typeCode, BigDecimal amount) {
         TaxTotal tt = new TaxTotal();
         tt.setTaxAmount(new Amount(this.invoice.getDocumentCurrencyCode(), amount));
@@ -162,6 +179,13 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
+    public InvoiceBuilder addTotalAllowance(String amount) {
+        if (amount != null) {
+            addTotalAllowance(new BigDecimal(amount));
+        }
+        return this;
+    }
+
     public InvoiceBuilder addTotalAllowance(BigDecimal amount) {
         if (amount != null) {
             if (this.invoice.getLegalMonetaryTotal() == null) {
@@ -173,6 +197,13 @@ public class InvoiceBuilder implements Builder<Invoice> {
                             amount
                     )
             );
+        }
+        return this;
+    }
+
+    public InvoiceBuilder addTotalCharge(String amount) {
+        if (amount != null) {
+            addTotalCharge(new BigDecimal(amount));
         }
         return this;
     }
@@ -192,6 +223,13 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
+    public InvoiceBuilder addTotalPayable(String amount) {
+        if (amount != null) {
+            addTotalPayable(new BigDecimal(amount));
+        }
+        return this;
+    }
+
     public InvoiceBuilder addTotalPayable(BigDecimal amount) {
         if (amount != null) {
             if (this.invoice.getLegalMonetaryTotal() == null) {
@@ -202,6 +240,133 @@ public class InvoiceBuilder implements Builder<Invoice> {
                             this.invoice.getDocumentCurrencyCode(),
                             amount
                     )
+            );
+        }
+        return this;
+    }
+
+    public InvoiceBuilder setIssuerName(String name) {
+        if (name == null) {
+            return this;
+        }
+        invoice.getAccountingSupplierParty().getParty().setPartyName(new PartyName(name));
+        return this;
+    }
+
+    /**
+     * Establece la dirección del emisor.
+     *
+     * @param id ubigeo
+     * @param address dirección postal
+     * @param zone urbanización o zona
+     * @param disctrict distrito
+     * @param city provincia
+     * @param state departamento
+     * @param country código iso del país
+     * @return
+     */
+    public InvoiceBuilder setIssuerAddress(String id, String address, String zone, String disctrict, String city, String state, String country) {
+
+        Address a = invoice.getAccountingSupplierParty().getParty().getPostalAddress();
+
+        a.setID(id);
+        a.setStreetName(address);
+        a.setCitySubdivisionName(zone);
+        a.setDistrict(disctrict);
+        a.setCountrySubentity(city);
+        a.setCityName(state);
+
+        if (country != null) {
+            a.setCountry(new Country());
+            a.getCountry().setIdentificationCode(country);
+        }
+
+        return this;
+    }
+
+    public InvoiceBuilder addPerception(String reference, String payable, String total, String percent) {
+        if (payable != null) {
+            AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
+                    "2001",
+                    null,
+                    reference == null ? null : new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(reference)),
+                    new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(payable)),
+                    percent,
+                    total == null ? null : new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(total))
+            );
+
+            invoice
+                    .getUBLExtensions()
+                    .getUBLExtension()
+                    .get(0)
+                    .getExtensionContent()
+                    .getSunatAdditionalInformation()
+                    .getAdditionalMonetaryTotal()
+                    .add(amt);
+        }
+        return this;
+    }
+
+    public InvoiceBuilder addRetention(String payable, String percent) {
+        if (payable != null) {
+            AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
+                    "2003",
+                    null,
+                    null,
+                    new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(payable)),
+                    percent,
+                    null
+            );
+
+            invoice
+                    .getUBLExtensions()
+                    .getUBLExtension()
+                    .get(0)
+                    .getExtensionContent()
+                    .getSunatAdditionalInformation()
+                    .getAdditionalMonetaryTotal()
+                    .add(amt);
+        }
+        return this;
+    }
+
+    //TODO map description
+    public InvoiceBuilder addDetraction(String reference, String payable, String percent, String description) {
+        if (payable != null) {
+            AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
+                    "2003",
+                    null,
+                    reference == null ? null : new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(reference)),
+                    new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(payable)),
+                    percent,
+                    null
+            );
+
+            invoice
+                    .getUBLExtensions()
+                    .getUBLExtension()
+                    .get(0)
+                    .getExtensionContent()
+                    .getSunatAdditionalInformation()
+                    .getAdditionalMonetaryTotal()
+                    .add(amt);
+        }
+        return this;
+    }
+
+    public InvoiceBuilder addDespatchReference(String type, String number) {
+        if (type != null && number != null) {
+            invoice.getDespatchDocumentReference().add(
+                    new DocumentReference(type, number)
+            );
+        }
+        return this;
+    }
+
+    public InvoiceBuilder addAdditionalReference(String type, String number) {
+        if (type != null && number != null) {
+            invoice.getAdditionalDocumentReference().add(
+                    new DocumentReference(type, number)
             );
         }
         return this;

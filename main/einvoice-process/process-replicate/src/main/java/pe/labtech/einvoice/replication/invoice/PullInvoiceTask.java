@@ -8,6 +8,7 @@ package pe.labtech.einvoice.replication.invoice;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -17,6 +18,8 @@ import javax.ejb.Stateless;
 import org.apache.commons.beanutils.BeanUtils;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentAttribute;
+import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
+import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
@@ -49,6 +52,8 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
         try {
             List<DocumentAttribute> attrs = new LinkedList<>();
+            List<DocumentAuxiliar> auxs = new LinkedList<>();
+            List<DocumentLegend> legs = new LinkedList<>();
 
             //mapeo automático de la llave primaria
             BeanUtils.describe(header.getId()).entrySet().stream()
@@ -58,15 +63,42 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                     .forEach(a -> attrs.add(a));
 
             //mapeo automático del cuerpo
-            BeanUtils.describe(header).entrySet().stream()
+            final Map<String, String> bean = BeanUtils.describe(header);
+            bean.entrySet().stream()
                     .filter(e -> e.getValue() != null)
                     .filter(e -> !"id".equals(e.getKey()))
                     .filter(e -> !"class".equals(e.getKey()))
                     .filter(e -> !e.getKey().startsWith("bl_"))
-                    .map(e -> new DocumentAttribute(document, e.getKey(), e.getValue()))
-                    .forEach(a -> attrs.add(a));
+                    .forEach(e -> {
+                        final String key = e.getKey();
+                        final String value = e.getValue();
+                        if (key.startsWith("codigoLeyenda") || e.getKey().startsWith("textoLeyenda") || e.getKey().startsWith("textoAdicionalLeyenda")) {
+                            if (key.startsWith("codigoLeyenda")) {
+                                Long order = Long.parseLong(key.split("_")[1]);
+                                DocumentLegend dl = buildLegend(bean, order, document);
+                                if (dl.getValue() != null) {
+                                    legs.add(dl);
+                                }
+                            }
+                        } else if (key.startsWith("codigoAuxiliar") || key.startsWith("textoAuxiliar")) {
+                            if (key.startsWith("codigoAuxiliar")) {
+                                String s = key.substring(14);
+                                String length = s.split("_")[0];
+                                Long order = Long.parseLong(s.split("_")[1]);
+                                DocumentAuxiliar da = buildAuxiliar(bean, length, order, document);
+                                if (da.getValue() != null) {
+                                    auxs.add(da);
+                                }
+                            }
+                        } else {
+                            attrs.add(new DocumentAttribute(document, key, value));
+                        }
+                    });
 
             document.setAttributes(attrs);
+            document.setAuxiliars(auxs);
+            document.setLegends(legs);
+
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             logger.log(Level.SEVERE, null, ex);
             //TODO mark as error... y decidir que hacer luego con el mapeo!
@@ -99,6 +131,28 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
         prv.handle(e -> e.persist(document));
 
+    }
+
+    private DocumentAuxiliar buildAuxiliar(final Map<String, String> bean, String length, Long order, Document document) {
+        DocumentAuxiliar da = new DocumentAuxiliar(
+                bean.get("codigoAuxiliar" + length + "_" + order),
+                length,
+                order,
+                bean.get("textoAuxiliar" + length + "_" + order)
+        );
+        da.setDocument(document);
+        return da;
+    }
+
+    private DocumentLegend buildLegend(final Map<String, String> bean, Long order, Document document) {
+        DocumentLegend dl = new DocumentLegend(
+                bean.get("codigoLeyenda_" + order),
+                order,
+                bean.get("textoLeyenda_" + order),
+                bean.get("textoAdicionalLeyenda_" + order)
+        );
+        dl.setDocument(document);
+        return dl;
     }
 
     @Override

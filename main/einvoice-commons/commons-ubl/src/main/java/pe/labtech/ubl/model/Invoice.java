@@ -153,6 +153,9 @@ public class Invoice {
     }
 
     public List<DocumentReference> getDespatchDocumentReference() {
+        if (DespatchDocumentReference == null) {
+            DespatchDocumentReference = new LinkedList<>();
+        }
         return DespatchDocumentReference;
     }
 
@@ -161,6 +164,9 @@ public class Invoice {
     }
 
     public List<DocumentReference> getAdditionalDocumentReference() {
+        if (AdditionalDocumentReference == null) {
+            AdditionalDocumentReference = new LinkedList<>();
+        }
         return AdditionalDocumentReference;
     }
 

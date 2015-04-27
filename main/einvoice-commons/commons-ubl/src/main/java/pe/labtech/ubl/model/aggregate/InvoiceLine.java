@@ -57,6 +57,9 @@ public class InvoiceLine {
     @XmlElement(namespace = Namespaces.CAC)
     private Item Item;
 
+    @XmlElement(namespace = Namespaces.CAC)
+    private AllowanceCharge AllowanceCharge;
+
     /**
      * Precio unitario sin impuesto.
      */
@@ -115,6 +118,14 @@ public class InvoiceLine {
 
     public void setItem(Item Item) {
         this.Item = Item;
+    }
+
+    public AllowanceCharge getAllowanceCharge() {
+        return AllowanceCharge;
+    }
+
+    public void setAllowanceCharge(AllowanceCharge AllowanceCharge) {
+        this.AllowanceCharge = AllowanceCharge;
     }
 
     public Price getPriceAmount() {

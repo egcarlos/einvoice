@@ -66,7 +66,7 @@ public class Tools {
         });
     }
 
-    public static String exToString(SOAPFaultException ex, String... headers) {
+    public static String exToString(Exception ex, String... headers) {
         try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
             Arrays.stream(headers).forEach(s -> pw.println(s));
             pw.println();
