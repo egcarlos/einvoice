@@ -50,12 +50,9 @@ public class DigitalSignTest {
         Key key = ks.getKey(alias, "3b1zl4t1n$AVINKA".toCharArray());
         X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
 
-        DigitalSign ds = new DigitalSign();
-
-        ds.sign(document, key, cert);
-
-        System.out.println(ds.createTextRepresentation(document));
-
+//        DigitalSign ds = new DigitalSign();
+//        ds.sign(document, key, cert);
+//        System.out.println(ds.createTextRepresentation(document));
     }
 
 }

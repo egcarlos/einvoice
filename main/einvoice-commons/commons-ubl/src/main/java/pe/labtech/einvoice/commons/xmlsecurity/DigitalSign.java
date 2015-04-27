@@ -12,6 +12,8 @@ import java.security.KeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.crypto.MarshalException;
 import javax.xml.crypto.dsig.CanonicalizationMethod;
 import javax.xml.crypto.dsig.DigestMethod;
@@ -72,6 +74,28 @@ public class DigitalSign {
             return sw.toString();
         } catch (TransformerException ex) {
             throw new SignatureException("Unable to serialize XML", ex);
+        }
+    }
+
+    /**
+     * Returns hash and signature.
+     *
+     * @param document
+     * @return
+     */
+    public String[] getResponses(Document document) {
+        try {
+            XPath xpath = buildXpath(document);
+            String prefix = xpath
+                    .getNamespaceContext()
+                    .getPrefix("http://www.w3.org/2000/09/xmldsig#");
+            Node dvn = (Node) xpath.evaluate("//" + prefix + ":DigestValue", document, XPathConstants.NODE);
+
+            Node svn = (Node) xpath.evaluate("//" + prefix + ":SignatureValue", document, XPathConstants.NODE);
+            return new String[]{dvn.getTextContent(), svn.getTextContent()};
+        } catch (XPathExpressionException ex) {
+            Logger.getLogger(DigitalSign.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 

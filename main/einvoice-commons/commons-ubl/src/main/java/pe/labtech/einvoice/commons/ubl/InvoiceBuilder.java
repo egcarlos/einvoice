@@ -10,8 +10,10 @@ import java.util.Arrays;
 import pe.labtech.ubl.model.Invoice;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
 import pe.labtech.ubl.model.aggregate.Address;
+import pe.labtech.ubl.model.aggregate.Attachment;
 import pe.labtech.ubl.model.aggregate.Country;
 import pe.labtech.ubl.model.aggregate.DocumentReference;
+import pe.labtech.ubl.model.aggregate.ExternalReference;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
 import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
 import pe.labtech.ubl.model.aggregate.Party;
@@ -129,6 +131,7 @@ public class InvoiceBuilder implements Builder<Invoice> {
         i.setSignature(new Signature());
         i.getSignature().setID("IDSignKG");
         i.getSignature().setSignatoryParty(new Party(supplierId, supplierName));
+        i.getSignature().setDigitalSignatureAttachment(new Attachment(new ExternalReference("#signatureKG")));
         //datos del emisor
         i.setAccountingSupplierParty(
                 new AccountingParty(

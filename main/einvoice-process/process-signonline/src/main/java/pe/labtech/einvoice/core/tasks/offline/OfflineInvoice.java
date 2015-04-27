@@ -5,15 +5,32 @@
  */
 package pe.labtech.einvoice.core.tasks.offline;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import pe.labtech.einvoice.commons.ubl.InvoiceBuilder;
 import pe.labtech.einvoice.commons.ubl.InvoiceLineBuilder;
+import pe.labtech.einvoice.commons.xmlsecurity.DigitalSign;
 import pe.labtech.einvoice.core.entity.Document;
+import pe.labtech.einvoice.core.entity.DocumentData;
+import pe.labtech.einvoice.core.entity.SecurityValues;
+import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.DATA_LOADED;
+import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.ubl.model.Invoice;
@@ -29,10 +46,55 @@ public class OfflineInvoice {
     @EJB
     private PrivateDatabaseManagerLocal prv;
 
+    @EJB
+    private DocumentLoaderLocal loader;
+
+    private DigitalSign ds = new DigitalSign();
+
     public DocumentInfo handle(Document document) {
+        //create the UBL structure
+        Invoice invoice = mapInvoice(document.getId());
+
+        //move to the xml representation
+        org.w3c.dom.Document xml = Commons.toXmlDocument(invoice);
+
+        //sign
+        signDocument(document.getClientId(), xml);
+
+        //represent as text
+        String signedDocument = ds.createTextRepresentation(xml);
+
+        //log to disc
+        Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, "SIGNED DOCUMENT\n{0}", signedDocument);
+
+        //create the fake response
+        DocumentInfo di = synthDocumentInfo(xml);
+
+        //save the data as localUbl... do not replicate
+        prv.handle(e -> {
+            final DocumentData data = new DocumentData();
+            data.setDocument(document);
+            data.setName("localUBL");
+            data.setData(signedDocument.getBytes());
+            data.setStatus(DATA_LOADED);
+            data.setReplicate(Boolean.FALSE);
+            e.persist(data);
+        });
+
+        Map<String, String> diresponses = new HashMap<>();
+        diresponses.put("status", di.getStatus());
+        diresponses.put("hashCode", di.getHashCode());
+        diresponses.put("signatureValue", di.getSignatureValue());
+
+        //TODO proceder a declarar usando el proceso de envio especial
+        loader.markSigned(document.getId(), "SIGNED-LOCAL", di.getHashCode(), di.getSignatureValue(), diresponses);
+        return di;
+    }
+
+    private Invoice mapInvoice(Long id) {
         Invoice invoice = prv.seek(e -> {
-            Document d = e.find(Document.class, document.getId());
-            
+            Document d = e.find(Document.class, id);
+
             Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
             InvoiceBuilder ib = new InvoiceBuilder()
                     .init(
@@ -123,16 +185,51 @@ public class OfflineInvoice {
                         .addTax("1000", "IGV", "VAT", buildNumber(ia.get("importeIgv")), ia.get("codigoRazonExoneracion"), null)
                         .addTax("2000", "ISC", "EXT", buildNumber(ia.get("importeIsc")), null, ia.get("tipoSistemaImpuestoISC"))
                         .addAllowance(buildNumber(ia.get("importeDescuento")));
-                
+
                 ib.addLine(ilb.compile());
             });
 
             return ib.compile();
         });
+        return invoice;
+    }
 
-        org.w3c.dom.Document xml = Commons.toXmlDocument(invoice);
+    private void signDocument(String id, org.w3c.dom.Document xml) {
+        SecurityValues sv = prv.seek(e -> e.find(SecurityValues.class, id));
 
-        return null;
+        KeyStore ks = open(sv.getKeystoreReference().getData(), sv.getKeystoreReference().getProtection());
+
+        Key key = extractKey(ks, sv);
+        X509Certificate cert = extractCertificate(ks, sv);
+
+        ds.sign(xml, key, cert);
+    }
+
+    private DocumentInfo synthDocumentInfo(org.w3c.dom.Document xml) {
+        String[] responses = ds.getResponses(xml);
+        DocumentInfo di = new DocumentInfo();
+        di.setHashCode(responses[0]);
+        di.setSignatureValue(responses[1]);
+        di.setStatus("SIGNED");
+        return di;
+    }
+
+    private X509Certificate extractCertificate(KeyStore ks, SecurityValues sv) {
+        try {
+            return (X509Certificate) ks.getCertificate(sv.getAlias());
+        } catch (KeyStoreException ex) {
+            Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    private Key extractKey(KeyStore ks, SecurityValues sv) {
+        try {
+            return ks.getKey(sv.getAlias(), sv.getProtection().toCharArray());
+        } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException ex) {
+            Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     public static BigDecimal buildNumber(String amount) {
@@ -140,6 +237,21 @@ public class OfflineInvoice {
             return null;
         }
         return new BigDecimal(amount);
+    }
+
+    //TODO make cache
+    private KeyStore open(byte[] data, String protection) {
+        try {
+            KeyStore ks = KeyStore.getInstance("jks");
+            ks.load(
+                    new ByteArrayInputStream(data),
+                    protection.toCharArray()
+            );
+            return ks;
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException ex) {
+            Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
 }

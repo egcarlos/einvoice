@@ -20,7 +20,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.xml.ws.WebServiceException;
-import javax.xml.ws.soap.SOAPFaultException;
 import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.Item;

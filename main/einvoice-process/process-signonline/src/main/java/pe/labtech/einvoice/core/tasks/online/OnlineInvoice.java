@@ -5,25 +5,18 @@
  */
 package pe.labtech.einvoice.core.tasks.online;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.inject.Inject;
-import javax.xml.ws.soap.SOAPFaultException;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.Tools;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
-import pe.labtech.einvoice.core.ws.helpers.Builder;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
-import pe.labtech.einvoice.core.ws.messages.response.Response;
 import pe.labtech.einvoice.core.ws.model.DocumentItem;
-import pe.labtech.einvoice.replicator.model.DatabaseManager;
 
 /**
  *

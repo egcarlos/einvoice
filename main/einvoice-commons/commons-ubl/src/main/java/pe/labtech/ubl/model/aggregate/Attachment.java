@@ -18,25 +18,21 @@ import pe.labtech.ubl.model.Namespaces;
 public class Attachment {
 
     @XmlElement(namespace = Namespaces.CAC)
-    private String ExternalReference;
+    private ExternalReference ExternalReference;
 
-    @XmlElement(namespace = Namespaces.CBC)
-    private String URI;
-
-    public String getExternalReference() {
-        return ExternalReference;
+    public Attachment() {
     }
 
-    public void setExternalReference(String ExternalReference) {
+    public Attachment(ExternalReference ExternalReference) {
         this.ExternalReference = ExternalReference;
     }
 
-    public String getURI() {
-        return URI;
+    public ExternalReference getExternalReference() {
+        return ExternalReference;
     }
 
-    public void setURI(String URI) {
-        this.URI = URI;
+    public void setExternalReference(ExternalReference ExternalReference) {
+        this.ExternalReference = ExternalReference;
     }
 
 }
