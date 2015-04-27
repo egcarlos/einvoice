@@ -31,7 +31,7 @@ import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-public class PushCancelRecurrent extends AbstractRecurrentTask<DocumentData> {
+public class PushCancelDataRecurrent extends AbstractRecurrentTask<DocumentData> {
 
     @EJB
     SummaryDatabaseManagerLocal manager;

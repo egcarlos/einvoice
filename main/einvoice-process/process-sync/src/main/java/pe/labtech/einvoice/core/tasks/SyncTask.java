@@ -60,24 +60,25 @@ public class SyncTask implements SyncTaskLocal {
             Map<String, String> responses = describe(di);
             if (isSigned(di)) {
                 final String status = di.getSunatStatus();
-                final String step = document.getStep();
-                if (step == null || "SIGN".equals(step)) {
-                    //was in sign phase and now it's completed
+                if (status == null) {
+                    //se debe marcar para declarar
                     loader.markSigned(document.getId(), "COMPLETE", di.getSignatureValue(), di.getHashCode(), responses);
-                } else if ("DECLARE".equals(step)) {
-                    if ((status != null && (status.startsWith("AC") || status.startsWith("RC")))) {
-                        responses.put("recordStatus", "P");
-                        loader.markSigned(document.getId(), "COMPLETE", di.getSignatureValue(), di.getHashCode(), responses);
-                    } else {
-                        //longtime sync since is not completed
-                        loader.markSigned(document.getId(), "SYNC", di.getSignatureValue(), di.getHashCode(), responses);
-                    }
+                    return;
                 }
-                //any other case is inconsistent and presumes model modified while running
+                if (status.startsWith("AC") || status.startsWith("RC")) {
+                    //el proceso ha terminado
+                    responses.put("recordStatus", "P");
+                    loader.markSigned(document.getId(), "COMPLETED", di.getSignatureValue(), di.getHashCode(), responses);
+                } else {
+                    //long sync
+                    loader.markSigned(document.getId(), "LONG-SYNC", di.getSignatureValue(), di.getHashCode(), responses);
+                }
             } else {
+                //este caso no debería ocurrir solo se manda a sincronizar casos que ya están firmados...
                 loader.markSigned(document.getId(), "ERROR", di.getSignatureValue(), di.getHashCode(), responses);
             }
         } catch (Exception ex) {
+            //marcar para sincronizar en larga viada
             loader.markAsError(document.getId(), ex);
         }
 

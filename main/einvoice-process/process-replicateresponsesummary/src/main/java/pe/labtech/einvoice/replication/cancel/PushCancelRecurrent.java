@@ -17,6 +17,7 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.persistence.Query;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.commons.recurrent.RecurrentTask;
@@ -24,7 +25,9 @@ import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
-import pe.labtech.einvoice.replicator.model.SummaryDatabaseManager;
+import pe.labtech.einvoice.replicator.model.Database;
+import pe.labtech.einvoice.replicator.model.DatabaseManager;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
  *
@@ -40,10 +43,10 @@ public class PushCancelRecurrent extends AbstractRecurrentTask<Document> {
     private static final String DOCUMENT_RESPONSE_QEURY = "SELECT o FROM DocumentResponse o WHERE o.replicate = TRUE AND o.document = :document";
 
     @EJB
-    SummaryDatabaseManager manager;
+    private SummaryDatabaseManagerLocal sum;
 
     @EJB
-    PrivateDatabaseManagerLocal privateManager;
+    private PrivateDatabaseManagerLocal prv;
 
     /**
      * Bloquear una respuesta de documento para ser replicada
@@ -66,13 +69,13 @@ public class PushCancelRecurrent extends AbstractRecurrentTask<Document> {
     public void init() {
         super.init();
 
-        this.findTasks = () -> privateManager.seek(e -> e.createQuery(DOCUMENT_QUERY, Document.class).getResultList());
+        this.findTasks = () -> prv.seek(e -> e.createQuery(DOCUMENT_QUERY, Document.class).getResultList());
 
         this.tryLock = t -> true;
 
         this.getId = t -> RecurrentTask.buildTaskId(t.getClientId(), t.getDocumentType(), t.getDocumentNumber(), "replicate response");
 
-        this.consumer = t -> manager.handle(e -> {
+        this.consumer = t -> sum.handle(e -> {
             Map<String, String> responses = this.findTasksSingle.apply(t).stream()
                     .filter(r -> this.tryLockSingle.apply(r))
                     .filter(r -> mapName(r) != null)
@@ -99,9 +102,9 @@ public class PushCancelRecurrent extends AbstractRecurrentTask<Document> {
                     .executeUpdate();
         });
 
-        this.findTasksSingle = t -> privateManager.seek(e -> e.createQuery(DOCUMENT_RESPONSE_QEURY, DocumentResponse.class).setParameter("document", t).getResultList());
+        this.findTasksSingle = t -> prv.seek(e -> e.createQuery(DOCUMENT_RESPONSE_QEURY, DocumentResponse.class).setParameter("document", t).getResultList());
 
-        this.tryLockSingle = t -> privateManager.seek(e -> e
+        this.tryLockSingle = t -> prv.seek(e -> e
                 .createNamedQuery("DocumentResponse.tryLock")
                 .setParameter("document", t.getDocument())
                 .setParameter("name", t.getName())

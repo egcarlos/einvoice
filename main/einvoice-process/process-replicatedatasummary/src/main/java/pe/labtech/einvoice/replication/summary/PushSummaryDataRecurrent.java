@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.replication.invoice;
+package pe.labtech.einvoice.replication.summary;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
@@ -18,9 +18,11 @@ import static pe.labtech.einvoice.commons.recurrent.RecurrentTask.buildTaskId;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
-import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.commons.InvoiceType;
+import pe.labtech.einvoice.replicator.commons.Tools;
 import static pe.labtech.einvoice.replicator.commons.Tools.*;
-import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
+import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
  *
@@ -29,13 +31,13 @@ import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-public class PushDocumentRecurrent extends AbstractRecurrentTask<DocumentData> {
+public class PushSummaryDataRecurrent extends AbstractRecurrentTask<DocumentData> {
 
     @EJB
-    PublicDatabaseManagerLocal pub;
+    SummaryDatabaseManagerLocal manager;
 
     @EJB
-    PrivateDatabaseManagerLocal prv;
+    PrivateDatabaseManagerLocal privateManager;
 
     @Override
     @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
@@ -48,16 +50,16 @@ public class PushDocumentRecurrent extends AbstractRecurrentTask<DocumentData> {
     public void init() {
         super.init();
 
-        this.findTasks = () -> prv.seek(e -> e
+        this.findTasks = () -> privateManager.seek(e -> e
                 .createQuery(
-                        "SELECT o FROM DocumentData o WHERE (o.document.documentNumber LIKE 'F%' OR o.document.documentNumber LIKE 'B%') AND o.replicate = TRUE AND o.data <> NULL",
+                        "SELECT o FROM DocumentData o WHERE o.document.documentNumber LIKE 'RC%' AND o.replicate = TRUE AND o.data <> NULL",
                         DocumentData.class
                 )
                 .getResultList()
         );
 
-        this.tryLock = t -> prv.seek(e -> e
-                .createQuery("UPDATE DocumentData o SET o.replicate = FALSE WHERE o.replicate = TRUE AND o.document = :document AND o.name = :name")
+        this.tryLock = t -> privateManager.seek(e -> e
+                .createNamedQuery("DocumentData.tryLock")
                 .setParameter("document", t.getDocument())
                 .setParameter("name", t.getName())
                 .executeUpdate() == 1
@@ -70,7 +72,7 @@ public class PushDocumentRecurrent extends AbstractRecurrentTask<DocumentData> {
                 "replicate",
                 t.getName());
 
-        this.consumer = t -> pub.handle(e -> {
+        this.consumer = t -> manager.handle(e -> {
             String targetField = mapResponseName(t.getName());
             if (targetField == null) {
                 return;
@@ -78,15 +80,14 @@ public class PushDocumentRecurrent extends AbstractRecurrentTask<DocumentData> {
 
             final Document d = t.getDocument();
 
-            DocumentHeaderPK id = new DocumentHeaderPK(
+            SummaryHeaderPK id = new SummaryHeaderPK(
                     d.getDocumentNumber().split("-")[0],
                     d.getDocumentNumber().split("-")[1],
-                    d.getDocumentType(),
                     d.getDocumentNumber()
             );
 
             e
-                    .createQuery("UPDATE DocumentHeader d SET d." + targetField + " = :param WHERE d.id = :id")
+                    .createQuery("UPDATE SummaryHeader d SET d." + targetField + " = :param WHERE d.id = :id")
                     .setParameter("param", t.getData())
                     .setParameter("id", id)
                     .executeUpdate();

@@ -65,6 +65,8 @@
         <!--<module>process-declare</module>-->
         <!--<module>process-sync</module>-->
         <!--<module>process-copy</module>-->
+        <module>process-sync</module>
+        <module>process-declare</module>
     </modules>
     
     <properties>
