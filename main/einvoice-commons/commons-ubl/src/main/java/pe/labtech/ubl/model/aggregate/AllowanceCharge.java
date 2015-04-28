@@ -5,6 +5,8 @@
  */
 package pe.labtech.ubl.model.aggregate;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import pe.labtech.ubl.model.Namespaces;
 import pe.labtech.ubl.model.basic.Amount;
@@ -13,6 +15,7 @@ import pe.labtech.ubl.model.basic.Amount;
  *
  * @author Carlos
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AllowanceCharge {
 
     @XmlElement(namespace = Namespaces.CBC)

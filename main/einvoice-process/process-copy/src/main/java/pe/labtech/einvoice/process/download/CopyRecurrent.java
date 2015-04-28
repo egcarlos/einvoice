@@ -118,7 +118,9 @@ public class CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
     private String buildFileName(DocumentData data) {
         String fileName = data.getName();
         //fix the suffix issue
-        if (fileName.toUpperCase().contains("PDF")) {
+        if (fileName.toUpperCase().endsWith(".ZIP")) {
+            return fileName;
+        } else if (fileName.toUpperCase().contains("PDF")) {
             fileName += ".pdf";
         } else if (fileName.toUpperCase().contains("XML")) {
             fileName += ".xml";

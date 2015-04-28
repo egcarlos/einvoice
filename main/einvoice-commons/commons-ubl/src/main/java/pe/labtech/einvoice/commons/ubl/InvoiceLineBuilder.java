@@ -17,6 +17,7 @@ import pe.labtech.ubl.model.aggregate.TaxSubtotal;
 import pe.labtech.ubl.model.aggregate.TaxTotal;
 import pe.labtech.ubl.model.basic.Amount;
 import pe.labtech.ubl.model.basic.Quantity;
+import pe.labtech.ubl.model.sunat.AdditionalProperty;
 
 /**
  *
@@ -60,9 +61,10 @@ public class InvoiceLineBuilder implements Builder<InvoiceLine> {
         il.setInvoicedQuantity(new Quantity(unit, quantity));
         //codigo y descrpcion del articulo
         il.setItem(new Item(code));
+        il.getItem().getAdditionalItemProperty().add(new AdditionalProperty(null, "9005", unit));
         il.getItem().getDescription().add(description);
         //precio unitario sin impuestos
-        il.setPriceAmount(new Price(currencyID, unitPrice));
+        il.setPrice(new Price(currencyID, unitPrice));
         //precio unitario alternativo
         il.setPricingReference(new PricingReference(alternateUnitPriceCode, currencyID, alternateUnitPrice));
         //total de la línea

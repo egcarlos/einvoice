@@ -6,14 +6,20 @@
 package pe.labtech.ubl.model.aggregate;
 
 import java.math.BigDecimal;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import pe.labtech.ubl.model.Namespaces;
 import pe.labtech.ubl.model.basic.Amount;
 
 /**
  *
  * @author carloseg
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Price {
 
+    @XmlElement(namespace = Namespaces.CBC)
     private Amount PriceAmount;
 
     public Price() {

@@ -55,8 +55,8 @@ public class Invoice {
     private String DocumentCurrencyCode;
 
     //holder para la firma
-    @XmlElement(namespace = Namespaces.CBC)
-    private Signature signature;
+    @XmlElement(namespace = Namespaces.CAC)
+    private Signature Signature;
 
     //guías de remisión
     @XmlElement(namespace = Namespaces.CAC)
@@ -145,11 +145,11 @@ public class Invoice {
     }
 
     public Signature getSignature() {
-        return signature;
+        return Signature;
     }
 
     public void setSignature(Signature signature) {
-        this.signature = signature;
+        this.Signature = signature;
     }
 
     public List<DocumentReference> getDespatchDocumentReference() {

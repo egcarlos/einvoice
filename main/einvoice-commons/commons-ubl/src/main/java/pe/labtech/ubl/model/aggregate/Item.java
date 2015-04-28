@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import org.eclipse.persistence.oxm.annotations.XmlCDATA;
 import pe.labtech.ubl.model.Namespaces;
+import pe.labtech.ubl.model.sunat.AdditionalProperty;
 
 /**
  *
@@ -24,8 +25,11 @@ public class Item {
     @XmlCDATA
     private List<String> Description;
 
-    @XmlElement(namespace = Namespaces.CBC)
+    @XmlElement(namespace = Namespaces.CAC)
     private Identification SellersItemIdentification;
+
+    @XmlElement(namespace = Namespaces.CAC)
+    private List<AdditionalProperty> AdditionalItemProperty;
 
     public Item() {
     }
@@ -51,6 +55,17 @@ public class Item {
 
     public void setSellersItemIdentification(Identification SellersItemIdentification) {
         this.SellersItemIdentification = SellersItemIdentification;
+    }
+
+    public List<AdditionalProperty> getAdditionalItemProperty() {
+        if (AdditionalItemProperty == null) {
+            AdditionalItemProperty = new LinkedList<>();
+        }
+        return AdditionalItemProperty;
+    }
+
+    public void setAdditionalItemProperty(List<AdditionalProperty> AdditionalItemProperty) {
+        this.AdditionalItemProperty = AdditionalItemProperty;
     }
 
 }

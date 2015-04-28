@@ -21,6 +21,7 @@ public class AdditionalProperty {
     @XmlElement(namespace = Namespaces.CBC)
     private String ID;
     @XmlElement(namespace = Namespaces.CBC)
+    @XmlCDATA
     private String Name;
     @XmlElement(namespace = Namespaces.CBC)
     @XmlCDATA

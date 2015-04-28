@@ -62,7 +62,12 @@ public class OfflineInvoice {
         signDocument(document.getClientId(), xml);
 
         //represent as text
-        String signedDocument = ds.createTextRepresentation(xml);
+        //FIXES A BUG IN PLATFORM WHERE DOCUMENTS ARE REJECTED IF NOT
+        //ALL NAMESPACES ARE DECLARED WITH THE SAME PREFIXES
+        String signedDocument = ds.createTextRepresentation(xml).replace(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\" xmlns:sac=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1\">",
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\" xmlns:ns10=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SummaryDocuments-1\" xmlns:ns11=\"urn:sunat:names:specification:ubl:peru:schema:xsd:VoidedDocuments-1\" xmlns:ns6=\"urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2\" xmlns:ns7=\"urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2\" xmlns:qdt=\"urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2\" xmlns:sac=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1\">"
+        );
 
         //log to disc
         Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, "SIGNED DOCUMENT\n{0}", signedDocument);

@@ -17,9 +17,6 @@ import pe.labtech.ubl.model.Namespaces;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Party {
 
-    /**
-     *
-     */
     @XmlElement(namespace = Namespaces.CAC)
     private PartyIdentification PartyIdentification;
 
