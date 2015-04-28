@@ -79,8 +79,8 @@ public class PushDocumentDataRecurrent extends AbstractRecurrentTask<DocumentDat
             final Document d = t.getDocument();
 
             DocumentHeaderPK id = new DocumentHeaderPK(
-                    d.getDocumentNumber().split("-")[0],
-                    d.getDocumentNumber().split("-")[1],
+                    d.getClientId().split("-")[0],
+                    d.getClientId().split("-")[1],
                     d.getDocumentType(),
                     d.getDocumentNumber()
             );

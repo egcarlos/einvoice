@@ -18,8 +18,6 @@ import static pe.labtech.einvoice.commons.recurrent.RecurrentTask.buildTaskId;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
-import pe.labtech.einvoice.replicator.commons.InvoiceType;
-import pe.labtech.einvoice.replicator.commons.Tools;
 import static pe.labtech.einvoice.replicator.commons.Tools.*;
 import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
 import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
@@ -81,8 +79,8 @@ public class PushCancelDataRecurrent extends AbstractRecurrentTask<DocumentData>
             final Document d = t.getDocument();
 
             CancelHeaderPK id = new CancelHeaderPK(
-                    d.getDocumentNumber().split("-")[0],
-                    d.getDocumentNumber().split("-")[1],
+                    d.getClientId().split("-")[0],
+                    d.getClientId().split("-")[1],
                     d.getDocumentNumber()
             );
 

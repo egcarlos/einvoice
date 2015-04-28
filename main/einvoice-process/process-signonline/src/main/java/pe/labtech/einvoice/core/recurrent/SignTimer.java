@@ -15,9 +15,6 @@ import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
-import pe.labtech.einvoice.commons.recurrent.RecurrentTask;
-import pe.labtech.einvoice.core.entity.Document;
-import pe.labtech.einvoice.core.model.InvoiceSeekerLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.SignTaskLocal;
 
