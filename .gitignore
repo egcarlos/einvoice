@@ -91,3 +91,6 @@ $RECYCLE.BIN/
 /main/einvoice-model/model-commons/target/
 /main/einvoice-process/process-replicateresponsesummary/target/
 /main/einvoice-process/process-replicatedatasummary/target/
+/customizations/hv/process-replicate/target/
+/customizations/hv/process-replicateresponse/target/
+/customizations/hv/default/target/

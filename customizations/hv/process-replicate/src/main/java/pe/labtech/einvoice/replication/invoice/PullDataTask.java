@@ -7,68 +7,73 @@ package pe.labtech.einvoice.replication.invoice;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.ejb.Asynchronous;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentAttribute;
 import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
 import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
-import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
-import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
-import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
  *
  * @author Carlos
  */
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
-public class PullInvoiceTask implements PullInvoiceTaskLocal {
+public class PullDataTask implements PullDataTaskLocal {
 
+    private static final String HEADER_QUERY = "SELECT o FROM DocumentHeader o WHERE o.cestado = 'A'";
     private static final String DETAIL_QUERY = "SELECT o "
-            + "FROM Detail o "
+            + "FROM DocumentDetail o "
             + "WHERE "
-            + " o.id.codigoCompania = :codigoCompania "
-            + " and o.id.codigoLocalidad = :codigoLocalidad "
-            + " and o.id.codigoTiposRecaudacion = :codigoTiposRecaudacion "
-            + " and o.id.numeroRecaudacion = :numeroRecaudacion "
+            + " o.detailPK.codigoCompania = :codigoCompania "
+            + " and o.detailPK.codigoLocalidad = :codigoLocalidad "
+            + " and o.detailPK.codigoTiposRecaudacion = :codigoTiposRecaudacion "
+            + " and o.detailPK.numeroRecaudacion = :numeroRecaudacion "
             + "ORDER BY"
             + " o.detailPK.did";
 
-    @EJB
-    private PublicDatabaseManagerLocal pub;
-    @EJB
-    private PrivateDatabaseManagerLocal priv;
+    @PersistenceContext(unitName = "hv_PU")
+    EntityManager em;
 
-    @Asynchronous
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     @Override
-    public void handle(DocumentHeaderPK id) {
-        DocumentHeader header = pub.seek(e -> e.find(DocumentHeader.class, id));
-        Document document = mapHeader(header);
-        pub.seek(e
-                -> e
-                .createQuery(DETAIL_QUERY, DocumentDetail.class)
-                .setParameter("codigoCompania", id.getCodigoCompania())
-                .setParameter("codigoLocalidad", id.getCodigoLocalidad())
-                .setParameter("codigoTiposRecaudacion", id.getCodigoTiposRecaudacion())
-                .setParameter("numeroRecaudacion", id.getNumeroRecaudacion())
-                .getResultList()
-        )
-                .forEach(i -> mapDetail(i, document));
-        priv.handle(e -> e.persist(document));
+    public void handle() {
+        Logger.getLogger(this.getClass().getSimpleName()).fine("Dispatching for data pulling");
+
+        Consumer<DocumentHeader> forHeaders = (h) -> {
+            h.setCestado('L');
+            Document document = mapHeader(h);
+            List<Item> items = mapItems(h, document);
+            document.setItems(items);
+            em.persist(document);
+        };
+
+        //REDUCING LOG
+        List<DocumentHeader> hs = em.createQuery(HEADER_QUERY, DocumentHeader.class).getResultList();
+        if (hs.isEmpty()) {
+            return;
+        }
+
+        Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "pulling items: {0}", hs.size());
+        hs.forEach(forHeaders);
     }
 
     private Document mapHeader(DocumentHeader h) {
         Document d = new Document();
-        d.setClientId("6-" + h.getCdocumentoemisor());
+        d.setClientId(h.getCtipdocumentoemisor() + "-" + h.getCdocumentoemisor());
         d.setDocumentType(h.getCtipcomprobante());
         d.setDocumentNumber(h.getCcomprobante());
         //creacion de los atributos
@@ -79,7 +84,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 new DocumentAttribute("nombreComercialEmisor", h.getCncomercialemisor()),
                 new DocumentAttribute("tipoDocumento", h.getCtipcomprobante()),
                 new DocumentAttribute("serieNumero", h.getCcomprobante()),
-                new DocumentAttribute("fechaEmision", convertFecha(h)),
+                new DocumentAttribute("fechaEmision", adjustDate(h)),
                 new DocumentAttribute("ubigeoEmisor", h.getCubigeoemisor()),
                 new DocumentAttribute("direccionEmisor", h.getCdireccionemisor()),
                 new DocumentAttribute("urbanizacion", h.getCurbanizacionemisor()),
@@ -124,17 +129,40 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 new DocumentAttribute("descripcionDetraccion", h.getCdescdetraccion()),
                 new DocumentAttribute("valorReferencialDetraccion", h.getCvalordetraccion()),
                 new DocumentAttribute("totalBonificacion", h.getCbonificacion()),
-                new DocumentAttribute("inHabilitado", h.getChabilitado())
+                new DocumentAttribute("inHabilitado", h.getChabilitado()),
+                new DocumentAttribute("totalDocumentoAnticipo", h.getCaux7())
         )
                 .stream()
                 .filter(a -> a.getValue() != null && !"".equals(a.getValue()))
-                .map(a -> {
-                    a.setDocument(d);
-                    return a;
-                })
                 .collect(Collectors.toList());
+        //agregamos referencias adicionales
 
         d.setAttributes(da);
+        d.getAttributes().forEach(child -> child.setDocument(d));
+
+        BiConsumer<Integer, Function<DocumentHeader, String>> anticipos = (i, r) -> {
+            if (!"01".equals(h.getCtipcomprobante()) && !"03".equals(h.getCtipcomprobante())) {
+                return;
+            }
+            String numberValue = r.apply(h);
+            if (numberValue == null || (numberValue = numberValue.trim()).isEmpty()) {
+                return;
+            }
+
+            String typeName = "tipoReferenciaAdicional_" + i;
+            String typeValue = "01".equals(h.getCtipcomprobante()) ? "02" : "03";
+            String numberName = "numeroDocumentoReferenciaAdicional_" + i;
+
+            d.getAttributes().add(new DocumentAttribute(d, typeName, typeValue));
+            d.getAttributes().add(new DocumentAttribute(d, numberName, numberValue));
+
+        };
+
+        anticipos.accept(1, DocumentHeader::getCaux2);
+        anticipos.accept(2, DocumentHeader::getCaux3);
+        anticipos.accept(3, DocumentHeader::getCaux4);
+        anticipos.accept(4, DocumentHeader::getCaux5);
+        anticipos.accept(5, DocumentHeader::getCaux6);
 
         //agregando los campos de leyenda
         d.setLegends(
@@ -152,30 +180,41 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 )
                 .stream()
                 .filter(a -> a.getValue() != null && !"".equals(a.getValue()))
-                .map(a -> {
-                    a.setDocument(d);
-                    return a;
-                })
                 .collect(Collectors.toList())
         );
+
+        d.getLegends().forEach(child -> child.setDocument(d));
 
         d.setAuxiliars(
                 Arrays.asList(
                         new DocumentAuxiliar("9024", "40", 1l, h.getCaux1()),
                         //TODO consultar con bizlinks la creación del código
                         //new DocumentAuxiliar("    ", "100", 1l, h.getCaux21()),
-                        new DocumentAuxiliar("9999", "250", 1l, h.getCaux36())
+                        new DocumentAuxiliar(
+                                "9999",
+                                "250",
+                                1l,
+                                Arrays.asList(h.getCaux19(), h.getCaux20(), h.getCaux36()).stream()
+                                .filter(t -> t != null)
+                                .map(t -> t.trim())
+                                .filter(t -> !t.isEmpty())
+                                .reduce(null, (a, b) -> a == null ? b : a + "\n" + b)
+                        )
                 )
                 .stream()
                 .filter(a -> a.getValue() != null && !"".equals(a.getValue()))
                 .collect(Collectors.toList())
         );
         d.getAuxiliars().forEach(child -> child.setDocument(d));
+
+        List<Item> items = mapItems(h, d);
+        items.forEach(child -> child.setDocument(d));
+        d.setItems(items);
         return d;
     }
 
     //Personalización para HV. Cambio de formato de dd/mm/yyyy a yyyy-mm-dd
-    private static String convertFecha(DocumentHeader h) {
+    private static String adjustDate(DocumentHeader h) {
         String fecha = h.getCfemision();
         fecha = fecha.substring(6, 10) + "-" + fecha.substring(3, 5) + "-" + fecha.substring(0, 2);
         return fecha;
@@ -195,15 +234,29 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
     }
 
-    private Item mapDetail(DocumentDetail detail, Document document) {
+    private List<Item> mapItems(DocumentHeader h, Document document) {
+        //como capturar el detalle
+        List<Item> items = em
+                .createQuery(DETAIL_QUERY, DocumentDetail.class)
+                .setParameter("codigoCompania", h.getHeaderPK().getCodigoCompania())
+                .setParameter("codigoLocalidad", h.getHeaderPK().getCodigoLocalidad())
+                .setParameter("codigoTiposRecaudacion", h.getHeaderPK().getCodigoTiposRecaudacion())
+                .setParameter("numeroRecaudacion", h.getHeaderPK().getNumeroRecaudacion())
+                .getResultList()
+                .stream()
+                .map(d -> mapDetailToItem(d, document))
+                .collect(Collectors.toList());
+        return items;
+    }
+
+    private Item mapDetailToItem(DocumentDetail detail, Document document) {
         Item item = new Item();
-        document.getItems().add(item);
         item.setDocument(document);
-        item.setId(Long.parseLong(detail.getId().getDid().trim(), 10));
+        item.setId(Long.parseLong(detail.getDetailPK().getDid().trim(), 10));
 
         List<ItemAttribute> attr = Arrays.asList(
-                new ItemAttribute("numeroOrdenItem", detail.getId().getDid()),
-                new ItemAttribute("codigoProducto", detail.getId().getDcodproducto()),
+                new ItemAttribute("numeroOrdenItem", detail.getDetailPK().getDid()),
+                new ItemAttribute("codigoProducto", detail.getDetailPK().getDcodproducto()),
                 new ItemAttribute("descripcion", detail.getDdesproducto()),
                 new ItemAttribute("cantidad", detail.getDcanproducto()),
                 new ItemAttribute("unidadMedida", detail.getDuniproducto()),
@@ -222,10 +275,6 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         )
                 .stream()
                 .filter(a -> a.getValue() != null)
-                .map(a -> {
-                    a.setItem(item);
-                    return a;
-                })
                 .collect(Collectors.toList());
 
         attr.forEach(child -> child.setItem(item));

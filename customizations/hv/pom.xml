@@ -9,10 +9,10 @@
     <name>hv</name>
     
     <modules>
-        <module>process-replicate</module>
-        <module>einvoice-default</module>
         <module>model-public</module>
-        <module>einvoice-process-replicateresponse</module>
+        <module>process-replicate</module>
+        <module>process-replicateresponse</module>
+        <module>default</module>
     </modules>
     
     <properties>

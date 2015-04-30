@@ -5,10 +5,11 @@
     <parent>
         <groupId>pe.labtech.einvoice.model</groupId>
         <artifactId>einvoice-model-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>hv-model-public</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
     <properties>
@@ -19,6 +20,11 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>einvoice-model-commons</artifactId>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

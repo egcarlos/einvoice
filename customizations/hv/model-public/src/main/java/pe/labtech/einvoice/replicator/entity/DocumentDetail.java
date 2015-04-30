@@ -27,7 +27,7 @@ public class DocumentDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected DocumentDetailPK id;
+    protected DocumentDetailPK detailPK;
     @Size(max = 1700)
     @Column(name = "DDESPRODUCTO")
     private String ddesproducto;
@@ -111,16 +111,16 @@ public class DocumentDetail implements Serializable {
     public DocumentDetail() {
     }
 
-    public DocumentDetail(DocumentDetailPK id) {
-        this.id = id;
+    public DocumentDetail(DocumentDetailPK detailPK) {
+        this.detailPK = detailPK;
     }
 
-    public DocumentDetailPK getId() {
-        return id;
+    public DocumentDetailPK getDetailPK() {
+        return detailPK;
     }
 
-    public void setId(DocumentDetailPK id) {
-        this.id = id;
+    public void setDetailPK(DocumentDetailPK detailPK) {
+        this.detailPK = detailPK;
     }
 
     public String getDdesproducto() {
@@ -358,7 +358,7 @@ public class DocumentDetail implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (detailPK != null ? detailPK.hashCode() : 0);
         return hash;
     }
 
@@ -369,7 +369,7 @@ public class DocumentDetail implements Serializable {
             return false;
         }
         DocumentDetail other = (DocumentDetail) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.detailPK == null && other.detailPK != null) || (this.detailPK != null && !this.detailPK.equals(other.detailPK))) {
             return false;
         }
         return true;
@@ -377,7 +377,7 @@ public class DocumentDetail implements Serializable {
 
     @Override
     public String toString() {
-        return "pe.labtech.einvoice.core.replicator.entity.Detail[ detailPK=" + id + " ]";
+        return "pe.labtech.einvoice.core.replicator.entity.Detail[ detailPK=" + detailPK + " ]";
     }
 
 }

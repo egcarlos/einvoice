@@ -27,77 +27,78 @@ public class DocumentHeader implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected DocumentHeaderPK id;
-    @Column(name = "CTIPDOCUMENTOEMISOR", length = 1)
+    protected DocumentHeaderPK headerPK;
+    @Column(name = "CTIPDOCUMENTOEMISOR")
     private Character ctipdocumentoemisor;
     @Size(max = 11)
-    @Column(name = "CDOCUMENTOEMISOR", length = 20)
+    @Column(name = "CDOCUMENTOEMISOR")
     private String cdocumentoemisor;
-    @Size(max = 200)
-    @Column(name = "CRSOCIALEMISOR", length = 200)
+    @Size(max = 100)
+    @Column(name = "CRSOCIALEMISOR")
     private String crsocialemisor;
-    @Size(max = 200)
-    @Column(name = "CNCOMERCIALEMISOR", length = 200)
+    @Size(max = 100)
+    @Column(name = "CNCOMERCIALEMISOR")
     private String cncomercialemisor;
     @Size(max = 2)
-    @Column(name = "CTIPCOMPROBANTE", length = 2)
+    @Column(name = "CTIPCOMPROBANTE")
     private String ctipcomprobante;
     @Size(max = 13)
-    @Column(name = "CCOMPROBANTE", length = 20)
+    @Column(name = "CCOMPROBANTE")
     private String ccomprobante;
     @Size(max = 10)
-    @Column(name = "CFEMISION", length = 10)
+    @Column(name = "CFEMISION")
     private String cfemision;
     @Size(max = 6)
-    @Column(name = "CUBIGEOEMISOR", length = 10)
+    @Column(name = "CUBIGEOEMISOR")
     private String cubigeoemisor;
-    @Size(max = 200)
-    @Column(name = "CDIRECCIONEMISOR", length = 200)
+    @Size(max = 100)
+    @Column(name = "CDIRECCIONEMISOR")
     private String cdireccionemisor;
-    @Size(max = 50)
-    @Column(name = "CURBANIZACIONEMISOR", length = 50)
+    @Size(max = 25)
+    @Column(name = "CURBANIZACIONEMISOR")
     private String curbanizacionemisor;
-    @Size(max = 50)
-    @Column(name = "CDISTRITOEMISOR", length = 50)
+    @Size(max = 30)
+    @Column(name = "CDISTRITOEMISOR")
     private String cdistritoemisor;
-    @Size(max = 50)
-    @Column(name = "CPROVINCIAEMISOR", length = 50)
+    @Size(max = 30)
+    @Column(name = "CPROVINCIAEMISOR")
     private String cprovinciaemisor;
-    @Size(max = 50)
-    @Column(name = "CDEPARTAMENTOEMISOR", length = 50)
+    @Size(max = 30)
+    @Column(name = "CDEPARTAMENTOEMISOR")
     private String cdepartamentoemisor;
-    @Size(max = 10)
-    @Column(name = "CCODPAISEMISOR", length = 50)
+    @Size(max = 2)
+    @Column(name = "CCODPAISEMISOR")
     private String ccodpaisemisor;
     @Size(max = 100)
-    @Column(name = "CCORREOEMISOR", length = 100)
+    @Column(name = "CCORREOEMISOR")
     private String ccorreoemisor;
     @Size(max = 2)
-    @Column(name = "CTIPNCREDITODEBITO", length = 2)
+    @Column(name = "CTIPNCREDITODEBITO")
     private String ctipncreditodebito;
     @Size(max = 13)
-    @Column(name = "CCOMPROBANTEAFECTO", length = 20)
+    @Column(name = "CCOMPROBANTEAFECTO")
     private String ccomprobanteafecto;
-    @Column(name = "CTIPDOCUMENTOUSUARIO", length = 1)
+    @Column(name = "CTIPDOCUMENTOUSUARIO")
     private Character ctipdocumentousuario;
-    @Size(max = 20)
-    @Column(name = "CDOCUMENTOUSUARIO", length = 20)
+    @Size(max = 15)
+    @Column(name = "CDOCUMENTOUSUARIO")
     private String cdocumentousuario;
     @Size(max = 100)
-    @Column(name = "CRSOCIALUSUARIO", length = 100)
+    @Column(name = "CRSOCIALUSUARIO")
     private String crsocialusuario;
     @Size(max = 100)
-    @Column(name = "CDIRECCIONUSUARIO", length = 100)
+    @Column(name = "CDIRECCIONUSUARIO")
     private String cdireccionusuario;
     @Size(max = 100)
-    @Column(name = "CCORREOUSUARIO", length = 100)
+    @Column(name = "CCORREOUSUARIO")
     private String ccorreousuario;
     @Size(max = 3)
-    @Column(name = "CMONEDA", length = 3)
+    @Column(name = "CMONEDA")
     private String cmoneda;
     @Size(max = 500)
-    @Column(name = "CMOTNCREDITODEBITO", length = 500)
+    @Column(name = "CMOTNCREDITODEBITO")
     private String cmotncreditodebito;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "CVVENTAGRAVADA")
     private BigDecimal cvventagravada;
     @Column(name = "CVVENTANOGRAVADA")
@@ -123,19 +124,19 @@ public class DocumentHeader implements Serializable {
     @Column(name = "CTOTAL")
     private BigDecimal ctotal;
     @Size(max = 3)
-    @Column(name = "CMONEDANCREDITODEBITO", length = 3)
+    @Column(name = "CMONEDANCREDITODEBITO")
     private String cmonedancreditodebito;
     @Size(max = 2)
-    @Column(name = "CTIPNCREDITODEBITO1", length = 2)
+    @Column(name = "CTIPNCREDITODEBITO1")
     private String ctipncreditodebito1;
     @Size(max = 13)
-    @Column(name = "CCOMPROBANTEAFECTO1", length = 20)
+    @Column(name = "CCOMPROBANTEAFECTO1")
     private String ccomprobanteafecto1;
     @Size(max = 2)
-    @Column(name = "CTIPNCREDITODEBITO2", length = 2)
+    @Column(name = "CTIPNCREDITODEBITO2")
     private String ctipncreditodebito2;
     @Size(max = 13)
-    @Column(name = "CCOMPROBANTEAFECTO2", length = 20)
+    @Column(name = "CCOMPROBANTEAFECTO2")
     private String ccomprobanteafecto2;
     @Column(name = "CBASEPERCEPCION")
     private BigDecimal cbasepercepcion;
@@ -154,7 +155,7 @@ public class DocumentHeader implements Serializable {
     @Column(name = "CPORCDETRACCION")
     private BigDecimal cporcdetraccion;
     @Size(max = 100)
-    @Column(name = "CDESCDETRACCION", length = 100)
+    @Column(name = "CDESCDETRACCION")
     private String cdescdetraccion;
     @Column(name = "CVALORDETRACCION")
     private BigDecimal cvalordetraccion;
@@ -162,192 +163,174 @@ public class DocumentHeader implements Serializable {
     private BigDecimal cbonificacion;
     @Column(name = "CHABILITADO")
     private Character chabilitado;
-
-    //Campos para referencia de anticipos
-    @Size(max = 20)
-    @Column(name = "CDOCANTICIPO1", length = 20)
-    private String documentoAnticipo1;
-    @Size(max = 20)
-    @Column(name = "CDOCANTICIPO2", length = 20)
-    private String documentoAnticipo2;
-    @Size(max = 20)
-    @Column(name = "CDOCANTICIPO3", length = 20)
-    private String documentoAnticipo3;
-    @Size(max = 20)
-    @Column(name = "CDOCANTICIPO4", length = 20)
-    private String documentoAnticipo4;
-    @Size(max = 20)
-    @Column(name = "CDOCANTICIPO5", length = 20)
-    private String documentoAnticipo5;
-
-    @Size(max = 200)
-    @Column(name = "CLEY1", length = 200)
+    @Size(max = 500)
+    @Column(name = "CLEY1")
     private String cley1;
-    @Size(max = 200)
-    @Column(name = "CLEY2", length = 200)
+    @Size(max = 500)
+    @Column(name = "CLEY2")
     private String cley2;
-    @Size(max = 200)
-    @Column(name = "CLEY3", length = 200)
+    @Size(max = 500)
+    @Column(name = "CLEY3")
     private String cley3;
-    @Size(max = 200)
-    @Column(name = "CLEY4", length = 200)
+    @Size(max = 500)
+    @Column(name = "CLEY4")
     private String cley4;
-    @Size(max = 40)
-    @Column(name = "CAUX1", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX1")
     private String caux1;
-    @Size(max = 40)
-    @Column(name = "CAUX2", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX2")
     private String caux2;
-    @Size(max = 40)
-    @Column(name = "CAUX3", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX3")
     private String caux3;
-    @Size(max = 40)
-    @Column(name = "CAUX4", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX4")
     private String caux4;
-    @Size(max = 40)
-    @Column(name = "CAUX5", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX5")
     private String caux5;
-    @Size(max = 40)
-    @Column(name = "CAUX6", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX6")
     private String caux6;
-    @Size(max = 40)
-    @Column(name = "CAUX7", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX7")
     private String caux7;
-    @Size(max = 40)
-    @Column(name = "CAUX8", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX8")
     private String caux8;
-    @Size(max = 40)
-    @Column(name = "CAUX9", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX9")
     private String caux9;
-    @Size(max = 40)
-    @Column(name = "CAUX10", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX10")
     private String caux10;
-    @Size(max = 40)
-    @Column(name = "CAUX11", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX11")
     private String caux11;
-    @Size(max = 40)
-    @Column(name = "CAUX12", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX12")
     private String caux12;
-    @Size(max = 40)
-    @Column(name = "CAUX13", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX13")
     private String caux13;
-    @Size(max = 40)
-    @Column(name = "CAUX14", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX14")
     private String caux14;
-    @Size(max = 40)
-    @Column(name = "CAUX15", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX15")
     private String caux15;
-    @Size(max = 40)
-    @Column(name = "CAUX16", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX16")
     private String caux16;
-    @Size(max = 40)
-    @Column(name = "CAUX17", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX17")
     private String caux17;
-    @Size(max = 40)
-    @Column(name = "CAUX18", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX18")
     private String caux18;
-    @Size(max = 40)
-    @Column(name = "CAUX19", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX19")
     private String caux19;
-    @Size(max = 40)
-    @Column(name = "CAUX20", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX20")
     private String caux20;
-    @Size(max = 100)
-    @Column(name = "CAUX21", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX21")
     private String caux21;
-    @Size(max = 100)
-    @Column(name = "CAUX22", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX22")
     private String caux22;
-    @Size(max = 100)
-    @Column(name = "CAUX23", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX23")
     private String caux23;
-    @Size(max = 100)
-    @Column(name = "CAUX24", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX24")
     private String caux24;
-    @Size(max = 100)
-    @Column(name = "CAUX25", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX25")
     private String caux25;
-    @Size(max = 100)
-    @Column(name = "CAUX26", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX26")
     private String caux26;
-    @Size(max = 100)
-    @Column(name = "CAUX27", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX27")
     private String caux27;
-    @Size(max = 100)
-    @Column(name = "CAUX28", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX28")
     private String caux28;
-    @Size(max = 100)
-    @Column(name = "CAUX29", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX29")
     private String caux29;
-    @Size(max = 100)
-    @Column(name = "CAUX30", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX30")
     private String caux30;
-    @Size(max = 100)
-    @Column(name = "CAUX31", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX31")
     private String caux31;
-    @Size(max = 100)
-    @Column(name = "CAUX32", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX32")
     private String caux32;
-    @Size(max = 100)
-    @Column(name = "CAUX33", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX33")
     private String caux33;
-    @Size(max = 100)
-    @Column(name = "CAUX34", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX34")
     private String caux34;
-    @Size(max = 100)
-    @Column(name = "CAUX35", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX35")
     private String caux35;
-    @Size(max = 250)
-    @Column(name = "CAUX36", length = 200)
+    @Size(max = 500)
+    @Column(name = "CAUX36")
     private String caux36;
     @Column(name = "CESTADO")
     private Character cestado;
-    @Size(max = 100)
-    @Column(name = "CNUMEROAUTORIZACION", length = 100)
+    @Size(max = 500)
+    @Column(name = "CNUMEROAUTORIZACION")
     private String cnumeroautorizacion;
-    @Size(max = 20)
-    @Column(name = "CFECHAAUTORIZACION", length = 20)
+    @Size(max = 10)
+    @Column(name = "CFECHAAUTORIZACION")
     private String cfechaautorizacion;
-    @Size(max = 20)
-    @Column(name = "CHORAAUTORIZACION", length = 20)
+    @Size(max = 8)
+    @Column(name = "CHORAAUTORIZACION")
     private String choraautorizacion;
     @Size(max = 1000)
-    @Column(name = "CRUTAXML", length = 1000)
+    @Column(name = "CRUTAXML")
     private String crutaxml;
     @Size(max = 1000)
-    @Column(name = "CRUTAPDF", length = 1000)
+    @Column(name = "CRUTAPDF")
     private String crutapdf;
     @Column(name = "LG_PROCESS_STATUS")
     private Character lgProcessStatus;
-    @Size(max = 40)
-    @Column(name = "LG_RECORD_STATUS", length = 40)
+    @Size(max = 20)
+    @Column(name = "LG_RECORD_STATUS")
     private String lgRecordStatus;
     @Size(max = 2000)
-    @Column(name = "LG_FIRMA", length = 2000)
+    @Column(name = "LG_FIRMA")
     private String lgFirma;
     @Size(max = 2000)
-    @Column(name = "LG_FIRMA_HASH", length = 2000)
+    @Column(name = "LG_FIRMA_HASH")
     private String lgFirmaHash;
     @Size(max = 2000)
-    @Column(name = "LG_LOAD_MESSAGES", length = 2000)
+    @Column(name = "LG_LOAD_MESSAGES")
     private String lgLoadMessages;
     @Size(max = 2000)
-    @Column(name = "LG_SERVICE_RESPONSE", length = 2000)
+    @Column(name = "LG_SERVICE_RESPONSE")
     private String lgServiceResponse;
 
     public DocumentHeader() {
     }
 
-    public DocumentHeader(DocumentHeaderPK id) {
-        this.id = id;
+    public DocumentHeader(DocumentHeaderPK headerPK) {
+        this.headerPK = headerPK;
     }
 
-    public DocumentHeaderPK getId() {
-        return id;
+    public DocumentHeaderPK getHeaderPK() {
+        return headerPK;
     }
 
-    public void setId(DocumentHeaderPK id) {
-        this.id = id;
+    public void setHeaderPK(DocumentHeaderPK headerPK) {
+        this.headerPK = headerPK;
     }
 
     public Character getCtipdocumentoemisor() {
@@ -1190,50 +1173,10 @@ public class DocumentHeader implements Serializable {
         this.lgServiceResponse = lgServiceResponse;
     }
 
-    public String getDocumentoAnticipo1() {
-        return documentoAnticipo1;
-    }
-
-    public void setDocumentoAnticipo1(String documentoAnticipo1) {
-        this.documentoAnticipo1 = documentoAnticipo1;
-    }
-
-    public String getDocumentoAnticipo2() {
-        return documentoAnticipo2;
-    }
-
-    public void setDocumentoAnticipo2(String documentoAnticipo2) {
-        this.documentoAnticipo2 = documentoAnticipo2;
-    }
-
-    public String getDocumentoAnticipo3() {
-        return documentoAnticipo3;
-    }
-
-    public void setDocumentoAnticipo3(String documentoAnticipo3) {
-        this.documentoAnticipo3 = documentoAnticipo3;
-    }
-
-    public String getDocumentoAnticipo4() {
-        return documentoAnticipo4;
-    }
-
-    public void setDocumentoAnticipo4(String documentoAnticipo4) {
-        this.documentoAnticipo4 = documentoAnticipo4;
-    }
-
-    public String getDocumentoAnticipo5() {
-        return documentoAnticipo5;
-    }
-
-    public void setDocumentoAnticipo5(String documentoAnticipo5) {
-        this.documentoAnticipo5 = documentoAnticipo5;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (headerPK != null ? headerPK.hashCode() : 0);
         return hash;
     }
 
@@ -1244,7 +1187,7 @@ public class DocumentHeader implements Serializable {
             return false;
         }
         DocumentHeader other = (DocumentHeader) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.headerPK == null && other.headerPK != null) || (this.headerPK != null && !this.headerPK.equals(other.headerPK))) {
             return false;
         }
         return true;
@@ -1252,7 +1195,7 @@ public class DocumentHeader implements Serializable {
 
     @Override
     public String toString() {
-        return "pe.labtech.einvoice.core.replicator.entity.Header[ headerPK=" + id + " ]";
+        return "pe.labtech.einvoice.core.replicator.entity.Header[ headerPK=" + headerPK + " ]";
     }
 
 }

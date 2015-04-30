@@ -6,14 +6,13 @@
 package pe.labtech.einvoice.replication.invoice;
 
 import javax.ejb.Local;
-import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 
 /**
  *
  * @author Carlos
  */
 @Local
-public interface PullInvoiceTaskLocal {
+public interface PullDataTaskLocal {
 
-    void handle(DocumentHeaderPK id);
+    void handle();
 }
