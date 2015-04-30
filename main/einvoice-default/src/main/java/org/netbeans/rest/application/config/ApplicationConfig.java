@@ -30,7 +30,9 @@ public class ApplicationConfig extends Application {
      * out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(pe.labtech.einvoice.api.restful.CancelResource.class);
         resources.add(pe.labtech.einvoice.api.restful.InvoiceResource.class);
+        resources.add(pe.labtech.einvoice.api.restful.SummaryResource.class);
     }
 
 }
