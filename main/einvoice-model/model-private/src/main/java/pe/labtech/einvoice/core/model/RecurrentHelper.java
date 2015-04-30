@@ -21,7 +21,7 @@ public class RecurrentHelper {
         return db.seek(e -> uo
                 .apply(
                         e.createQuery(
-                                "SELECT O FROM Document O WHERE O.step = :step AND O.status = :status",
+                                "SELECT O.id FROM Document O WHERE O.step = :step AND O.status = :status",
                                 Long.class
                         )
                 )

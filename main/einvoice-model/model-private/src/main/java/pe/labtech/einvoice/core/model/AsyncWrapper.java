@@ -6,7 +6,11 @@
 package pe.labtech.einvoice.core.model;
 
 import javax.ejb.Asynchronous;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 
 /**
  * TODO llevar a un paquete de utilitarios y ordenar.
@@ -14,6 +18,8 @@ import javax.ejb.Stateless;
  * @author Carlos
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class AsyncWrapper implements AsyncWrapperLocal {
 
     @Override
