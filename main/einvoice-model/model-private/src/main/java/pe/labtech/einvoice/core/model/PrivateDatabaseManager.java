@@ -8,8 +8,8 @@ package pe.labtech.einvoice.core.model;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import pe.labtech.einvoice.replicator.model.Database;
-import pe.labtech.einvoice.replicator.model.DatabaseManagerImpl;
+import pe.labtech.einvoice.commons.model.Database;
+import pe.labtech.einvoice.commons.model.DatabaseManagerImpl;
 
 /**
  *

@@ -5,6 +5,8 @@
  */
 package pe.labtech.einvoice.core.entity;
 
+import pe.labtech.einvoice.commons.entity.ValueHolder;
+import pe.labtech.einvoice.commons.entity.Coded;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;

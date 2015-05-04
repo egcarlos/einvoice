@@ -5,10 +5,8 @@
  */
 package pe.labtech.einvoice.replicator.model;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.ejb.Local;
-import javax.persistence.EntityManager;
+import pe.labtech.einvoice.commons.model.DatabaseManager;
 
 /**
  *

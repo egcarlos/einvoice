@@ -5,6 +5,8 @@
  */
 package pe.labtech.einvoice.core.entity;
 
+import pe.labtech.einvoice.commons.entity.ValueHolder;
+import pe.labtech.einvoice.commons.entity.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

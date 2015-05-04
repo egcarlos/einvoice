@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.replicator.model;
 
 import javax.ejb.Local;
+import pe.labtech.einvoice.commons.model.DatabaseManager;
 
 /**
  *

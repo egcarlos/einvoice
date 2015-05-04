@@ -18,9 +18,9 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import pe.labtech.einvoice.replicator.commons.BLResponse;
-import pe.labtech.einvoice.replicator.commons.BLResponseImpl;
-import pe.labtech.einvoice.replicator.commons.Header;
+import pe.labtech.einvoice.commons.entity.BLResponse;
+import pe.labtech.einvoice.commons.entity.BLResponseImpl;
+import pe.labtech.einvoice.commons.entity.Header;
 
 /**
  *

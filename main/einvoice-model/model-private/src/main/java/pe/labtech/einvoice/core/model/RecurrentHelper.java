@@ -9,7 +9,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.function.UnaryOperator;
 import javax.persistence.TypedQuery;
-import pe.labtech.einvoice.replicator.model.DatabaseManager;
+import pe.labtech.einvoice.commons.model.DatabaseManager;
 
 /**
  *
