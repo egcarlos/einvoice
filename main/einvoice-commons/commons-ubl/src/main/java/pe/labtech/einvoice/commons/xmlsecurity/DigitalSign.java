@@ -55,8 +55,8 @@ public class DigitalSign {
     public void sign(Document document, Key key, X509Certificate certificate) {
         Node targetNode = locateTargetNode(document);
         applysign(key, targetNode, certificate);
-        this.fixFormat(document);
-
+        //removed since it seems to interfere with signature validation
+        //this.fixFormat(document);
     }
 
     /**
