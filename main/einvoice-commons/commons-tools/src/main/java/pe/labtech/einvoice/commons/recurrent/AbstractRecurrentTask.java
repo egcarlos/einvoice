@@ -17,9 +17,9 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 
 /**
+ * Abstract template for recurrent tasks that will handle the
  *
- *
- * @author carlos.echeverria
+ * @author @{@link mailto:info@labtech.pe}
  * @param <T> Type of the task to be procesed
  */
 public abstract class AbstractRecurrentTask<T> implements RecurrentTask {
@@ -29,8 +29,14 @@ public abstract class AbstractRecurrentTask<T> implements RecurrentTask {
      */
     protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
+    /**
+     * Holder for the working flag. Read only.
+     */
     private AtomicBoolean working;
 
+    /**
+     * Holder for the enabled flag. Read/Write.
+     */
     private AtomicBoolean enabled;
 
     /**

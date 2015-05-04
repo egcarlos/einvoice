@@ -17,8 +17,11 @@ import pe.labtech.einvoice.replicator.model.DatabaseManager;
  */
 public class RecurrentHelper {
 
+    private static final UnaryOperator<TypedQuery<Long>> noop = q -> q;
+
     public static List<Long> lookup(DatabaseManager db, String step, String status, UnaryOperator<TypedQuery<Long>> uo) {
-        return db.seek(e -> uo
+        UnaryOperator<TypedQuery<Long>> safeUo = (uo == null ? noop : uo);
+        return db.seek(e -> safeUo
                 .apply(
                         e.createQuery(
                                 "SELECT O.id FROM Document O WHERE O.step = :step AND O.status = :status",
@@ -32,7 +35,7 @@ public class RecurrentHelper {
     }
 
     public static List<Long> lookup(DatabaseManager db, String step, String status) {
-        return lookup(db, step, status, e -> e);
+        return lookup(db, step, status, null);
     }
 
     public static String buildId(Long t, String action) {

@@ -5,26 +5,31 @@
  */
 package pe.labtech.einvoice.commons.recurrent;
 
-import java.text.MessageFormat;
-
 /**
  *
  * @author carloseg
  */
 public interface RecurrentTask {
 
+    /**
+     * Flag that indicates is the process is handling data.
+     *
+     * @return
+     */
     boolean isWorking();
 
+    /**
+     * Flag that indicates if the process will handle data.
+     *
+     * @return
+     */
     boolean isEnabled();
 
+    /**
+     * Enables or disables the process without needing to rebuild the app.
+     *
+     * @param enabled
+     */
     void setEnabled(boolean enabled);
-
-    static String buildTaskId(String clientId, String documentType, String documentNumber, String taskName) {
-        return MessageFormat.format("{0}-{1}-{2}[{3}]", clientId, documentType, documentNumber, taskName);
-    }
-
-    static String buildTaskId(String clientId, String documentType, String documentNumber, String taskName, String qualifier) {
-        return MessageFormat.format("{0}-{1}-{2}[{3}:{4}]", clientId, documentType, documentNumber, taskName, qualifier);
-    }
 
 }

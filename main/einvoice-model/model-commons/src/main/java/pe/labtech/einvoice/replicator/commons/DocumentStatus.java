@@ -47,7 +47,7 @@ public class DocumentStatus {
     public static final String DECLARED = "DECLARED";
 
     /**
-     * Indicador de necesidad de sincronización.
+     * Indicador de necesidad de proceso.
      */
     public static final String NEEDED = "NEEDED";
 
