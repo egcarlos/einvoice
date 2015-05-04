@@ -20,8 +20,10 @@
             </dependency>
             <dependency>
                 <groupId>pe.labtech.einvoice.commons</groupId>
-                <artifactId>einvoice-commons-tools</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <artifactId>einvoice-commons-bom</artifactId>
+                <version>1.0</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

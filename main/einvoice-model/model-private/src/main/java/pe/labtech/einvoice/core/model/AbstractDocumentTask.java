@@ -6,11 +6,11 @@
 package pe.labtech.einvoice.core.model;
 
 import java.util.function.UnaryOperator;
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.commons.recurrent.RecurrentTask;
 import pe.labtech.einvoice.commons.model.DatabaseManager;
+import pe.labtech.einvoice.commons.model.RecurrentHelper;
 
 /**
  *
