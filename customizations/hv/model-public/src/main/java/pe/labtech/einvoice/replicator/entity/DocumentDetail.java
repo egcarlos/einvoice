@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "SPE_EINVOICEDETAIL")
 @NamedQueries({
-    @NamedQuery(name = "Detail.findAll", query = "SELECT d FROM Detail d")})
+    @NamedQuery(name = "Detail.findAll", query = "SELECT d FROM DocumentDetail d")})
 public class DocumentDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;

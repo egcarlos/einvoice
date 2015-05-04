@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "SPE_EINVOICEHEADER")
 @NamedQueries({
-    @NamedQuery(name = "Header.findAll", query = "SELECT h FROM Header h")})
+    @NamedQuery(name = "Header.findAll", query = "SELECT h FROM DocumentHeader h")})
 public class DocumentHeader implements Serializable {
 
     private static final long serialVersionUID = 1L;

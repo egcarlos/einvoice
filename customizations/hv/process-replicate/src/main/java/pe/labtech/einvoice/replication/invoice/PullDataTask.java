@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -24,8 +25,10 @@ import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
 import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
+import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
+import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
  *
@@ -45,10 +48,13 @@ public class PullDataTask implements PullDataTaskLocal {
             + "ORDER BY"
             + " o.detailPK.did";
 
-    @PersistenceContext(unitName = "hv_PU")
-    EntityManager em;
+    @EJB
+    PrivateDatabaseManagerLocal prv;
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @EJB
+    PublicDatabaseManagerLocal pub;
+
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
     public void handle() {
         Logger.getLogger(this.getClass().getSimpleName()).fine("Dispatching for data pulling");
@@ -58,11 +64,11 @@ public class PullDataTask implements PullDataTaskLocal {
             Document document = mapHeader(h);
             List<Item> items = mapItems(h, document);
             document.setItems(items);
-            em.persist(document);
+            prv.handle(e -> e.persist(document));
         };
 
         //REDUCING LOG
-        List<DocumentHeader> hs = em.createQuery(HEADER_QUERY, DocumentHeader.class).getResultList();
+        List<DocumentHeader> hs = pub.seek(e -> e.createQuery(HEADER_QUERY, DocumentHeader.class).getResultList());
         if (hs.isEmpty()) {
             return;
         }
@@ -236,7 +242,7 @@ public class PullDataTask implements PullDataTaskLocal {
 
     private List<Item> mapItems(DocumentHeader h, Document document) {
         //como capturar el detalle
-        List<Item> items = em
+        List<Item> items = pub.seek(e -> e
                 .createQuery(DETAIL_QUERY, DocumentDetail.class)
                 .setParameter("codigoCompania", h.getHeaderPK().getCodigoCompania())
                 .setParameter("codigoLocalidad", h.getHeaderPK().getCodigoLocalidad())
@@ -245,7 +251,8 @@ public class PullDataTask implements PullDataTaskLocal {
                 .getResultList()
                 .stream()
                 .map(d -> mapDetailToItem(d, document))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+        );
         return items;
     }
 
