@@ -33,7 +33,7 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-public class PushDocumentRecurrent extends AbstractRecurrentTask<Long> {
+public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
 
     private static final String DOCUMENT_QUERY = "SELECT DISTINCT o.document.id FROM DocumentResponse o WHERE (o.document.documentNumber LIKE 'F%' OR o.document.documentNumber LIKE 'B%') AND o.replicate = TRUE";
 
