@@ -13,13 +13,13 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import pe.labtech.einvoice.commons.model.ModelTools;
+import pe.labtech.einvoice.commons.model.RecurrentHelper;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
-import static pe.labtech.einvoice.commons.recurrent.RecurrentTask.buildTaskId;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
-import static pe.labtech.einvoice.replicator.commons.Tools.*;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 
 /**
@@ -63,15 +63,10 @@ public class PushDocumentDataRecurrent extends AbstractRecurrentTask<DocumentDat
                 .executeUpdate() == 1
         );
 
-        this.getId = t -> buildTaskId(
-                t.getDocument().getClientId(),
-                t.getDocument().getDocumentType(),
-                t.getDocument().getDocumentNumber(),
-                "replicate",
-                t.getName());
+        this.getId = t -> RecurrentHelper.buildId(t.getDocument().getId(), "replicateData", t.getName());
 
         this.consumer = t -> pub.handle(e -> {
-            String targetField = mapResponseName(t.getName());
+            String targetField = ModelTools.mapDataName(t.getName());
             if (targetField == null) {
                 return;
             }

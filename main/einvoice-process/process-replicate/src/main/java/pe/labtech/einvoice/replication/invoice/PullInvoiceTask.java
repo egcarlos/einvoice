@@ -12,10 +12,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import org.apache.commons.beanutils.BeanUtils;
+import pe.labtech.einvoice.commons.model.DocumentStatus;
+import pe.labtech.einvoice.commons.model.DocumentStep;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentAttribute;
 import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
@@ -156,7 +157,6 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
     }
 
     @Override
-    @Asynchronous
     public void replicate(DocumentHeaderPK id, String step, String status) {
         DocumentHeader header = pub.seek(e -> e.find(DocumentHeader.class, id));
         List<DocumentDetail> details = pub.seek(e -> e
@@ -174,13 +174,12 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
     @Override
     public void replicate(DocumentHeader header, List<DocumentDetail> details) {
-        this.replicate(header, details, "PULL", "LOADED");
+        this.replicate(header, details, DocumentStep.PULL, DocumentStatus.LOADED);
     }
 
     @Override
-    @Asynchronous
     public void replicate(DocumentHeaderPK id) {
-        this.replicate(id, "PULL", "LOADED");
+        this.replicate(id, DocumentStep.PULL, DocumentStatus.LOADED);
     }
 
 }

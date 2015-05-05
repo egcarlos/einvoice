@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.replication.invoice;
+package pe.labtech.einvoice.replication.cancel;
 
 import java.util.List;
 import java.util.Map;
@@ -23,8 +23,8 @@ import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
-import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
-import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
  *
@@ -33,10 +33,10 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
-public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
+public class PushCancelRecurrent extends AbstractRecurrentTask<Long> {
 
     @EJB
-    private PublicDatabaseManagerLocal pub;
+    private SummaryDatabaseManagerLocal sum;
 
     @EJB
     private PrivateDatabaseManagerLocal prv;
@@ -52,7 +52,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
     private Function<Long, List<DocumentResponse>> findTasksSingle;
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/1", persistent = false)
+    @Schedule(hour = "*/1", minute = "0", second = "0", persistent = false)
     public void timeout() {
         super.timeout();
     }
@@ -61,29 +61,28 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
     @PostConstruct
     public void init() {
         super.init();
-        this.findTasks = () -> RecurrentHelper.lookupAllResponses(prv, "F", "B");
+        this.findTasks = () -> RecurrentHelper.lookupAllResponses(prv, "RA");
         this.findTasksSingle = t -> RecurrentHelper.lookupResponse(prv, DocumentResponse.class, t);
         this.tryLock = t -> true;
         this.tryLockSingle = t -> RecurrentHelper.lockResponse(prv, t.getDocument().getId(), t.getName());
         this.getId = t -> RecurrentHelper.buildId(t, "replicateCancel");
         this.consumer = t -> {
-            DocumentHeaderPK id = createId(prv.seek(e -> e.find(Document.class, t)));
+            CancelHeaderPK id = createId(prv.seek(e -> e.find(Document.class, t)));
             Map<String, String> responses = this.findTasksSingle.apply(t).stream()
                     .filter(r -> this.tryLockSingle.apply(r))
                     .filter(r -> ModelTools.mapResponseName(r.getName()) != null)
-                    .collect(Collectors.toMap(r -> ModelTools.mapResponseName(r.getName()), r -> r.getValue()));
+                    .collect(Collectors.toMap(r -> ModelTools.mapDataName(r.getName()), r -> r.getValue()));
             if (responses.isEmpty()) {
                 return;
             }
-            RecurrentHelper.sendResponses(pub, id, responses);
+            RecurrentHelper.sendResponses(sum, id, responses);
         };
     }
 
-    private DocumentHeaderPK createId(Document t) {
-        DocumentHeaderPK id = new DocumentHeaderPK(
+    private CancelHeaderPK createId(Document t) {
+        CancelHeaderPK id = new CancelHeaderPK(
                 t.getClientId().split("-")[0],
                 t.getClientId().split("-")[1],
-                t.getDocumentType(),
                 t.getDocumentNumber()
         );
         return id;

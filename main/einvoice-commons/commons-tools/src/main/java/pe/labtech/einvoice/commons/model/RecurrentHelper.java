@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.function.UnaryOperator;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import pe.labtech.einvoice.commons.ext.StringTools;
 
 /**
  *
@@ -25,12 +26,15 @@ public class RecurrentHelper {
     private static final UnaryOperator<TypedQuery<Long>> noop = q -> q;
 
     /**
+     * Looksup for Documents in said database that match the said step and
+     * status. Also can apply an unnary operator in order to alter the generated
+     * query.
      *
-     * @param db
-     * @param step
-     * @param status
-     * @param uo
-     * @return
+     * @param db database to look in
+     * @param step step of the document
+     * @param status status of the document
+     * @param uo unary operator to apply to the generated query
+     * @return a list of document identifiers (Long) of chosen records
      */
     public static List<Long> lookup(DatabaseManager db, String step, String status, UnaryOperator<TypedQuery<Long>> uo) {
         UnaryOperator<TypedQuery<Long>> safeUo = (uo == null ? noop : uo);
@@ -48,11 +52,13 @@ public class RecurrentHelper {
     }
 
     /**
+     * Looksup for Documents in said database that match the said step and
+     * status.
      *
-     * @param db
-     * @param step
-     * @param status
-     * @return
+     * @param db database to look in
+     * @param step step of the document
+     * @param status status of the document
+     * @return a list of document identifiers (Long) of chosen records
      */
     public static List<Long> lookup(DatabaseManager db, String step, String status) {
         return lookup(db, step, status, null);
@@ -60,6 +66,10 @@ public class RecurrentHelper {
 
     public static String buildId(Long t, String action) {
         return MessageFormat.format("Document[id:{0}].{1}()", t, action);
+    }
+
+    public static String buildId(Long t, String action, String... args) {
+        return MessageFormat.format("Document[id:{0}].{1}(" + StringTools.join(args, ", ", "'") + ")", t, action);
     }
 
     public static boolean lock(DatabaseManager db, Long id, String oldStep, String oldStatus, String newStep, String newStatus) {
@@ -117,7 +127,7 @@ public class RecurrentHelper {
         );
     }
 
-    public static final <T> void sendResponses(DatabaseManager db, T id, Map<String, String> responses) {
+    public static final <T> void sendResponses(DatabaseManager db, T id, Map<String, ? extends Object> responses) {
         String entity = id.getClass().getSimpleName().replace("PK", "");
         String setPart = responses.entrySet().stream()
                 .map(d -> "d." + d.getKey() + " = :" + d.getKey())

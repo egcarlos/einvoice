@@ -21,7 +21,14 @@
             <dependency>
                 <groupId>pe.labtech.einvoice.model</groupId>
                 <artifactId>einvoice-model-bom</artifactId>
-                <version>1.1-SNAPSHOT</version>
+                <version>1.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>pe.labtech.einvoice.commons</groupId>
+                <artifactId>einvoice-commons-bom</artifactId>
+                <version>1.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -31,11 +38,6 @@
                 <version>1.0.3</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>pe.labtech.einvoice.commons</groupId>
-                <artifactId>einvoice-commons-tools</artifactId>
-                <version>${einvoice.commons.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -48,32 +50,26 @@
     </dependencies>
     
     <modules>
-        <!-- entry -->
+        <!-- in / out -->
         <module>process-replicate</module>
         <module>process-replicatesummary</module>
-        <!-- response -->
-        <module>process-replicateresponse</module>
-        <module>process-replicateresponsesummary</module>
-        <module>process-replicatedata</module>
-        <module>process-replicatedatasummary</module>
-        
-        <!-- work -->
         
         <!--<module>process-download</module>-->
         <module>process-signonline</module>
-        
-        <!--<module>process-declare</module>-->
-        <!--<module>process-sync</module>-->
-        <!--<module>process-copy</module>-->
         <module>process-sync</module>
         <module>process-declare</module>
+        
+        <!-- additional data -->
+        <module>process-replicatedata</module>
+        <module>process-replicatedatasummary</module>
+        
+        <!-- additional binary data -->
         <module>process-copy</module>
         <module>process-download</module>
     </modules>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <einvoice.commons.version>1.0-SNAPSHOT</einvoice.commons.version>
     </properties>
 
 </project>

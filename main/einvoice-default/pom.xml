@@ -28,16 +28,6 @@
         </dependency>
         <dependency>
             <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-replicateresponse</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-replicateresponsesummary</artifactId>
-            <version>${einvoice.process.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-replicatedata</artifactId>
             <version>${einvoice.process.version}</version>
         </dependency>

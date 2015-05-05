@@ -10,12 +10,12 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
-import pe.labtech.einvoice.replicator.commons.BLResponse;
-import pe.labtech.einvoice.replicator.commons.Header;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 import static pe.labtech.einvoice.api.restful.Tools.*;
+import pe.labtech.einvoice.commons.entity.BLResponse;
+import pe.labtech.einvoice.commons.entity.Header;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 
 /**

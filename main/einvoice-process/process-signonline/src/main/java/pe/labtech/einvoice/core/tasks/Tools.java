@@ -15,13 +15,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.beanutils.BeanUtils;
+import pe.labtech.einvoice.commons.model.DatabaseManager;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.DATA_LOADED;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.core.ws.messages.response.Response;
 import pe.labtech.einvoice.core.ws.messages.response.ResponseMessage;
-import pe.labtech.einvoice.replicator.model.DatabaseManager;
 
 /**
  *

@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.xml.ws.WebServiceException;
 import org.apache.commons.beanutils.PropertyUtils;
+import pe.labtech.einvoice.commons.model.DatabaseManager;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
@@ -29,7 +30,6 @@ import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 import pe.labtech.einvoice.core.ws.helpers.Builder;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.core.ws.messages.response.Response;
-import pe.labtech.einvoice.replicator.model.DatabaseManager;
 
 /**
  *

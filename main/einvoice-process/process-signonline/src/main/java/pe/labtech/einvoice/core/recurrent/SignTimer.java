@@ -18,9 +18,9 @@ import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.model.AsyncWrapperLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.SignTaskLocal;
-import static pe.labtech.einvoice.core.model.RecurrentHelper.*;
-import static pe.labtech.einvoice.replicator.commons.DocumentStatus.*;
-import static pe.labtech.einvoice.replicator.commons.DocumentStep.*;
+import static pe.labtech.einvoice.commons.model.RecurrentHelper.*;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.*;
+import static pe.labtech.einvoice.commons.model.DocumentStep.*;
 
 /**
  *

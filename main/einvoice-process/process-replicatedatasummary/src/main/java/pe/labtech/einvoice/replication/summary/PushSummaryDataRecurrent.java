@@ -5,6 +5,8 @@
  */
 package pe.labtech.einvoice.replication.summary;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
@@ -13,12 +15,12 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import pe.labtech.einvoice.commons.model.ModelTools;
+import pe.labtech.einvoice.commons.model.RecurrentHelper;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
-import static pe.labtech.einvoice.commons.recurrent.RecurrentTask.buildTaskId;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
-import static pe.labtech.einvoice.replicator.commons.Tools.*;
 import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
 import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
@@ -63,15 +65,10 @@ public class PushSummaryDataRecurrent extends AbstractRecurrentTask<DocumentData
                 .executeUpdate() == 1
         );
 
-        this.getId = t -> buildTaskId(
-                t.getDocument().getClientId(),
-                t.getDocument().getDocumentType(),
-                t.getDocument().getDocumentNumber(),
-                "replicate",
-                t.getName());
+        this.getId = t -> RecurrentHelper.buildId(t.getDocument().getId(), "replicateData", t.getName());
 
         this.consumer = t -> manager.handle(e -> {
-            String targetField = mapResponseName(t.getName());
+            String targetField = ModelTools.mapDataName(t.getName());
             if (targetField == null) {
                 return;
             }
@@ -84,11 +81,10 @@ public class PushSummaryDataRecurrent extends AbstractRecurrentTask<DocumentData
                     d.getDocumentNumber()
             );
 
-            e
-                    .createQuery("UPDATE SummaryHeader d SET d." + targetField + " = :param WHERE d.id = :id")
-                    .setParameter("param", t.getData())
-                    .setParameter("id", id)
-                    .executeUpdate();
+            Map<String, byte[]> responses = new HashMap<>();
+            responses.put(targetField, t.getData());
+
+            RecurrentHelper.sendResponses(manager, id, responses);
         });
     }
 

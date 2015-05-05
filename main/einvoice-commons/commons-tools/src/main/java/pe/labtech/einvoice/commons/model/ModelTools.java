@@ -49,7 +49,13 @@ public class ModelTools {
         }
     }
 
-    public static String mapResponseName(String name) {
+    /**
+     * Maps names of binary fields.
+     *
+     * @param name name in internal model
+     * @return name in external model
+     */
+    public static String mapDataName(String name) {
         switch (name) {
             case "pdfFileUrl":
                 return "bl_pdf";
@@ -61,6 +67,36 @@ public class ModelTools {
                 return "bl_xml";
             case "signXml":
                 return "bl_xml";
+        }
+        return null;
+    }
+
+    /**
+     * Maps names of response fields.
+     *
+     * @param name name in internal model
+     * @return name in external model
+     */
+    public static String mapResponseName(String name) {
+        switch (name) {
+            case "hashCode":
+                return "bl_hashFirma";
+            case "integratedStatus":
+                return "bl_estadoProceso";
+            case "recordStatus":
+                return "bl_estadoRegistro";
+            case "pdfFileUrl":
+                return "bl_urlpdf";
+            case "signatureValue":
+                return "bl_firma";
+            case "xmlFileSignUrl":
+                return "bl_urlxmlubl";
+            case "xmlFileSunatUrl":
+                return "bl_urlcdr";
+            case "sunatMessage":
+                return "bl_mensajeSunat";
+            case "messages":
+                return "bl_mensaje";
         }
         return null;
     }

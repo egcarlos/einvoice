@@ -51,9 +51,7 @@ public class PullSummaryRecurrent extends AbstractRecurrentTask<SummaryHeaderPK>
                 .executeUpdate() == 1
         );
         this.getId = t -> t.getTipoDocumentoEmisor() + "-" + t.getNumeroDocumentoEmisor() + "-" + t.getResumenId();
-        this.consumer = t -> {
-            task.replicate(t);
-        };
+        this.consumer = t -> task.replicate(t);
     }
 
     @Override

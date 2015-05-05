@@ -10,15 +10,15 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import pe.labtech.einvoice.commons.model.InvoiceType;
+import static pe.labtech.einvoice.commons.model.InvoiceType.*;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.SecurityValues;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.core.tasks.offline.OfflineInvoice;
-import pe.labtech.einvoice.core.tasks.offline.OfflineSummary;
 import pe.labtech.einvoice.core.tasks.online.OnlineInvoice;
 import pe.labtech.einvoice.core.tasks.online.OnlineSummary;
-import pe.labtech.einvoice.replicator.commons.InvoiceType;
 
 /**
  *
@@ -29,8 +29,8 @@ public class SignTask implements SignTaskLocal {
 
     @EJB
     PrivateDatabaseManagerLocal db;
-    @EJB
-    private OfflineSummary offlineSummary;
+//    @EJB
+//    private OfflineSummary offlineSummary;
     @EJB
     private OnlineSummary onlineSummary;
     @EJB

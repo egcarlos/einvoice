@@ -6,8 +6,8 @@
 package pe.labtech.einvoice.api.restful;
 
 import javax.ejb.Local;
+import pe.labtech.einvoice.commons.entity.Header;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
-import pe.labtech.einvoice.replicator.commons.Header;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 
 /**

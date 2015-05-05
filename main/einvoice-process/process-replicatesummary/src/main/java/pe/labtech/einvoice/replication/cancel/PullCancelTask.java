@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import org.apache.commons.beanutils.BeanUtils;
+import pe.labtech.einvoice.commons.model.DocumentStatus;
+import pe.labtech.einvoice.commons.model.DocumentStep;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentAttribute;
 import pe.labtech.einvoice.core.entity.Item;
@@ -106,8 +108,8 @@ public class PullCancelTask implements PullCancelTaskLocal {
         }).collect(Collectors.toList());
 
         document.setItems(items);
-        document.setStep("PULL");
-        document.setStatus("LOADED");
+        document.setStep(DocumentStep.PULL);
+        document.setStatus(DocumentStatus.LOADED);
 
         prv.handle(e -> e.persist(document));
     }
