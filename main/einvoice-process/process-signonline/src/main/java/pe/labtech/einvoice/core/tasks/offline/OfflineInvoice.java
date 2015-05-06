@@ -49,7 +49,7 @@ public class OfflineInvoice {
     @EJB
     private DocumentLoaderLocal loader;
 
-    private DigitalSign ds = new DigitalSign();
+    private final DigitalSign ds = new DigitalSign();
 
     public DocumentInfo handle(Document document) {
         //create the UBL structure
@@ -59,17 +59,18 @@ public class OfflineInvoice {
         org.w3c.dom.Document xml = Commons.toXmlDocument(invoice);
 
         //sign
+        String unsignedDocument = ds.createTextRepresentation(xml);
         signDocument(document.getClientId(), xml);
 
         //represent as text
         //FIXES A BUG IN PLATFORM WHERE DOCUMENTS ARE REJECTED IF NOT
         //ALL NAMESPACES ARE DECLARED WITH THE SAME PREFIXES
-        String signedDocument = ds.createTextRepresentation(xml).replace(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\" xmlns:sac=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1\">",
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\" xmlns:ns10=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SummaryDocuments-1\" xmlns:ns11=\"urn:sunat:names:specification:ubl:peru:schema:xsd:VoidedDocuments-1\" xmlns:ns6=\"urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2\" xmlns:ns7=\"urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2\" xmlns:qdt=\"urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2\" xmlns:sac=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1\">"
-        );
-
+//        String signedDocument = ds.createTextRepresentation(xml).replace(
+//                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\" xmlns:sac=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1\">",
+//                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\" xmlns:ns10=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SummaryDocuments-1\" xmlns:ns11=\"urn:sunat:names:specification:ubl:peru:schema:xsd:VoidedDocuments-1\" xmlns:ns6=\"urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2\" xmlns:ns7=\"urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2\" xmlns:qdt=\"urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2\" xmlns:sac=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1\">"
+//        );
         //log to disc
+        String signedDocument = ds.createTextRepresentation(xml);
         Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, "SIGNED DOCUMENT\n{0}", signedDocument);
 
         //create the fake response
@@ -81,6 +82,15 @@ public class OfflineInvoice {
             data.setDocument(document);
             data.setName("localUBL");
             data.setData(signedDocument.getBytes());
+            data.setStatus(DATA_LOADED);
+            data.setReplicate(Boolean.FALSE);
+            e.persist(data);
+        });
+        prv.handle(e -> {
+            final DocumentData data = new DocumentData();
+            data.setDocument(document);
+            data.setName("localUBLUnsigned");
+            data.setData(unsignedDocument.getBytes());
             data.setStatus(DATA_LOADED);
             data.setReplicate(Boolean.FALSE);
             e.persist(data);

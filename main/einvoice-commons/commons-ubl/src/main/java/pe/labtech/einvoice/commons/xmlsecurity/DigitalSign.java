@@ -56,7 +56,7 @@ public class DigitalSign {
         Node targetNode = locateTargetNode(document);
         applysign(key, targetNode, certificate);
         //removed since it seems to interfere with signature validation
-        //this.fixFormat(document);
+        this.fixFormat(document);
     }
 
     /**
@@ -180,18 +180,18 @@ public class DigitalSign {
                 node.getAttributes().removeNamedItem("xmlns");
             }
             //remove empty spaces from the certificate representation
-            {
-                Node node = (Node) xpath.evaluate("//" + prefix + ":X509Certificate", document, XPathConstants.NODE);
-                NodeList nodes = node.getChildNodes();
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Node item = nodes.item(i);
-                    String nodeValue = item
-                            .getNodeValue()
-                            .replace("\n", "")
-                            .replace("\r", "");
-                    item.setNodeValue(nodeValue);
-                }
-            }
+//            {
+//                Node node = (Node) xpath.evaluate("//" + prefix + ":X509Certificate", document, XPathConstants.NODE);
+//                NodeList nodes = node.getChildNodes();
+//                for (int i = 0; i < nodes.getLength(); i++) {
+//                    Node item = nodes.item(i);
+//                    String nodeValue = item
+//                            .getNodeValue()
+//                            .replace("\n", "")
+//                            .replace("\r", "");
+//                    item.setNodeValue(nodeValue);
+//                }
+//            }
         } catch (XPathExpressionException ex) {
             throw new SignatureException("Unable to normalize signature elements", ex);
         }

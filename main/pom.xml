@@ -15,7 +15,8 @@
         <module>einvoice-ws</module>
         <module>einvoice-process</module>
         <module>einvoice-default</module>
-    </modules>
+    <module>einvoice-dist</module>
+  </modules>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

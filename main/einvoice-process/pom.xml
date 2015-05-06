@@ -66,6 +66,7 @@
         <!-- additional binary data -->
         <module>process-copy</module>
         <module>process-download</module>
+        <module>process-bom</module>
     </modules>
     
     <properties>
