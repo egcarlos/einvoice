@@ -89,7 +89,7 @@ public class RecurrentHelper {
     public static List<Long> lookupAllResponses(DatabaseManager db, String... numberPrefixes) {
         List<String> l = new LinkedList<>();
         for (int i = 0; i < numberPrefixes.length; i++) {
-            l.add("o.document.documentNumber LIKE :p" + i);
+            l.add("o.document.documentNumber LIKE (:p" + i + " ||'%')");
         }
         String variable = l.stream().reduce(null, (a, b) -> a == null ? b : a + " OR " + b);
         StringBuilder sb = new StringBuilder("SELECT DISTINCT o.document.id FROM DocumentResponse o WHERE o.replicate = TRUE");
