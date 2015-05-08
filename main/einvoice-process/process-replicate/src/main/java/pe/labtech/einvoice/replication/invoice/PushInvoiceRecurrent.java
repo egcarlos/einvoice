@@ -65,7 +65,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
         this.findTasksSingle = t -> RecurrentHelper.lookupResponse(prv, DocumentResponse.class, t);
         this.tryLock = t -> true;
         this.tryLockSingle = t -> RecurrentHelper.lockResponse(prv, t.getDocument().getId(), t.getName());
-        this.getId = t -> RecurrentHelper.buildId(t, "replicateCancel");
+        this.getId = t -> RecurrentHelper.buildId(t, "replicate");
         this.consumer = t -> {
             DocumentHeaderPK id = createId(prv.seek(e -> e.find(Document.class, t)));
             Map<String, String> responses = this.findTasksSingle.apply(t).stream()

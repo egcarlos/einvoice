@@ -17,46 +17,55 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-process-signonline</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-process-sync</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-process-declare</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-process-replicate</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-process-replicatesummary</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-process-replicatedata</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-process-replicatedatasummary</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-process-copy</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-process-download</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
         </dependencies>
     </dependencyManagement>

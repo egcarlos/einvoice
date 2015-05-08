@@ -39,6 +39,12 @@ public class SummaryHeaderPK implements Serializable {
     public SummaryHeaderPK() {
     }
 
+    public SummaryHeaderPK(String tipoDocumentoEmisor, String numeroDocumentoEmisor, String tipoDocumento, String numeroDocumento) {
+        this.tipoDocumentoEmisor = tipoDocumentoEmisor;
+        this.numeroDocumentoEmisor = numeroDocumentoEmisor;
+        this.resumenId = tipoDocumento + "-" + numeroDocumento;
+    }
+
     public SummaryHeaderPK(String tipoDocumentoEmisor, String numeroDocumentoEmisor, String resumenId) {
         this.tipoDocumentoEmisor = tipoDocumentoEmisor;
         this.numeroDocumentoEmisor = numeroDocumentoEmisor;

@@ -19,6 +19,7 @@
         <dependency>
             <groupId>pe.labtech.einvoice.model</groupId>
             <artifactId>einvoice-model-private</artifactId>
+            <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>pe.labtech.einvoice.ws</groupId>

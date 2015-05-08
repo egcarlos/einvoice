@@ -5,7 +5,10 @@
  */
 package pe.labtech.einvoice.replication.cancel;
 
+import java.util.List;
 import javax.ejb.Local;
+import pe.labtech.einvoice.replicator.entity.CancelDetail;
+import pe.labtech.einvoice.replicator.entity.CancelHeader;
 import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
 
 /**
@@ -15,6 +18,12 @@ import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
 @Local
 public interface PullCancelTaskLocal {
 
-    void replicate(CancelHeaderPK header);
+    void replicate(CancelHeaderPK id);
+
+    void replicate(CancelHeaderPK id, String step, String status);
+
+    void replicate(CancelHeader header, List<CancelDetail> details);
+
+    void replicate(CancelHeader header, List<CancelDetail> details, String step, String status);
 
 }

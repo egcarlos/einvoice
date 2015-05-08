@@ -43,9 +43,12 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
 
     @Override
     public void replicate(SummaryHeaderPK id) {
-        //recuperar la cabecera
+        replicate(id, DocumentStep.PULL, DocumentStatus.LOADED);
+    }
+
+    @Override
+    public void replicate(SummaryHeaderPK id, String step, String status) {
         SummaryHeader header = pub.seek(e -> e.find(SummaryHeader.class, id));
-        //recuperar los detalles
         List<SummaryDetail> details = pub.seek(e -> e
                 .createQuery(
                         "SELECT o FROM SummaryDetail o WHERE o.id.tipoDocumentoEmisor = :tde AND o.id.numeroDocumentoEmisor = :nde AND o.id.resumenId = :ri",
@@ -56,7 +59,16 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
                 .setParameter("ri", id.getResumenId())
                 .getResultList()
         );
+        this.replicate(header, details, step, status);
+    }
 
+    @Override
+    public void replicate(SummaryHeader header, List<SummaryDetail> details) {
+        this.replicate(header, details, DocumentStep.PULL, DocumentStatus.LOADED);
+    }
+
+    @Override
+    public void replicate(SummaryHeader header, List<SummaryDetail> details, String step, String status) {
         Document document = new Document();
         document.setClientId(header.getId().getTipoDocumentoEmisor() + "-" + header.getId().getNumeroDocumentoEmisor());
         document.setDocumentType("RC");
@@ -111,8 +123,8 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
         }).collect(Collectors.toList());
 
         document.setItems(items);
-        document.setStep(DocumentStep.PULL);
-        document.setStatus(DocumentStatus.LOADED);
+        document.setStep(step);
+        document.setStatus(status);
 
         prv.handle(e -> e.persist(document));
     }

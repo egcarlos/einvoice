@@ -37,6 +37,12 @@ public class CancelHeaderPK implements Serializable {
     public CancelHeaderPK() {
     }
 
+    public CancelHeaderPK(String tipoDocumentoEmisor, String numeroDocumentoEmisor, String tipoDocumento, String numeroDocumento) {
+        this.tipoDocumentoEmisor = tipoDocumentoEmisor;
+        this.numeroDocumentoEmisor = numeroDocumentoEmisor;
+        this.resumenId = tipoDocumento + "-" + numeroDocumento;
+    }
+
     public CancelHeaderPK(String tipoDocumentoEmisor, String numeroDocumentoEmisor, String resumenId) {
         this.tipoDocumentoEmisor = tipoDocumentoEmisor;
         this.numeroDocumentoEmisor = numeroDocumentoEmisor;

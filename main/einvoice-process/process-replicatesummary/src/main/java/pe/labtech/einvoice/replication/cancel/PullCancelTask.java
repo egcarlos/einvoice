@@ -43,6 +43,11 @@ public class PullCancelTask implements PullCancelTaskLocal {
 
     @Override
     public void replicate(CancelHeaderPK id) {
+        this.replicate(id, DocumentStep.PULL, DocumentStatus.LOADED);
+    }
+
+    @Override
+    public void replicate(CancelHeaderPK id, String step, String status) {
         //recuperar la cabecera
         CancelHeader header = pub.seek(e -> e.find(CancelHeader.class, id));
         //recuperar los detalles
@@ -56,7 +61,16 @@ public class PullCancelTask implements PullCancelTaskLocal {
                 .setParameter("ri", id.getResumenId())
                 .getResultList()
         );
+        this.replicate(header, details, step, status);
+    }
 
+    @Override
+    public void replicate(CancelHeader header, List<CancelDetail> details) {
+        this.replicate(header, details, DocumentStep.PULL, DocumentStatus.LOADED);
+    }
+
+    @Override
+    public void replicate(CancelHeader header, List<CancelDetail> details, String step, String status) {
         Document document = new Document();
         document.setClientId(header.getId().getTipoDocumentoEmisor() + "-" + header.getId().getNumeroDocumentoEmisor());
         document.setDocumentType("RA");
@@ -106,11 +120,9 @@ public class PullCancelTask implements PullCancelTaskLocal {
             }
             return item;
         }).collect(Collectors.toList());
-
         document.setItems(items);
-        document.setStep(DocumentStep.PULL);
-        document.setStatus(DocumentStatus.LOADED);
-
+        document.setStep(step);
+        document.setStatus(status);
         prv.handle(e -> e.persist(document));
     }
 
@@ -123,5 +135,4 @@ public class PullCancelTask implements PullCancelTaskLocal {
             return new DocumentAttribute(property, (String) null);
         }
     }
-
 }

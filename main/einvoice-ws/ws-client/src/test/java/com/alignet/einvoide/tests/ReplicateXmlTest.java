@@ -33,7 +33,7 @@ public class ReplicateXmlTest {
         rc.put(BindingProvider.USERNAME_PROPERTY, "avinka");
         rc.put(BindingProvider.PASSWORD_PROPERTY, "ebiz");
 
-        File f = new File("20501827623-01-FLT2-00000022.xml");
+        File f = new File("20501827623-01-FLTE-00000001.xml");
         ByteArrayOutputStream bos = new ByteArrayOutputStream(10240);
         try (ZipOutputStream output = new ZipOutputStream(bos); FileInputStream input = new FileInputStream(f)) {
             output.putNextEntry(new ZipEntry(f.getName()));
@@ -50,11 +50,12 @@ public class ReplicateXmlTest {
         }
 
         String ruc = "20501827623";
-        String response = port.replicateXml(
-                "<ReplicateXmlCmd declare-sunat=\"1\" declare-direct-sunat=\"0\" publish=\"1\" output=\"PDF\">"
+        final String comand = "<ReplicateXmlCmd declare-sunat=\"1\" declare-direct-sunat=\"0\" publish=\"1\" output=\"PDF\">"
                 + "<parametros/>"
                 + "<parameter value=\"" + ruc + "\" name=\"idEmisor\"/>"
-                + "</ReplicateXmlCmd>",
+                + "</ReplicateXmlCmd>";
+        System.out.println(comand);
+        String response = port.replicateXml(comand,
                 bos.toByteArray(),
                 null
         );

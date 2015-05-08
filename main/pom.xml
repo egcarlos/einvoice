@@ -14,7 +14,7 @@
         <module>einvoice-commons</module>
         <module>einvoice-ws</module>
         <module>einvoice-process</module>
-        <module>einvoice-default</module>
+        <!--<module>einvoice-default</module>-->
     <module>einvoice-dist</module>
   </modules>
     

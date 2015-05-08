@@ -73,7 +73,7 @@ public class DeclareOfflineTask implements DeclareOfflineTaskLocal {
         prv.handle(e -> {
             final DocumentData data = new DocumentData();
             data.setDocument(d);
-            data.setName(fileName + ".zip");
+            data.setName(fileName.replace(".xml", ".zip"));
             data.setData(zippedUBL);
             data.setStatus(DATA_LOADED);
             data.setReplicate(Boolean.FALSE);
@@ -86,10 +86,11 @@ public class DeclareOfflineTask implements DeclareOfflineTaskLocal {
 
         try {
             String command = "<ReplicateXmlCmd declare-sunat=\"1\" declare-direct-sunat=\"0\" publish=\"1\" output=\"PDF\">"
+                    + "<parametros/>"
                     + "<parameter value=\"" + buildClientId(d) + "\" name=\"idEmisor\"/>"
                     + "</ReplicateXmlCmd>";
             loader.createEvent(d, "INFO", command);
-            String response = invoker.replicateXml(fileName, zippedUBL, null);
+            String response = invoker.replicateXml(command, zippedUBL, null);
             loader.createEvent(d, "INFO", response);
         } catch (WebServiceException ex) {
             loader.createEvent(d, "ERROR", exToString(ex, "Error raised while replicating xml"));

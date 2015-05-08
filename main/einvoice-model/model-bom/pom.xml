@@ -17,16 +17,19 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-model-summary</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-model-public</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>einvoice-model-private</artifactId>
                 <version>${project.version}</version>
+                <type>ejb</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
