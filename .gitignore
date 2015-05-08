@@ -95,3 +95,5 @@ $RECYCLE.BIN/
 /customizations/hv/process-replicateresponse/target/
 /customizations/hv/default/target/
 /main/einvoice-dist/einvoice-dist-ear/target/
+/main/einvoice-dist/dist-ear/target/
+/main/einvoice-dist/dist-apirest/target/
