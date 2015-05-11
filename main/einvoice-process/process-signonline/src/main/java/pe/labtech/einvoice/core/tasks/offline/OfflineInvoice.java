@@ -7,14 +7,13 @@ package pe.labtech.einvoice.core.tasks.offline;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -23,17 +22,17 @@ import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import pe.labtech.einvoice.commons.ext.ZipTools;
 import pe.labtech.einvoice.commons.ubl.InvoiceBuilder;
 import pe.labtech.einvoice.commons.ubl.InvoiceLineBuilder;
-import pe.labtech.einvoice.commons.xmlsecurity.DigitalSign;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.entity.SecurityValues;
 import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.DATA_LOADED;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
+import static pe.labtech.einvoice.core.tasks.offline.Commons.*;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
-import pe.labtech.ubl.model.Invoice;
 
 /**
  *
@@ -43,55 +42,48 @@ import pe.labtech.ubl.model.Invoice;
 @LocalBean
 public class OfflineInvoice {
 
+    private static final String DEFAULT_ENCODING = "UTF-8";
+    private static final String XML_SUFFIX = ".xml";
+    private static final String ZIP_SUFFIX = ".zip";
+
     @EJB
     private PrivateDatabaseManagerLocal prv;
 
     @EJB
     private DocumentLoaderLocal loader;
 
-    private final DigitalSign ds = new DigitalSign();
-
     public DocumentInfo handle(Document document) {
         //create the UBL structure
-        Invoice invoice = mapInvoice(document.getId());
+        InvoiceBuilder ib = mapInvoice(document.getId());
 
         //move to the xml representation
-        org.w3c.dom.Document xml = Commons.toXmlDocument(invoice);
+        org.w3c.dom.Document xml = ib.document(DEFAULT_ENCODING);
 
         //sign
-        String unsignedDocument = ds.createTextRepresentation(xml);
         signDocument(document.getClientId(), xml);
+        byte[] signedDocument = DIGISIGN.createRepresentation(xml, DEFAULT_ENCODING);
 
-        //represent as text
-        //FIXES A BUG IN PLATFORM WHERE DOCUMENTS ARE REJECTED IF NOT
-        //ALL NAMESPACES ARE DECLARED WITH THE SAME PREFIXES
-//        String signedDocument = ds.createTextRepresentation(xml).replace(
-//                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\" xmlns:sac=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1\">",
-//                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\" xmlns:ns10=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SummaryDocuments-1\" xmlns:ns11=\"urn:sunat:names:specification:ubl:peru:schema:xsd:VoidedDocuments-1\" xmlns:ns6=\"urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2\" xmlns:ns7=\"urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2\" xmlns:qdt=\"urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2\" xmlns:sac=\"urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1\">"
-//        );
-        //log to disc
-        String signedDocument = ds.createTextRepresentation(xml);
-        Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, "SIGNED DOCUMENT\n{0}", signedDocument);
+        //create names
+        //SUNAT format for identifying documents
+        String name = buildEntryName(document);
+        //Name inside zip file
+        String entryName = name + XML_SUFFIX;
+        //Zip file name in local database
+        String zipName = name + ZIP_SUFFIX;
+
+        //compress data
+        byte[] compressedData = ZipTools.compress(entryName, signedDocument);
 
         //create the fake response
         DocumentInfo di = synthDocumentInfo(xml);
 
-        //save the data as localUbl... do not replicate
         prv.handle(e -> {
             final DocumentData data = new DocumentData();
             data.setDocument(document);
-            data.setName("localUBL");
-            data.setData(signedDocument.getBytes());
+            data.setName(zipName);
+            data.setData(compressedData);
             data.setStatus(DATA_LOADED);
-            data.setReplicate(Boolean.FALSE);
-            e.persist(data);
-        });
-        prv.handle(e -> {
-            final DocumentData data = new DocumentData();
-            data.setDocument(document);
-            data.setName("localUBLUnsigned");
-            data.setData(unsignedDocument.getBytes());
-            data.setStatus(DATA_LOADED);
+            //there is no field for the local UBL replicated data... when zipped...
             data.setReplicate(Boolean.FALSE);
             e.persist(data);
         });
@@ -106,11 +98,23 @@ public class OfflineInvoice {
         return di;
     }
 
-    private Invoice mapInvoice(Long id) {
-        Invoice invoice = prv.seek(e -> {
+    public String buildEntryName(Document document) {
+        //compress
+        String fileName = MessageFormat.format(
+                "{0}-{1}-{2}",
+                document.getClientId().split("-")[1],
+                document.getDocumentType(),
+                document.getDocumentNumber()
+        );
+        return fileName;
+    }
+
+    private InvoiceBuilder mapInvoice(Long id) {
+        return prv.seek(e -> {
             Document d = e.find(Document.class, id);
 
             Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
+            //add document main data
             InvoiceBuilder ib = new InvoiceBuilder()
                     .init(
                             da.get("tipoDocumento"),
@@ -174,14 +178,17 @@ public class OfflineInvoice {
                     .addTotalCharge(da.get("totalOtrosCargos"))
                     .addTotalPayable(da.get("totalVenta"));
 
+            //add document legend data
             if (d.getLegends() != null && !d.getLegends().isEmpty()) {
                 d.getLegends().forEach(l -> ib.addNote(l.getCode(), l.getValue()));
             }
 
+            //add document auxiliar data
             if (d.getAuxiliars() != null && !d.getAuxiliars().isEmpty()) {
                 d.getAuxiliars().forEach(l -> ib.addCustomNote(l.getCode(), l.getValue()));
             }
 
+            //add item information
             d.getItems().forEach(i -> {
                 Map<String, String> ia = i.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
                 InvoiceLineBuilder ilb = new InvoiceLineBuilder()
@@ -204,9 +211,8 @@ public class OfflineInvoice {
                 ib.addLine(ilb.compile());
             });
 
-            return ib.compile();
+            return ib;
         });
-        return invoice;
     }
 
     private void signDocument(String id, org.w3c.dom.Document xml) {
@@ -217,41 +223,7 @@ public class OfflineInvoice {
         Key key = extractKey(ks, sv);
         X509Certificate cert = extractCertificate(ks, sv);
 
-        ds.sign(xml, key, cert);
-    }
-
-    private DocumentInfo synthDocumentInfo(org.w3c.dom.Document xml) {
-        String[] responses = ds.getResponses(xml);
-        DocumentInfo di = new DocumentInfo();
-        di.setHashCode(responses[0]);
-        di.setSignatureValue(responses[1]);
-        di.setStatus("SIGNED");
-        return di;
-    }
-
-    private X509Certificate extractCertificate(KeyStore ks, SecurityValues sv) {
-        try {
-            return (X509Certificate) ks.getCertificate(sv.getAlias());
-        } catch (KeyStoreException ex) {
-            Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
-
-    private Key extractKey(KeyStore ks, SecurityValues sv) {
-        try {
-            return ks.getKey(sv.getAlias(), sv.getProtection().toCharArray());
-        } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException ex) {
-            Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
-
-    public static BigDecimal buildNumber(String amount) {
-        if (amount == null) {
-            return null;
-        }
-        return new BigDecimal(amount);
+        DIGISIGN.sign(xml, key, cert);
     }
 
     //TODO make cache

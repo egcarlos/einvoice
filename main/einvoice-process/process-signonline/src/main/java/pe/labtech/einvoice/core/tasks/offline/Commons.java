@@ -5,17 +5,18 @@
  */
 package pe.labtech.einvoice.core.tasks.offline;
 
-import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.eclipse.persistence.jaxb.MarshallerProperties;
-import pe.labtech.ubl.model.InvoicePrefixMapper;
+import pe.labtech.einvoice.commons.xmlsecurity.DigitalSign;
+import pe.labtech.einvoice.core.entity.SecurityValues;
+import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 
 /**
  *
@@ -23,28 +24,40 @@ import pe.labtech.ubl.model.InvoicePrefixMapper;
  */
 public class Commons {
 
-    public static org.w3c.dom.Document toXmlDocument(Object o) {
+    public static final DigitalSign DIGISIGN = new DigitalSign();
+
+    public static DocumentInfo synthDocumentInfo(org.w3c.dom.Document xml) {
+        String[] responses = DIGISIGN.getResponses(xml);
+        DocumentInfo di = new DocumentInfo();
+        di.setHashCode(responses[0]);
+        di.setSignatureValue(responses[1]);
+        di.setStatus("SIGNED");
+        return di;
+    }
+
+    public static X509Certificate extractCertificate(KeyStore ks, SecurityValues sv) {
         try {
-            JAXBContext jbc = JAXBContext.newInstance(o.getClass());
-            Marshaller m = jbc.createMarshaller();
-            m.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, new InvoicePrefixMapper());
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            m.setProperty(MarshallerProperties.INDENT_STRING, "    ");
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            m.marshal(o, bos);
-            Logger.getLogger(Commons.class.getName()).log(Level.INFO, "UBL GENERADO\n{0}", new String(bos.toByteArray()));
-
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            org.w3c.dom.Document xmlInvoice = db.newDocument();
-            m.marshal(o, xmlInvoice);
-
-            return xmlInvoice;
-        } catch (JAXBException | ParserConfigurationException ex) {
-            Logger.getLogger(Commons.class.getName()).log(Level.SEVERE, null, ex);
+            return (X509Certificate) ks.getCertificate(sv.getAlias());
+        } catch (KeyStoreException ex) {
+            Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
+
+    public static Key extractKey(KeyStore ks, SecurityValues sv) {
+        try {
+            return ks.getKey(sv.getAlias(), sv.getProtection().toCharArray());
+        } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException ex) {
+            Logger.getLogger(OfflineInvoice.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public static BigDecimal buildNumber(String amount) {
+        if (amount == null) {
+            return null;
+        }
+        return new BigDecimal(amount);
+    }
+
 }

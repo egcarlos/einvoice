@@ -7,7 +7,16 @@ package pe.labtech.einvoice.commons.ubl;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
+import org.w3c.dom.Document;
 import pe.labtech.ubl.model.Invoice;
+import pe.labtech.ubl.model.InvoicePrefixMapper;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
 import pe.labtech.ubl.model.aggregate.Address;
 import pe.labtech.ubl.model.aggregate.Attachment;
@@ -38,12 +47,27 @@ import pe.labtech.ubl.model.sunat.AdditionalProperty;
  */
 public class InvoiceBuilder implements Builder<Invoice> {
 
+    private static final JAXBContext JAXB_CONTEXT;
+    private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY;
+
     private Invoice invoice;
 
+    static {
+        JAXBContext context;
+        try {
+            context = JAXBContext.newInstance(Invoice.class);
+        } catch (JAXBException ex) {
+            context = null;
+        }
+        JAXB_CONTEXT = context;
+        DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+        DOCUMENT_BUILDER_FACTORY.setNamespaceAware(true);
+
+    }
+
     public InvoiceBuilder init(final String invoiceType, final String invoiceNumber, final String invoiceDate, final String currency, final String supplierType, final String supplierId, final String supplierName, final String clientType, final String clientId, final String clientName) {
-        InvoiceBuilder ib = new InvoiceBuilder();
-        ib.invoice = createInvoice(invoiceType, invoiceNumber, invoiceDate, currency, supplierType, supplierId, supplierName, clientType, clientId, clientName);
-        return ib;
+        this.invoice = createInvoice(invoiceType, invoiceNumber, invoiceDate, currency, supplierType, supplierId, supplierName, clientType, clientId, clientName);
+        return this;
     }
 
     public InvoiceBuilder addAmount(String id, String amount) {
@@ -101,11 +125,6 @@ public class InvoiceBuilder implements Builder<Invoice> {
                     .add(new AdditionalProperty(id, null, value));
         }
         return this;
-    }
-
-    public Invoice compile() {
-        //TODO agregar todo el resto
-        return invoice;
     }
 
     private static Invoice createInvoice(final String invoiceType, final String invoiceNumber, final String invoiceDate, final String currency, final String supplierType, final String supplierId, final String supplierName, final String clientType, final String clientId, final String clientName) {
@@ -378,5 +397,63 @@ public class InvoiceBuilder implements Builder<Invoice> {
     public InvoiceBuilder addLine(InvoiceLine line) {
         invoice.getInvoiceLine().add(line);
         return this;
+    }
+
+    /**
+     *
+     *
+     * @return
+     */
+    @Override
+    public Invoice compile() {
+        return invoice;
+    }
+
+    /**
+     * Final operation used in order to get the XML representation of the UBL
+     * document.
+     *
+     * @param charsetName
+     * @return
+     */
+    public Document document(String charsetName) {
+        try {
+            Marshaller marshaller = getMarshaller(charsetName);
+            DocumentBuilder db = getDocumentBuilder();
+            Document document = db.newDocument();
+            marshaller.marshal(this.compile(), document);
+            return document;
+        } catch (JAXBException ex) {
+            throw new InvoiceBuilderException(ex);
+        }
+    }
+
+    public JAXBContext getContext() {
+        return JAXB_CONTEXT;
+    }
+
+    //TODO migrate to pooled implementation to enhance memmory usage
+    public Marshaller getMarshaller(String charsetName) {
+        try {
+            Marshaller marshaller = getContext().createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, charsetName);
+            marshaller.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, new InvoicePrefixMapper());
+            return marshaller;
+        } catch (JAXBException ex) {
+            throw new InvoiceBuilderException(ex);
+        }
+    }
+
+    public DocumentBuilderFactory getDocumentBuilderFactory() {
+        return DOCUMENT_BUILDER_FACTORY;
+    }
+
+    //TODO migrate to pooled implementation to enhance memmory usage
+    public DocumentBuilder getDocumentBuilder() {
+        try {
+            return getDocumentBuilderFactory().newDocumentBuilder();
+        } catch (ParserConfigurationException ex) {
+            throw new InvoiceBuilderException(ex);
+        }
     }
 }

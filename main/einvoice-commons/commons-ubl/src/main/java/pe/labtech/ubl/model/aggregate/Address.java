@@ -8,6 +8,7 @@ package pe.labtech.ubl.model.aggregate;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import org.eclipse.persistence.oxm.annotations.XmlCDATA;
 import pe.labtech.ubl.model.Namespaces;
 
 /**
@@ -27,30 +28,35 @@ public class Address {
      * Direccion.
      */
     @XmlElement(namespace = Namespaces.CBC)
+    @XmlCDATA
     private String StreetName;
 
     /**
      * Urbanizacion/Zona.
      */
     @XmlElement(namespace = Namespaces.CBC)
+    @XmlCDATA
     private String CitySubdivisionName;
 
     /**
      * Departamento.
      */
     @XmlElement(namespace = Namespaces.CBC)
+    @XmlCDATA
     private String CityName;
 
     /**
      * Provincia.
      */
     @XmlElement(namespace = Namespaces.CBC)
+    @XmlCDATA
     private String CountrySubentity;
 
     /**
      * Distrito.
      */
     @XmlElement(namespace = Namespaces.CBC)
+    @XmlCDATA
     private String District;
 
     /**

@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.junit.Test;
@@ -28,12 +26,6 @@ public class IntegralTest {
 
     @Test
     public void jbcontext() throws JAXBException, ParserConfigurationException {
-        JAXBContext jbc = JAXBContext.newInstance(Invoice.class);
-        Marshaller m = jbc.createMarshaller();
-        m.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, new InvoicePrefixMapper());
-        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        m.setProperty(MarshallerProperties.INDENT_STRING, "    ");
-
         final String moneda = "PEN";
         final String tipoDocumento = "01";
         final String number = "F000-00000000";
@@ -45,7 +37,7 @@ public class IntegralTest {
         final String idCliente = "11111111";
         final String razonSocialCliente = "razon social del cliente";
 
-        Invoice invoice = new InvoiceBuilder()
+        final InvoiceBuilder invoiceBuilder = new InvoiceBuilder()
                 .init(tipoDocumento, number, date, moneda, tipoIdEmisor, idEmisor, razonSocialEmisor, tipoIdCliente, idCliente, razonSocialCliente)
                 .addAmount("1001", BigDecimal.valueOf(10000, 2))
                 .addAmount("1002", BigDecimal.valueOf(0, 2))
@@ -54,23 +46,36 @@ public class IntegralTest {
                 .addNote("1000", "CIENTO DIECIOCHO Y 00/100 NUEVOS SOLES")
                 .addCustomNote("9999", "COMENTARIO")
                 .addTax("1000", "IGV", "VAT", BigDecimal.valueOf(1800, 2))
-//                .addTotalCharge(()null)
+                //                .addTotalCharge(()null)
                 .addTotalPayable(BigDecimal.valueOf(11800, 2))
                 .addLine(
                         new InvoiceLineBuilder()
                         .init("1", BigDecimal.ONE, "NIU", "IH-107", "articulo 1", "PEN", BigDecimal.valueOf(10000, 2), "01", BigDecimal.valueOf(11800, 2), BigDecimal.valueOf(10000, 2))
                         .addTax("1000", "IGV", "VAT", BigDecimal.valueOf(1800, 2), "10", null)
                         .compile()
-                )
-                .compile();
+                );
 
-        m.marshal(invoice, System.out);
+//        m.marshal(invoice, System.out);
+        Document document = invoiceBuilder.document("ISO-8859-1");
 
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document xmlInvoice = db.newDocument();
-        m.marshal(invoice, xmlInvoice);
+        Invoice i = invoiceBuilder.compile();
+        JAXBContext ctx = JAXBContext.newInstance(Invoice.class);
+
+        Marshaller m = ctx.createMarshaller();
+        m.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+
+        m.marshal(i, System.out);
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        document.setXmlStandalone(true);
+
+        DigitalSign ds = new DigitalSign();
+
+        String text = ds.createTextRepresentation(document, "ISO-8859-1");
+        System.out.println(text);
     }
 
 }

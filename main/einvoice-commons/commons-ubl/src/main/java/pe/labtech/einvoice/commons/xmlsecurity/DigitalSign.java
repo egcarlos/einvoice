@@ -5,7 +5,9 @@
  */
 package pe.labtech.einvoice.commons.xmlsecurity;
 
-import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.Key;
 import java.security.KeyException;
@@ -26,6 +28,7 @@ import javax.xml.crypto.dsig.dom.DOMSignContext;
 import javax.xml.crypto.dsig.keyinfo.KeyInfoFactory;
 import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
 import javax.xml.crypto.dsig.spec.TransformParameterSpec;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -66,12 +69,28 @@ public class DigitalSign {
      * @return
      */
     public String createTextRepresentation(Document document) {
+        byte[] representation = createRepresentation(document, Charset.defaultCharset().name());
+        return new String(representation);
+    }
+
+    public String createTextRepresentation(Document document, String charsetName) {
         try {
-            StringWriter sw = new StringWriter();
+            byte[] representation = createRepresentation(document, charsetName);
+            return new String(representation, charsetName);
+        } catch (UnsupportedEncodingException ex) {
+            throw new SignatureException("Invalid charset " + charsetName, ex);
+        }
+    }
+
+    public byte[] createRepresentation(Document document, String charsetName) {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(10240);
             TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer trans = tf.newTransformer();
-            trans.transform(new DOMSource(document), new StreamResult(sw));
-            return sw.toString();
+//            tf.setAttribute(OutputKeys.ENCODING, charsetName);
+            Transformer t = tf.newTransformer();
+            t.setParameter(OutputKeys.ENCODING, charsetName);
+            t.transform(new DOMSource(document), new StreamResult(bos));
+            return bos.toByteArray();
         } catch (TransformerException ex) {
             throw new SignatureException("Unable to serialize XML", ex);
         }
@@ -179,19 +198,6 @@ public class DigitalSign {
                 Node node = (Node) xpath.evaluate("//" + prefix + ":Signature", document, XPathConstants.NODE);
                 node.getAttributes().removeNamedItem("xmlns");
             }
-            //remove empty spaces from the certificate representation
-//            {
-//                Node node = (Node) xpath.evaluate("//" + prefix + ":X509Certificate", document, XPathConstants.NODE);
-//                NodeList nodes = node.getChildNodes();
-//                for (int i = 0; i < nodes.getLength(); i++) {
-//                    Node item = nodes.item(i);
-//                    String nodeValue = item
-//                            .getNodeValue()
-//                            .replace("\n", "")
-//                            .replace("\r", "");
-//                    item.setNodeValue(nodeValue);
-//                }
-//            }
         } catch (XPathExpressionException ex) {
             throw new SignatureException("Unable to normalize signature elements", ex);
         }
