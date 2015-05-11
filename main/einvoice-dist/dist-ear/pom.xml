@@ -46,6 +46,11 @@
                             <artifactId>einvoice-dist-apirest</artifactId>
                             <contextRoot>/einvoice/rest</contextRoot>
                         </webModule>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>einvoice-dist-console</artifactId>
+                            <contextRoot>/einvoice/console</contextRoot>
+                        </webModule>
                     </modules>
                 </configuration>
             </plugin>
@@ -55,6 +60,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>einvoice-dist-apirest</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>einvoice-dist-console</artifactId>
             <version>${project.version}</version>
             <type>war</type>
         </dependency>

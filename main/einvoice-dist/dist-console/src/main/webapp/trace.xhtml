@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link href="jquery-ui.css" rel="stylesheet" />
+        <script type="text/javascript" src="external/jquery/jquery.js"></script>
+        <script type="text/javascript" src="jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/default.min.css" />
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('pre code').each(function (i, block) {
+                    hljs.highlightBlock(block);
+                });
+                $('.ei-popup').dialog({autoOpen: false, modal: true, maxHeight: 600, maxWidth:980, width:780});
+            });
+            function showPopup(popupId) {
+                $("#" + popupId).dialog("open");
+            }
+        </script>
+        <style type="text/css">
+            .hljs {
+                font-size: 0.7em;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:inputText value="${traceManager.query}" />
+            <h:commandButton value="Search" action="${traceManager.search()}" />
+        </h:form>
+        <h:dataTable value="${traceManager.results}" var="item">
+            <h:column>
+                <h:outputText value="${item.document.documentType}-${item.document.documentNumber}" />
+            </h:column>
+            <h:column>
+                <h:outputText value="${item.date}" />
+            </h:column>
+            <h:column>
+                <h:outputText value="${item.type}" />
+            </h:column>
+            <h:column>
+                <a href="javascript:showPopup('popup-${item.id}')">${traceManager.reduce(item.message)}</a>
+                <div class="ei-popup" id="popup-${item.id}" title="Mensaje">
+                    <pre><code class="xml">${item.message}</code></pre>
+                </div>
+            </h:column>
+        </h:dataTable>
+    </h:body>
+</html>
