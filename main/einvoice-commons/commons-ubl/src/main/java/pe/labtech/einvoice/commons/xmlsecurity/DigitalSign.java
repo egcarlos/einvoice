@@ -41,6 +41,7 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import pe.labtech.ubl.model.Namespaces;
 
 /**
  *
@@ -184,7 +185,7 @@ public class DigitalSign {
             XPath xpath = buildXpath(document);
             String prefix = xpath
                     .getNamespaceContext()
-                    .getPrefix("http://www.w3.org/2000/09/xmldsig#");
+                    .getPrefix(Namespaces.DS);
 
             //add prefix to signature elements
             {

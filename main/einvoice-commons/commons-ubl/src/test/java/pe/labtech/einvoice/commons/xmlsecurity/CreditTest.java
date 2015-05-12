@@ -20,7 +20,7 @@ import pe.labtech.ubl.model.Invoice;
  *
  * @author carloseg
  */
-public class IntegralTest {
+public class CreditTest {
 
     @Test
     public void jbcontext() throws JAXBException, ParserConfigurationException {

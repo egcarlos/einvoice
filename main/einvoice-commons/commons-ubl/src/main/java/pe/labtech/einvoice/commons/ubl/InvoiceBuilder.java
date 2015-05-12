@@ -20,9 +20,12 @@ import pe.labtech.ubl.model.InvoicePrefixMapper;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
 import pe.labtech.ubl.model.aggregate.Address;
 import pe.labtech.ubl.model.aggregate.Attachment;
+import pe.labtech.ubl.model.aggregate.BillingReference;
 import pe.labtech.ubl.model.aggregate.Country;
+import pe.labtech.ubl.model.aggregate.DiscrepancyResponse;
 import pe.labtech.ubl.model.aggregate.DocumentReference;
 import pe.labtech.ubl.model.aggregate.ExternalReference;
+import pe.labtech.ubl.model.aggregate.InvoiceDocumentReference;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
 import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
 import pe.labtech.ubl.model.aggregate.Party;
@@ -390,6 +393,32 @@ public class InvoiceBuilder implements Builder<Invoice> {
             invoice.getAdditionalDocumentReference().add(
                     new DocumentReference(type, number)
             );
+        }
+        return this;
+    }
+
+    public InvoiceBuilder addDiscrepancyResponse(String ReferenceID, String ResponseCode, String Description) {
+        if (ReferenceID != null && ResponseCode != null && Description != null) {
+            invoice
+                    .getDiscrepancyResponse()
+                    .add(
+                            new DiscrepancyResponse(ReferenceID, ResponseCode, Description)
+                    );
+        }
+        return this;
+    }
+
+    public InvoiceBuilder addInvoiceDocumentReference(String ID, String DocumentTypeCode) {
+        if (ID != null && DocumentTypeCode != null) {
+            if (invoice.getBillingReference() == null) {
+                invoice.setBillingReference(new BillingReference());
+            }
+            invoice
+                    .getBillingReference()
+                    .getInvoiceDocumentReference()
+                    .add(
+                            new InvoiceDocumentReference(ID, DocumentTypeCode)
+                    );
         }
         return this;
     }

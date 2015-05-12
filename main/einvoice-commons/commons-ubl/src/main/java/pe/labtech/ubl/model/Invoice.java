@@ -16,6 +16,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
+import pe.labtech.ubl.model.aggregate.BillingReference;
+import pe.labtech.ubl.model.aggregate.DiscrepancyResponse;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
 import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
 
@@ -53,6 +55,13 @@ public class Invoice {
     //mapea a moneda documento
     @XmlElement(namespace = Namespaces.CBC)
     private String DocumentCurrencyCode;
+
+    //campos adicionales para la nota de crédito
+    @XmlElement(namespace = Namespaces.CAC)
+    private List<DiscrepancyResponse> DiscrepancyResponse;
+
+    @XmlElement(namespace = Namespaces.CAC)
+    private BillingReference BillingReference;
 
     //holder para la firma
     @XmlElement(namespace = Namespaces.CAC)
@@ -142,6 +151,25 @@ public class Invoice {
 
     public void setDocumentCurrencyCode(String DocumentCurrencyCode) {
         this.DocumentCurrencyCode = DocumentCurrencyCode;
+    }
+
+    public List<DiscrepancyResponse> getDiscrepancyResponse() {
+        if (DiscrepancyResponse == null) {
+            return new LinkedList<>();
+        }
+        return DiscrepancyResponse;
+    }
+
+    public void setDiscrepancyResponse(List<DiscrepancyResponse> DiscrepancyResponse) {
+        this.DiscrepancyResponse = DiscrepancyResponse;
+    }
+
+    public BillingReference getBillingReference() {
+        return BillingReference;
+    }
+
+    public void setBillingReference(BillingReference BillingReference) {
+        this.BillingReference = BillingReference;
     }
 
     public Signature getSignature() {
