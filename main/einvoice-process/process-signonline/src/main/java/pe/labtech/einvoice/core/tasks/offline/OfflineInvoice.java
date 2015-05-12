@@ -23,6 +23,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import pe.labtech.einvoice.commons.ext.ZipTools;
+import pe.labtech.einvoice.commons.ubl.DocumentMorpher;
 import pe.labtech.einvoice.commons.ubl.InvoiceBuilder;
 import pe.labtech.einvoice.commons.ubl.InvoiceLineBuilder;
 import pe.labtech.einvoice.core.entity.Document;
@@ -58,6 +59,16 @@ public class OfflineInvoice {
 
         //move to the xml representation
         org.w3c.dom.Document xml = ib.document(DEFAULT_ENCODING);
+
+        //if document type is 07 morph to creditNote
+        if ("07".equals(document.getDocumentType())) {
+            DocumentMorpher.morphToCreditNote(xml);
+        }
+
+        //if document type is 08 morph to debitNote
+        if ("07".equals(document.getDocumentType())) {
+            DocumentMorpher.morphToDebitNote(xml);
+        }
 
         //sign
         signDocument(document.getClientId(), xml);
@@ -176,7 +187,10 @@ public class OfflineInvoice {
                     .addAdditionalReference(da.get("tipoReferenciaAdicional_5"), da.get("numeroDocumentoReferenciaAdicional_5"))
                     .addTotalAllowance(da.get("descuentosGlobales"))
                     .addTotalCharge(da.get("totalOtrosCargos"))
-                    .addTotalPayable(da.get("totalVenta"));
+                    .addTotalPayable(da.get("totalVenta"))
+                    //fix para notas de credito y debito
+                    .addDiscrepancyResponse(da.get("serieNumeroAfectado"), da.get("codigoSerieNumeroAfectado"), da.get("motivoDocumento"))
+                    .addInvoiceDocumentReference(da.get("numeroDocumentoReferenciaPrincipal"), da.get("tipoDocumentoReferenciaPrincipal"));
 
             //add document legend data
             if (d.getLegends() != null && !d.getLegends().isEmpty()) {
