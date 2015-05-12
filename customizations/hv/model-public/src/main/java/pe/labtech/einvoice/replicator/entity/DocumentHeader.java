@@ -7,12 +7,12 @@ package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 /**
@@ -21,1173 +21,1312 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "SPE_EINVOICEHEADER")
-@NamedQueries({
-    @NamedQuery(name = "Header.findAll", query = "SELECT h FROM DocumentHeader h")})
 public class DocumentHeader implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected DocumentHeaderPK headerPK;
+    private DocumentHeaderPK id;
     @Column(name = "CTIPDOCUMENTOEMISOR")
-    private Character ctipdocumentoemisor;
+    private Character tipoDocumentoEmisor;
     @Size(max = 11)
-    @Column(name = "CDOCUMENTOEMISOR")
-    private String cdocumentoemisor;
-    @Size(max = 100)
-    @Column(name = "CRSOCIALEMISOR")
-    private String crsocialemisor;
-    @Size(max = 100)
-    @Column(name = "CNCOMERCIALEMISOR")
-    private String cncomercialemisor;
+    @Column(name = "CDOCUMENTOEMISOR", length = 11)
+    private String numeroDocumentoEmisor;
     @Size(max = 2)
-    @Column(name = "CTIPCOMPROBANTE")
-    private String ctipcomprobante;
+    @Column(name = "CTIPCOMPROBANTE", length = 2)
+    private String tipoDocumento;
     @Size(max = 13)
-    @Column(name = "CCOMPROBANTE")
-    private String ccomprobante;
+    @Column(name = "CCOMPROBANTE", length = 13)
+    private String serieNumero;
+
+    @Size(max = 100)
+    @Column(name = "CRSOCIALEMISOR", length = 100)
+    private String razonSocialEmisor;
+    @Size(max = 100)
+    @Column(name = "CNCOMERCIALEMISOR", length = 100)
+    private String nombreComercialEmisor;
+
     @Size(max = 10)
-    @Column(name = "CFEMISION")
-    private String cfemision;
+    @Column(name = "CFEMISION", length = 10)
+    private String fechaEmision;
     @Size(max = 6)
-    @Column(name = "CUBIGEOEMISOR")
-    private String cubigeoemisor;
+    @Column(name = "CUBIGEOEMISOR", length = 6)
+    private String ubigeoEmisor;
     @Size(max = 100)
-    @Column(name = "CDIRECCIONEMISOR")
-    private String cdireccionemisor;
+    @Column(name = "CDIRECCIONEMISOR", length = 100)
+    private String direccionEmisor;
     @Size(max = 25)
-    @Column(name = "CURBANIZACIONEMISOR")
-    private String curbanizacionemisor;
+    @Column(name = "CURBANIZACIONEMISOR", length = 25)
+    private String urbanizacion;
     @Size(max = 30)
-    @Column(name = "CDISTRITOEMISOR")
-    private String cdistritoemisor;
+    @Column(name = "CDISTRITOEMISOR", length = 30)
+    private String distritoEmisor;
     @Size(max = 30)
-    @Column(name = "CPROVINCIAEMISOR")
-    private String cprovinciaemisor;
+    @Column(name = "CPROVINCIAEMISOR", length = 30)
+    private String provinciaEmisor;
     @Size(max = 30)
-    @Column(name = "CDEPARTAMENTOEMISOR")
-    private String cdepartamentoemisor;
+    @Column(name = "CDEPARTAMENTOEMISOR", length = 30)
+    private String departamentoEmisor;
     @Size(max = 2)
-    @Column(name = "CCODPAISEMISOR")
-    private String ccodpaisemisor;
+    @Column(name = "CCODPAISEMISOR", length = 2)
+    private String paisEmisor;
     @Size(max = 100)
-    @Column(name = "CCORREOEMISOR")
-    private String ccorreoemisor;
+    @Column(name = "CCORREOEMISOR", length = 100)
+    private String correoEmisor;
     @Size(max = 2)
-    @Column(name = "CTIPNCREDITODEBITO")
-    private String ctipncreditodebito;
+    @Column(name = "CTIPNCREDITODEBITO", length = 2)
+    private String codigoSerieNumeroAfectado;
     @Size(max = 13)
-    @Column(name = "CCOMPROBANTEAFECTO")
-    private String ccomprobanteafecto;
+    @Column(name = "CCOMPROBANTEAFECTO", length = 13)
+    private String serieNumeroAfectado;
     @Column(name = "CTIPDOCUMENTOUSUARIO")
-    private Character ctipdocumentousuario;
+    private Character tipoDocumentoAdquiriente;
     @Size(max = 15)
-    @Column(name = "CDOCUMENTOUSUARIO")
-    private String cdocumentousuario;
+    @Column(name = "CDOCUMENTOUSUARIO", length = 15)
+    private String numeroDocumentoAdquiriente;
     @Size(max = 100)
-    @Column(name = "CRSOCIALUSUARIO")
-    private String crsocialusuario;
+    @Column(name = "CRSOCIALUSUARIO", length = 100)
+    private String razonSocialAdquiriente;
     @Size(max = 100)
-    @Column(name = "CDIRECCIONUSUARIO")
-    private String cdireccionusuario;
+    @Column(name = "CDIRECCIONUSUARIO", length = 100)
+    private String lugarDestino;
     @Size(max = 100)
-    @Column(name = "CCORREOUSUARIO")
-    private String ccorreousuario;
+    @Column(name = "CCORREOUSUARIO", length = 100)
+    private String correoAdquiriente;
     @Size(max = 3)
-    @Column(name = "CMONEDA")
-    private String cmoneda;
+    @Column(name = "CMONEDA", length = 3)
+    private String tipoMoneda;
     @Size(max = 500)
-    @Column(name = "CMOTNCREDITODEBITO")
-    private String cmotncreditodebito;
+    @Column(name = "CMOTNCREDITODEBITO", length = 500)
+    private String motivoDocumento;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "CVVENTAGRAVADA")
-    private BigDecimal cvventagravada;
-    @Column(name = "CVVENTANOGRAVADA")
-    private BigDecimal cvventanogravada;
-    @Column(name = "CVVENTAEXONERADA")
-    private BigDecimal cvventaexonerada;
-    @Column(name = "CVVENTAGRATUITA")
-    private BigDecimal cvventagratuita;
-    @Column(name = "CSUBTOTAL")
-    private BigDecimal csubtotal;
-    @Column(name = "CIGV")
-    private BigDecimal cigv;
-    @Column(name = "CISC")
-    private BigDecimal cisc;
-    @Column(name = "CTRIBUTO")
-    private BigDecimal ctributo;
-    @Column(name = "CCARGO")
-    private BigDecimal ccargo;
-    @Column(name = "CDESCUENTO")
-    private BigDecimal cdescuento;
-    @Column(name = "CDESCUENTOGLOBAL")
-    private BigDecimal cdescuentoglobal;
-    @Column(name = "CTOTAL")
-    private BigDecimal ctotal;
+    @Column(name = "CVVENTAGRAVADA", precision = 19, scale = 2)
+    private BigDecimal totalValorVentaNetoOpGravadas;
+    @Column(name = "CVVENTANOGRAVADA", precision = 19, scale = 2)
+    private BigDecimal totalValorVentaNetoOpNoGravada;
+    @Column(name = "CVVENTAEXONERADA", precision = 19, scale = 2)
+    private BigDecimal totalValorVentaNetoOpExoneradas;
+    @Column(name = "CVVENTAGRATUITA", precision = 19, scale = 2)
+    private BigDecimal totalValorVentaNetoOpGratuitas;
+    @Column(name = "CSUBTOTAL", precision = 19, scale = 2)
+    private BigDecimal subTotal;
+    @Column(name = "CIGV", precision = 19, scale = 2)
+    private BigDecimal totalIgv;
+    @Column(name = "CISC", precision = 19, scale = 2)
+    private BigDecimal totalIsc;
+    @Column(name = "CTRIBUTO", precision = 19, scale = 2)
+    private BigDecimal totalOtrosTributos;
+    @Column(name = "CCARGO", precision = 19, scale = 2)
+    private BigDecimal totalOtrosCargos;
+    @Column(name = "CDESCUENTO", precision = 19, scale = 2)
+    private BigDecimal totalDescuentos;
+    @Column(name = "CDESCUENTOGLOBAL", precision = 19, scale = 2)
+    private BigDecimal descuentosGlobales;
+    @Column(name = "CTOTAL", precision = 19, scale = 2)
+    private BigDecimal totalVenta;
     @Size(max = 3)
-    @Column(name = "CMONEDANCREDITODEBITO")
-    private String cmonedancreditodebito;
+    @Column(name = "CMONEDANCREDITODEBITO", length = 3)
+    private String x_tipoMoneda;
     @Size(max = 2)
-    @Column(name = "CTIPNCREDITODEBITO1")
-    private String ctipncreditodebito1;
+    @Column(name = "CTIPNCREDITODEBITO1", length = 2)
+    private String tipoDocumentoReferenciaPrincipal;
     @Size(max = 13)
-    @Column(name = "CCOMPROBANTEAFECTO1")
-    private String ccomprobanteafecto1;
+    @Column(name = "CCOMPROBANTEAFECTO1", length = 13)
+    private String numeroDocumentoReferenciaPrincipal;
     @Size(max = 2)
-    @Column(name = "CTIPNCREDITODEBITO2")
-    private String ctipncreditodebito2;
+    @Column(name = "CTIPNCREDITODEBITO2", length = 2)
+    private String tipoDocumentoReferenciaCorregido;
     @Size(max = 13)
-    @Column(name = "CCOMPROBANTEAFECTO2")
-    private String ccomprobanteafecto2;
-    @Column(name = "CBASEPERCEPCION")
-    private BigDecimal cbasepercepcion;
-    @Column(name = "CTOTALPERCEPCION")
-    private BigDecimal ctotalpercepcion;
-    @Column(name = "CVENTAPERCEPCION")
-    private BigDecimal cventapercepcion;
-    @Column(name = "CPORCPERCEPCION")
-    private BigDecimal cporcpercepcion;
-    @Column(name = "CTOTALRETENCION")
-    private BigDecimal ctotalretencion;
-    @Column(name = "CPORCRETENCION")
-    private BigDecimal cporcretencion;
-    @Column(name = "CTOTALDETRACCION")
-    private BigDecimal ctotaldetraccion;
-    @Column(name = "CPORCDETRACCION")
-    private BigDecimal cporcdetraccion;
+    @Column(name = "CCOMPROBANTEAFECTO2", length = 13)
+    private String numeroDocumentoReferenciaCorregido;
+    @Column(name = "CBASEPERCEPCION", precision = 19, scale = 2)
+    private BigDecimal baseImponiblePercepcion;
+    @Column(name = "CTOTALPERCEPCION", precision = 19, scale = 2)
+    private BigDecimal totalPercepcion;
+    @Column(name = "CVENTAPERCEPCION", precision = 19, scale = 2)
+    private BigDecimal totalVentaConPercepcion;
+    @Column(name = "CPORCPERCEPCION", precision = 19, scale = 2)
+    private BigDecimal porcentajePercepcion;
+    @Column(name = "CTOTALRETENCION", precision = 19, scale = 2)
+    private BigDecimal totalRetencion;
+    @Column(name = "CPORCRETENCION", precision = 19, scale = 2)
+    private BigDecimal porcentajeRetencion;
+    @Column(name = "CTOTALDETRACCION", precision = 19, scale = 2)
+    private BigDecimal totalDetraccion;
+    @Column(name = "CPORCDETRACCION", precision = 19, scale = 2)
+    private BigDecimal porcentajeDetraccion;
     @Size(max = 100)
-    @Column(name = "CDESCDETRACCION")
-    private String cdescdetraccion;
-    @Column(name = "CVALORDETRACCION")
-    private BigDecimal cvalordetraccion;
-    @Column(name = "CBONIFICACION")
-    private BigDecimal cbonificacion;
+    @Column(name = "CDESCDETRACCION", length = 100)
+    private String descripcionDetraccion;
+    @Column(name = "CVALORDETRACCION", precision = 19, scale = 2)
+    private BigDecimal valorReferencialDetraccion;
+    @Column(name = "CBONIFICACION", precision = 19, scale = 2)
+    private BigDecimal totalBonificacion;
     @Column(name = "CHABILITADO")
-    private Character chabilitado;
-    @Size(max = 500)
-    @Column(name = "CLEY1")
-    private String cley1;
-    @Size(max = 500)
-    @Column(name = "CLEY2")
-    private String cley2;
-    @Size(max = 500)
-    @Column(name = "CLEY3")
-    private String cley3;
-    @Size(max = 500)
-    @Column(name = "CLEY4")
-    private String cley4;
-    @Size(max = 500)
-    @Column(name = "CAUX1")
-    private String caux1;
-    @Size(max = 500)
-    @Column(name = "CAUX2")
-    private String caux2;
-    @Size(max = 500)
-    @Column(name = "CAUX3")
-    private String caux3;
-    @Size(max = 500)
-    @Column(name = "CAUX4")
-    private String caux4;
-    @Size(max = 500)
-    @Column(name = "CAUX5")
-    private String caux5;
-    @Size(max = 500)
-    @Column(name = "CAUX6")
-    private String caux6;
-    @Size(max = 500)
-    @Column(name = "CAUX7")
-    private String caux7;
-    @Size(max = 500)
-    @Column(name = "CAUX8")
-    private String caux8;
-    @Size(max = 500)
-    @Column(name = "CAUX9")
-    private String caux9;
-    @Size(max = 500)
-    @Column(name = "CAUX10")
-    private String caux10;
-    @Size(max = 500)
-    @Column(name = "CAUX11")
-    private String caux11;
-    @Size(max = 500)
-    @Column(name = "CAUX12")
-    private String caux12;
-    @Size(max = 500)
-    @Column(name = "CAUX13")
-    private String caux13;
-    @Size(max = 500)
-    @Column(name = "CAUX14")
-    private String caux14;
-    @Size(max = 500)
-    @Column(name = "CAUX15")
-    private String caux15;
-    @Size(max = 500)
-    @Column(name = "CAUX16")
-    private String caux16;
-    @Size(max = 500)
-    @Column(name = "CAUX17")
-    private String caux17;
-    @Size(max = 500)
-    @Column(name = "CAUX18")
-    private String caux18;
-    @Size(max = 500)
-    @Column(name = "CAUX19")
-    private String caux19;
-    @Size(max = 500)
-    @Column(name = "CAUX20")
-    private String caux20;
-    @Size(max = 500)
-    @Column(name = "CAUX21")
-    private String caux21;
-    @Size(max = 500)
-    @Column(name = "CAUX22")
-    private String caux22;
-    @Size(max = 500)
-    @Column(name = "CAUX23")
-    private String caux23;
-    @Size(max = 500)
-    @Column(name = "CAUX24")
-    private String caux24;
-    @Size(max = 500)
-    @Column(name = "CAUX25")
-    private String caux25;
-    @Size(max = 500)
-    @Column(name = "CAUX26")
-    private String caux26;
-    @Size(max = 500)
-    @Column(name = "CAUX27")
-    private String caux27;
-    @Size(max = 500)
-    @Column(name = "CAUX28")
-    private String caux28;
-    @Size(max = 500)
-    @Column(name = "CAUX29")
-    private String caux29;
-    @Size(max = 500)
-    @Column(name = "CAUX30")
-    private String caux30;
-    @Size(max = 500)
-    @Column(name = "CAUX31")
-    private String caux31;
-    @Size(max = 500)
-    @Column(name = "CAUX32")
-    private String caux32;
-    @Size(max = 500)
-    @Column(name = "CAUX33")
-    private String caux33;
-    @Size(max = 500)
-    @Column(name = "CAUX34")
-    private String caux34;
-    @Size(max = 500)
-    @Column(name = "CAUX35")
-    private String caux35;
-    @Size(max = 500)
-    @Column(name = "CAUX36")
-    private String caux36;
+    private Character inHabilitado;
+    @Column(name = "CANTICIPO", precision = 19, scale = 2)
+    private BigDecimal totalDocumentoAnticipo;
+    @Transient
+    private String tipoReferenciaAdicional_1;
+    @Size(max = 13)
+    @Column(name = "CDOCANTICIPO1", length = 13)
+    private String numeroDocumentoReferenciaAdicional_1;
+    @Transient
+    private String tipoReferenciaAdicional_2;
+    @Size(max = 13)
+    @Column(name = "CDOCANTICIPO2", length = 13)
+    private String numeroDocumentoReferenciaAdicional_2;
+    @Transient
+    private String tipoReferenciaAdicional_3;
+    @Size(max = 13)
+    @Column(name = "CDOCANTICIPO3", length = 13)
+    private String numeroDocumentoReferenciaAdicional_3;
+    @Transient
+    private String tipoReferenciaAdicional_4;
+    @Size(max = 13)
+    @Column(name = "CDOCANTICIPO4", length = 13)
+    private String numeroDocumentoReferenciaAdicional_4;
+    @Transient
+    private String tipoReferenciaAdicional_5;
+    @Size(max = 13)
+    @Column(name = "CDOCANTICIPO5", length = 13)
+    private String numeroDocumentoReferenciaAdicional_5;
+    @Size(max = 200)
+
+    @Transient//siempre 1000:monto en letras
+    private String codigoLeyenda_1;
+    @Column(name = "CLEY1", length = 200)
+    private String textoLeyenda_1;
+    @Transient//siempre 1002:mensaje de gratuita
+    private String codigoLeyenda_2;
+    @Size(max = 200)
+    @Column(name = "CLEY2", length = 200)
+    private String textoLeyenda_2;
+    @Transient//siempre 3000:detracciones
+    private String codigoLeyenda_3;
+    @Size(max = 200)
+    @Column(name = "CLEY3", length = 200)
+    private String textoLeyenda_3;
+    @Transient//siempre 3001:detracciones
+    private String codigoLeyenda_4;
+    @Size(max = 200)
+    @Column(name = "CLEY4", length = 200)
+    private String textoLeyenda_4;
+
+    @Size(max = 40)
+    @Column(name = "CAUX1", length = 40)
+    private String textoAuxiliar40_1;
+    @Size(max = 40)
+    @Column(name = "CAUX8", length = 40)
+    private String textoAuxiliar40_2;
+    @Size(max = 40)
+    @Column(name = "CAUX9", length = 40)
+    private String textoAuxiliar40_3;
+    @Size(max = 40)
+    @Column(name = "CAUX10", length = 40)
+    private String textoAuxiliar40_4;
+    @Size(max = 40)
+    @Column(name = "CAUX11", length = 40)
+    private String textoAuxiliar40_5;
+    @Size(max = 40)
+    @Column(name = "CAUX12", length = 40)
+    private String textoAuxiliar40_6;
+    @Size(max = 40)
+    @Column(name = "CAUX13", length = 40)
+    private String textoAuxiliar40_7;
+    @Size(max = 40)
+    @Column(name = "CAUX14", length = 40)
+    private String textoAuxiliar40_8;
+    @Size(max = 40)
+    @Column(name = "CAUX15", length = 40)
+    private String textoAuxiliar40_9;
+    @Size(max = 40)
+    @Column(name = "CAUX16", length = 40)
+    private String textoAuxiliar40_10;
+    @Size(max = 40)
+    @Column(name = "CAUX17", length = 40)
+    private String textoAuxiliar40_11;
+    @Size(max = 40)
+    @Column(name = "CAUX18", length = 40)
+    private String textoAuxiliar40_12;
+
+    //bloque de observaciones
+    @Transient//siempre 9606:Observaciones
+    private String codigoAuxiliar250_1;
+    @Size(max = 250)
+    @Column(name = "CAUX36", length = 250)
+    private String textoAuxiliar250_1;
+    @Transient//siempre 9618:Observaciones
+    private String codigoAuxiliar250_2;
+    @Size(max = 250)
+    @Column(name = "CAUX19", length = 250)
+    private String textoAuxiliar250_2;
+    @Transient//siempre 9998:Observaciones
+    private String codigoAuxiliar250_3;
+    @Size(max = 250)
+    @Column(name = "CAUX20", length = 250)
+    private String textoAuxiliar250_3;
+
+    @Transient//siempre 9171:Centro de Costo
+    private String codigoAuxiliar100_1;
+    @Size(max = 100)
+    @Column(name = "CAUX21", length = 100)
+    private String textoAuxiliar100_1;
+    @Size(max = 100)
+    @Column(name = "CAUX22", length = 100)
+    private String textoAuxiliar100_2;
+    @Size(max = 100)
+    @Column(name = "CAUX23", length = 100)
+    private String textoAuxiliar100_3;
+    @Size(max = 100)
+    @Column(name = "CAUX24", length = 100)
+    private String textoAuxiliar100_4;
+    @Size(max = 100)
+    @Column(name = "CAUX25", length = 100)
+    private String textoAuxiliar100_5;
+    @Size(max = 100)
+    @Column(name = "CAUX26", length = 100)
+    private String textoAuxiliar100_6;
+    @Size(max = 100)
+    @Column(name = "CAUX27", length = 100)
+    private String textoAuxiliar100_7;
+    @Size(max = 100)
+    @Column(name = "CAUX28", length = 100)
+    private String textoAuxiliar100_8;
+    @Size(max = 100)
+    @Column(name = "CAUX29", length = 100)
+    private String textoAuxiliar100_9;
+    @Size(max = 100)
+    @Column(name = "CAUX30", length = 100)
+    private String textoAuxiliar100_10;
+    @Size(max = 100)
+    @Column(name = "CAUX31", length = 100)
+    private String textoAuxiliar100_11;
+    @Size(max = 100)
+    @Column(name = "CAUX32", length = 100)
+    private String textoAuxiliar100_12;
+    @Size(max = 100)
+    @Column(name = "CAUX33", length = 100)
+    private String textoAuxiliar100_13;
+    @Size(max = 100)
+    @Column(name = "CAUX34", length = 100)
+    private String textoAuxiliar100_14;
+    @Size(max = 100)
+    @Column(name = "CAUX35", length = 100)
+    private String textoAuxiliar100_15;
     @Column(name = "CESTADO")
-    private Character cestado;
-    @Size(max = 500)
-    @Column(name = "CNUMEROAUTORIZACION")
-    private String cnumeroautorizacion;
+    private Character bl_estadoRegistro;
     @Size(max = 10)
-    @Column(name = "CFECHAAUTORIZACION")
-    private String cfechaautorizacion;
+    @Column(name = "CFECHAAUTORIZACION", length = 10)
+    private String x_fechaAutorizacion;
     @Size(max = 8)
-    @Column(name = "CHORAAUTORIZACION")
-    private String choraautorizacion;
+    @Column(name = "CHORAAUTORIZACION", length = 8)
+    private String x_horaAutorizacion;
+    @Size(max = 100)
+    @Column(name = "CNUMEROAUTORIZACION", length = 100)
+    private String x_numeroAutorizacion;
     @Size(max = 1000)
-    @Column(name = "CRUTAXML")
-    private String crutaxml;
+    @Column(name = "CRUTAPDF", length = 1000)
+    private String bl_urlpdf;
     @Size(max = 1000)
-    @Column(name = "CRUTAPDF")
-    private String crutapdf;
+    @Column(name = "CRUTAXML", length = 1000)
+    private String bl_urlxmlubl;
+    @Size(max = 2000)
+    @Column(name = "LG_FIRMA", length = 2000)
+    private String bl_firma;
+    @Size(max = 2000)
+    @Column(name = "LG_FIRMA_HASH", length = 2000)
+    private String bl_hashFirma;
+    @Size(max = 2000)
+    @Column(name = "LG_LOAD_MESSAGES", length = 2000)
+    private String bl_mensaje;
     @Column(name = "LG_PROCESS_STATUS")
-    private Character lgProcessStatus;
+    private Character bl_estadoProceso;
     @Size(max = 20)
-    @Column(name = "LG_RECORD_STATUS")
-    private String lgRecordStatus;
+    @Column(name = "LG_RECORD_STATUS", length = 20)
+    private String x_recordStatus;
     @Size(max = 2000)
-    @Column(name = "LG_FIRMA")
-    private String lgFirma;
-    @Size(max = 2000)
-    @Column(name = "LG_FIRMA_HASH")
-    private String lgFirmaHash;
-    @Size(max = 2000)
-    @Column(name = "LG_LOAD_MESSAGES")
-    private String lgLoadMessages;
-    @Size(max = 2000)
-    @Column(name = "LG_SERVICE_RESPONSE")
-    private String lgServiceResponse;
+    @Column(name = "LG_SERVICE_RESPONSE", length = 2000)
+    private String bl_mensajeSunat;
 
     public DocumentHeader() {
     }
 
-    public DocumentHeader(DocumentHeaderPK headerPK) {
-        this.headerPK = headerPK;
+    public DocumentHeaderPK getId() {
+        return id;
     }
 
-    public DocumentHeaderPK getHeaderPK() {
-        return headerPK;
+    public void setId(DocumentHeaderPK id) {
+        this.id = id;
     }
 
-    public void setHeaderPK(DocumentHeaderPK headerPK) {
-        this.headerPK = headerPK;
+    public Character getTipoDocumentoEmisor() {
+        return tipoDocumentoEmisor;
     }
 
-    public Character getCtipdocumentoemisor() {
-        return ctipdocumentoemisor;
+    public void setTipoDocumentoEmisor(Character tipoDocumentoEmisor) {
+        this.tipoDocumentoEmisor = tipoDocumentoEmisor;
     }
 
-    public void setCtipdocumentoemisor(Character ctipdocumentoemisor) {
-        this.ctipdocumentoemisor = ctipdocumentoemisor;
+    public String getNumeroDocumentoEmisor() {
+        return numeroDocumentoEmisor;
     }
 
-    public String getCdocumentoemisor() {
-        return cdocumentoemisor;
+    public void setNumeroDocumentoEmisor(String numeroDocumentoEmisor) {
+        this.numeroDocumentoEmisor = numeroDocumentoEmisor;
     }
 
-    public void setCdocumentoemisor(String cdocumentoemisor) {
-        this.cdocumentoemisor = cdocumentoemisor;
+    public String getTipoDocumento() {
+        return tipoDocumento;
     }
 
-    public String getCrsocialemisor() {
-        return crsocialemisor;
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
-    public void setCrsocialemisor(String crsocialemisor) {
-        this.crsocialemisor = crsocialemisor;
+    public String getSerieNumero() {
+        return serieNumero;
     }
 
-    public String getCncomercialemisor() {
-        return cncomercialemisor;
+    public void setSerieNumero(String serieNumero) {
+        this.serieNumero = serieNumero;
     }
 
-    public void setCncomercialemisor(String cncomercialemisor) {
-        this.cncomercialemisor = cncomercialemisor;
+    public String getRazonSocialEmisor() {
+        return razonSocialEmisor;
     }
 
-    public String getCtipcomprobante() {
-        return ctipcomprobante;
+    public void setRazonSocialEmisor(String razonSocialEmisor) {
+        this.razonSocialEmisor = razonSocialEmisor;
     }
 
-    public void setCtipcomprobante(String ctipcomprobante) {
-        this.ctipcomprobante = ctipcomprobante;
+    public String getNombreComercialEmisor() {
+        return nombreComercialEmisor;
     }
 
-    public String getCcomprobante() {
-        return ccomprobante;
+    public void setNombreComercialEmisor(String nombreComercialEmisor) {
+        this.nombreComercialEmisor = nombreComercialEmisor;
     }
 
-    public void setCcomprobante(String ccomprobante) {
-        this.ccomprobante = ccomprobante;
+    public String getFechaEmision() {
+        return fechaEmision;
     }
 
-    public String getCfemision() {
-        return cfemision;
+    public void setFechaEmision(String fechaEmision) {
+        this.fechaEmision = fechaEmision;
     }
 
-    public void setCfemision(String cfemision) {
-        this.cfemision = cfemision;
+    public String getUbigeoEmisor() {
+        return ubigeoEmisor;
     }
 
-    public String getCubigeoemisor() {
-        return cubigeoemisor;
+    public void setUbigeoEmisor(String ubigeoEmisor) {
+        this.ubigeoEmisor = ubigeoEmisor;
     }
 
-    public void setCubigeoemisor(String cubigeoemisor) {
-        this.cubigeoemisor = cubigeoemisor;
+    public String getDireccionEmisor() {
+        return direccionEmisor;
     }
 
-    public String getCdireccionemisor() {
-        return cdireccionemisor;
+    public void setDireccionEmisor(String direccionEmisor) {
+        this.direccionEmisor = direccionEmisor;
     }
 
-    public void setCdireccionemisor(String cdireccionemisor) {
-        this.cdireccionemisor = cdireccionemisor;
+    public String getUrbanizacion() {
+        return urbanizacion;
     }
 
-    public String getCurbanizacionemisor() {
-        return curbanizacionemisor;
+    public void setUrbanizacion(String urbanizacion) {
+        this.urbanizacion = urbanizacion;
     }
 
-    public void setCurbanizacionemisor(String curbanizacionemisor) {
-        this.curbanizacionemisor = curbanizacionemisor;
+    public String getDistritoEmisor() {
+        return distritoEmisor;
     }
 
-    public String getCdistritoemisor() {
-        return cdistritoemisor;
+    public void setDistritoEmisor(String distritoEmisor) {
+        this.distritoEmisor = distritoEmisor;
     }
 
-    public void setCdistritoemisor(String cdistritoemisor) {
-        this.cdistritoemisor = cdistritoemisor;
+    public String getProvinciaEmisor() {
+        return provinciaEmisor;
     }
 
-    public String getCprovinciaemisor() {
-        return cprovinciaemisor;
+    public void setProvinciaEmisor(String provinciaEmisor) {
+        this.provinciaEmisor = provinciaEmisor;
     }
 
-    public void setCprovinciaemisor(String cprovinciaemisor) {
-        this.cprovinciaemisor = cprovinciaemisor;
+    public String getDepartamentoEmisor() {
+        return departamentoEmisor;
     }
 
-    public String getCdepartamentoemisor() {
-        return cdepartamentoemisor;
+    public void setDepartamentoEmisor(String departamentoEmisor) {
+        this.departamentoEmisor = departamentoEmisor;
     }
 
-    public void setCdepartamentoemisor(String cdepartamentoemisor) {
-        this.cdepartamentoemisor = cdepartamentoemisor;
+    public String getPaisEmisor() {
+        return paisEmisor;
     }
 
-    public String getCcodpaisemisor() {
-        return ccodpaisemisor;
+    public void setPaisEmisor(String paisEmisor) {
+        this.paisEmisor = paisEmisor;
     }
 
-    public void setCcodpaisemisor(String ccodpaisemisor) {
-        this.ccodpaisemisor = ccodpaisemisor;
+    public String getCorreoEmisor() {
+        return correoEmisor;
     }
 
-    public String getCcorreoemisor() {
-        return ccorreoemisor;
+    public void setCorreoEmisor(String correoEmisor) {
+        this.correoEmisor = correoEmisor;
     }
 
-    public void setCcorreoemisor(String ccorreoemisor) {
-        this.ccorreoemisor = ccorreoemisor;
+    public String getCodigoSerieNumeroAfectado() {
+        return codigoSerieNumeroAfectado;
     }
 
-    public String getCtipncreditodebito() {
-        return ctipncreditodebito;
+    public void setCodigoSerieNumeroAfectado(String codigoSerieNumeroAfectado) {
+        this.codigoSerieNumeroAfectado = codigoSerieNumeroAfectado;
     }
 
-    public void setCtipncreditodebito(String ctipncreditodebito) {
-        this.ctipncreditodebito = ctipncreditodebito;
+    public String getSerieNumeroAfectado() {
+        return serieNumeroAfectado;
     }
 
-    public String getCcomprobanteafecto() {
-        return ccomprobanteafecto;
+    public void setSerieNumeroAfectado(String serieNumeroAfectado) {
+        this.serieNumeroAfectado = serieNumeroAfectado;
     }
 
-    public void setCcomprobanteafecto(String ccomprobanteafecto) {
-        this.ccomprobanteafecto = ccomprobanteafecto;
+    public Character getTipoDocumentoAdquiriente() {
+        return tipoDocumentoAdquiriente;
     }
 
-    public Character getCtipdocumentousuario() {
-        return ctipdocumentousuario;
+    public void setTipoDocumentoAdquiriente(Character tipoDocumentoAdquiriente) {
+        this.tipoDocumentoAdquiriente = tipoDocumentoAdquiriente;
     }
 
-    public void setCtipdocumentousuario(Character ctipdocumentousuario) {
-        this.ctipdocumentousuario = ctipdocumentousuario;
+    public String getNumeroDocumentoAdquiriente() {
+        return numeroDocumentoAdquiriente;
     }
 
-    public String getCdocumentousuario() {
-        return cdocumentousuario;
+    public void setNumeroDocumentoAdquiriente(String numeroDocumentoAdquiriente) {
+        this.numeroDocumentoAdquiriente = numeroDocumentoAdquiriente;
     }
 
-    public void setCdocumentousuario(String cdocumentousuario) {
-        this.cdocumentousuario = cdocumentousuario;
+    public String getRazonSocialAdquiriente() {
+        return razonSocialAdquiriente;
     }
 
-    public String getCrsocialusuario() {
-        return crsocialusuario;
+    public void setRazonSocialAdquiriente(String razonSocialAdquiriente) {
+        this.razonSocialAdquiriente = razonSocialAdquiriente;
     }
 
-    public void setCrsocialusuario(String crsocialusuario) {
-        this.crsocialusuario = crsocialusuario;
+    public String getLugarDestino() {
+        return lugarDestino;
     }
 
-    public String getCdireccionusuario() {
-        return cdireccionusuario;
+    public void setLugarDestino(String lugarDestino) {
+        this.lugarDestino = lugarDestino;
     }
 
-    public void setCdireccionusuario(String cdireccionusuario) {
-        this.cdireccionusuario = cdireccionusuario;
+    public String getCorreoAdquiriente() {
+        return correoAdquiriente;
     }
 
-    public String getCcorreousuario() {
-        return ccorreousuario;
+    public void setCorreoAdquiriente(String correoAdquiriente) {
+        this.correoAdquiriente = correoAdquiriente;
     }
 
-    public void setCcorreousuario(String ccorreousuario) {
-        this.ccorreousuario = ccorreousuario;
+    public String getTipoMoneda() {
+        return tipoMoneda;
     }
 
-    public String getCmoneda() {
-        return cmoneda;
+    public void setTipoMoneda(String tipoMoneda) {
+        this.tipoMoneda = tipoMoneda;
     }
 
-    public void setCmoneda(String cmoneda) {
-        this.cmoneda = cmoneda;
+    public String getMotivoDocumento() {
+        return motivoDocumento;
     }
 
-    public String getCmotncreditodebito() {
-        return cmotncreditodebito;
+    public void setMotivoDocumento(String motivoDocumento) {
+        this.motivoDocumento = motivoDocumento;
     }
 
-    public void setCmotncreditodebito(String cmotncreditodebito) {
-        this.cmotncreditodebito = cmotncreditodebito;
+    public BigDecimal getTotalValorVentaNetoOpGravadas() {
+        return totalValorVentaNetoOpGravadas;
     }
 
-    public BigDecimal getCvventagravada() {
-        return cvventagravada;
+    public void setTotalValorVentaNetoOpGravadas(BigDecimal totalValorVentaNetoOpGravadas) {
+        this.totalValorVentaNetoOpGravadas = totalValorVentaNetoOpGravadas;
     }
 
-    public void setCvventagravada(BigDecimal cvventagravada) {
-        this.cvventagravada = cvventagravada;
+    public BigDecimal getTotalValorVentaNetoOpNoGravada() {
+        return totalValorVentaNetoOpNoGravada;
     }
 
-    public BigDecimal getCvventanogravada() {
-        return cvventanogravada;
+    public void setTotalValorVentaNetoOpNoGravada(BigDecimal totalValorVentaNetoOpNoGravada) {
+        this.totalValorVentaNetoOpNoGravada = totalValorVentaNetoOpNoGravada;
     }
 
-    public void setCvventanogravada(BigDecimal cvventanogravada) {
-        this.cvventanogravada = cvventanogravada;
+    public BigDecimal getTotalValorVentaNetoOpExoneradas() {
+        return totalValorVentaNetoOpExoneradas;
     }
 
-    public BigDecimal getCvventaexonerada() {
-        return cvventaexonerada;
+    public void setTotalValorVentaNetoOpExoneradas(BigDecimal totalValorVentaNetoOpExoneradas) {
+        this.totalValorVentaNetoOpExoneradas = totalValorVentaNetoOpExoneradas;
     }
 
-    public void setCvventaexonerada(BigDecimal cvventaexonerada) {
-        this.cvventaexonerada = cvventaexonerada;
+    public BigDecimal getTotalValorVentaNetoOpGratuitas() {
+        return totalValorVentaNetoOpGratuitas;
     }
 
-    public BigDecimal getCvventagratuita() {
-        return cvventagratuita;
+    public void setTotalValorVentaNetoOpGratuitas(BigDecimal totalValorVentaNetoOpGratuitas) {
+        this.totalValorVentaNetoOpGratuitas = totalValorVentaNetoOpGratuitas;
     }
 
-    public void setCvventagratuita(BigDecimal cvventagratuita) {
-        this.cvventagratuita = cvventagratuita;
+    public BigDecimal getSubTotal() {
+        return subTotal;
     }
 
-    public BigDecimal getCsubtotal() {
-        return csubtotal;
+    public void setSubTotal(BigDecimal subTotal) {
+        this.subTotal = subTotal;
     }
 
-    public void setCsubtotal(BigDecimal csubtotal) {
-        this.csubtotal = csubtotal;
+    public BigDecimal getTotalIgv() {
+        return totalIgv;
     }
 
-    public BigDecimal getCigv() {
-        return cigv;
+    public void setTotalIgv(BigDecimal totalIgv) {
+        this.totalIgv = totalIgv;
     }
 
-    public void setCigv(BigDecimal cigv) {
-        this.cigv = cigv;
+    public BigDecimal getTotalIsc() {
+        return totalIsc;
     }
 
-    public BigDecimal getCisc() {
-        return cisc;
+    public void setTotalIsc(BigDecimal totalIsc) {
+        this.totalIsc = totalIsc;
     }
 
-    public void setCisc(BigDecimal cisc) {
-        this.cisc = cisc;
+    public BigDecimal getTotalOtrosTributos() {
+        return totalOtrosTributos;
     }
 
-    public BigDecimal getCtributo() {
-        return ctributo;
+    public void setTotalOtrosTributos(BigDecimal totalOtrosTributos) {
+        this.totalOtrosTributos = totalOtrosTributos;
     }
 
-    public void setCtributo(BigDecimal ctributo) {
-        this.ctributo = ctributo;
+    public BigDecimal getTotalOtrosCargos() {
+        return totalOtrosCargos;
     }
 
-    public BigDecimal getCcargo() {
-        return ccargo;
+    public void setTotalOtrosCargos(BigDecimal totalOtrosCargos) {
+        this.totalOtrosCargos = totalOtrosCargos;
     }
 
-    public void setCcargo(BigDecimal ccargo) {
-        this.ccargo = ccargo;
+    public BigDecimal getTotalDescuentos() {
+        return totalDescuentos;
     }
 
-    public BigDecimal getCdescuento() {
-        return cdescuento;
+    public void setTotalDescuentos(BigDecimal totalDescuentos) {
+        this.totalDescuentos = totalDescuentos;
     }
 
-    public void setCdescuento(BigDecimal cdescuento) {
-        this.cdescuento = cdescuento;
+    public BigDecimal getDescuentosGlobales() {
+        return descuentosGlobales;
     }
 
-    public BigDecimal getCdescuentoglobal() {
-        return cdescuentoglobal;
+    public void setDescuentosGlobales(BigDecimal descuentosGlobales) {
+        this.descuentosGlobales = descuentosGlobales;
     }
 
-    public void setCdescuentoglobal(BigDecimal cdescuentoglobal) {
-        this.cdescuentoglobal = cdescuentoglobal;
+    public BigDecimal getTotalVenta() {
+        return totalVenta;
     }
 
-    public BigDecimal getCtotal() {
-        return ctotal;
+    public void setTotalVenta(BigDecimal totalVenta) {
+        this.totalVenta = totalVenta;
     }
 
-    public void setCtotal(BigDecimal ctotal) {
-        this.ctotal = ctotal;
+    public String getX_tipoMoneda() {
+        return x_tipoMoneda;
     }
 
-    public String getCmonedancreditodebito() {
-        return cmonedancreditodebito;
+    public void setX_tipoMoneda(String x_tipoMoneda) {
+        this.x_tipoMoneda = x_tipoMoneda;
     }
 
-    public void setCmonedancreditodebito(String cmonedancreditodebito) {
-        this.cmonedancreditodebito = cmonedancreditodebito;
+    public String getTipoDocumentoReferenciaPrincipal() {
+        return tipoDocumentoReferenciaPrincipal;
     }
 
-    public String getCtipncreditodebito1() {
-        return ctipncreditodebito1;
+    public void setTipoDocumentoReferenciaPrincipal(String tipoDocumentoReferenciaPrincipal) {
+        this.tipoDocumentoReferenciaPrincipal = tipoDocumentoReferenciaPrincipal;
     }
 
-    public void setCtipncreditodebito1(String ctipncreditodebito1) {
-        this.ctipncreditodebito1 = ctipncreditodebito1;
+    public String getNumeroDocumentoReferenciaPrincipal() {
+        return numeroDocumentoReferenciaPrincipal;
     }
 
-    public String getCcomprobanteafecto1() {
-        return ccomprobanteafecto1;
+    public void setNumeroDocumentoReferenciaPrincipal(String numeroDocumentoReferenciaPrincipal) {
+        this.numeroDocumentoReferenciaPrincipal = numeroDocumentoReferenciaPrincipal;
     }
 
-    public void setCcomprobanteafecto1(String ccomprobanteafecto1) {
-        this.ccomprobanteafecto1 = ccomprobanteafecto1;
+    public String getTipoDocumentoReferenciaCorregido() {
+        return tipoDocumentoReferenciaCorregido;
     }
 
-    public String getCtipncreditodebito2() {
-        return ctipncreditodebito2;
+    public void setTipoDocumentoReferenciaCorregido(String tipoDocumentoReferenciaCorregido) {
+        this.tipoDocumentoReferenciaCorregido = tipoDocumentoReferenciaCorregido;
     }
 
-    public void setCtipncreditodebito2(String ctipncreditodebito2) {
-        this.ctipncreditodebito2 = ctipncreditodebito2;
+    public String getNumeroDocumentoReferenciaCorregido() {
+        return numeroDocumentoReferenciaCorregido;
     }
 
-    public String getCcomprobanteafecto2() {
-        return ccomprobanteafecto2;
+    public void setNumeroDocumentoReferenciaCorregido(String numeroDocumentoReferenciaCorregido) {
+        this.numeroDocumentoReferenciaCorregido = numeroDocumentoReferenciaCorregido;
     }
 
-    public void setCcomprobanteafecto2(String ccomprobanteafecto2) {
-        this.ccomprobanteafecto2 = ccomprobanteafecto2;
+    public BigDecimal getBaseImponiblePercepcion() {
+        return baseImponiblePercepcion;
     }
 
-    public BigDecimal getCbasepercepcion() {
-        return cbasepercepcion;
+    public void setBaseImponiblePercepcion(BigDecimal baseImponiblePercepcion) {
+        this.baseImponiblePercepcion = baseImponiblePercepcion;
     }
 
-    public void setCbasepercepcion(BigDecimal cbasepercepcion) {
-        this.cbasepercepcion = cbasepercepcion;
+    public BigDecimal getTotalPercepcion() {
+        return totalPercepcion;
     }
 
-    public BigDecimal getCtotalpercepcion() {
-        return ctotalpercepcion;
+    public void setTotalPercepcion(BigDecimal totalPercepcion) {
+        this.totalPercepcion = totalPercepcion;
     }
 
-    public void setCtotalpercepcion(BigDecimal ctotalpercepcion) {
-        this.ctotalpercepcion = ctotalpercepcion;
+    public BigDecimal getTotalVentaConPercepcion() {
+        return totalVentaConPercepcion;
     }
 
-    public BigDecimal getCventapercepcion() {
-        return cventapercepcion;
+    public void setTotalVentaConPercepcion(BigDecimal totalVentaConPercepcion) {
+        this.totalVentaConPercepcion = totalVentaConPercepcion;
     }
 
-    public void setCventapercepcion(BigDecimal cventapercepcion) {
-        this.cventapercepcion = cventapercepcion;
+    public BigDecimal getPorcentajePercepcion() {
+        return porcentajePercepcion;
     }
 
-    public BigDecimal getCporcpercepcion() {
-        return cporcpercepcion;
+    public void setPorcentajePercepcion(BigDecimal porcentajePercepcion) {
+        this.porcentajePercepcion = porcentajePercepcion;
     }
 
-    public void setCporcpercepcion(BigDecimal cporcpercepcion) {
-        this.cporcpercepcion = cporcpercepcion;
+    public BigDecimal getTotalRetencion() {
+        return totalRetencion;
     }
 
-    public BigDecimal getCtotalretencion() {
-        return ctotalretencion;
+    public void setTotalRetencion(BigDecimal totalRetencion) {
+        this.totalRetencion = totalRetencion;
     }
 
-    public void setCtotalretencion(BigDecimal ctotalretencion) {
-        this.ctotalretencion = ctotalretencion;
+    public BigDecimal getPorcentajeRetencion() {
+        return porcentajeRetencion;
     }
 
-    public BigDecimal getCporcretencion() {
-        return cporcretencion;
+    public void setPorcentajeRetencion(BigDecimal porcentajeRetencion) {
+        this.porcentajeRetencion = porcentajeRetencion;
     }
 
-    public void setCporcretencion(BigDecimal cporcretencion) {
-        this.cporcretencion = cporcretencion;
+    public BigDecimal getTotalDetraccion() {
+        return totalDetraccion;
     }
 
-    public BigDecimal getCtotaldetraccion() {
-        return ctotaldetraccion;
+    public void setTotalDetraccion(BigDecimal totalDetraccion) {
+        this.totalDetraccion = totalDetraccion;
     }
 
-    public void setCtotaldetraccion(BigDecimal ctotaldetraccion) {
-        this.ctotaldetraccion = ctotaldetraccion;
+    public BigDecimal getPorcentajeDetraccion() {
+        return porcentajeDetraccion;
     }
 
-    public BigDecimal getCporcdetraccion() {
-        return cporcdetraccion;
+    public void setPorcentajeDetraccion(BigDecimal porcentajeDetraccion) {
+        this.porcentajeDetraccion = porcentajeDetraccion;
     }
 
-    public void setCporcdetraccion(BigDecimal cporcdetraccion) {
-        this.cporcdetraccion = cporcdetraccion;
+    public String getDescripcionDetraccion() {
+        return descripcionDetraccion;
     }
 
-    public String getCdescdetraccion() {
-        return cdescdetraccion;
+    public void setDescripcionDetraccion(String descripcionDetraccion) {
+        this.descripcionDetraccion = descripcionDetraccion;
     }
 
-    public void setCdescdetraccion(String cdescdetraccion) {
-        this.cdescdetraccion = cdescdetraccion;
+    public BigDecimal getValorReferencialDetraccion() {
+        return valorReferencialDetraccion;
     }
 
-    public BigDecimal getCvalordetraccion() {
-        return cvalordetraccion;
+    public void setValorReferencialDetraccion(BigDecimal valorReferencialDetraccion) {
+        this.valorReferencialDetraccion = valorReferencialDetraccion;
     }
 
-    public void setCvalordetraccion(BigDecimal cvalordetraccion) {
-        this.cvalordetraccion = cvalordetraccion;
+    public BigDecimal getTotalBonificacion() {
+        return totalBonificacion;
     }
 
-    public BigDecimal getCbonificacion() {
-        return cbonificacion;
+    public void setTotalBonificacion(BigDecimal totalBonificacion) {
+        this.totalBonificacion = totalBonificacion;
     }
 
-    public void setCbonificacion(BigDecimal cbonificacion) {
-        this.cbonificacion = cbonificacion;
+    public Character getInHabilitado() {
+        return inHabilitado;
     }
 
-    public Character getChabilitado() {
-        return chabilitado;
+    public void setInHabilitado(Character inHabilitado) {
+        this.inHabilitado = inHabilitado;
     }
 
-    public void setChabilitado(Character chabilitado) {
-        this.chabilitado = chabilitado;
+    public BigDecimal getTotalDocumentoAnticipo() {
+        return totalDocumentoAnticipo;
     }
 
-    public String getCley1() {
-        return cley1;
+    public void setTotalDocumentoAnticipo(BigDecimal totalDocumentoAnticipo) {
+        this.totalDocumentoAnticipo = totalDocumentoAnticipo;
     }
 
-    public void setCley1(String cley1) {
-        this.cley1 = cley1;
+    public String getTipoReferenciaAdicional_1() {
+        return tipoReferenciaAdicional_1;
     }
 
-    public String getCley2() {
-        return cley2;
+    public void setTipoReferenciaAdicional_1(String tipoReferenciaAdicional_1) {
+        this.tipoReferenciaAdicional_1 = tipoReferenciaAdicional_1;
     }
 
-    public void setCley2(String cley2) {
-        this.cley2 = cley2;
+    public String getNumeroDocumentoReferenciaAdicional_1() {
+        return numeroDocumentoReferenciaAdicional_1;
     }
 
-    public String getCley3() {
-        return cley3;
+    public void setNumeroDocumentoReferenciaAdicional_1(String numeroDocumentoReferenciaAdicional_1) {
+        this.numeroDocumentoReferenciaAdicional_1 = numeroDocumentoReferenciaAdicional_1;
     }
 
-    public void setCley3(String cley3) {
-        this.cley3 = cley3;
+    public String getTipoReferenciaAdicional_2() {
+        return tipoReferenciaAdicional_2;
     }
 
-    public String getCley4() {
-        return cley4;
+    public void setTipoReferenciaAdicional_2(String tipoReferenciaAdicional_2) {
+        this.tipoReferenciaAdicional_2 = tipoReferenciaAdicional_2;
     }
 
-    public void setCley4(String cley4) {
-        this.cley4 = cley4;
+    public String getNumeroDocumentoReferenciaAdicional_2() {
+        return numeroDocumentoReferenciaAdicional_2;
     }
 
-    public String getCaux1() {
-        return caux1;
+    public void setNumeroDocumentoReferenciaAdicional_2(String numeroDocumentoReferenciaAdicional_2) {
+        this.numeroDocumentoReferenciaAdicional_2 = numeroDocumentoReferenciaAdicional_2;
     }
 
-    public void setCaux1(String caux1) {
-        this.caux1 = caux1;
+    public String getTipoReferenciaAdicional_3() {
+        return tipoReferenciaAdicional_3;
     }
 
-    public String getCaux2() {
-        return caux2;
+    public void setTipoReferenciaAdicional_3(String tipoReferenciaAdicional_3) {
+        this.tipoReferenciaAdicional_3 = tipoReferenciaAdicional_3;
     }
 
-    public void setCaux2(String caux2) {
-        this.caux2 = caux2;
+    public String getNumeroDocumentoReferenciaAdicional_3() {
+        return numeroDocumentoReferenciaAdicional_3;
     }
 
-    public String getCaux3() {
-        return caux3;
+    public void setNumeroDocumentoReferenciaAdicional_3(String numeroDocumentoReferenciaAdicional_3) {
+        this.numeroDocumentoReferenciaAdicional_3 = numeroDocumentoReferenciaAdicional_3;
     }
 
-    public void setCaux3(String caux3) {
-        this.caux3 = caux3;
+    public String getTipoReferenciaAdicional_4() {
+        return tipoReferenciaAdicional_4;
     }
 
-    public String getCaux4() {
-        return caux4;
+    public void setTipoReferenciaAdicional_4(String tipoReferenciaAdicional_4) {
+        this.tipoReferenciaAdicional_4 = tipoReferenciaAdicional_4;
     }
 
-    public void setCaux4(String caux4) {
-        this.caux4 = caux4;
+    public String getNumeroDocumentoReferenciaAdicional_4() {
+        return numeroDocumentoReferenciaAdicional_4;
     }
 
-    public String getCaux5() {
-        return caux5;
+    public void setNumeroDocumentoReferenciaAdicional_4(String numeroDocumentoReferenciaAdicional_4) {
+        this.numeroDocumentoReferenciaAdicional_4 = numeroDocumentoReferenciaAdicional_4;
     }
 
-    public void setCaux5(String caux5) {
-        this.caux5 = caux5;
+    public String getTipoReferenciaAdicional_5() {
+        return tipoReferenciaAdicional_5;
     }
 
-    public String getCaux6() {
-        return caux6;
+    public void setTipoReferenciaAdicional_5(String tipoReferenciaAdicional_5) {
+        this.tipoReferenciaAdicional_5 = tipoReferenciaAdicional_5;
     }
 
-    public void setCaux6(String caux6) {
-        this.caux6 = caux6;
+    public String getNumeroDocumentoReferenciaAdicional_5() {
+        return numeroDocumentoReferenciaAdicional_5;
     }
 
-    public String getCaux7() {
-        return caux7;
+    public void setNumeroDocumentoReferenciaAdicional_5(String numeroDocumentoReferenciaAdicional_5) {
+        this.numeroDocumentoReferenciaAdicional_5 = numeroDocumentoReferenciaAdicional_5;
     }
 
-    public void setCaux7(String caux7) {
-        this.caux7 = caux7;
+    public String getCodigoLeyenda_1() {
+        codigoLeyenda_1 = textoLeyenda_1 == null ? null : "1000";
+        return codigoLeyenda_1;
     }
 
-    public String getCaux8() {
-        return caux8;
+    public void setCodigoLeyenda_1(String codigoLeyenda_1) {
+        this.codigoLeyenda_1 = codigoLeyenda_1;
     }
 
-    public void setCaux8(String caux8) {
-        this.caux8 = caux8;
+    public String getTextoLeyenda_1() {
+        return textoLeyenda_1;
     }
 
-    public String getCaux9() {
-        return caux9;
+    public void setTextoLeyenda_1(String textoLeyenda_1) {
+        this.textoLeyenda_1 = textoLeyenda_1;
     }
 
-    public void setCaux9(String caux9) {
-        this.caux9 = caux9;
+    public String getCodigoLeyenda_2() {
+        codigoLeyenda_2 = textoLeyenda_2 == null ? null : "1002";
+        return codigoLeyenda_2;
     }
 
-    public String getCaux10() {
-        return caux10;
+    public void setCodigoLeyenda_2(String codigoLeyenda_2) {
+        this.codigoLeyenda_2 = codigoLeyenda_2;
     }
 
-    public void setCaux10(String caux10) {
-        this.caux10 = caux10;
+    public String getTextoLeyenda_2() {
+        return textoLeyenda_2;
     }
 
-    public String getCaux11() {
-        return caux11;
+    public void setTextoLeyenda_2(String textoLeyenda_2) {
+        this.textoLeyenda_2 = textoLeyenda_2;
     }
 
-    public void setCaux11(String caux11) {
-        this.caux11 = caux11;
+    public String getCodigoLeyenda_3() {
+        codigoLeyenda_3 = textoLeyenda_3 == null ? null : "3000";
+        return codigoLeyenda_3;
     }
 
-    public String getCaux12() {
-        return caux12;
+    public void setCodigoLeyenda_3(String codigoLeyenda_3) {
+        this.codigoLeyenda_3 = codigoLeyenda_3;
     }
 
-    public void setCaux12(String caux12) {
-        this.caux12 = caux12;
+    public String getTextoLeyenda_3() {
+        return textoLeyenda_3;
     }
 
-    public String getCaux13() {
-        return caux13;
+    public void setTextoLeyenda_3(String textoLeyenda_3) {
+        this.textoLeyenda_3 = textoLeyenda_3;
     }
 
-    public void setCaux13(String caux13) {
-        this.caux13 = caux13;
+    public String getCodigoLeyenda_4() {
+        codigoLeyenda_4 = textoLeyenda_4 == null ? null : "3001";
+        return codigoLeyenda_4;
     }
 
-    public String getCaux14() {
-        return caux14;
+    public void setCodigoLeyenda_4(String codigoLeyenda_4) {
+        this.codigoLeyenda_4 = codigoLeyenda_4;
     }
 
-    public void setCaux14(String caux14) {
-        this.caux14 = caux14;
+    public String getTextoLeyenda_4() {
+        return textoLeyenda_4;
     }
 
-    public String getCaux15() {
-        return caux15;
+    public void setTextoLeyenda_4(String textoLeyenda_4) {
+        this.textoLeyenda_4 = textoLeyenda_4;
     }
 
-    public void setCaux15(String caux15) {
-        this.caux15 = caux15;
+    public String getTextoAuxiliar40_1() {
+        return textoAuxiliar40_1;
     }
 
-    public String getCaux16() {
-        return caux16;
+    public void setTextoAuxiliar40_1(String textoAuxiliar40_1) {
+        this.textoAuxiliar40_1 = textoAuxiliar40_1;
     }
 
-    public void setCaux16(String caux16) {
-        this.caux16 = caux16;
+    public String getTextoAuxiliar40_2() {
+        return textoAuxiliar40_2;
     }
 
-    public String getCaux17() {
-        return caux17;
+    public void setTextoAuxiliar40_2(String textoAuxiliar40_2) {
+        this.textoAuxiliar40_2 = textoAuxiliar40_2;
     }
 
-    public void setCaux17(String caux17) {
-        this.caux17 = caux17;
+    public String getTextoAuxiliar40_3() {
+        return textoAuxiliar40_3;
     }
 
-    public String getCaux18() {
-        return caux18;
+    public void setTextoAuxiliar40_3(String textoAuxiliar40_3) {
+        this.textoAuxiliar40_3 = textoAuxiliar40_3;
     }
 
-    public void setCaux18(String caux18) {
-        this.caux18 = caux18;
+    public String getTextoAuxiliar40_4() {
+        return textoAuxiliar40_4;
     }
 
-    public String getCaux19() {
-        return caux19;
+    public void setTextoAuxiliar40_4(String textoAuxiliar40_4) {
+        this.textoAuxiliar40_4 = textoAuxiliar40_4;
     }
 
-    public void setCaux19(String caux19) {
-        this.caux19 = caux19;
+    public String getTextoAuxiliar40_5() {
+        return textoAuxiliar40_5;
     }
 
-    public String getCaux20() {
-        return caux20;
+    public void setTextoAuxiliar40_5(String textoAuxiliar40_5) {
+        this.textoAuxiliar40_5 = textoAuxiliar40_5;
     }
 
-    public void setCaux20(String caux20) {
-        this.caux20 = caux20;
+    public String getTextoAuxiliar40_6() {
+        return textoAuxiliar40_6;
     }
 
-    public String getCaux21() {
-        return caux21;
+    public void setTextoAuxiliar40_6(String textoAuxiliar40_6) {
+        this.textoAuxiliar40_6 = textoAuxiliar40_6;
     }
 
-    public void setCaux21(String caux21) {
-        this.caux21 = caux21;
+    public String getTextoAuxiliar40_7() {
+        return textoAuxiliar40_7;
     }
 
-    public String getCaux22() {
-        return caux22;
+    public void setTextoAuxiliar40_7(String textoAuxiliar40_7) {
+        this.textoAuxiliar40_7 = textoAuxiliar40_7;
     }
 
-    public void setCaux22(String caux22) {
-        this.caux22 = caux22;
+    public String getTextoAuxiliar40_8() {
+        return textoAuxiliar40_8;
     }
 
-    public String getCaux23() {
-        return caux23;
+    public void setTextoAuxiliar40_8(String textoAuxiliar40_8) {
+        this.textoAuxiliar40_8 = textoAuxiliar40_8;
     }
 
-    public void setCaux23(String caux23) {
-        this.caux23 = caux23;
+    public String getTextoAuxiliar40_9() {
+        return textoAuxiliar40_9;
     }
 
-    public String getCaux24() {
-        return caux24;
+    public void setTextoAuxiliar40_9(String textoAuxiliar40_9) {
+        this.textoAuxiliar40_9 = textoAuxiliar40_9;
     }
 
-    public void setCaux24(String caux24) {
-        this.caux24 = caux24;
+    public String getTextoAuxiliar40_10() {
+        return textoAuxiliar40_10;
     }
 
-    public String getCaux25() {
-        return caux25;
+    public void setTextoAuxiliar40_10(String textoAuxiliar40_10) {
+        this.textoAuxiliar40_10 = textoAuxiliar40_10;
     }
 
-    public void setCaux25(String caux25) {
-        this.caux25 = caux25;
+    public String getTextoAuxiliar40_11() {
+        return textoAuxiliar40_11;
     }
 
-    public String getCaux26() {
-        return caux26;
+    public void setTextoAuxiliar40_11(String textoAuxiliar40_11) {
+        this.textoAuxiliar40_11 = textoAuxiliar40_11;
     }
 
-    public void setCaux26(String caux26) {
-        this.caux26 = caux26;
+    public String getTextoAuxiliar40_12() {
+        return textoAuxiliar40_12;
     }
 
-    public String getCaux27() {
-        return caux27;
+    public void setTextoAuxiliar40_12(String textoAuxiliar40_12) {
+        this.textoAuxiliar40_12 = textoAuxiliar40_12;
     }
 
-    public void setCaux27(String caux27) {
-        this.caux27 = caux27;
+    public String getCodigoAuxiliar250_1() {
+        codigoAuxiliar250_1 = textoAuxiliar250_1 == null ? null : "9606";
+        return codigoAuxiliar250_1;
     }
 
-    public String getCaux28() {
-        return caux28;
+    public void setCodigoAuxiliar250_1(String codigoAuxiliar250_1) {
+        this.codigoAuxiliar250_1 = codigoAuxiliar250_1;
     }
 
-    public void setCaux28(String caux28) {
-        this.caux28 = caux28;
+    public String getTextoAuxiliar250_1() {
+        return textoAuxiliar250_1;
     }
 
-    public String getCaux29() {
-        return caux29;
+    public void setTextoAuxiliar250_1(String textoAuxiliar250_1) {
+        this.textoAuxiliar250_1 = textoAuxiliar250_1;
     }
 
-    public void setCaux29(String caux29) {
-        this.caux29 = caux29;
+    public String getCodigoAuxiliar250_2() {
+        codigoAuxiliar250_2 = textoAuxiliar250_2 == null ? null : "9618";
+        return codigoAuxiliar250_2;
     }
 
-    public String getCaux30() {
-        return caux30;
+    public void setCodigoAuxiliar250_2(String codigoAuxiliar250_2) {
+        this.codigoAuxiliar250_2 = codigoAuxiliar250_2;
     }
 
-    public void setCaux30(String caux30) {
-        this.caux30 = caux30;
+    public String getTextoAuxiliar250_2() {
+        return textoAuxiliar250_2;
     }
 
-    public String getCaux31() {
-        return caux31;
+    public void setTextoAuxiliar250_2(String textoAuxiliar250_2) {
+        this.textoAuxiliar250_2 = textoAuxiliar250_2;
     }
 
-    public void setCaux31(String caux31) {
-        this.caux31 = caux31;
+    public String getCodigoAuxiliar250_3() {
+        codigoAuxiliar250_3 = textoAuxiliar250_3 == null ? null : "9998";
+        return codigoAuxiliar250_3;
     }
 
-    public String getCaux32() {
-        return caux32;
+    public void setCodigoAuxiliar250_3(String codigoAuxiliar250_3) {
+        this.codigoAuxiliar250_3 = codigoAuxiliar250_3;
     }
 
-    public void setCaux32(String caux32) {
-        this.caux32 = caux32;
+    public String getTextoAuxiliar250_3() {
+        return textoAuxiliar250_3;
     }
 
-    public String getCaux33() {
-        return caux33;
+    public void setTextoAuxiliar250_3(String textoAuxiliar250_3) {
+        this.textoAuxiliar250_3 = textoAuxiliar250_3;
     }
 
-    public void setCaux33(String caux33) {
-        this.caux33 = caux33;
+    public String getCodigoAuxiliar100_1() {
+        codigoAuxiliar100_1 = textoAuxiliar100_1 == null ? null : "9171";
+        return codigoAuxiliar100_1;
     }
 
-    public String getCaux34() {
-        return caux34;
+    public void setCodigoAuxiliar100_1(String codigoAuxiliar100_1) {
+        this.codigoAuxiliar100_1 = codigoAuxiliar100_1;
     }
 
-    public void setCaux34(String caux34) {
-        this.caux34 = caux34;
+    public String getTextoAuxiliar100_1() {
+        return textoAuxiliar100_1;
     }
 
-    public String getCaux35() {
-        return caux35;
+    public void setTextoAuxiliar100_1(String textoAuxiliar100_1) {
+        this.textoAuxiliar100_1 = textoAuxiliar100_1;
     }
 
-    public void setCaux35(String caux35) {
-        this.caux35 = caux35;
+    public String getTextoAuxiliar100_2() {
+        return textoAuxiliar100_2;
     }
 
-    public String getCaux36() {
-        return caux36;
+    public void setTextoAuxiliar100_2(String textoAuxiliar100_2) {
+        this.textoAuxiliar100_2 = textoAuxiliar100_2;
     }
 
-    public void setCaux36(String caux36) {
-        this.caux36 = caux36;
+    public String getTextoAuxiliar100_3() {
+        return textoAuxiliar100_3;
     }
 
-    public Character getCestado() {
-        return cestado;
+    public void setTextoAuxiliar100_3(String textoAuxiliar100_3) {
+        this.textoAuxiliar100_3 = textoAuxiliar100_3;
     }
 
-    public void setCestado(Character cestado) {
-        this.cestado = cestado;
+    public String getTextoAuxiliar100_4() {
+        return textoAuxiliar100_4;
     }
 
-    public String getCnumeroautorizacion() {
-        return cnumeroautorizacion;
+    public void setTextoAuxiliar100_4(String textoAuxiliar100_4) {
+        this.textoAuxiliar100_4 = textoAuxiliar100_4;
     }
 
-    public void setCnumeroautorizacion(String cnumeroautorizacion) {
-        this.cnumeroautorizacion = cnumeroautorizacion;
+    public String getTextoAuxiliar100_5() {
+        return textoAuxiliar100_5;
     }
 
-    public String getCfechaautorizacion() {
-        return cfechaautorizacion;
+    public void setTextoAuxiliar100_5(String textoAuxiliar100_5) {
+        this.textoAuxiliar100_5 = textoAuxiliar100_5;
     }
 
-    public void setCfechaautorizacion(String cfechaautorizacion) {
-        this.cfechaautorizacion = cfechaautorizacion;
+    public String getTextoAuxiliar100_6() {
+        return textoAuxiliar100_6;
     }
 
-    public String getChoraautorizacion() {
-        return choraautorizacion;
+    public void setTextoAuxiliar100_6(String textoAuxiliar100_6) {
+        this.textoAuxiliar100_6 = textoAuxiliar100_6;
     }
 
-    public void setChoraautorizacion(String choraautorizacion) {
-        this.choraautorizacion = choraautorizacion;
+    public String getTextoAuxiliar100_7() {
+        return textoAuxiliar100_7;
     }
 
-    public String getCrutaxml() {
-        return crutaxml;
+    public void setTextoAuxiliar100_7(String textoAuxiliar100_7) {
+        this.textoAuxiliar100_7 = textoAuxiliar100_7;
     }
 
-    public void setCrutaxml(String crutaxml) {
-        this.crutaxml = crutaxml;
+    public String getTextoAuxiliar100_8() {
+        return textoAuxiliar100_8;
     }
 
-    public String getCrutapdf() {
-        return crutapdf;
+    public void setTextoAuxiliar100_8(String textoAuxiliar100_8) {
+        this.textoAuxiliar100_8 = textoAuxiliar100_8;
     }
 
-    public void setCrutapdf(String crutapdf) {
-        this.crutapdf = crutapdf;
+    public String getTextoAuxiliar100_9() {
+        return textoAuxiliar100_9;
     }
 
-    public Character getLgProcessStatus() {
-        return lgProcessStatus;
+    public void setTextoAuxiliar100_9(String textoAuxiliar100_9) {
+        this.textoAuxiliar100_9 = textoAuxiliar100_9;
     }
 
-    public void setLgProcessStatus(Character lgProcessStatus) {
-        this.lgProcessStatus = lgProcessStatus;
+    public String getTextoAuxiliar100_10() {
+        return textoAuxiliar100_10;
     }
 
-    public String getLgRecordStatus() {
-        return lgRecordStatus;
+    public void setTextoAuxiliar100_10(String textoAuxiliar100_10) {
+        this.textoAuxiliar100_10 = textoAuxiliar100_10;
     }
 
-    public void setLgRecordStatus(String lgRecordStatus) {
-        this.lgRecordStatus = lgRecordStatus;
+    public String getTextoAuxiliar100_11() {
+        return textoAuxiliar100_11;
     }
 
-    public String getLgFirma() {
-        return lgFirma;
+    public void setTextoAuxiliar100_11(String textoAuxiliar100_11) {
+        this.textoAuxiliar100_11 = textoAuxiliar100_11;
     }
 
-    public void setLgFirma(String lgFirma) {
-        this.lgFirma = lgFirma;
+    public String getTextoAuxiliar100_12() {
+        return textoAuxiliar100_12;
     }
 
-    public String getLgFirmaHash() {
-        return lgFirmaHash;
+    public void setTextoAuxiliar100_12(String textoAuxiliar100_12) {
+        this.textoAuxiliar100_12 = textoAuxiliar100_12;
     }
 
-    public void setLgFirmaHash(String lgFirmaHash) {
-        this.lgFirmaHash = lgFirmaHash;
+    public String getTextoAuxiliar100_13() {
+        return textoAuxiliar100_13;
     }
 
-    public String getLgLoadMessages() {
-        return lgLoadMessages;
+    public void setTextoAuxiliar100_13(String textoAuxiliar100_13) {
+        this.textoAuxiliar100_13 = textoAuxiliar100_13;
     }
 
-    public void setLgLoadMessages(String lgLoadMessages) {
-        this.lgLoadMessages = lgLoadMessages;
+    public String getTextoAuxiliar100_14() {
+        return textoAuxiliar100_14;
     }
 
-    public String getLgServiceResponse() {
-        return lgServiceResponse;
+    public void setTextoAuxiliar100_14(String textoAuxiliar100_14) {
+        this.textoAuxiliar100_14 = textoAuxiliar100_14;
     }
 
-    public void setLgServiceResponse(String lgServiceResponse) {
-        this.lgServiceResponse = lgServiceResponse;
+    public String getTextoAuxiliar100_15() {
+        return textoAuxiliar100_15;
+    }
+
+    public void setTextoAuxiliar100_15(String textoAuxiliar100_15) {
+        this.textoAuxiliar100_15 = textoAuxiliar100_15;
+    }
+
+    public Character getBl_estadoRegistro() {
+        return bl_estadoRegistro;
+    }
+
+    public void setBl_estadoRegistro(Character bl_estadoRegistro) {
+        this.bl_estadoRegistro = bl_estadoRegistro;
+    }
+
+    public String getX_fechaAutorizacion() {
+        return x_fechaAutorizacion;
+    }
+
+    public void setX_fechaAutorizacion(String x_fechaAutorizacion) {
+        this.x_fechaAutorizacion = x_fechaAutorizacion;
+    }
+
+    public String getX_horaAutorizacion() {
+        return x_horaAutorizacion;
+    }
+
+    public void setX_horaAutorizacion(String x_horaAutorizacion) {
+        this.x_horaAutorizacion = x_horaAutorizacion;
+    }
+
+    public String getX_numeroAutorizacion() {
+        return x_numeroAutorizacion;
+    }
+
+    public void setX_numeroAutorizacion(String x_numeroAutorizacion) {
+        this.x_numeroAutorizacion = x_numeroAutorizacion;
+    }
+
+    public String getBl_urlpdf() {
+        return bl_urlpdf;
+    }
+
+    public void setBl_urlpdf(String bl_urlpdf) {
+        this.bl_urlpdf = bl_urlpdf;
+    }
+
+    public String getBl_urlxmlubl() {
+        return bl_urlxmlubl;
+    }
+
+    public void setBl_urlxmlubl(String bl_urlxmlubl) {
+        this.bl_urlxmlubl = bl_urlxmlubl;
+    }
+
+    public String getBl_firma() {
+        return bl_firma;
+    }
+
+    public void setBl_firma(String bl_firma) {
+        this.bl_firma = bl_firma;
+    }
+
+    public String getBl_hashFirma() {
+        return bl_hashFirma;
+    }
+
+    public void setBl_hashFirma(String bl_hashFirma) {
+        this.bl_hashFirma = bl_hashFirma;
+    }
+
+    public String getBl_mensaje() {
+        return bl_mensaje;
+    }
+
+    public void setBl_mensaje(String bl_mensaje) {
+        this.bl_mensaje = bl_mensaje;
+    }
+
+    public Character getBl_estadoProceso() {
+        return bl_estadoProceso;
+    }
+
+    public void setBl_estadoProceso(Character bl_estadoProceso) {
+        this.bl_estadoProceso = bl_estadoProceso;
+    }
+
+    public String getX_recordStatus() {
+        return x_recordStatus;
+    }
+
+    public void setX_recordStatus(String x_recordStatus) {
+        this.x_recordStatus = x_recordStatus;
+    }
+
+    public String getBl_mensajeSunat() {
+        return bl_mensajeSunat;
+    }
+
+    public void setBl_mensajeSunat(String bl_mensajeSunat) {
+        this.bl_mensajeSunat = bl_mensajeSunat;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (headerPK != null ? headerPK.hashCode() : 0);
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DocumentHeader)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        DocumentHeader other = (DocumentHeader) object;
-        if ((this.headerPK == null && other.headerPK != null) || (this.headerPK != null && !this.headerPK.equals(other.headerPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DocumentHeader other = (DocumentHeader) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
@@ -1195,7 +1334,7 @@ public class DocumentHeader implements Serializable {
 
     @Override
     public String toString() {
-        return "pe.labtech.einvoice.core.replicator.entity.Header[ headerPK=" + headerPK + " ]";
+        return "DocumentHeader{" + "tipoDocumentoEmisor=" + tipoDocumentoEmisor + ", numeroDocumentoEmisor=" + numeroDocumentoEmisor + ", tipoDocumento=" + tipoDocumento + ", serieNumero=" + serieNumero + '}';
     }
 
 }

@@ -22,104 +22,80 @@ public class DocumentDetailPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 0, max = 15)
-    @Column(name = "COD_COMPANIA", length = 15)
-    private String codigoCompania;
+    @Size(min = 1, max = 15)
+    @Column(name = "COD_COMPANIA", nullable = false, length = 15)
+    private String hv_compania;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 0, max = 5)
-    @Column(name = "COD_LOCALIDAD", length = 5)
-    private String codigoLocalidad;
+    @Size(min = 1, max = 5)
+    @Column(name = "COD_LOCALIDAD", nullable = false, length = 5)
+    private String hv_localidad;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 0, max = 5)
-    @Column(name = "COD_TIPRECAUDACION", length = 5)
-    private String codigoTiposRecaudacion;
+    @Size(min = 1, max = 5)
+    @Column(name = "COD_TIPRECAUDACION", nullable = false, length = 5)
+    private String hv_tipoRecaudacion;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "NUM_RECAUDACION")
-    private Integer numeroRecaudacion;
-
+    @Column(name = "NUM_RECAUDACION", nullable = false)
+    private int hv_recaudacion;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 3)
-    @Column(name = "NUM_LINEA")
-    private String did;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
-    @Column(name = "DCODPRODUCTO")
-    private String dcodproducto;
+    @Column(name = "NUM_LINEA", nullable = false, length = 3)
+    private String numeroOrdenItem;
 
     public DocumentDetailPK() {
     }
 
-    public DocumentDetailPK(String codigoCompania, String codigoLocalidad, String codigoTiposRecaudacion, Integer numeroRecaudacion, String did, String dcodproducto) {
-        this.codigoCompania = codigoCompania;
-        this.codigoLocalidad = codigoLocalidad;
-        this.codigoTiposRecaudacion = codigoTiposRecaudacion;
-        this.numeroRecaudacion = numeroRecaudacion;
-        this.did = did;
-        this.dcodproducto = dcodproducto;
+    public String getHv_compania() {
+        return hv_compania;
     }
 
-    public String getCodigoCompania() {
-        return codigoCompania;
+    public void setHv_compania(String hv_compania) {
+        this.hv_compania = hv_compania;
     }
 
-    public void setCodigoCompania(String codigoCompania) {
-        this.codigoCompania = codigoCompania;
+    public String getHv_localidad() {
+        return hv_localidad;
     }
 
-    public String getCodigoLocalidad() {
-        return codigoLocalidad;
+    public void setHv_localidad(String hv_localidad) {
+        this.hv_localidad = hv_localidad;
     }
 
-    public void setCodigoLocalidad(String codigoLocalidad) {
-        this.codigoLocalidad = codigoLocalidad;
+    public String getHv_tipoRecaudacion() {
+        return hv_tipoRecaudacion;
     }
 
-    public String getCodigoTiposRecaudacion() {
-        return codigoTiposRecaudacion;
+    public void setHv_tipoRecaudacion(String hv_tipoRecaudacion) {
+        this.hv_tipoRecaudacion = hv_tipoRecaudacion;
     }
 
-    public void setCodigoTiposRecaudacion(String codigoTiposRecaudacion) {
-        this.codigoTiposRecaudacion = codigoTiposRecaudacion;
+    public int getHv_recaudacion() {
+        return hv_recaudacion;
     }
 
-    public Integer getNumeroRecaudacion() {
-        return numeroRecaudacion;
+    public void setHv_recaudacion(int hv_recaudacion) {
+        this.hv_recaudacion = hv_recaudacion;
     }
 
-    public void setNumeroRecaudacion(Integer numeroRecaudacion) {
-        this.numeroRecaudacion = numeroRecaudacion;
+    public String getNumeroOrdenItem() {
+        return numeroOrdenItem;
     }
 
-    public String getDid() {
-        return did;
-    }
-
-    public void setDid(String did) {
-        this.did = did;
-    }
-
-    public String getDcodproducto() {
-        return dcodproducto;
-    }
-
-    public void setDcodproducto(String dcodproducto) {
-        this.dcodproducto = dcodproducto;
+    public void setNumeroOrdenItem(String numeroOrdenItem) {
+        this.numeroOrdenItem = numeroOrdenItem;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.codigoCompania);
-        hash = 53 * hash + Objects.hashCode(this.codigoLocalidad);
-        hash = 53 * hash + Objects.hashCode(this.codigoTiposRecaudacion);
-        hash = 53 * hash + Objects.hashCode(this.numeroRecaudacion);
-        hash = 53 * hash + Objects.hashCode(this.did);
-        hash = 53 * hash + Objects.hashCode(this.dcodproducto);
+        int hash = 3;
+        hash = 19 * hash + Objects.hashCode(this.hv_compania);
+        hash = 19 * hash + Objects.hashCode(this.hv_localidad);
+        hash = 19 * hash + Objects.hashCode(this.hv_tipoRecaudacion);
+        hash = 19 * hash + this.hv_recaudacion;
+        hash = 19 * hash + Objects.hashCode(this.numeroOrdenItem);
         return hash;
     }
 
@@ -132,25 +108,27 @@ public class DocumentDetailPK implements Serializable {
             return false;
         }
         final DocumentDetailPK other = (DocumentDetailPK) obj;
-        if (!Objects.equals(this.codigoCompania, other.codigoCompania)) {
+        if (!Objects.equals(this.hv_compania, other.hv_compania)) {
             return false;
         }
-        if (!Objects.equals(this.codigoLocalidad, other.codigoLocalidad)) {
+        if (!Objects.equals(this.hv_localidad, other.hv_localidad)) {
             return false;
         }
-        if (!Objects.equals(this.codigoTiposRecaudacion, other.codigoTiposRecaudacion)) {
+        if (!Objects.equals(this.hv_tipoRecaudacion, other.hv_tipoRecaudacion)) {
             return false;
         }
-        if (!Objects.equals(this.numeroRecaudacion, other.numeroRecaudacion)) {
+        if (this.hv_recaudacion != other.hv_recaudacion) {
             return false;
         }
-        if (!Objects.equals(this.did, other.did)) {
-            return false;
-        }
-        if (!Objects.equals(this.dcodproducto, other.dcodproducto)) {
+        if (!Objects.equals(this.numeroOrdenItem, other.numeroOrdenItem)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "DocumentDetailPK{" + "hv_compania=" + hv_compania + ", hv_localidad=" + hv_localidad + ", hv_tipoRecaudacion=" + hv_tipoRecaudacion + ", hv_recaudacion=" + hv_recaudacion + ", numeroOrdenItem=" + numeroOrdenItem + '}';
     }
 
 }

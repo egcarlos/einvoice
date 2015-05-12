@@ -22,73 +22,73 @@ public class DocumentHeaderPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 0, max = 15)
-    @Column(name = "COD_COMPANIA", length = 15)
-    private String codigoCompania;
+    @Size(min = 1, max = 15)
+    @Column(name = "COD_COMPANIA", nullable = false, length = 15)
+    private String hv_compania;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 0, max = 5)
-    @Column(name = "COD_LOCALIDAD", length = 5)
-    private String codigoLocalidad;
+    @Size(min = 1, max = 5)
+    @Column(name = "COD_LOCALIDAD", nullable = false, length = 5)
+    private String hv_localidad;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 0, max = 5)
-    @Column(name = "COD_TIPRECAUDACION", length = 5)
-    private String codigoTiposRecaudacion;
+    @Size(min = 1, max = 5)
+    @Column(name = "COD_TIPRECAUDACION", nullable = false, length = 5)
+    private String hv_tipoRecaudacion;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "NUM_RECAUDACION")
-    private Integer numeroRecaudacion;
+    @Column(name = "NUM_RECAUDACION", nullable = false)
+    private int hv_recaudacion;
 
     public DocumentHeaderPK() {
     }
 
-    public DocumentHeaderPK(String codigoCompania, String codigoLocalidad, String codigoTiposRecaudacion, Integer numeroRecaudacion) {
-        this.codigoCompania = codigoCompania;
-        this.codigoLocalidad = codigoLocalidad;
-        this.codigoTiposRecaudacion = codigoTiposRecaudacion;
-        this.numeroRecaudacion = numeroRecaudacion;
+    public DocumentHeaderPK(String hv_compania, String hv_localidad, String hv_tipoRecaudacion, int hv_recaudacion) {
+        this.hv_compania = hv_compania;
+        this.hv_localidad = hv_localidad;
+        this.hv_tipoRecaudacion = hv_tipoRecaudacion;
+        this.hv_recaudacion = hv_recaudacion;
     }
 
-    public String getCodigoCompania() {
-        return codigoCompania;
+    public String getHv_compania() {
+        return hv_compania;
     }
 
-    public void setCodigoCompania(String codigoCompania) {
-        this.codigoCompania = codigoCompania;
+    public void setHv_compania(String hv_compania) {
+        this.hv_compania = hv_compania;
     }
 
-    public String getCodigoLocalidad() {
-        return codigoLocalidad;
+    public String getHv_localidad() {
+        return hv_localidad;
     }
 
-    public void setCodigoLocalidad(String codigoLocalidad) {
-        this.codigoLocalidad = codigoLocalidad;
+    public void setHv_localidad(String hv_localidad) {
+        this.hv_localidad = hv_localidad;
     }
 
-    public String getCodigoTiposRecaudacion() {
-        return codigoTiposRecaudacion;
+    public String getHv_tipoRecaudacion() {
+        return hv_tipoRecaudacion;
     }
 
-    public void setCodigoTiposRecaudacion(String codigoTiposRecaudacion) {
-        this.codigoTiposRecaudacion = codigoTiposRecaudacion;
+    public void setHv_tipoRecaudacion(String hv_tipoRecaudacion) {
+        this.hv_tipoRecaudacion = hv_tipoRecaudacion;
     }
 
-    public Integer getNumeroRecaudacion() {
-        return numeroRecaudacion;
+    public int getHv_recaudacion() {
+        return hv_recaudacion;
     }
 
-    public void setNumeroRecaudacion(Integer numeroRecaudacion) {
-        this.numeroRecaudacion = numeroRecaudacion;
+    public void setHv_recaudacion(int hv_recaudacion) {
+        this.hv_recaudacion = hv_recaudacion;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.codigoCompania);
-        hash = 47 * hash + Objects.hashCode(this.codigoLocalidad);
-        hash = 47 * hash + Objects.hashCode(this.codigoTiposRecaudacion);
-        hash = 47 * hash + Objects.hashCode(this.numeroRecaudacion);
+        int hash = 3;
+        hash = 83 * hash + Objects.hashCode(this.hv_compania);
+        hash = 83 * hash + Objects.hashCode(this.hv_localidad);
+        hash = 83 * hash + Objects.hashCode(this.hv_tipoRecaudacion);
+        hash = 83 * hash + this.hv_recaudacion;
         return hash;
     }
 
@@ -101,19 +101,24 @@ public class DocumentHeaderPK implements Serializable {
             return false;
         }
         final DocumentHeaderPK other = (DocumentHeaderPK) obj;
-        if (!Objects.equals(this.codigoCompania, other.codigoCompania)) {
+        if (!Objects.equals(this.hv_compania, other.hv_compania)) {
             return false;
         }
-        if (!Objects.equals(this.codigoLocalidad, other.codigoLocalidad)) {
+        if (!Objects.equals(this.hv_localidad, other.hv_localidad)) {
             return false;
         }
-        if (!Objects.equals(this.codigoTiposRecaudacion, other.codigoTiposRecaudacion)) {
+        if (!Objects.equals(this.hv_tipoRecaudacion, other.hv_tipoRecaudacion)) {
             return false;
         }
-        if (!Objects.equals(this.numeroRecaudacion, other.numeroRecaudacion)) {
+        if (this.hv_recaudacion != other.hv_recaudacion) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "DocumentHeaderPK{" + "hv_compania=" + hv_compania + ", hv_localidad=" + hv_localidad + ", hv_tipoRecaudacion=" + hv_tipoRecaudacion + ", hv_recaudacion=" + hv_recaudacion + '}';
     }
 
 }

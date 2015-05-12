@@ -7,12 +7,14 @@ package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -20,364 +22,348 @@ import javax.validation.constraints.Size;
  * @author Carlos
  */
 @Entity
-@Table(name = "SPE_EINVOICEDETAIL")
+@Table(name = "SPE_EINVOICEDETAIL", catalog = "salfaconstruccion_261014", schema = "dbo")
 @NamedQueries({
-    @NamedQuery(name = "Detail.findAll", query = "SELECT d FROM DocumentDetail d")})
+    @NamedQuery(name = "DocumentDetail.findAll", query = "SELECT d FROM DocumentDetail d")})
 public class DocumentDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected DocumentDetailPK detailPK;
+    protected DocumentDetailPK id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "DCODPRODUCTO", nullable = false, length = 255)
+    private String codigoProducto;
     @Size(max = 1700)
-    @Column(name = "DDESPRODUCTO")
-    private String ddesproducto;
+    @Column(name = "DDESPRODUCTO", length = 1700)
+    private String descripcion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "DCANPRODUCTO")
-    private BigDecimal dcanproducto;
+    @Column(name = "DCANPRODUCTO", precision = 19, scale = 2)
+    private BigDecimal cantidad;
     @Size(max = 3)
-    @Column(name = "DUNIPRODUCTO")
-    private String duniproducto;
-    @Column(name = "DVVENTAUNITARIO")
-    private BigDecimal dvventaunitario;
-    @Column(name = "DPVENTAUNITARIO")
-    private BigDecimal dpventaunitario;
+    @Column(name = "DUNIPRODUCTO", length = 3)
+    private String unidadMedida;
+    @Column(name = "DVVENTAUNITARIO", precision = 19, scale = 2)
+    private BigDecimal importeUnitarioSinImpuesto;
+    @Column(name = "DPVENTAUNITARIO", precision = 19, scale = 2)
+    private BigDecimal importeUnitarioConImpuesto;
     @Size(max = 2)
-    @Column(name = "DCODPVENTAUNITARIO")
-    private String dcodpventaunitario;
-    @Column(name = "DIREFERENCIAUNITARIO")
-    private BigDecimal direferenciaunitario;
+    @Column(name = "DCODPVENTAUNITARIO", length = 2)
+    private String codigoImporteUnitarioConImpuesto;
+    @Column(name = "DIREFERENCIAUNITARIO", precision = 19, scale = 2)
+    private BigDecimal importeReferencial;
     @Size(max = 2)
-    @Column(name = "DCODIREFERENCIAUNITARIO")
-    private String dcodireferenciaunitario;
-    @Column(name = "DVVENTA")
-    private BigDecimal dvventa;
-    @Column(name = "DCARGO")
-    private BigDecimal dcargo;
-    @Column(name = "DDESCUENTO")
-    private BigDecimal ddescuento;
+    @Column(name = "DCODIREFERENCIAUNITARIO", length = 2)
+    private String codigoImporteReferencial;
+    @Column(name = "DVVENTA", precision = 19, scale = 2)
+    private BigDecimal importeTotalSinImpuesto;
+    @Column(name = "DCARGO", precision = 19, scale = 2)
+    private BigDecimal importeCargo;
+    @Column(name = "DDESCUENTO", precision = 19, scale = 2)
+    private BigDecimal importeDescuento;
     @Size(max = 2)
-    @Column(name = "DTIPIGV")
-    private String dtipigv;
-    @Column(name = "DIGV")
-    private BigDecimal digv;
+    @Column(name = "DTIPIGV", length = 2)
+    private String codigoRazonExoneracion;
+    @Column(name = "DIGV", precision = 19, scale = 2)
+    private BigDecimal importeIgv;
     @Size(max = 2)
-    @Column(name = "DTIPISC")
-    private String dtipisc;
-    @Column(name = "DISC")
-    private BigDecimal disc;
+    @Column(name = "DTIPISC", length = 2)
+    private String tipoSistemaImpuestoISC;
+    @Column(name = "DISC", precision = 19, scale = 2)
+    private BigDecimal importeIsc;
     @Size(max = 100)
-    @Column(name = "DAUX1")
-    private String daux1;
+    @Column(name = "DAUX1", length = 100)
+    private String x_daux1;
     @Size(max = 100)
-    @Column(name = "DAUX2")
-    private String daux2;
+    @Column(name = "DAUX2", length = 100)
+    private String x_daux2;
     @Size(max = 100)
-    @Column(name = "DAUX3")
-    private String daux3;
+    @Column(name = "DAUX3", length = 100)
+    private String x_daux3;
     @Size(max = 100)
-    @Column(name = "DAUX4")
-    private String daux4;
+    @Column(name = "DAUX4", length = 100)
+    private String x_daux4;
     @Size(max = 100)
-    @Column(name = "DAUX5")
-    private String daux5;
+    @Column(name = "DAUX5", length = 100)
+    private String x_daux5;
     @Size(max = 100)
-    @Column(name = "DAUX6")
-    private String daux6;
+    @Column(name = "DAUX6", length = 100)
+    private String x_daux6;
     @Size(max = 100)
-    @Column(name = "DAUX7")
-    private String daux7;
+    @Column(name = "DAUX7", length = 100)
+    private String x_daux7;
     @Size(max = 100)
-    @Column(name = "DAUX8")
-    private String daux8;
+    @Column(name = "DAUX8", length = 100)
+    private String x_daux8;
     @Size(max = 100)
-    @Column(name = "DAUX9")
-    private String daux9;
+    @Column(name = "DAUX9", length = 100)
+    private String x_daux9;
     @Size(max = 100)
-    @Column(name = "DAUX10")
-    private String daux10;
+    @Column(name = "DAUX10", length = 100)
+    private String x_daux10;
     @Size(max = 100)
-    @Column(name = "DAUX11")
-    private String daux11;
+    @Column(name = "DAUX11", length = 100)
+    private String x_daux11;
     @Size(max = 100)
-    @Column(name = "DAUX12")
-    private String daux12;
+    @Column(name = "DAUX12", length = 100)
+    private String x_daux12;
     @Size(max = 100)
-    @Column(name = "DAUX13")
-    private String daux13;
+    @Column(name = "DAUX13", length = 100)
+    private String x_daux13;
     @Size(max = 100)
-    @Column(name = "DAUX14")
-    private String daux14;
+    @Column(name = "DAUX14", length = 100)
+    private String x_daux14;
 
     public DocumentDetail() {
     }
 
-    public DocumentDetail(DocumentDetailPK detailPK) {
-        this.detailPK = detailPK;
+    public DocumentDetailPK getId() {
+        return id;
     }
 
-    public DocumentDetailPK getDetailPK() {
-        return detailPK;
+    public void setId(DocumentDetailPK id) {
+        this.id = id;
     }
 
-    public void setDetailPK(DocumentDetailPK detailPK) {
-        this.detailPK = detailPK;
+    public String getCodigoProducto() {
+        return codigoProducto;
     }
 
-    public String getDdesproducto() {
-        return ddesproducto;
+    public void setCodigoProducto(String codigoProducto) {
+        this.codigoProducto = codigoProducto;
     }
 
-    public void setDdesproducto(String ddesproducto) {
-        this.ddesproducto = ddesproducto;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public BigDecimal getDcanproducto() {
-        return dcanproducto;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public void setDcanproducto(BigDecimal dcanproducto) {
-        this.dcanproducto = dcanproducto;
+    public BigDecimal getCantidad() {
+        return cantidad;
     }
 
-    public String getDuniproducto() {
-        return duniproducto;
+    public void setCantidad(BigDecimal cantidad) {
+        this.cantidad = cantidad;
     }
 
-    public void setDuniproducto(String duniproducto) {
-        this.duniproducto = duniproducto;
+    public String getUnidadMedida() {
+        return unidadMedida;
     }
 
-    public BigDecimal getDvventaunitario() {
-        return dvventaunitario;
+    public void setUnidadMedida(String unidadMedida) {
+        this.unidadMedida = unidadMedida;
     }
 
-    public void setDvventaunitario(BigDecimal dvventaunitario) {
-        this.dvventaunitario = dvventaunitario;
+    public BigDecimal getImporteUnitarioSinImpuesto() {
+        return importeUnitarioSinImpuesto;
     }
 
-    public BigDecimal getDpventaunitario() {
-        return dpventaunitario;
+    public void setImporteUnitarioSinImpuesto(BigDecimal importeUnitarioSinImpuesto) {
+        this.importeUnitarioSinImpuesto = importeUnitarioSinImpuesto;
     }
 
-    public void setDpventaunitario(BigDecimal dpventaunitario) {
-        this.dpventaunitario = dpventaunitario;
+    public BigDecimal getImporteUnitarioConImpuesto() {
+        return importeUnitarioConImpuesto;
     }
 
-    public String getDcodpventaunitario() {
-        return dcodpventaunitario;
+    public void setImporteUnitarioConImpuesto(BigDecimal importeUnitarioConImpuesto) {
+        this.importeUnitarioConImpuesto = importeUnitarioConImpuesto;
     }
 
-    public void setDcodpventaunitario(String dcodpventaunitario) {
-        this.dcodpventaunitario = dcodpventaunitario;
+    public String getCodigoImporteUnitarioConImpuesto() {
+        return codigoImporteUnitarioConImpuesto;
     }
 
-    public BigDecimal getDireferenciaunitario() {
-        return direferenciaunitario;
+    public void setCodigoImporteUnitarioConImpuesto(String codigoImporteUnitarioConImpuesto) {
+        this.codigoImporteUnitarioConImpuesto = codigoImporteUnitarioConImpuesto;
     }
 
-    public void setDireferenciaunitario(BigDecimal direferenciaunitario) {
-        this.direferenciaunitario = direferenciaunitario;
+    public BigDecimal getImporteReferencial() {
+        return importeReferencial;
     }
 
-    public String getDcodireferenciaunitario() {
-        return dcodireferenciaunitario;
+    public void setImporteReferencial(BigDecimal importeReferencial) {
+        this.importeReferencial = importeReferencial;
     }
 
-    public void setDcodireferenciaunitario(String dcodireferenciaunitario) {
-        this.dcodireferenciaunitario = dcodireferenciaunitario;
+    public String getCodigoImporteReferencial() {
+        return codigoImporteReferencial;
     }
 
-    public BigDecimal getDvventa() {
-        return dvventa;
+    public void setCodigoImporteReferencial(String codigoImporteReferencial) {
+        this.codigoImporteReferencial = codigoImporteReferencial;
     }
 
-    public void setDvventa(BigDecimal dvventa) {
-        this.dvventa = dvventa;
+    public BigDecimal getImporteTotalSinImpuesto() {
+        return importeTotalSinImpuesto;
     }
 
-    public BigDecimal getDcargo() {
-        return dcargo;
+    public void setImporteTotalSinImpuesto(BigDecimal importeTotalSinImpuesto) {
+        this.importeTotalSinImpuesto = importeTotalSinImpuesto;
     }
 
-    public void setDcargo(BigDecimal dcargo) {
-        this.dcargo = dcargo;
+    public BigDecimal getImporteCargo() {
+        return importeCargo;
     }
 
-    public BigDecimal getDdescuento() {
-        return ddescuento;
+    public void setImporteCargo(BigDecimal importeCargo) {
+        this.importeCargo = importeCargo;
     }
 
-    public void setDdescuento(BigDecimal ddescuento) {
-        this.ddescuento = ddescuento;
+    public BigDecimal getImporteDescuento() {
+        return importeDescuento;
     }
 
-    public String getDtipigv() {
-        return dtipigv;
+    public void setImporteDescuento(BigDecimal importeDescuento) {
+        this.importeDescuento = importeDescuento;
     }
 
-    public void setDtipigv(String dtipigv) {
-        this.dtipigv = dtipigv;
+    public String getCodigoRazonExoneracion() {
+        return codigoRazonExoneracion;
     }
 
-    public BigDecimal getDigv() {
-        return digv;
+    public void setCodigoRazonExoneracion(String codigoRazonExoneracion) {
+        this.codigoRazonExoneracion = codigoRazonExoneracion;
     }
 
-    public void setDigv(BigDecimal digv) {
-        this.digv = digv;
+    public BigDecimal getImporteIgv() {
+        return importeIgv;
     }
 
-    public String getDtipisc() {
-        return dtipisc;
+    public void setImporteIgv(BigDecimal importeIgv) {
+        this.importeIgv = importeIgv;
     }
 
-    public void setDtipisc(String dtipisc) {
-        this.dtipisc = dtipisc;
+    public String getTipoSistemaImpuestoISC() {
+        return tipoSistemaImpuestoISC;
     }
 
-    public BigDecimal getDisc() {
-        return disc;
+    public void setTipoSistemaImpuestoISC(String tipoSistemaImpuestoISC) {
+        this.tipoSistemaImpuestoISC = tipoSistemaImpuestoISC;
     }
 
-    public void setDisc(BigDecimal disc) {
-        this.disc = disc;
+    public BigDecimal getImporteIsc() {
+        return importeIsc;
     }
 
-    public String getDaux1() {
-        return daux1;
+    public void setImporteIsc(BigDecimal importeIsc) {
+        this.importeIsc = importeIsc;
     }
 
-    public void setDaux1(String daux1) {
-        this.daux1 = daux1;
+    public String getX_daux1() {
+        return x_daux1;
     }
 
-    public String getDaux2() {
-        return daux2;
+    public void setX_daux1(String x_daux1) {
+        this.x_daux1 = x_daux1;
     }
 
-    public void setDaux2(String daux2) {
-        this.daux2 = daux2;
+    public String getX_daux2() {
+        return x_daux2;
     }
 
-    public String getDaux3() {
-        return daux3;
+    public void setX_daux2(String x_daux2) {
+        this.x_daux2 = x_daux2;
     }
 
-    public void setDaux3(String daux3) {
-        this.daux3 = daux3;
+    public String getX_daux3() {
+        return x_daux3;
     }
 
-    public String getDaux4() {
-        return daux4;
+    public void setX_daux3(String x_daux3) {
+        this.x_daux3 = x_daux3;
     }
 
-    public void setDaux4(String daux4) {
-        this.daux4 = daux4;
+    public String getX_daux4() {
+        return x_daux4;
     }
 
-    public String getDaux5() {
-        return daux5;
+    public void setX_daux4(String x_daux4) {
+        this.x_daux4 = x_daux4;
     }
 
-    public void setDaux5(String daux5) {
-        this.daux5 = daux5;
+    public String getX_daux5() {
+        return x_daux5;
     }
 
-    public String getDaux6() {
-        return daux6;
+    public void setX_daux5(String x_daux5) {
+        this.x_daux5 = x_daux5;
     }
 
-    public void setDaux6(String daux6) {
-        this.daux6 = daux6;
+    public String getX_daux6() {
+        return x_daux6;
     }
 
-    public String getDaux7() {
-        return daux7;
+    public void setX_daux6(String x_daux6) {
+        this.x_daux6 = x_daux6;
     }
 
-    public void setDaux7(String daux7) {
-        this.daux7 = daux7;
+    public String getX_daux7() {
+        return x_daux7;
     }
 
-    public String getDaux8() {
-        return daux8;
+    public void setX_daux7(String x_daux7) {
+        this.x_daux7 = x_daux7;
     }
 
-    public void setDaux8(String daux8) {
-        this.daux8 = daux8;
+    public String getX_daux8() {
+        return x_daux8;
     }
 
-    public String getDaux9() {
-        return daux9;
+    public void setX_daux8(String x_daux8) {
+        this.x_daux8 = x_daux8;
     }
 
-    public void setDaux9(String daux9) {
-        this.daux9 = daux9;
+    public String getX_daux9() {
+        return x_daux9;
     }
 
-    public String getDaux10() {
-        return daux10;
+    public void setX_daux9(String x_daux9) {
+        this.x_daux9 = x_daux9;
     }
 
-    public void setDaux10(String daux10) {
-        this.daux10 = daux10;
+    public String getX_daux10() {
+        return x_daux10;
     }
 
-    public String getDaux11() {
-        return daux11;
+    public void setX_daux10(String x_daux10) {
+        this.x_daux10 = x_daux10;
     }
 
-    public void setDaux11(String daux11) {
-        this.daux11 = daux11;
+    public String getX_daux11() {
+        return x_daux11;
     }
 
-    public String getDaux12() {
-        return daux12;
+    public void setX_daux11(String x_daux11) {
+        this.x_daux11 = x_daux11;
     }
 
-    public void setDaux12(String daux12) {
-        this.daux12 = daux12;
+    public String getX_daux12() {
+        return x_daux12;
     }
 
-    public String getDaux13() {
-        return daux13;
+    public void setX_daux12(String x_daux12) {
+        this.x_daux12 = x_daux12;
     }
 
-    public void setDaux13(String daux13) {
-        this.daux13 = daux13;
+    public String getX_daux13() {
+        return x_daux13;
     }
 
-    public String getDaux14() {
-        return daux14;
+    public void setX_daux13(String x_daux13) {
+        this.x_daux13 = x_daux13;
     }
 
-    public void setDaux14(String daux14) {
-        this.daux14 = daux14;
+    public String getX_daux14() {
+        return x_daux14;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (detailPK != null ? detailPK.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DocumentDetail)) {
-            return false;
-        }
-        DocumentDetail other = (DocumentDetail) object;
-        if ((this.detailPK == null && other.detailPK != null) || (this.detailPK != null && !this.detailPK.equals(other.detailPK))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "pe.labtech.einvoice.core.replicator.entity.Detail[ detailPK=" + detailPK + " ]";
+    public void setX_daux14(String x_daux14) {
+        this.x_daux14 = x_daux14;
     }
 
 }
