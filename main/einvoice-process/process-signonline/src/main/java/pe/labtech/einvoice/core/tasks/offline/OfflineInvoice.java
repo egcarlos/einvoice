@@ -70,6 +70,17 @@ public class OfflineInvoice {
             DocumentMorpher.morphToDebitNote(xml);
         }
 
+        byte[] unsignedDocument = DIGISIGN.createRepresentation(xml, DEFAULT_ENCODING);
+        prv.handle(e -> {
+            final DocumentData data = new DocumentData();
+            data.setDocument(document);
+            data.setName("xmlText");
+            data.setData(unsignedDocument);
+            data.setStatus(DATA_LOADED);
+            data.setReplicate(Boolean.TRUE);
+            e.persist(data);
+        });
+
         //sign
         signDocument(document.getClientId(), xml);
         byte[] signedDocument = DIGISIGN.createRepresentation(xml, DEFAULT_ENCODING);
