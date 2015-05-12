@@ -27,39 +27,59 @@ public class DocumentMorpher {
         //cambiar el root element
         Element root = document.getDocumentElement();
         document.renameNode(root, Namespaces.NS6, "CreditNote");
-
-        NodeList lines = document.getElementsByTagNameNS(Namespaces.CAC, "InvoiceLine");
-        for (int index = 0; index < lines.getLength(); index++) {
-            Node n = lines.item(index);
-            document.renameNode(n, Namespaces.CAC, "CreditNoteLine");
+        {
+            NodeList lines = document.getElementsByTagNameNS(Namespaces.CAC, "InvoiceLine");
+            for (int index = 0; index < lines.getLength(); index++) {
+                Node n = lines.item(index);
+                document.renameNode(n, Namespaces.CAC, "CreditNoteLine");
+            }
         }
-        NodeList quantities = document.getElementsByTagNameNS(Namespaces.CBC, "InvoicedQuantity");
-        for (int index = 0; index < quantities.getLength(); index++) {
-            Node n = quantities.item(index);
-            document.renameNode(n, Namespaces.CBC, "CreditedQuantity");
+        {
+            NodeList quantities = document.getElementsByTagNameNS(Namespaces.CBC, "InvoicedQuantity");
+            for (int index = 0; index < quantities.getLength(); index++) {
+                Node n = quantities.item(index);
+                document.renameNode(n, Namespaces.CBC, "CreditedQuantity");
+            }
         }
         adjustPrefix(document, "CreditedQuantity", Namespaces.CBC);
         adjustPrefix(document, "CreditNoteLine", Namespaces.CAC);
+        {
+            NodeList type = document.getElementsByTagNameNS(Namespaces.CBC, "InvoiceTypeCode");
+            for (int index = 0; index < type.getLength(); index++) {
+                Node n = type.item(index);
+                n.getParentNode().removeChild(n);
+            }
+        }
     }
 
     public static void morphToDebitNote(Document document) {
         //cambiar el root element
         Element root = document.getDocumentElement();
         document.renameNode(root, Namespaces.NS6, "CreditNote");
+        {
+            NodeList lines = document.getElementsByTagNameNS(Namespaces.CAC, "InvoiceLine");
+            for (int index = 0; index < lines.getLength(); index++) {
+                Node n = lines.item(index);
+                document.renameNode(n, Namespaces.CAC, "DebitNoteLine");
 
-        NodeList lines = document.getElementsByTagNameNS(Namespaces.CAC, "InvoiceLine");
-        for (int index = 0; index < lines.getLength(); index++) {
-            Node n = lines.item(index);
-            document.renameNode(n, Namespaces.CAC, "DebitNoteLine");
-
+            }
         }
-        NodeList quantities = document.getElementsByTagNameNS(Namespaces.CBC, "InvoicedQuantity");
-        for (int index = 0; index < quantities.getLength(); index++) {
-            Node n = quantities.item(index);
-            document.renameNode(n, Namespaces.CBC, "DebitedQuantity");
+        {
+            NodeList quantities = document.getElementsByTagNameNS(Namespaces.CBC, "InvoicedQuantity");
+            for (int index = 0; index < quantities.getLength(); index++) {
+                Node n = quantities.item(index);
+                document.renameNode(n, Namespaces.CBC, "DebitedQuantity");
+            }
         }
         adjustPrefix(document, "DebitedQuantity", Namespaces.CBC);
         adjustPrefix(document, "DebitNoteLine", Namespaces.CAC);
+        {
+            NodeList type = document.getElementsByTagNameNS(Namespaces.CBC, "InvoiceTypeCode");
+            for (int index = 0; index < type.getLength(); index++) {
+                Node n = type.item(index);
+                n.getParentNode().removeChild(n);
+            }
+        }
     }
 
     public static void adjustPrefix(Document document, String element, String namespace) {
