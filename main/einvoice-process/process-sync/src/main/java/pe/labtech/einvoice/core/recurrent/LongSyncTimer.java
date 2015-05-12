@@ -42,14 +42,14 @@ public class LongSyncTimer extends AbstractRecurrentTask<Document> {
         super.init();
         this.findTasks = () -> prv.seek(e -> e
                 .createQuery(
-                        "SELECT O FROM Document O WHERE O.status = 'LONG-SYNC'",
+                        "SELECT O FROM Document O WHERE (O.status = 'LONG-SYNC') OR (O.step = 'DECLARE' AND O.status = 'SYNC')",
                         Document.class
                 )
                 .getResultList()
         );
         this.tryLock = t -> prv.seek(e -> e
                 .createQuery(
-                        "UPDATE Document O SET O.status = 'SYNCING' WHERE O.status = 'LONG-SYNC' AND o.id = :id"
+                        "UPDATE Document O SET O.status = 'SYNCING' WHERE (O.status = 'LONG-SYNC') OR (O.step = 'DECLARE' AND O.status = 'SYNC') AND o.id = :id"
                 )
                 .setParameter("id", t.getId())
                 .executeUpdate() == 1
