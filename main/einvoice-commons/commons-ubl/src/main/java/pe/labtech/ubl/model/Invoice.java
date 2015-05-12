@@ -155,7 +155,7 @@ public class Invoice {
 
     public List<DiscrepancyResponse> getDiscrepancyResponse() {
         if (DiscrepancyResponse == null) {
-            return new LinkedList<>();
+            DiscrepancyResponse = new LinkedList<>();
         }
         return DiscrepancyResponse;
     }
