@@ -23,6 +23,20 @@ import pe.labtech.ubl.model.Namespaces;
  */
 public class DocumentMorpher {
 
+    private static final String CREDIT_NOTE = "07";
+    private static final String DEBIT_NOTE = "08";
+
+    public static void morph(String documentType, Document document) {
+        switch (documentType) {
+            case CREDIT_NOTE:
+                morphToCreditNote(document);
+                break;
+            case DEBIT_NOTE:
+                morphToDebitNote(document);
+                break;
+        }
+    }
+
     public static void morphToCreditNote(Document document) {
         //cambiar el root element
         Element root = document.getDocumentElement();
@@ -55,7 +69,7 @@ public class DocumentMorpher {
     public static void morphToDebitNote(Document document) {
         //cambiar el root element
         Element root = document.getDocumentElement();
-        document.renameNode(root, Namespaces.NS6, "CreditNote");
+        document.renameNode(root, Namespaces.NS7, "DebitNote");
         {
             NodeList lines = document.getElementsByTagNameNS(Namespaces.CAC, "InvoiceLine");
             for (int index = 0; index < lines.getLength(); index++) {

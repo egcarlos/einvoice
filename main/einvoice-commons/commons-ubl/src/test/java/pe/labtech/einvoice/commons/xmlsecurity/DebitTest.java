@@ -55,7 +55,7 @@ public class DebitTest {
 
 //        m.marshal(invoice, System.out);
         Document document = invoiceBuilder.document("UTF-8");
-        DocumentMorpher.morphToDebitNote(document);
+        DocumentMorpher.morph("08", document);
 
         DigitalSign ds = new DigitalSign();
         String text = ds.createTextRepresentation(document, "UTF-8");
