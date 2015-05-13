@@ -47,7 +47,18 @@ public class DocumentStep {
      * <li>ERROR</li>
      * </ul>
      */
-    public static final String DECALRE = "DECLARE";
+    public static final String DECLARE = "DECLARE";
+
+    /**
+     * Representa el estado de proceso de replicación de xml en firma onsite.
+     * <ul>
+     * <li>NEEDED</li>
+     * <li>REPLICATING</li>
+     * <li>RETRY</li>
+     * <li>ERROR</li>
+     * </ul>
+     */
+    public static final String REPLICATE = "REPLICATE";
 
     /**
      * Representa el estado de detección para sincronización de documentos. Los

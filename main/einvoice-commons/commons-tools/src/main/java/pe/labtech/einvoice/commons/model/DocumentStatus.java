@@ -37,6 +37,11 @@ public class DocumentStatus {
     public static final String SIGNED_LOCAL = "SIGNED_LOCAL";
 
     /**
+     * Indicador de replicaion xml en proceso.
+     */
+    public static final String REPLICATING = "REPLICATING";
+
+    /**
      * Indicador de declaración en proceso.
      */
     public static final String DECLARING = "DECLARING";
