@@ -8,16 +8,16 @@ package pe.labtech.einvoice.api.restful;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import static pe.labtech.einvoice.api.restful.RestTools.*;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
-import static pe.labtech.einvoice.api.restful.RestTools.*;
 import pe.labtech.einvoice.commons.entity.BLResponse;
 import pe.labtech.einvoice.commons.entity.Detail;
 import pe.labtech.einvoice.commons.entity.Header;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
-import pe.labtech.einvoice.core.tasks.SignTaskLocal;
+import pe.labtech.einvoice.core.tasks.sign.SignTaskLocal;
 import pe.labtech.einvoice.replication.cancel.PullCancelTaskLocal;
 import pe.labtech.einvoice.replication.invoice.PullInvoiceTaskLocal;
 import pe.labtech.einvoice.replication.summary.PullSummaryTaskLocal;
@@ -89,7 +89,7 @@ public class RestHelper implements RestHelperLocal {
         //grabar los nuevos datos en la tabla
         saveNewData(content);
         //replicar
-        pullInvoice.replicate(content, details, "PULL", "LOADED-WS");
+        pullInvoice.replicate(content, details, "REST-API", "LOADED-WS");
         //firmar
         Long id = findDocumentId(issuerType, issuerId, documentType, documentNumber);
         sign.handle(id);
@@ -120,7 +120,7 @@ public class RestHelper implements RestHelperLocal {
         //grabar los nuevos datos en la tabla
         saveNewData(content);
         //replicar
-        pullSummary.replicate(content, details, "PULL", "LOADED-WS");
+        pullSummary.replicate(content, details, "REST-API", "LOADED-WS");
         //firmar
         Long id = findDocumentId(issuerType, issuerId, documentType, documentNumber);
         sign.handle(id);
@@ -151,7 +151,7 @@ public class RestHelper implements RestHelperLocal {
         //grabar los nuevos datos en la tabla
         saveNewData(content);
         //replicar
-        pullCancel.replicate(content, details, "PULL", "LOADED-WS");
+        pullCancel.replicate(content, details, "REST-API", "LOADED-WS");
         //firmar
         Long id = findDocumentId(issuerType, issuerId, documentType, documentNumber);
         sign.handle(id);

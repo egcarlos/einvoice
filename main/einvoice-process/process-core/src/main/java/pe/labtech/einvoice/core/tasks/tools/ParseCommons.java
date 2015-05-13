@@ -3,81 +3,41 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.core.tasks.online;
+package pe.labtech.einvoice.core.tasks.tools;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.xml.ws.WebServiceException;
 import org.apache.commons.beanutils.PropertyUtils;
-import pe.labtech.einvoice.commons.model.DatabaseManager;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.Item;
-import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
-import pe.labtech.einvoice.core.tasks.Tools;
-import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
-import pe.labtech.einvoice.core.ws.helpers.Builder;
-import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
-import pe.labtech.einvoice.core.ws.messages.response.Response;
 
 /**
  *
  * @author Carlos
  */
-public class Commons {
+public class ParseCommons {
 
-    public static final Builder builder = new Builder();
-
-    public static DocumentInfo handleOnline(DatabaseManager db, DocumentLoaderLocal loader, EBizGenericInvoker invoker, Document document, String request) {
-
-        Tools.saveRequest(db, document, request);
-        try {
-            loader.createEvent(document, "SIGN_REQUEST", request);
-            String response = invoker.invoke(request);
-            loader.createEvent(document, "SIGN_RESPONSE", response);
-            Response r = builder.unmarshall(Response.class, response);
-
-            if (Tools.isInvalid(r)) {
-                loader.createEvent(document, "ERROR", "Invalid response structure");
-                loader.markAsError(document.getId());
-                return null;
-            }
-
-            DocumentInfo di = Tools.getDocumentInfo(r);
-            Map<String, String> responses = Tools.describe(di);
-            if (Tools.isSigned(di)) {
-                loader.markSigned(document.getId(), "SYNC", di.getSignatureValue(), di.getHashCode(), responses);
-            } else if (Tools.wasSignedBefore(di)) {
-                loader.markForSync(document.getId());
-            } else {
-                loader.markSigned(document.getId(), "ERROR", di.getSignatureValue(), di.getHashCode(), responses);
-            }
-            return di;
-        } catch (WebServiceException ex) {
-            Map<String, String> responses = new HashMap<>();
-            responses.put("messages", "Soap Fault raised!");
-            loader.markSigned(document.getId(), "RETRY", null, null, responses);
-            String message = Tools.exToString(ex, "Document will retry");
-            loader.createEvent(document, "WARN", message);
-            //TODO create a synthetic document info
-            return null;
-        } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-            loader.markAsError(document.getId(), ex);
-            return null;
-        }
-    }
-
+    /**
+     * Utility class to convert a document into another target.
+     *
+     * @param <D> type of the target
+     * @param <I> type of the item of the target
+     * @param source document to convert
+     * @param d creates new instances of the target
+     * @param i creates new items of the target
+     * @param set sets the item list in the target
+     * @return
+     */
     public static <D, I> D map(Document source, Supplier<D> d, Supplier<I> i, BiConsumer<D, List<I>> set) {
         D target = d.get();
         if (source.getAttributes() != null) {
@@ -99,6 +59,14 @@ public class Commons {
         return target;
     }
 
+    /**
+     * Utility class to convert an item into another target
+     *
+     * @param <I> type of the target
+     * @param source item source
+     * @param target item target
+     * @return the item target (same as argument)
+     */
     public static <I> I mapItem(Item source, I target) {
         if (source.getAttributes() != null) {
             source.getAttributes().forEach(a -> mapAttribute(target, a.getName(), a.getValue()));
@@ -109,6 +77,13 @@ public class Commons {
         return target;
     }
 
+    /**
+     * Sets the value of an attribute in a target object
+     *
+     * @param target
+     * @param attribute
+     * @param value
+     */
     public static void mapAttribute(final Object target, final String attribute, final String value) {
         if (value == null || "".equals(value.trim())) {
             //can't assign null values
@@ -118,6 +93,7 @@ public class Commons {
             Class<?> propertyType = PropertyUtils.getPropertyType(target, attribute);
             if (propertyType == null) {
                 //raise error and cancel for no mappeableProperty
+                Logger.getLogger(Tools.class.getName()).log(Level.WARNING, () -> "Can''t map property " + attribute);
             } else if (BigDecimal.class.isAssignableFrom(propertyType)) {
                 PropertyUtils.setProperty(target, attribute, new BigDecimal(value));
             } else if (Date.class.isAssignableFrom(propertyType)) {
@@ -132,11 +108,19 @@ public class Commons {
                 PropertyUtils.setProperty(target, attribute, value);
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ParseException ex) {
-            //TODO can't handle invalid mapping
-            Logger.getLogger(Tools.class.getName()).log(Level.INFO, "Can''t map property " + attribute, ex);
+            Logger.getLogger(Tools.class.getName()).log(Level.WARNING, ex, () -> "Can''t map property " + attribute);
         }
     }
 
+    /**
+     * Map a legend field
+     *
+     * @param target
+     * @param code
+     * @param order
+     * @param value
+     * @param additional
+     */
     public static void mapLegend(Object target, String code, Long order, String value, String additional) {
         if (code == null || value == null) {
             return;
@@ -154,6 +138,15 @@ public class Commons {
 
     }
 
+    /**
+     * Map an auxiliar field
+     *
+     * @param target
+     * @param code
+     * @param length
+     * @param order
+     * @param value
+     */
     public static void mapAuxiliar(Object target, String code, String length, Long order, String value) {
         if (code == null || value == null) {
             return;

@@ -174,12 +174,12 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
     @Override
     public void replicate(DocumentHeader header, List<DocumentDetail> details) {
-        this.replicate(header, details, DocumentStep.PULL, DocumentStatus.LOADED);
+        this.replicate(header, details, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
     @Override
     public void replicate(DocumentHeaderPK id) {
-        this.replicate(id, DocumentStep.PULL, DocumentStatus.LOADED);
+        this.replicate(id, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
 }

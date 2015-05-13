@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.core.tasks.offline;
+package pe.labtech.einvoice.core.tasks.sign;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import javax.ejb.Local;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 
@@ -14,12 +13,10 @@ import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
  *
  * @author Carlos
  */
-@Stateless
-@LocalBean
-public class OfflineSummary {
+@Local
+public interface SignTaskLocal {
 
-    public DocumentInfo handle(Document document) {
-        return null;
-    }
+    void handle(Document document);
 
+    DocumentInfo handle(Long id);
 }

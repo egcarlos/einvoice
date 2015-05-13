@@ -67,6 +67,7 @@
         <module>process-copy</module>
         <module>process-download</module>
         <module>process-bom</module>
+        <module>process-core</module>
     </modules>
     
     <properties>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.core.tasks;
+package pe.labtech.einvoice.core.tasks.sign;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
@@ -16,9 +16,6 @@ import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.SecurityValues;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
-import pe.labtech.einvoice.core.tasks.offline.OfflineInvoice;
-import pe.labtech.einvoice.core.tasks.online.OnlineInvoice;
-import pe.labtech.einvoice.core.tasks.online.OnlineSummary;
 
 /**
  *
@@ -29,8 +26,6 @@ public class SignTask implements SignTaskLocal {
 
     @EJB
     PrivateDatabaseManagerLocal db;
-//    @EJB
-//    private OfflineSummary offlineSummary;
     @EJB
     private OnlineSummary onlineSummary;
     @EJB

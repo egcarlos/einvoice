@@ -17,13 +17,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>pe.labtech.einvoice.model</groupId>
-            <artifactId>einvoice-model-private</artifactId>
-            <type>ejb</type>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.ws</groupId>
-            <artifactId>einvoice-ws-clientcdi</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>einvoice-process-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

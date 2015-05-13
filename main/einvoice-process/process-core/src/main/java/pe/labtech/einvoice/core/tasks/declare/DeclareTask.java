@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.core.tasks;
+package pe.labtech.einvoice.core.tasks.declare;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
@@ -13,6 +13,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
+import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
+import pe.labtech.einvoice.core.tasks.tools.ServiceCommons;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 import pe.labtech.einvoice.core.ws.helpers.Builder;
 
@@ -26,30 +28,21 @@ public class DeclareTask implements DeclareTaskLocal {
     @EJB
     DocumentLoaderLocal loader;
 
+    @EJB
+    PrivateDatabaseManagerLocal prv;
+
     @Inject
     EBizGenericInvoker invoker;
 
-    @Asynchronous
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
     public void handle(Long id) {
-        try {
-            Document document = loader.loadForWork(id, null);
+        Document document = prv.seek(e -> e.find(Document.class, id));
+        String request = buildDeclareCommand(document);
+        ServiceCommons.declare(prv, loader, invoker, document, request);
+    }
 
-            Builder builder = new Builder();
-            String request = builder.buildDeclare(document.getClientId().split("-")[1], document.getDocumentType(), document.getDocumentNumber());
-
-            loader.createEvent(document, "DECLARE_REQUEST", request);
-
-            String response = invoker.invoke(request);
-
-            loader.createEvent(document, "DECLARE_RESPONSE", response);
-
-            //TODO create the document info element and analize
-            loader.markForSync(id);
-
-        } catch (Exception ex) {
-            loader.markAsError(id, ex);
-        }
+    private String buildDeclareCommand(Document document) {
+        return new Builder().buildDeclare(document.getClientId().split("-")[1], document.getDocumentType(), document.getDocumentNumber());
     }
 }

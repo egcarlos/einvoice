@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.core.tasks;
+package pe.labtech.einvoice.core.tasks.replicate;
 
 import javax.ejb.Local;
 
@@ -12,7 +12,8 @@ import javax.ejb.Local;
  * @author Carlos
  */
 @Local
-public interface DeclareTaskLocal {
+public interface ReplicateXmlTaskLocal {
 
-    void handle(Long id);
+    void handle(Long t);
+
 }

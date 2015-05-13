@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.core.tasks;
+package pe.labtech.einvoice.core.tasks.replicate;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +18,7 @@ import javax.xml.ws.WebServiceException;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
+import pe.labtech.einvoice.core.tasks.tools.ServiceCommons;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 
 /**
@@ -25,7 +26,7 @@ import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
  * @author Carlos
  */
 @Stateless
-public class DeclareOfflineTask implements DeclareOfflineTaskLocal {
+public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
 
     @Inject
     private EBizGenericInvoker invoker;
@@ -37,7 +38,6 @@ public class DeclareOfflineTask implements DeclareOfflineTaskLocal {
     private PrivateDatabaseManagerLocal prv;
 
     @Override
-    @Asynchronous
     public void handle(final Long t) {
         //marcar en trabajo
         Document document = prv.seek(e -> e.find(Document.class, t));
@@ -56,45 +56,16 @@ public class DeclareOfflineTask implements DeclareOfflineTaskLocal {
                 .getSingleResult()
         );
 
-        try {
-            String command = "<ReplicateXmlCmd declare-sunat=\"1\" declare-direct-sunat=\"0\" publish=\"1\" output=\"PDF\">"
-                    + "<parametros/>"
-                    + "<parameter value=\"" + buildClientId(document) + "\" name=\"idEmisor\"/>"
-                    + "</ReplicateXmlCmd>";
-            loader.createEvent(document, "INFO", command);
-            String response = invoker.replicateXml(command, zippedUBL, null);
-            loader.createEvent(document, "INFO", response);
-        } catch (WebServiceException ex) {
-            loader.createEvent(document, "ERROR", exToString(ex, "Error raised while replicating xml"));
-        }
+        String command = "<ReplicateXmlCmd declare-sunat=\"1\" declare-direct-sunat=\"0\" publish=\"1\" output=\"PDF\">"
+                + "<parametros/>"
+                + "<parameter value=\"" + buildClientId(document) + "\" name=\"idEmisor\"/>"
+                + "</ReplicateXmlCmd>";
 
-        prv.handle(e -> e
-                .createQuery(
-                        "UPDATE Document O SET O.step = 'SIGN', O.status = 'SYNC' WHERE O.id = :id"
-                )
-                .setParameter("id", document.getId())
-                .executeUpdate()
-        );
+        ServiceCommons.replicateXml(prv, loader, invoker, document, command, zippedUBL);
     }
 
     private static Object buildClientId(Document d) {
         return d.getClientId().contains("-") ? d.getClientId().split("-")[1] : d.getClientId();
-    }
-
-    public static String exToString(Exception ex, String... headers) {
-        try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
-            Arrays.stream(headers).forEach(s -> pw.println(s));
-            pw.println();
-            pw.println(ex.getMessage());
-            pw.println();
-            pw.println("Stack Trace");
-            ex.printStackTrace(pw);
-            pw.flush();
-            pw.close();
-            return sw.toString();
-        } catch (IOException ioex) {
-            throw new RuntimeException(ioex);
-        }
     }
 
     private String buildEntryName(Document document) {

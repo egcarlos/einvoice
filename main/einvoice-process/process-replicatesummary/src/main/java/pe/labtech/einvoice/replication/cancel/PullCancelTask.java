@@ -43,7 +43,7 @@ public class PullCancelTask implements PullCancelTaskLocal {
 
     @Override
     public void replicate(CancelHeaderPK id) {
-        this.replicate(id, DocumentStep.PULL, DocumentStatus.LOADED);
+        this.replicate(id, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class PullCancelTask implements PullCancelTaskLocal {
 
     @Override
     public void replicate(CancelHeader header, List<CancelDetail> details) {
-        this.replicate(header, details, DocumentStep.PULL, DocumentStatus.LOADED);
+        this.replicate(header, details, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
     @Override

@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.core.tasks;
+package pe.labtech.einvoice.core.tasks.tools;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,13 @@ import pe.labtech.einvoice.core.ws.messages.response.ResponseMessage;
  * @author Carlos
  */
 public class Tools {
+
+    public static BigDecimal buildNumber(String amount) {
+        if (amount == null) {
+            return null;
+        }
+        return new BigDecimal(amount);
+    }
 
     public static void saveRequest(DatabaseManager db, Document document, String request) {
         //save request

@@ -38,6 +38,12 @@
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>einvoice-process-core</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
     </dependencies>
 
     <build>

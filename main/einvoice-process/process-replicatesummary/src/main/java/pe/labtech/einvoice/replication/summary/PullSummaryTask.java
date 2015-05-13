@@ -43,7 +43,7 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
 
     @Override
     public void replicate(SummaryHeaderPK id) {
-        replicate(id, DocumentStep.PULL, DocumentStatus.LOADED);
+        replicate(id, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
 
     @Override
     public void replicate(SummaryHeader header, List<SummaryDetail> details) {
-        this.replicate(header, details, DocumentStep.PULL, DocumentStatus.LOADED);
+        this.replicate(header, details, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
     @Override

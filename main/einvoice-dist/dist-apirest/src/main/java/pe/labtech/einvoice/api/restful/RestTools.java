@@ -6,12 +6,9 @@
 package pe.labtech.einvoice.api.restful;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.beanutils.PropertyUtils;
-import pe.labtech.einvoice.commons.entity.Detail;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.replicator.entity.CancelDetail;
 import pe.labtech.einvoice.replicator.entity.CancelDetailPK;

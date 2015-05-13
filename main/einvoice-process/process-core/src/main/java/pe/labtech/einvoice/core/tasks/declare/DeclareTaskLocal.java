@@ -3,18 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.core.tasks;
+package pe.labtech.einvoice.core.tasks.declare;
 
 import javax.ejb.Local;
-import pe.labtech.einvoice.core.entity.Document;
 
 /**
  *
  * @author Carlos
  */
 @Local
-public interface SyncTaskLocal {
+public interface DeclareTaskLocal {
 
-    void handle(Document document);
-
+    void handle(Long id);
 }

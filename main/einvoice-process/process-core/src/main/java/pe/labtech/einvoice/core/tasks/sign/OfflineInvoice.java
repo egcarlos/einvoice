@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pe.labtech.einvoice.core.tasks.offline;
+package pe.labtech.einvoice.core.tasks.sign;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -23,17 +23,23 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import pe.labtech.einvoice.commons.ext.ZipTools;
+import pe.labtech.einvoice.commons.model.DocumentStatus;
+import pe.labtech.einvoice.commons.model.DocumentStep;
 import pe.labtech.einvoice.commons.ubl.DocumentMorpher;
 import pe.labtech.einvoice.commons.ubl.InvoiceBuilder;
 import pe.labtech.einvoice.commons.ubl.InvoiceLineBuilder;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.entity.SecurityValues;
-import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.DATA_LOADED;
+import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.*;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
-import static pe.labtech.einvoice.core.tasks.offline.Commons.*;
+import static pe.labtech.einvoice.core.tasks.tools.DatabaseCommons.mark;
+import static pe.labtech.einvoice.core.tasks.tools.SecurityCommons.extractCertificate;
+import static pe.labtech.einvoice.core.tasks.tools.SecurityCommons.extractKey;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
+import static pe.labtech.einvoice.core.tasks.tools.ServiceCommons.*;
+import static pe.labtech.einvoice.core.tasks.tools.Tools.buildNumber;
 
 /**
  *
@@ -109,7 +115,8 @@ public class OfflineInvoice {
         diresponses.put("signatureValue", di.getSignatureValue());
 
         //TODO proceder a declarar usando el proceso de envio especial
-        loader.markSigned(document.getId(), "SIGNED-LOCAL", di.getHashCode(), di.getSignatureValue(), diresponses);
+        //loader.markSigned(document.getId(), "SIGNED-LOCAL", di.getHashCode(), di.getSignatureValue(), diresponses);
+        mark(prv, document.getId(), DocumentStep.REPLICATE, DocumentStatus.NEEDED, diresponses);
         return di;
     }
 

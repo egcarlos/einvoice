@@ -14,13 +14,16 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.NEEDED;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.REPLICATING;
+import static pe.labtech.einvoice.commons.model.DocumentStep.REPLICATE;
+import static pe.labtech.einvoice.commons.model.RecurrentHelper.buildId;
+import static pe.labtech.einvoice.commons.model.RecurrentHelper.lock;
+import static pe.labtech.einvoice.commons.model.RecurrentHelper.lookup;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.model.AsyncWrapperLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
-import static pe.labtech.einvoice.commons.model.RecurrentHelper.*;
-import static pe.labtech.einvoice.commons.model.DocumentStatus.*;
-import static pe.labtech.einvoice.commons.model.DocumentStep.*;
-import pe.labtech.einvoice.core.tasks.sign.SignTaskLocal;
+import pe.labtech.einvoice.core.tasks.replicate.ReplicateXmlTaskLocal;
 
 /**
  *
@@ -30,13 +33,13 @@ import pe.labtech.einvoice.core.tasks.sign.SignTaskLocal;
 @Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
-public class SignTimer extends AbstractRecurrentTask<Long> {
+public class ReplicateXmlRetryRecurrent extends AbstractRecurrentTask<Long> {
 
     @EJB
     private PrivateDatabaseManagerLocal prv;
 
     @EJB
-    private SignTaskLocal task;
+    private ReplicateXmlTaskLocal task;
 
     @EJB
     private AsyncWrapperLocal asw;
@@ -45,15 +48,15 @@ public class SignTimer extends AbstractRecurrentTask<Long> {
     @Override
     public void init() {
         super.init();
-        super.findTasks = () -> lookup(prv, SIGN, NEEDED, q -> q.setMaxResults(10000));
-        super.tryLock = t -> lock(prv, t, SIGN, NEEDED, SIGN, SIGNING);
-        super.getId = t -> buildId(t, "sign");
+        super.findTasks = () -> lookup(prv, REPLICATE, NEEDED, q -> q.setMaxResults(10000));
+        super.tryLock = t -> lock(prv, t, REPLICATE, NEEDED, REPLICATE, REPLICATING);
+        super.getId = t -> buildId(t, "declare");
         super.consumer = t -> asw.perform(() -> task.handle(t));
     }
 
+    @Schedule(hour = "*", minute = "*/3", second = "30", persistent = false)
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/3", persistent = false)
-    public void timeout() {
+    protected void timeout() {
         super.timeout();
     }
 
