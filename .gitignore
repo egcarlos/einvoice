@@ -93,8 +93,9 @@ $RECYCLE.BIN/
 /main/einvoice-process/process-replicatedatasummary/target/
 /customizations/hv/process-replicate/target/
 /customizations/hv/process-replicateresponse/target/
-/customizations/hv/default/target/
+/customizations/hv/dist-ear/target/
 /main/einvoice-dist/einvoice-dist-ear/target/
 /main/einvoice-dist/dist-ear/target/
 /main/einvoice-dist/dist-apirest/target/
 /main/einvoice-dist/dist-console/target/
+/main/einvoice-process/process-core/target/

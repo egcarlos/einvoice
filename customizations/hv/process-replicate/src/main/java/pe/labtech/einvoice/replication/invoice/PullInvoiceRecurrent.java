@@ -38,7 +38,7 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
         super.init();
         this.findTasks = () -> pub.seek(e -> e
                 .createQuery(
-                        "SELECT O.id FROM DocumentHeader O WHERE o.bl_estadoRegistro = 'A' ORDER BY O.id.tipoDocumento ASC, O.id.serieNumero",
+                        "SELECT O.id FROM DocumentHeader O WHERE o.bl_estadoRegistro = 'A' ORDER BY O.tipoDocumento ASC, O.serieNumero ASC",
                         DocumentHeaderPK.class
                 )
                 .setMaxResults(10000)
