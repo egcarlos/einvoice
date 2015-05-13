@@ -61,14 +61,7 @@ public class OfflineInvoice {
         org.w3c.dom.Document xml = ib.document(DEFAULT_ENCODING);
 
         //if document type is 07 morph to creditNote
-        if ("07".equals(document.getDocumentType())) {
-            DocumentMorpher.morphToCreditNote(xml);
-        }
-
-        //if document type is 08 morph to debitNote
-        if ("07".equals(document.getDocumentType())) {
-            DocumentMorpher.morphToDebitNote(xml);
-        }
+        DocumentMorpher.morph(document.getDocumentType(), xml);
 
         byte[] unsignedDocument = DIGISIGN.createRepresentation(xml, DEFAULT_ENCODING);
         prv.handle(e -> {
