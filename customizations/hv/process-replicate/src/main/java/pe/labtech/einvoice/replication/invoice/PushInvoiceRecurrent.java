@@ -71,12 +71,16 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
         this.getId = t -> RecurrentHelper.buildId(t, "replicate");
         this.consumer = t -> {
             DocumentHeaderPK id = createId(prv.seek(e -> e.find(Document.class, t)));
-            Map<String, String> responses = this.findTasksSingle.apply(t).stream()
+            Map<String, Object> responses = this.findTasksSingle.apply(t).stream()
                     .filter(r -> this.tryLockSingle.apply(r))
                     .filter(r -> isValid(ModelTools.mapResponseName(r.getName())))
                     .collect(Collectors.toMap(r -> ModelTools.mapResponseName(r.getName()), r -> r.getValue()));
             if (responses.isEmpty()) {
                 return;
+            }
+            if (responses.containsKey("bl_estadoRegistro")) {
+                String estado = (String) responses.get("bl_estadoRegistro");//siempre es un caracter y nada más
+                responses.put("bl_estadoRegistro", estado.charAt(0));
             }
             RecurrentHelper.sendResponses(pub, id, responses);
         };
@@ -89,7 +93,8 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
             "bl_hashFirma",
             "bl_mensaje",
             "bl_estadoProceso",
-            "bl_mensajeSunat"
+            "bl_mensajeSunat",
+            "bl_estadoRegistro"
     );
 
     private boolean isValid(String name) {
@@ -105,7 +110,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
                         "SELECT O.id FROM DocumentHeader O WHERE O.tipoDocumentoEmisor = :tde AND O.numeroDocumentoEmisor = :nde AND O.tipoDocumento = :td AND O.serieNumero = :sn",
                         DocumentHeaderPK.class
                 )
-                .setParameter("tde", t.getClientId().split("-")[0])
+                .setParameter("tde", t.getClientId().split("-")[0].charAt(0))
                 .setParameter("nde", t.getClientId().split("-")[1])
                 .setParameter("td", t.getDocumentType())
                 .setParameter("sn", t.getDocumentNumber())

@@ -339,10 +339,10 @@ public class DocumentHeader implements Serializable {
     @Column(name = "LG_LOAD_MESSAGES", length = 2000)
     private String bl_mensaje;
     @Column(name = "LG_PROCESS_STATUS")
-    private Character bl_estadoProceso;
+    private Character x_recordStatus;
     @Size(max = 20)
     @Column(name = "LG_RECORD_STATUS", length = 20)
-    private String x_recordStatus;
+    private String bl_estadoProceso;
     @Size(max = 2000)
     @Column(name = "LG_SERVICE_RESPONSE", length = 2000)
     private String bl_mensajeSunat;
@@ -791,6 +791,18 @@ public class DocumentHeader implements Serializable {
     }
 
     public String getTipoReferenciaAdicional_1() {
+        if (numeroDocumentoReferenciaAdicional_1 != null) {
+            if (null != tipoDocumento) {
+                switch (tipoDocumento) {
+                    case "01":
+                        tipoReferenciaAdicional_1 = "02";
+                        break;
+                    case "03":
+                        tipoReferenciaAdicional_1 = "03";
+                        break;
+                }
+            }
+        }
         return tipoReferenciaAdicional_1;
     }
 
@@ -807,6 +819,18 @@ public class DocumentHeader implements Serializable {
     }
 
     public String getTipoReferenciaAdicional_2() {
+        if (numeroDocumentoReferenciaAdicional_2 != null) {
+            if (null != tipoDocumento) {
+                switch (tipoDocumento) {
+                    case "01":
+                        tipoReferenciaAdicional_2 = "02";
+                        break;
+                    case "03":
+                        tipoReferenciaAdicional_2 = "03";
+                        break;
+                }
+            }
+        }
         return tipoReferenciaAdicional_2;
     }
 
@@ -823,6 +847,18 @@ public class DocumentHeader implements Serializable {
     }
 
     public String getTipoReferenciaAdicional_3() {
+        if (numeroDocumentoReferenciaAdicional_3 != null) {
+            if (null != tipoDocumento) {
+                switch (tipoDocumento) {
+                    case "01":
+                        tipoReferenciaAdicional_3 = "02";
+                        break;
+                    case "03":
+                        tipoReferenciaAdicional_3 = "03";
+                        break;
+                }
+            }
+        }
         return tipoReferenciaAdicional_3;
     }
 
@@ -839,6 +875,18 @@ public class DocumentHeader implements Serializable {
     }
 
     public String getTipoReferenciaAdicional_4() {
+        if (numeroDocumentoReferenciaAdicional_4 != null) {
+            if (null != tipoDocumento) {
+                switch (tipoDocumento) {
+                    case "01":
+                        tipoReferenciaAdicional_4 = "02";
+                        break;
+                    case "03":
+                        tipoReferenciaAdicional_4 = "03";
+                        break;
+                }
+            }
+        }
         return tipoReferenciaAdicional_4;
     }
 
@@ -855,6 +903,18 @@ public class DocumentHeader implements Serializable {
     }
 
     public String getTipoReferenciaAdicional_5() {
+        if (numeroDocumentoReferenciaAdicional_5 != null) {
+            if (null != tipoDocumento) {
+                switch (tipoDocumento) {
+                    case "01":
+                        tipoReferenciaAdicional_5 = "02";
+                        break;
+                    case "03":
+                        tipoReferenciaAdicional_5 = "03";
+                        break;
+                }
+            }
+        }
         return tipoReferenciaAdicional_5;
     }
 
@@ -1286,19 +1346,19 @@ public class DocumentHeader implements Serializable {
         this.bl_mensaje = bl_mensaje;
     }
 
-    public Character getBl_estadoProceso() {
+    public String getBl_estadoProceso() {
         return bl_estadoProceso;
     }
 
-    public void setBl_estadoProceso(Character bl_estadoProceso) {
+    public void setBl_estadoProceso(String bl_estadoProceso) {
         this.bl_estadoProceso = bl_estadoProceso;
     }
 
-    public String getX_recordStatus() {
+    public Character getX_recordStatus() {
         return x_recordStatus;
     }
 
-    public void setX_recordStatus(String x_recordStatus) {
+    public void setX_recordStatus(Character x_recordStatus) {
         this.x_recordStatus = x_recordStatus;
     }
 

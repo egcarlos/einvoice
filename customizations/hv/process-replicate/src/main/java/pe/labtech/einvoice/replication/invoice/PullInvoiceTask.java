@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import org.apache.commons.beanutils.BeanUtils;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
 import pe.labtech.einvoice.commons.model.DocumentStep;
@@ -34,6 +36,7 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
  * @author Carlos
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
     static final Logger logger = Logger.getLogger(PullInvoiceTask.class.getName());
@@ -93,7 +96,14 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                                 }
                             }
                         } else {
-                            attrs.add(new DocumentAttribute(document, key, value));
+                            if ("fechaEmision".equals(key)) {
+                                //fix para el formato de la fecha de emisión
+                                attrs.add(new DocumentAttribute(document, key, value.substring(6, 10) + "-" + value.substring(3, 5) + "-" + value.substring(0, 2)));
+                            } else if (key.startsWith("tipoReferenciaAdicional") || key.startsWith("numeroDocumentoReferenciaAdicional")) {
+//                                attrs.add(new DocumentAttribute(document, key.replace("Adicional", ""), value));
+                            } else {
+                                attrs.add(new DocumentAttribute(document, key, value));
+                            }
                         }
                     });
 
@@ -176,12 +186,12 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
     @Override
     public void replicate(DocumentHeader header, List<DocumentDetail> details) {
-        this.replicate(header, details, DocumentStep.PULL, DocumentStatus.LOADED);
+        this.replicate(header, details, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
     @Override
     public void replicate(DocumentHeaderPK id) {
-        this.replicate(id, DocumentStep.PULL, DocumentStatus.LOADED);
+        this.replicate(id, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
 }
