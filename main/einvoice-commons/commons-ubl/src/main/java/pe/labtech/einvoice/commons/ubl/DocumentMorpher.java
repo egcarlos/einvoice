@@ -5,17 +5,21 @@
  */
 package pe.labtech.einvoice.commons.ubl;
 
+import java.util.Arrays;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pe.labtech.einvoice.commons.xmlsecurity.SignatureException;
 import pe.labtech.einvoice.commons.xmlsecurity.UniversalNamespaceCache;
 import pe.labtech.ubl.model.Namespaces;
+import static pe.labtech.ubl.model.Namespaces.CAC;
+import static pe.labtech.ubl.model.Namespaces.CBC;
+import static pe.labtech.ubl.model.Namespaces.NS6;
+import static pe.labtech.ubl.model.Namespaces.NS7;
 
 /**
  *
@@ -24,79 +28,74 @@ import pe.labtech.ubl.model.Namespaces;
 public class DocumentMorpher {
 
     private static final String CREDIT_NOTE = "07";
+    private static final String[][] CREDIT_NOTE_FIX = new String[][]{
+        new String[]{Namespaces.CAC, "InvoiceLine", "CreditNoteLine"},
+        new String[]{Namespaces.CBC, "InvoicedQuantity", "CreditedQuantity"}
+    };
     private static final String DEBIT_NOTE = "08";
+    private static final String[][] DEBIT_NOTE_FIX = new String[][]{
+        new String[]{Namespaces.CAC, "InvoiceLine", "DebitNoteLine"},
+        new String[]{Namespaces.CBC, "InvoicedQuantity", "DebitedQuantity"},
+        new String[]{Namespaces.CAC, "LegalMonetaryTotal", "RequestedMonetaryTotal"}
+    };
+    private static final String[][] REMOVES = new String[][]{
+        new String[]{Namespaces.CBC, "InvoiceTypeCode"}
+    };
 
     public static void morph(String documentType, Document document) {
         switch (documentType) {
             case CREDIT_NOTE:
-                morphToCreditNote(document);
+                morph(
+                        document,
+                        a(NS6, "CreditNote"),
+                        new String[][]{
+                            a(CAC, "InvoiceLine", "CreditNoteLine"),
+                            a(CBC, "InvoicedQuantity", "CreditedQuantity")
+                        },
+                        new String[][]{
+                            a(CBC, "InvoiceTypeCode")
+                        }
+                );
                 break;
             case DEBIT_NOTE:
-                morphToDebitNote(document);
+                morph(
+                        document,
+                        a(NS7, "DebitNote"),
+                        new String[][]{
+                            a(CAC, "InvoiceLine", "DebitNoteLine"),
+                            a(CBC, "InvoicedQuantity", "DebitedQuantity"),
+                            a(CAC, "LegalMonetaryTotal", "RequestedMonetaryTotal")
+                        },
+                        new String[][]{
+                            a(CBC, "InvoiceTypeCode")
+                        }
+                );
                 break;
         }
     }
 
-    public static void morphToCreditNote(Document document) {
-        //cambiar el root element
-        Element root = document.getDocumentElement();
-        document.renameNode(root, Namespaces.NS6, "CreditNote");
-        {
-            NodeList lines = document.getElementsByTagNameNS(Namespaces.CAC, "InvoiceLine");
-            for (int index = 0; index < lines.getLength(); index++) {
-                Node n = lines.item(index);
-                document.renameNode(n, Namespaces.CAC, "CreditNoteLine");
-            }
-        }
-        {
-            NodeList quantities = document.getElementsByTagNameNS(Namespaces.CBC, "InvoicedQuantity");
-            for (int index = 0; index < quantities.getLength(); index++) {
-                Node n = quantities.item(index);
-                document.renameNode(n, Namespaces.CBC, "CreditedQuantity");
-            }
-        }
-        adjustPrefix(document, "CreditedQuantity", Namespaces.CBC);
-        adjustPrefix(document, "CreditNoteLine", Namespaces.CAC);
-        {
-            NodeList type = document.getElementsByTagNameNS(Namespaces.CBC, "InvoiceTypeCode");
-            for (int index = 0; index < type.getLength(); index++) {
-                Node n = type.item(index);
-                n.getParentNode().removeChild(n);
-            }
+    public static void morph(Document document, String[] root, String[][] renames, String[][] removes) {
+        document.renameNode(document.getDocumentElement(), root[0], root[1]);
+        renameTags(document, renames);
+        removeTags(document, removes);
+    }
+
+    public static void renameTags(Document document, String[]... tags) {
+        Arrays.stream(tags).forEach(d -> {
+            DocumentMorpher.remaneTag(document, d[0], d[1], d[2]);
+            DocumentMorpher.adjustPrefix(document, d[0], d[2]);
+        });
+    }
+
+    public static void remaneTag(Document document, String namespace, String sourceTag, String targetTag) {
+        NodeList lines = document.getElementsByTagNameNS(namespace, sourceTag);
+        for (int index = 0; index < lines.getLength(); index++) {
+            Node n = lines.item(index);
+            document.renameNode(n, namespace, targetTag);
         }
     }
 
-    public static void morphToDebitNote(Document document) {
-        //cambiar el root element
-        Element root = document.getDocumentElement();
-        document.renameNode(root, Namespaces.NS7, "DebitNote");
-        {
-            NodeList lines = document.getElementsByTagNameNS(Namespaces.CAC, "InvoiceLine");
-            for (int index = 0; index < lines.getLength(); index++) {
-                Node n = lines.item(index);
-                document.renameNode(n, Namespaces.CAC, "DebitNoteLine");
-
-            }
-        }
-        {
-            NodeList quantities = document.getElementsByTagNameNS(Namespaces.CBC, "InvoicedQuantity");
-            for (int index = 0; index < quantities.getLength(); index++) {
-                Node n = quantities.item(index);
-                document.renameNode(n, Namespaces.CBC, "DebitedQuantity");
-            }
-        }
-        adjustPrefix(document, "DebitedQuantity", Namespaces.CBC);
-        adjustPrefix(document, "DebitNoteLine", Namespaces.CAC);
-        {
-            NodeList type = document.getElementsByTagNameNS(Namespaces.CBC, "InvoiceTypeCode");
-            for (int index = 0; index < type.getLength(); index++) {
-                Node n = type.item(index);
-                n.getParentNode().removeChild(n);
-            }
-        }
-    }
-
-    public static void adjustPrefix(Document document, String element, String namespace) {
+    public static void adjustPrefix(Document document, String namespace, String element) {
         try {
             XPath xpath = buildXpath(document);
             String prefix = xpath
@@ -124,9 +123,26 @@ public class DocumentMorpher {
         }
     }
 
+    public static void removeTags(Document document, String[]... tags) {
+        Arrays.stream(tags).forEach(tag -> removeTag(document, tag[0], tag[1]));
+    }
+
+    public static void removeTag(Document document, String namespace, String tag) {
+        NodeList type = document.getElementsByTagNameNS(namespace, tag);
+        for (int index = 0; index < type.getLength(); index++) {
+            Node n = type.item(index);
+            n.getParentNode().removeChild(n);
+        }
+    }
+
     private static XPath buildXpath(Document document) {
         XPath xpath = XPathFactory.newInstance().newXPath();
         xpath.setNamespaceContext(new UniversalNamespaceCache(document));
         return xpath;
     }
+
+    private static <T> T[] a(T... items) {
+        return items;
+    }
+
 }
