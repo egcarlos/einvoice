@@ -13,6 +13,8 @@ import java.util.Arrays;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.xml.ws.WebServiceException;
 import pe.labtech.einvoice.core.entity.Document;
@@ -26,6 +28,7 @@ import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
  * @author Carlos
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
 
     @Inject

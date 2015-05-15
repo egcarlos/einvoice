@@ -51,7 +51,8 @@ public class ReplicateXmlRetryRecurrent extends AbstractRecurrentTask<Long> {
         super.findTasks = () -> lookup(prv, REPLICATE, NEEDED, q -> q.setMaxResults(10000));
         super.tryLock = t -> lock(prv, t, REPLICATE, NEEDED, REPLICATE, REPLICATING);
         super.getId = t -> buildId(t, "declare");
-        super.consumer = t -> asw.perform(() -> task.handle(t));
+//        super.consumer = t -> asw.perform(() -> task.handle(t));
+        super.consumer = t -> task.handle(t);
     }
 
     @Schedule(hour = "*", minute = "*/3", second = "30", persistent = false)

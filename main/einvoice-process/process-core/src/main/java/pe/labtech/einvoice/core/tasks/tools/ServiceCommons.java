@@ -10,7 +10,11 @@ import java.util.Map;
 import javax.xml.ws.WebServiceException;
 import pe.labtech.einvoice.commons.model.DatabaseManager;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.NEEDED;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.RETRY;
 import pe.labtech.einvoice.commons.model.DocumentStep;
+import static pe.labtech.einvoice.commons.model.DocumentStep.SIGN;
+import static pe.labtech.einvoice.commons.model.DocumentStep.SYNC;
 import pe.labtech.einvoice.commons.xmlsecurity.DigitalSign;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
@@ -67,16 +71,29 @@ public class ServiceCommons {
             Response r = BUILDER.unmarshall(Response.class, response);
 
             //este caso corresponde a una inicialización inválida
+            if (Tools.noRecordsFound(r)) {
+                //Este caso se agrega para considerar un registro que tuvo una
+                //solicitud de replicación o firma pero no retorno respuesta y
+                //no se grabó en el servidor
+                loader.createEvent(document, "WARN", "Document will restart process.");
+                mark(db, document.getId(), SIGN, NEEDED, Tools.toMap(String.class, String.class, "messages", "Document not found in platform... signing and retrying whole process."));
+                return null;
+            }
             if (Tools.isInvalid(r)) {
                 loader.createEvent(document, "ERROR", "Invalid response structure");
                 loader.markAsError(document.getId());
                 return null;
             }
+
             DocumentInfo di = Tools.getDocumentInfo(r);
             controlDocumentInfo(di, db, document);
             return di;
         } catch (WebServiceException ex) {
-            markAsRetry(db, document, loader, ex);
+            //Se elimina el flujo normal y se prefiere retornar a SYNC RETRY
+            //para reingrear al flujo y sincronizar estados o refirmar
+            //markAsRetry(db, document, loader, ex);
+            loader.createEvent(document, "WARN", Tools.exToString(ex, "Document will retry."));
+            mark(db, document.getId(), SYNC, RETRY, Tools.toMap(String.class, String.class, "messages", "Document will retry."));
             return null;
         } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             loader.markAsError(document.getId(), ex);
