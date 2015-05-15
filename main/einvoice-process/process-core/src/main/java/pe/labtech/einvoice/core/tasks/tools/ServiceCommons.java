@@ -141,7 +141,11 @@ public class ServiceCommons {
             controlDocumentInfo(di, db, document);
             return di;
         } catch (WebServiceException ex) {
-            markAsRetry(db, document, loader, ex);
+            //Se elimina el flujo normal y se prefiere retornar a SYNC RETRY
+            //para reingrear al flujo y sincronizar estados o refirmar
+            //markAsRetry(db, document, loader, ex);
+            loader.createEvent(document, "WARN", Tools.exToString(ex, "Document will retry."));
+            mark(db, document.getId(), SYNC, RETRY, Tools.toMap(String.class, String.class, "messages", "Document will retry."));
             return null;
         } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             loader.markAsError(document.getId(), ex);
