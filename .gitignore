@@ -99,3 +99,6 @@ $RECYCLE.BIN/
 /main/einvoice-dist/dist-apirest/target/
 /main/einvoice-dist/dist-console/target/
 /main/einvoice-process/process-core/target/
+/main/einvoice-dist/dist-ear-min/target/
+/main/einvoice-dist/dist-earmin/target/
+/main/einvoice-ws/ws-dto/target/
