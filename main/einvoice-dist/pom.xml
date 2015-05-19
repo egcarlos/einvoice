@@ -28,7 +28,8 @@
     
     <modules>
         <module>dist-apirest</module>
-        <module>dist-ear</module>
         <module>dist-console</module>
+        <module>dist-ear</module>
+        <module>dist-earmin</module>
     </modules>
 </project>
