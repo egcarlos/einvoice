@@ -102,3 +102,5 @@ $RECYCLE.BIN/
 /main/einvoice-dist/dist-ear-min/target/
 /main/einvoice-dist/dist-earmin/target/
 /main/einvoice-ws/ws-dto/target/
+/customizations/tgestiona/process-download/target/
+/customizations/tgestiona/dist-ear/target/

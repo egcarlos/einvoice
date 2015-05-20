@@ -32,6 +32,7 @@ import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 import pe.labtech.einvoice.replicator.entity.SummaryHeader;
 import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
 import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
  *
@@ -48,6 +49,9 @@ public class BL_CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
 
     @EJB
     PublicDatabaseManagerLocal db;
+
+    @EJB
+    SummaryDatabaseManagerLocal sum;
 
     public BL_CopyRecurrent() {
     }
@@ -76,11 +80,11 @@ public class BL_CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
 
     //TODO ajustar el tiempo de llamada luego de pruebas
     @Override
-    @Schedule(hour = "17", minute = "32", second = "00", persistent = false)
+    @Schedule(hour = "17", minute = "00", second = "00", persistent = false)
     protected void timeout() {
         super.timeout();
         try (BL_HandleFile hf = new BL_HandleFile()) {
-            logger.log(Level.WARNING, () -> "tamanio de lsta.............." + lista.size());
+            logger.info(() -> "tamanio de lsta.............." + lista.size());
             List listDocumentHeader = lista.values().stream().map(d -> getEinvoiceHeader(d)).filter(d -> d != null).collect(Collectors.toList());
             if (listDocumentHeader.isEmpty()) {
                 return;
@@ -88,7 +92,7 @@ public class BL_CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
             hf.setListDocument(listDocumentHeader);
             hf.connectToSftp();
             hf.generateFileAndSendFilesToSftp();
-            logger.log(Level.WARNING, () -> "tamanio de listDocumentHeader.............." + listDocumentHeader.size());
+            logger.info(() -> "tamanio de listDocumentHeader.............." + listDocumentHeader.size());
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex, () -> "error raised while sending via sftp. " + ex);
         } finally {
@@ -130,9 +134,9 @@ public class BL_CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
             case "DocumentHeader":
                 return db.seek(e -> e.find(DocumentHeader.class, id));
             case "SummaryHeader":
-                return db.seek(e -> e.find(SummaryHeader.class, id));
+                return sum.seek(e -> e.find(SummaryHeader.class, id));
             case "CancelHeader":
-                return db.seek(e -> e.find(CancelHeader.class, id));
+                return sum.seek(e -> e.find(CancelHeader.class, id));
         }
         return null;
     }
