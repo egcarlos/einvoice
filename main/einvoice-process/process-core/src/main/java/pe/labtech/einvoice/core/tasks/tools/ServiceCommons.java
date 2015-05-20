@@ -88,7 +88,7 @@ public class ServiceCommons {
             }
             if (Tools.isInvalid(r)) {
                 loader.createEvent(document, "ERROR", "Invalid response structure");
-                mark(db, document.getId(), null, ERROR, "messages", serializeMessages(r));
+                mark(db, document.getId(), null, ERROR, "messages", serializeMessages(r), "recordStatus", "E");
                 return null;
             }
 
@@ -145,7 +145,7 @@ public class ServiceCommons {
             }
             if (Tools.isInvalid(r)) {
                 loader.createEvent(document, "ERROR", "Invalid response structure");
-                mark(db, document.getId(), null, ERROR, "messages", serializeMessages(r));
+                mark(db, document.getId(), null, ERROR, "messages", serializeMessages(r), "recordStatus", "E");
                 return null;
             }
             DocumentInfo di = Tools.getDocumentInfo(r);
