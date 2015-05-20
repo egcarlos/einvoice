@@ -10,7 +10,13 @@ import java.util.Map;
 import javax.xml.ws.WebServiceException;
 import pe.labtech.einvoice.commons.model.DatabaseManager;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.ERROR;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.NEEDED;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.RETRY;
 import pe.labtech.einvoice.commons.model.DocumentStep;
+import static pe.labtech.einvoice.commons.model.DocumentStep.REPLICATE;
+import static pe.labtech.einvoice.commons.model.DocumentStep.SIGN;
+import static pe.labtech.einvoice.commons.model.DocumentStep.SYNC;
 import pe.labtech.einvoice.commons.xmlsecurity.DigitalSign;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
@@ -67,16 +73,34 @@ public class ServiceCommons {
             Response r = BUILDER.unmarshall(Response.class, response);
 
             //este caso corresponde a una inicialización inválida
-            if (Tools.isInvalid(r)) {
-                loader.createEvent(document, "ERROR", "Invalid response structure");
-                loader.markAsError(document.getId());
+            if (Tools.noRecordsFound(r)) {
+                //Este caso se agrega para considerar un registro que tuvo una
+                //solicitud de replicación o firma pero no retorno respuesta y
+                //no se grabó en el servidor
+                loader.createEvent(document, "WARN", "Document will restart process.");
+
+                if (hasLocalSignature(db, document.getId())) {
+                    mark(db, document.getId(), REPLICATE, RETRY, Tools.toMap(String.class, String.class, "messages", "Document not found in platform... resending signed UBL."));
+                } else {
+                    mark(db, document.getId(), SIGN, NEEDED, Tools.toMap(String.class, String.class, "messages", "Document not found in platform... signing and retrying whole process."));
+                }
                 return null;
             }
+            if (Tools.isInvalid(r)) {
+                loader.createEvent(document, "ERROR", "Invalid response structure");
+                mark(db, document.getId(), null, ERROR, "messages", serializeMessages(r));
+                return null;
+            }
+
             DocumentInfo di = Tools.getDocumentInfo(r);
             controlDocumentInfo(di, db, document);
             return di;
         } catch (WebServiceException ex) {
-            markAsRetry(db, document, loader, ex);
+            //Se elimina el flujo normal y se prefiere retornar a SYNC RETRY
+            //para reingrear al flujo y sincronizar estados o refirmar
+            //markAsRetry(db, document, loader, ex);
+            loader.createEvent(document, "WARN", Tools.exToString(ex, "Document will retry."));
+            mark(db, document.getId(), SYNC, NEEDED, Tools.toMap(String.class, String.class, "messages", "Document will retry."));
             return null;
         } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             loader.markAsError(document.getId(), ex);
@@ -93,7 +117,7 @@ public class ServiceCommons {
 
             Response r = BUILDER.unmarshall(Response.class, response);
 
-            mark(db, document.getId(), DocumentStep.SYNC, DocumentStatus.NEEDED, null);
+            mark(db, document.getId(), DocumentStep.SYNC, DocumentStatus.NEEDED, "messages", serializeMessages(r));
             return null;
         } catch (WebServiceException ex) {
             markAsRetry(db, document, loader, ex);
@@ -115,16 +139,24 @@ public class ServiceCommons {
             Response r = BUILDER.unmarshall(Response.class, response);
 
             //este caso corresponde a una inicialización inválida
+            if (wasReplicatedBefore(r)) {
+                mark(db, document.getId(), SYNC, RETRY, "messages", serializeMessages(r));
+                return null;
+            }
             if (Tools.isInvalid(r)) {
                 loader.createEvent(document, "ERROR", "Invalid response structure");
-                loader.markAsError(document.getId());
+                mark(db, document.getId(), null, ERROR, "messages", serializeMessages(r));
                 return null;
             }
             DocumentInfo di = Tools.getDocumentInfo(r);
             controlDocumentInfo(di, db, document);
             return di;
         } catch (WebServiceException ex) {
-            markAsRetry(db, document, loader, ex);
+            //Se elimina el flujo normal y se prefiere retornar a SYNC RETRY
+            //para reingrear al flujo y sincronizar estados o refirmar
+            //markAsRetry(db, document, loader, ex);
+            loader.createEvent(document, "WARN", Tools.exToString(ex, "Document will retry."));
+            mark(db, document.getId(), SYNC, RETRY, Tools.toMap(String.class, String.class, "messages", "Document will retry."));
             return null;
         } catch (RuntimeException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             loader.markAsError(document.getId(), ex);
@@ -136,7 +168,7 @@ public class ServiceCommons {
         if (Tools.wasSignedBefore(di)) {
             //si fue firmado con anterioridad entonces hay que sincronizarlo
             //la sincronización pura se da en el step sync
-            mark(db, document.getId(), DocumentStep.SYNC, DocumentStatus.NEEDED, null);
+            mark(db, document.getId(), DocumentStep.SYNC, DocumentStatus.NEEDED);
         } else {
             Map<String, String> responses = Tools.describe(di);
             if (Tools.isSigned(di)) {
@@ -177,5 +209,38 @@ public class ServiceCommons {
      */
     public static boolean isFinishedInSunat(String sunatStatus) {
         return sunatStatus.startsWith("RC") || sunatStatus.startsWith("AC");
+    }
+
+    private static boolean hasLocalSignature(DatabaseManager db, Long id) {
+        return db.seek(e -> e
+                .createQuery(
+                        "SELECT COUNT(o) FROM DocumentResponse o WHERE o.document.id = :id AND o.name = :name",
+                        Long.class
+                )
+                .setParameter("id", id)
+                .setParameter("name", "signed")
+                .getSingleResult()
+        ) == 1l;
+    }
+
+    private static boolean wasReplicatedBefore(Response r) {
+        try {
+            return r.getResponseBody().getCommon().getMessages().stream()
+                    .filter(m -> "400".equals(m.getStatusCode()) && "7213".equals(m.getDetailCode()))
+                    .findFirst()
+                    .isPresent();
+        } catch (RuntimeException ex) {
+            return false;
+        }
+    }
+
+    private static String serializeMessages(Response r) {
+        try {
+            return r.getResponseBody().getCommon().getMessages().stream()
+                    .map(m -> "[" + m.getStatusCode() + ":" + m.getStatusDescription() + "] " + m.getDetailCode() + ":" + m.getDetailDescription())
+                    .reduce(null, (a, b) -> a == null ? b : a + "\n" + b);
+        } catch (RuntimeException ex) {
+            return "";
+        }
     }
 }

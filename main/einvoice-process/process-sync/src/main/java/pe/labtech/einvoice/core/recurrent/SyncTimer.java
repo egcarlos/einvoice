@@ -55,7 +55,7 @@ public class SyncTimer extends AbstractRecurrentTask<Long> {
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*/1", second = "30", persistent = false)
+    @Schedule(hour = "*", minute = "*", second = "*/20", persistent = false)
     public void timeout() {
         super.timeout();
     }

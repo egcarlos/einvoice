@@ -16,6 +16,7 @@ import javax.ejb.TransactionManagementType;
 import static pe.labtech.einvoice.commons.model.DocumentStep.DECLARE;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.DECLARING;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.NEEDED;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.RETRY;
 import static pe.labtech.einvoice.commons.model.RecurrentHelper.buildId;
 import static pe.labtech.einvoice.commons.model.RecurrentHelper.lock;
 import static pe.labtech.einvoice.commons.model.RecurrentHelper.lookup;
@@ -46,8 +47,8 @@ public class DeclareRetryRecurrent extends AbstractRecurrentTask<Long> {
     @Override
     public void init() {
         super.init();
-        super.findTasks = () -> lookup(prv, DECLARE, NEEDED, q -> q.setMaxResults(10000));
-        super.tryLock = t -> lock(prv, t, DECLARE, NEEDED, DECLARE, DECLARING);
+        super.findTasks = () -> lookup(prv, DECLARE, RETRY, q -> q.setMaxResults(10000));
+        super.tryLock = t -> lock(prv, t, DECLARE, RETRY, DECLARE, DECLARING);
         super.getId = t -> buildId(t, "declare");
         super.consumer = t -> asw.perform(() -> task.handle(t));
     }

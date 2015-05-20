@@ -38,6 +38,10 @@ public class DatabaseCommons {
         loader.createEvent(document, "WARN", Tools.exToString(ex, "Document will retry"));
     }
 
+    public static void mark(DatabaseManager db, Long id, String step, String status, Object... responses) {
+        mark(db, id, step, status, Tools.toMap(String.class, String.class, responses));
+    }
+
     /**
      *
      * @param db reference to database

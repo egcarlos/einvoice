@@ -52,7 +52,7 @@ public class SignTimer extends AbstractRecurrentTask<Long> {
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/3", persistent = false)
+    @Schedule(hour = "*", minute = "*", second = "*/1", persistent = false)
     public void timeout() {
         super.timeout();
     }

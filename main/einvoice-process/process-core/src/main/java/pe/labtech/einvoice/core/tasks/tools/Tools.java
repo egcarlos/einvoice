@@ -11,6 +11,7 @@ import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import pe.labtech.einvoice.commons.model.DatabaseManager;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.DATA_LOADED;
+import pe.labtech.einvoice.core.ws.messages.response.CommonBody;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.core.ws.messages.response.Response;
 import pe.labtech.einvoice.core.ws.messages.response.ResponseMessage;
@@ -126,5 +128,29 @@ public class Tools {
                 || response.getResponseBody().getXml().getDocuments().isEmpty();
     }
 //</editor-fold>
+
+    public static boolean noRecordsFound(Response r) {
+        if (r.getResponseBody() == null) {
+            return false;
+        }
+        CommonBody c = r.getResponseBody().getCommon();
+        if (c == null || c.getSummary() == null) {
+            //si no hay common body o no hay summary es firma
+            return false;
+        }
+        if (c.getSummary().getTotal() == null) {
+            //no hay como comprobar
+            return false;
+        }
+        return c.getSummary().getTotal() == 0;
+    }
+
+    public static <K, V> Map<K, V> toMap(Class<K> k, Class<V> v, Object... values) {
+        Map<K, V> map = new LinkedHashMap<>();
+        for (int i = 0; i < values.length; i += 2) {
+            map.put((K) values[i], (V) values[i + 1]);
+        }
+        return map;
+    }
 
 }

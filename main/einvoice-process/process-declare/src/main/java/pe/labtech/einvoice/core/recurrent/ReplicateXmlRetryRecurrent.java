@@ -16,6 +16,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.NEEDED;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.REPLICATING;
+import static pe.labtech.einvoice.commons.model.DocumentStatus.RETRY;
 import static pe.labtech.einvoice.commons.model.DocumentStep.REPLICATE;
 import static pe.labtech.einvoice.commons.model.RecurrentHelper.buildId;
 import static pe.labtech.einvoice.commons.model.RecurrentHelper.lock;
@@ -48,13 +49,13 @@ public class ReplicateXmlRetryRecurrent extends AbstractRecurrentTask<Long> {
     @Override
     public void init() {
         super.init();
-        super.findTasks = () -> lookup(prv, REPLICATE, NEEDED, q -> q.setMaxResults(10000));
-        super.tryLock = t -> lock(prv, t, REPLICATE, NEEDED, REPLICATE, REPLICATING);
+        super.findTasks = () -> lookup(prv, REPLICATE, RETRY, q -> q.setMaxResults(10000));
+        super.tryLock = t -> lock(prv, t, REPLICATE, RETRY, REPLICATE, REPLICATING);
         super.getId = t -> buildId(t, "declare");
         super.consumer = t -> asw.perform(() -> task.handle(t));
     }
 
-    @Schedule(hour = "*", minute = "*/3", second = "30", persistent = false)
+    @Schedule(hour = "*", minute = "*/6", persistent = false)
     @Override
     protected void timeout() {
         super.timeout();
