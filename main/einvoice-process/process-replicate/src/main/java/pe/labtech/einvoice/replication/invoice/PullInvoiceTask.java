@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
 import pe.labtech.einvoice.commons.model.DocumentStep;
 import pe.labtech.einvoice.core.entity.Document;
@@ -66,30 +67,29 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
             //mapeo automático del cuerpo
             final Map<String, String> bean = BeanUtils.describe(header);
             bean.entrySet().stream()
-                    .filter(e -> e.getValue() != null)
+                    .filter(e -> StringUtils.isEmpty(e.getValue()))
                     .filter(e -> !"id".equals(e.getKey()))
                     .filter(e -> !"class".equals(e.getKey()))
                     .filter(e -> !e.getKey().startsWith("bl_"))
+                    .filter(e -> !e.getKey().startsWith("textoLeyenda"))
+                    .filter(e -> !e.getKey().startsWith("textoAdicionalLeyenda"))
+                    .filter(e -> !e.getKey().startsWith("textoAuxiliar"))
                     .forEach(e -> {
                         final String key = e.getKey();
-                        final String value = e.getValue();
-                        if (key.startsWith("codigoLeyenda") || e.getKey().startsWith("textoLeyenda") || e.getKey().startsWith("textoAdicionalLeyenda")) {
-                            if (key.startsWith("codigoLeyenda")) {
-                                Long order = Long.parseLong(key.split("_")[1]);
-                                DocumentLegend dl = buildLegend(bean, order, document);
-                                if (dl.getValue() != null) {
-                                    legs.add(dl);
-                                }
+                        final String value = StringUtils.trim(e.getValue());
+                        if (key.startsWith("codigoLeyenda")) {
+                            Long order = Long.parseLong(key.split("_")[1]);
+                            DocumentLegend dl = buildLegend(bean, order, document);
+                            if (dl.getValue() != null) {
+                                legs.add(dl);
                             }
-                        } else if (key.startsWith("codigoAuxiliar") || key.startsWith("textoAuxiliar")) {
-                            if (key.startsWith("codigoAuxiliar")) {
-                                String s = key.substring(14);
-                                String length = s.split("_")[0];
-                                Long order = Long.parseLong(s.split("_")[1]);
-                                DocumentAuxiliar da = buildAuxiliar(bean, length, order, document);
-                                if (da.getValue() != null) {
-                                    auxs.add(da);
-                                }
+                        } else if (key.startsWith("codigoAuxiliar")) {
+                            String s = key.substring(14);
+                            String length = s.split("_")[0];
+                            Long order = Long.parseLong(s.split("_")[1]);
+                            DocumentAuxiliar da = buildAuxiliar(bean, length, order, document);
+                            if (da.getValue() != null) {
+                                auxs.add(da);
                             }
                         } else {
                             attrs.add(new DocumentAttribute(document, key, value));
