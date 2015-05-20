@@ -44,10 +44,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
             "lugarDestino",
             "correoAdquiriente",
             "tipoMoneda",
+            "tipoOperacionFactura",
             "totalValorVentaNetoOpGravadas",
             "totalValorVentaNetoOpNoGravada",
             "totalValorVentaNetoOpExoneradas",
             "totalValorVentaNetoOpGratuitas",
+            "totalFondoInclusionSocial",
             "descuentosGlobales",
             "subTotal",
             "totalIgv",
@@ -101,6 +103,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
             "monto3",
             "monto4",
             "monto5",
+            "totalDocumentoAnticipo",
+            "tipoDocumentoAnticipo",
+            "serieNumeroDocumentoAnticipo",
             "tipoReferencia_1",
             "numeroDocumentoReferencia_1",
             "tipoReferencia_2",
@@ -316,38 +321,40 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
             "textoAuxiliar500_4",
             "codigoAuxiliar500_5",
             "textoAuxiliar500_5",
-            "items"
+            "items",
+            "referencias"
         })
 public class Document {
 
-    /**
-     * Siempre debe ser "C"
-     */
+    public static final String LINE_ID_HEADER = "C";
+    public static final String LINE_ID_ITEM = "D";
+    public static final String LINE_ID_REFERENCIA = "R";
+
+    @XmlElement(required = true, defaultValue = LINE_ID_HEADER)
+    private String indicador;
     @XmlElement(required = true)
-    protected String indicador;
+    private String tipoDocumentoEmisor;
     @XmlElement(required = true)
-    protected String tipoDocumentoEmisor;
+    private String numeroDocumentoEmisor;
     @XmlElement(required = true)
-    protected String numeroDocumentoEmisor;
+    private String razonSocialEmisor;
+    private String nombreComercialEmisor;
     @XmlElement(required = true)
-    protected String razonSocialEmisor;
-    protected String nombreComercialEmisor;
+    private String tipoDocumento;
     @XmlElement(required = true)
-    protected String tipoDocumento;
-    @XmlElement(required = true)
-    protected String serieNumero;
+    private String serieNumero;
     @XmlElement(required = true)
 //    @XmlSchemaType(name = "date")
-    protected Date fechaEmision;
-    protected String ubigeoEmisor;
-    protected String direccionEmisor;
-    protected String urbanizacion;
-    protected String provinciaEmisor;
-    protected String departamentoEmisor;
-    protected String distritoEmisor;
-    protected String paisEmisor;
-    protected String correoEmisor;
-    protected String inHabilitado;
+    private Date fechaEmision;
+    private String ubigeoEmisor;
+    private String direccionEmisor;
+    private String urbanizacion;
+    private String provinciaEmisor;
+    private String departamentoEmisor;
+    private String distritoEmisor;
+    private String paisEmisor;
+    private String correoEmisor;
+    private String inHabilitado;
     private String rutaAdjunto_1;
     private String rutaAdjunto_2;
     private String rutaAdjunto_3;
@@ -364,62 +371,69 @@ public class Document {
     private String adjunto_4;
     private String adjunto_5;
     @XmlElement(required = true)
-    protected String tipoDocumentoAdquiriente;
+    private String tipoDocumentoAdquiriente;
     @XmlElement(required = true)
-    protected String numeroDocumentoAdquiriente;
+    private String numeroDocumentoAdquiriente;
     @XmlElement(required = true)
-    protected String razonSocialAdquiriente;
-    protected String lugarDestino;
-    protected String correoAdquiriente;
+    private String razonSocialAdquiriente;
+    private String lugarDestino;
+    private String correoAdquiriente;
     @XmlElement(required = true)
-    protected String tipoMoneda;
+    private String tipoMoneda;
+    private String tipoOperacionFactura;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalValorVentaNetoOpGravadas;
-    @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalValorVentaNetoOpNoGravada;
-    @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalValorVentaNetoOpExoneradas;
+    private BigDecimal totalDocumentoAnticipo;
+    private String tipoDocumentoAnticipo;
+    private String serieNumeroDocumentoAnticipo;
     @XmlJavaTypeAdapter(Number15Adapter.class)
-    protected BigDecimal totalValorVentaNetoOpGratuitas;
+    private BigDecimal totalFondoInclusionSocial;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal descuentosGlobales;
+    private BigDecimal totalValorVentaNetoOpGravadas;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal baseImponiblePercepcion;
+    private BigDecimal totalValorVentaNetoOpNoGravada;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal subTotal;
+    private BigDecimal totalValorVentaNetoOpExoneradas;
+    @XmlJavaTypeAdapter(Number15Adapter.class)
+    private BigDecimal totalValorVentaNetoOpGratuitas;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalIgv;
+    private BigDecimal descuentosGlobales;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalIsc;
+    private BigDecimal baseImponiblePercepcion;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalOtrosTributos;
+    private BigDecimal subTotal;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalOtrosCargos;
+    private BigDecimal totalIgv;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalDescuentos;
+    private BigDecimal totalIsc;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalVenta;
+    private BigDecimal totalOtrosTributos;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalPercepcion;
+    private BigDecimal totalOtrosCargos;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal totalVentaConPercepcion;
+    private BigDecimal totalDescuentos;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal monto1;
+    private BigDecimal totalVenta;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal monto2;
+    private BigDecimal totalPercepcion;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal monto3;
+    private BigDecimal totalVentaConPercepcion;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal monto4;
+    private BigDecimal monto1;
     @XmlJavaTypeAdapter(Number2Adapter.class)
-    protected BigDecimal monto5;
-    protected String tipoDocumentoReferenciaPrincipal;
-    protected String numeroDocumentoReferenciaPrincipal;
-    protected String tipoDocumentoReferenciaCorregido;
-    protected String numeroDocumentoReferenciaCorregido;
-    protected String motivoDocumento;
-    protected String serieNumeroAfectado;
-    protected String codigoSerieNumeroAfectado;
+    private BigDecimal monto2;
+    @XmlJavaTypeAdapter(Number2Adapter.class)
+    private BigDecimal monto3;
+    @XmlJavaTypeAdapter(Number2Adapter.class)
+    private BigDecimal monto4;
+    @XmlJavaTypeAdapter(Number2Adapter.class)
+    private BigDecimal monto5;
+    private String tipoDocumentoReferenciaPrincipal;
+    private String numeroDocumentoReferenciaPrincipal;
+    private String tipoDocumentoReferenciaCorregido;
+    private String numeroDocumentoReferenciaCorregido;
+    private String motivoDocumento;
+    private String serieNumeroAfectado;
+    private String codigoSerieNumeroAfectado;
     @XmlJavaTypeAdapter(Number2Adapter.class)
     private BigDecimal porcentajePercepcion;
     @XmlJavaTypeAdapter(Number2Adapter.class)
@@ -457,167 +471,169 @@ public class Document {
     private String numeroRucTransportistaCuenta;
     private String razonSocialTransportista;
     @XmlElement(name = "tipoReferencia_1")
-    protected String tipoReferencia_1;
+    private String tipoReferencia_1;
     @XmlElement(name = "numeroDocumentoReferencia_1")
-    protected String numeroDocumentoReferencia_1;
+    private String numeroDocumentoReferencia_1;
     @XmlElement(name = "tipoReferencia_2")
-    protected String tipoReferencia_2;
+    private String tipoReferencia_2;
     @XmlElement(name = "numeroDocumentoReferencia_2")
-    protected String numeroDocumentoReferencia_2;
+    private String numeroDocumentoReferencia_2;
     @XmlElement(name = "tipoReferencia_3")
-    protected String tipoReferencia_3;
+    private String tipoReferencia_3;
     @XmlElement(name = "numeroDocumentoReferencia_3")
-    protected String numeroDocumentoReferencia_3;
+    private String numeroDocumentoReferencia_3;
     @XmlElement(name = "tipoReferencia_4")
-    protected String tipoReferencia_4;
+    private String tipoReferencia_4;
     @XmlElement(name = "numeroDocumentoReferencia_4")
-    protected String numeroDocumentoReferencia_4;
+    private String numeroDocumentoReferencia_4;
     @XmlElement(name = "tipoReferencia_5")
-    protected String tipoReferencia_5;
+    private String tipoReferencia_5;
     @XmlElement(name = "numeroDocumentoReferencia_5")
-    protected String numeroDocumentoReferencia_5;
+    private String numeroDocumentoReferencia_5;
     @XmlElement(name = "tipoReferenciaAdicional_1")
-    protected String tipoReferenciaAdicional_1;
+    private String tipoReferenciaAdicional_1;
     @XmlElement(name = "numeroDocumentoReferenciaAdicional_1")
-    protected String numeroDocumentoReferenciaAdicional_1;
+    private String numeroDocumentoReferenciaAdicional_1;
     @XmlElement(name = "tipoReferenciaAdicional_2")
-    protected String tipoReferenciaAdicional_2;
+    private String tipoReferenciaAdicional_2;
     @XmlElement(name = "numeroDocumentoReferenciaAdicional_2")
-    protected String numeroDocumentoReferenciaAdicional_2;
+    private String numeroDocumentoReferenciaAdicional_2;
     @XmlElement(name = "tipoReferenciaAdicional_3")
-    protected String tipoReferenciaAdicional_3;
+    private String tipoReferenciaAdicional_3;
     @XmlElement(name = "numeroDocumentoReferenciaAdicional_3")
-    protected String numeroDocumentoReferenciaAdicional_3;
+    private String numeroDocumentoReferenciaAdicional_3;
     @XmlElement(name = "tipoReferenciaAdicional_4")
-    protected String tipoReferenciaAdicional_4;
+    private String tipoReferenciaAdicional_4;
     @XmlElement(name = "numeroDocumentoReferenciaAdicional_4")
-    protected String numeroDocumentoReferenciaAdicional_4;
+    private String numeroDocumentoReferenciaAdicional_4;
     @XmlElement(name = "tipoReferenciaAdicional_5")
-    protected String tipoReferenciaAdicional_5;
+    private String tipoReferenciaAdicional_5;
     @XmlElement(name = "numeroDocumentoReferenciaAdicional_5")
-    protected String numeroDocumentoReferenciaAdicional_5;
+    private String numeroDocumentoReferenciaAdicional_5;
     @XmlElement(name = "codigoLeyenda_1")
-    protected String codigoLeyenda_1;
+    private String codigoLeyenda_1;
     @XmlElement(name = "textoLeyenda_1")
-    protected String textoLeyenda_1;
+    private String textoLeyenda_1;
     @XmlElement(name = "textoAdicionalLeyenda_1")
-    protected String textoAdicionalLeyenda_1;
+    private String textoAdicionalLeyenda_1;
     @XmlElement(name = "codigoLeyenda_2")
-    protected String codigoLeyenda_2;
+    private String codigoLeyenda_2;
     @XmlElement(name = "textoLeyenda_2")
-    protected String textoLeyenda_2;
+    private String textoLeyenda_2;
     @XmlElement(name = "textoAdicionalLeyenda_2")
-    protected String textoAdicionalLeyenda_2;
+    private String textoAdicionalLeyenda_2;
     @XmlElement(name = "codigoLeyenda_3")
-    protected String codigoLeyenda_3;
+    private String codigoLeyenda_3;
     @XmlElement(name = "textoLeyenda_3")
-    protected String textoLeyenda_3;
+    private String textoLeyenda_3;
     @XmlElement(name = "textoAdicionalLeyenda_3")
-    protected String textoAdicionalLeyenda_3;
+    private String textoAdicionalLeyenda_3;
     @XmlElement(name = "codigoLeyenda_4")
-    protected String codigoLeyenda_4;
+    private String codigoLeyenda_4;
     @XmlElement(name = "textoLeyenda_4")
-    protected String textoLeyenda_4;
+    private String textoLeyenda_4;
     @XmlElement(name = "textoAdicionalLeyenda_4")
-    protected String textoAdicionalLeyenda_4;
+    private String textoAdicionalLeyenda_4;
     @XmlElement(name = "codigoLeyenda_5")
-    protected String codigoLeyenda_5;
+    private String codigoLeyenda_5;
     @XmlElement(name = "textoLeyenda_5")
-    protected String textoLeyenda_5;
+    private String textoLeyenda_5;
     @XmlElement(name = "textoAdicionalLeyenda_5")
-    protected String textoAdicionalLeyenda_5;
+    private String textoAdicionalLeyenda_5;
     @XmlElement(name = "codigoLeyenda_6")
-    protected String codigoLeyenda_6;
+    private String codigoLeyenda_6;
     @XmlElement(name = "textoLeyenda_6")
-    protected String textoLeyenda_6;
+    private String textoLeyenda_6;
     @XmlElement(name = "textoAdicionalLeyenda_6")
-    protected String textoAdicionalLeyenda_6;
+    private String textoAdicionalLeyenda_6;
     @XmlElement(name = "codigoLeyenda_7")
-    protected String codigoLeyenda_7;
+    private String codigoLeyenda_7;
     @XmlElement(name = "textoLeyenda_7")
-    protected String textoLeyenda_7;
+    private String textoLeyenda_7;
     @XmlElement(name = "textoAdicionalLeyenda_7")
-    protected String textoAdicionalLeyenda_7;
+    private String textoAdicionalLeyenda_7;
     @XmlElement(name = "codigoLeyenda_8")
-    protected String codigoLeyenda_8;
+    private String codigoLeyenda_8;
     @XmlElement(name = "textoLeyenda_8")
-    protected String textoLeyenda_8;
+    private String textoLeyenda_8;
     @XmlElement(name = "textoAdicionalLeyenda_8")
-    protected String textoAdicionalLeyenda_8;
+    private String textoAdicionalLeyenda_8;
     @XmlElement(name = "codigoLeyenda_9")
-    protected String codigoLeyenda_9;
+    private String codigoLeyenda_9;
     @XmlElement(name = "textoLeyenda_9")
-    protected String textoLeyenda_9;
+    private String textoLeyenda_9;
     @XmlElement(name = "textoAdicionalLeyenda_9")
-    protected String textoAdicionalLeyenda_9;
+    private String textoAdicionalLeyenda_9;
     @XmlElement(name = "codigoLeyenda_10")
-    protected String codigoLeyenda_10;
+    private String codigoLeyenda_10;
     @XmlElement(name = "textoLeyenda_10")
-    protected String textoLeyenda_10;
+    private String textoLeyenda_10;
     @XmlElement(name = "textoAdicionalLeyenda_10")
-    protected String textoAdicionalLeyenda_10;
+    private String textoAdicionalLeyenda_10;
     @XmlElement(name = "codigoLeyenda_11")
-    protected String codigoLeyenda_11;
+    private String codigoLeyenda_11;
     @XmlElement(name = "textoLeyenda_11")
-    protected String textoLeyenda_11;
+    private String textoLeyenda_11;
     @XmlElement(name = "textoAdicionalLeyenda_11")
-    protected String textoAdicionalLeyenda_11;
+    private String textoAdicionalLeyenda_11;
     @XmlElement(name = "codigoLeyenda_12")
-    protected String codigoLeyenda_12;
+    private String codigoLeyenda_12;
     @XmlElement(name = "textoLeyenda_12")
-    protected String textoLeyenda_12;
+    private String textoLeyenda_12;
     @XmlElement(name = "textoAdicionalLeyenda_12")
-    protected String textoAdicionalLeyenda_12;
+    private String textoAdicionalLeyenda_12;
     @XmlElement(name = "codigoLeyenda_13")
-    protected String codigoLeyenda_13;
+    private String codigoLeyenda_13;
     @XmlElement(name = "textoLeyenda_13")
-    protected String textoLeyenda_13;
+    private String textoLeyenda_13;
     @XmlElement(name = "textoAdicionalLeyenda_13")
-    protected String textoAdicionalLeyenda_13;
+    private String textoAdicionalLeyenda_13;
     @XmlElement(name = "codigoLeyenda_14")
-    protected String codigoLeyenda_14;
+    private String codigoLeyenda_14;
     @XmlElement(name = "textoLeyenda_14")
-    protected String textoLeyenda_14;
+    private String textoLeyenda_14;
     @XmlElement(name = "textoAdicionalLeyenda_14")
-    protected String textoAdicionalLeyenda_14;
+    private String textoAdicionalLeyenda_14;
     @XmlElement(name = "codigoLeyenda_15")
-    protected String codigoLeyenda_15;
+    private String codigoLeyenda_15;
     @XmlElement(name = "textoLeyenda_15")
-    protected String textoLeyenda_15;
+    private String textoLeyenda_15;
     @XmlElement(name = "textoAdicionalLeyenda_15")
-    protected String textoAdicionalLeyenda_15;
+    private String textoAdicionalLeyenda_15;
     @XmlElement(name = "codigoLeyenda_16")
-    protected String codigoLeyenda_16;
+    private String codigoLeyenda_16;
     @XmlElement(name = "textoLeyenda_16")
-    protected String textoLeyenda_16;
+    private String textoLeyenda_16;
     @XmlElement(name = "textoAdicionalLeyenda_16")
-    protected String textoAdicionalLeyenda_16;
+    private String textoAdicionalLeyenda_16;
     @XmlElement(name = "codigoLeyenda_17")
-    protected String codigoLeyenda_17;
+    private String codigoLeyenda_17;
     @XmlElement(name = "textoLeyenda_17")
-    protected String textoLeyenda_17;
+    private String textoLeyenda_17;
     @XmlElement(name = "textoAdicionalLeyenda_17")
-    protected String textoAdicionalLeyenda_17;
+    private String textoAdicionalLeyenda_17;
     @XmlElement(name = "codigoLeyenda_18")
-    protected String codigoLeyenda_18;
+    private String codigoLeyenda_18;
     @XmlElement(name = "textoLeyenda_18")
-    protected String textoLeyenda_18;
+    private String textoLeyenda_18;
     @XmlElement(name = "textoAdicionalLeyenda_18")
-    protected String textoAdicionalLeyenda_18;
+    private String textoAdicionalLeyenda_18;
     @XmlElement(name = "codigoLeyenda_19")
-    protected String codigoLeyenda_19;
+    private String codigoLeyenda_19;
     @XmlElement(name = "textoLeyenda_19")
-    protected String textoLeyenda_19;
+    private String textoLeyenda_19;
     @XmlElement(name = "textoAdicionalLeyenda_19")
-    protected String textoAdicionalLeyenda_19;
+    private String textoAdicionalLeyenda_19;
     @XmlElement(name = "codigoLeyenda_20")
-    protected String codigoLeyenda_20;
+    private String codigoLeyenda_20;
     @XmlElement(name = "textoLeyenda_20")
-    protected String textoLeyenda_20;
+    private String textoLeyenda_20;
     @XmlElement(name = "textoAdicionalLeyenda_20")
-    protected String textoAdicionalLeyenda_20;
+    private String textoAdicionalLeyenda_20;
     @XmlElement(name = "item")
-    protected List<DocumentItem> items;
+    private List<DocumentItem> items;
+    @XmlElement(name = "referencia")
+    private List<DocumentReference> referencias;
     @XmlElement(name = "codigoAuxiliar100_1")
     private String codigoAuxiliar100_1;
     @XmlElement(name = "textoAuxiliar100_1")
@@ -1161,6 +1177,46 @@ public class Document {
 
     public void setTipoMoneda(String tipoMoneda) {
         this.tipoMoneda = tipoMoneda;
+    }
+
+    public String getTipoOperacionFactura() {
+        return tipoOperacionFactura;
+    }
+
+    public void setTipoOperacionFactura(String tipoOperacionFactura) {
+        this.tipoOperacionFactura = tipoOperacionFactura;
+    }
+
+    public BigDecimal getTotalDocumentoAnticipo() {
+        return totalDocumentoAnticipo;
+    }
+
+    public void setTotalDocumentoAnticipo(BigDecimal totalDocumentoAnticipo) {
+        this.totalDocumentoAnticipo = totalDocumentoAnticipo;
+    }
+
+    public String getTipoDocumentoAnticipo() {
+        return tipoDocumentoAnticipo;
+    }
+
+    public void setTipoDocumentoAnticipo(String tipoDocumentoAnticipo) {
+        this.tipoDocumentoAnticipo = tipoDocumentoAnticipo;
+    }
+
+    public String getSerieNumeroDocumentoAnticipo() {
+        return serieNumeroDocumentoAnticipo;
+    }
+
+    public void setSerieNumeroDocumentoAnticipo(String serieNumeroDocumentoAnticipo) {
+        this.serieNumeroDocumentoAnticipo = serieNumeroDocumentoAnticipo;
+    }
+
+    public BigDecimal getTotalFondoInclusionSocial() {
+        return totalFondoInclusionSocial;
+    }
+
+    public void setTotalFondoInclusionSocial(BigDecimal totalFondoInclusionSocial) {
+        this.totalFondoInclusionSocial = totalFondoInclusionSocial;
     }
 
     public BigDecimal getTotalValorVentaNetoOpGravadas() {
@@ -2257,6 +2313,14 @@ public class Document {
 
     public void setItems(List<DocumentItem> items) {
         this.items = items;
+    }
+
+    public List<DocumentReference> getReferencias() {
+        return referencias;
+    }
+
+    public void setReferencias(List<DocumentReference> referencias) {
+        this.referencias = referencias;
     }
 
     public String getCodigoAuxiliar100_1() {

@@ -125,9 +125,7 @@ public class DocumentItem {
     protected BigDecimal cantidad = BigDecimal.ZERO;
     @XmlElement(required = true)
     protected String unidadMedida;
-    @XmlJavaTypeAdapter(Number2Adapter.class)
     protected BigDecimal importeUnitarioSinImpuesto;
-    @XmlJavaTypeAdapter(NumberAdapter.class)
     protected BigDecimal importeUnitarioConImpuesto;
     protected String codigoImporteUnitarioConImpuesto;
     @XmlJavaTypeAdapter(Number2Adapter.class)

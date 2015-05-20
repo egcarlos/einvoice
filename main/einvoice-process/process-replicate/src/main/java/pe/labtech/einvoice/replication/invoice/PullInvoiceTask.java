@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.replication.invoice;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
 import pe.labtech.einvoice.commons.model.DocumentStep;
@@ -66,35 +68,35 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
             //mapeo automático del cuerpo
             final Map<String, String> bean = BeanUtils.describe(header);
-            bean.entrySet().stream()
-                    .filter(e -> StringUtils.isEmpty(e.getValue()))
-                    .filter(e -> !"id".equals(e.getKey()))
-                    .filter(e -> !"class".equals(e.getKey()))
-                    .filter(e -> !e.getKey().startsWith("bl_"))
-                    .filter(e -> !e.getKey().startsWith("textoLeyenda"))
-                    .filter(e -> !e.getKey().startsWith("textoAdicionalLeyenda"))
-                    .filter(e -> !e.getKey().startsWith("textoAuxiliar"))
-                    .forEach(e -> {
-                        final String key = e.getKey();
-                        final String value = StringUtils.trim(e.getValue());
-                        if (key.startsWith("codigoLeyenda")) {
-                            Long order = Long.parseLong(key.split("_")[1]);
-                            DocumentLegend dl = buildLegend(bean, order, document);
-                            if (dl.getValue() != null) {
-                                legs.add(dl);
-                            }
-                        } else if (key.startsWith("codigoAuxiliar")) {
-                            String s = key.substring(14);
-                            String length = s.split("_")[0];
-                            Long order = Long.parseLong(s.split("_")[1]);
-                            DocumentAuxiliar da = buildAuxiliar(bean, length, order, document);
-                            if (da.getValue() != null) {
-                                auxs.add(da);
-                            }
-                        } else {
-                            attrs.add(new DocumentAttribute(document, key, value));
-                        }
-                    });
+            bean.forEach((key, value) -> {
+                if (skippedKey(key)) {
+                    return;
+                }
+                if (StringUtils.trimToNull(value) == null) {
+                    return;
+                }
+                logger.info(() -> MessageFormat.format("property({0},{1})", key, value));
+                if (key.startsWith("codigoLeyenda")) {
+                    Long order = Long.parseLong(key.split("_")[1]);
+                    DocumentLegend dl = buildLegend(bean, order, document);
+                    if (dl.getValue() != null) {
+                        legs.add(dl);
+                    }
+                } else if (key.startsWith("codigoAuxiliar")) {
+                    String s = key.substring(14);
+                    String length = s.split("_")[0];
+                    Long order = Long.parseLong(s.split("_")[1]);
+                    DocumentAuxiliar da = buildAuxiliar(bean, length, order, document);
+                    if (da.getValue() != null) {
+                        auxs.add(da);
+                    }
+                } else {
+                    final DocumentAttribute da = new DocumentAttribute(document, key, StringUtils.trimToNull(value));
+                    if (da.getValue() != null) {
+                        attrs.add(da);
+                    }
+                }
+            });
 
             document.setAttributes(attrs);
             document.setAuxiliars(auxs);
@@ -132,6 +134,10 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
         prv.handle(e -> e.persist(document));
 
+    }
+
+    public static boolean skippedKey(String k) {
+        return "id".equals(k) || "class".equals(k) || k.startsWith("bl_") || k.startsWith("textoLeyenda") || k.startsWith("textoAdicionalLeyenda") || k.startsWith("textoAuxiliar");
     }
 
     private DocumentAuxiliar buildAuxiliar(final Map<String, String> bean, String length, Long order, Document document) {
