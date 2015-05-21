@@ -80,17 +80,22 @@ public class Tools {
         }
     }
 
-    public static Map<String, String> describe(DocumentInfo di) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        Map<String, String> responses = BeanUtils.describe(di).entrySet().stream()
-                .filter(e -> !e.getKey().equals("class"))
-                .filter(e -> e.getValue() != null)
-                .collect(
-                        Collectors.toMap(
-                                e -> e.getKey(),
-                                e -> e.getValue()
-                        )
-                );
-        return responses;
+    public static Map<String, String> describe(DocumentInfo di) {
+        try {
+            Map<String, String> responses = BeanUtils.describe(di).entrySet().stream()
+                    .filter(e -> !e.getKey().equals("class"))
+                    .filter(e -> e.getValue() != null)
+                    .collect(
+                            Collectors.toMap(
+                                    e -> e.getKey(),
+                                    e -> e.getValue()
+                            )
+                    );
+            return responses;
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+            //this condition should never happen since the bean is always describable
+            throw new RuntimeException(ex);
+        }
     }
 
     public static String buildClientID(String clientId) {
@@ -101,6 +106,22 @@ public class Tools {
     }
 
     //<editor-fold defaultstate="collapsed" desc="metodos para interpretar las respuestas del servicio">
+    public static boolean noRecordsFound(Response r) {
+        if (r.getResponseBody() == null) {
+            return false;
+        }
+        CommonBody c = r.getResponseBody().getCommon();
+        if (c == null || c.getSummary() == null) {
+            //si no hay common body o no hay summary es firma
+            return false;
+        }
+        if (c.getSummary().getTotal() == null) {
+            //no hay como comprobar
+            return false;
+        }
+        return c.getSummary().getTotal() == 0;
+    }
+
     public static DocumentInfo getDocumentInfo(Response response) {
         return response.getResponseBody().getXml().getDocuments().get(0);
     }
@@ -121,28 +142,53 @@ public class Tools {
         return signedBefore;
     }
 
+    public static boolean wasReplicatedBefore(Response r) {
+        try {
+            return r.getResponseBody().getCommon().getMessages().stream()
+                    .filter(m -> "400".equals(m.getStatusCode()) && "7213".equals(m.getDetailCode()))
+                    .findFirst()
+                    .isPresent();
+        } catch (RuntimeException ex) {
+            return false;
+        }
+    }
+
     public static boolean isInvalid(Response response) {
         return response.getResponseBody() == null
                 || response.getResponseBody().getXml() == null
                 || response.getResponseBody().getXml().getDocuments() == null
                 || response.getResponseBody().getXml().getDocuments().isEmpty();
     }
+
+    /**
+     * Checks if sunatStatus is not in a terminal state
+     *
+     * @param sunatStatus
+     * @return
+     */
+    public static boolean isNotFinishedInSunat(String sunatStatus) {
+        return sunatStatus == null || !(isFinishedInSunat(sunatStatus));
+    }
+
+    /**
+     * Checks if the status is finished in sunat
+     *
+     * @param sunatStatus
+     * @return
+     */
+    public static boolean isFinishedInSunat(String sunatStatus) {
+        return sunatStatus != null && (sunatStatus.startsWith("RC") || sunatStatus.startsWith("AC"));
+    }
 //</editor-fold>
 
-    public static boolean noRecordsFound(Response r) {
-        if (r.getResponseBody() == null) {
-            return false;
+    public static String serializeMessages(Response r) {
+        try {
+            return r.getResponseBody().getCommon().getMessages().stream()
+                    .map(m -> "[" + m.getStatusCode() + ":" + m.getStatusDescription() + "] " + m.getDetailCode() + ":" + m.getDetailDescription())
+                    .reduce(null, (a, b) -> a == null ? b : a + "\n" + b);
+        } catch (RuntimeException ex) {
+            return "";
         }
-        CommonBody c = r.getResponseBody().getCommon();
-        if (c == null || c.getSummary() == null) {
-            //si no hay common body o no hay summary es firma
-            return false;
-        }
-        if (c.getSummary().getTotal() == null) {
-            //no hay como comprobar
-            return false;
-        }
-        return c.getSummary().getTotal() == 0;
     }
 
     public static <K, V> Map<K, V> toMap(Class<K> k, Class<V> v, Object... values) {

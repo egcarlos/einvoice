@@ -15,7 +15,7 @@ import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
-import static pe.labtech.einvoice.core.tasks.tools.ServiceCommons.isNotFinishedInSunat;
+import static pe.labtech.einvoice.core.tasks.tools.Tools.isNotFinishedInSunat;
 
 /**
  *
@@ -145,5 +145,24 @@ public class DatabaseCommons {
             default:
                 documentResponse.setReplicate(false);
         }
+    }
+
+    /**
+     * Checks if document has a local signature in the server.
+     *
+     * @param db
+     * @param id
+     * @return
+     */
+    public static boolean hasLocalSignature(DatabaseManager db, Long id) {
+        return db.seek(e -> e
+                .createQuery(
+                        "SELECT COUNT(o) FROM DocumentResponse o WHERE o.document.id = :id AND o.name = :name",
+                        Long.class
+                )
+                .setParameter("id", id)
+                .setParameter("name", "signed")
+                .getSingleResult()
+        ) == 1l;
     }
 }

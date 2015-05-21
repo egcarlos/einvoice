@@ -33,6 +33,7 @@ import pe.labtech.einvoice.core.tasks.sign.SignTaskLocal;
 @Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
+@Deprecated
 public class SignRetryTimer extends AbstractRecurrentTask<Long> {
 
     @EJB
@@ -55,7 +56,7 @@ public class SignRetryTimer extends AbstractRecurrentTask<Long> {
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*/1", persistent = false)
+//    @Schedule(hour = "*", minute = "*/1", persistent = false)
     public void timeout() {
         super.timeout();
     }

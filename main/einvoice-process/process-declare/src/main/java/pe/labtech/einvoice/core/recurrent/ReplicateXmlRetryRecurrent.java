@@ -9,12 +9,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import static pe.labtech.einvoice.commons.model.DocumentStatus.NEEDED;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.REPLICATING;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.RETRY;
 import static pe.labtech.einvoice.commons.model.DocumentStep.REPLICATE;
@@ -34,6 +32,7 @@ import pe.labtech.einvoice.core.tasks.replicate.ReplicateXmlTaskLocal;
 @Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
+@Deprecated
 public class ReplicateXmlRetryRecurrent extends AbstractRecurrentTask<Long> {
 
     @EJB
@@ -55,7 +54,7 @@ public class ReplicateXmlRetryRecurrent extends AbstractRecurrentTask<Long> {
         super.consumer = t -> asw.perform(() -> task.handle(t));
     }
 
-    @Schedule(hour = "*", minute = "*/6", persistent = false)
+//    @Schedule(hour = "*", minute = "*/6", persistent = false)
     @Override
     protected void timeout() {
         super.timeout();

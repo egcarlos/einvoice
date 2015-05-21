@@ -9,13 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import static pe.labtech.einvoice.commons.model.DocumentStep.DECLARE;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.DECLARING;
-import static pe.labtech.einvoice.commons.model.DocumentStatus.NEEDED;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.RETRY;
 import static pe.labtech.einvoice.commons.model.RecurrentHelper.buildId;
 import static pe.labtech.einvoice.commons.model.RecurrentHelper.lock;
@@ -32,6 +30,7 @@ import pe.labtech.einvoice.core.tasks.declare.DeclareTaskLocal;
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
+@Deprecated
 public class DeclareRetryRecurrent extends AbstractRecurrentTask<Long> {
 
     @EJB
@@ -54,7 +53,7 @@ public class DeclareRetryRecurrent extends AbstractRecurrentTask<Long> {
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*/3", second = "30", persistent = false)
+//    @Schedule(hour = "*", minute = "*/3", second = "30", persistent = false)
     public void timeout() {
         super.timeout();
     }
