@@ -55,7 +55,7 @@ public class SyncRetryTimer extends AbstractRecurrentTask<Long> {
     private SyncTaskLocal task;
 
     @Override
-    @Schedule(hour = "*", minute = "*/1", second = "30", persistent = false)
+    @Schedule(hour = "*", minute = "3", persistent = false)
     public void timeout() {
         super.timeout();
     }
