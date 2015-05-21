@@ -18,11 +18,8 @@ import pe.labtech.einvoice.core.ws.generated.EBizGenericInvokerImplService;
 public class ClientProducer {
 
     @Produces
-    EBizGenericInvokerImplService service;
-
-    @PostConstruct
-    public void init() {
-        service = new EBizGenericInvokerImplService();
+    public EBizGenericInvokerImplService getService() {
+        return new EBizGenericInvokerImplService();
 
     }
 

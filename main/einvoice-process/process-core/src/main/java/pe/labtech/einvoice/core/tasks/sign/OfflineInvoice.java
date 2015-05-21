@@ -7,7 +7,7 @@ package pe.labtech.einvoice.core.tasks.sign;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.lang.reflect.InvocationTargetException;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.commons.ext.ZipTools;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
 import pe.labtech.einvoice.commons.model.DocumentStep;
@@ -31,9 +32,9 @@ import pe.labtech.einvoice.commons.ubl.InvoiceBuilder;
 import pe.labtech.einvoice.commons.ubl.InvoiceLineBuilder;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
+import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.entity.SecurityValues;
 import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.*;
-import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import static pe.labtech.einvoice.core.tasks.tools.DatabaseCommons.mark;
 import static pe.labtech.einvoice.core.tasks.tools.SecurityCommons.extractCertificate;
@@ -57,10 +58,9 @@ public class OfflineInvoice {
     @EJB
     private PrivateDatabaseManagerLocal prv;
 
-    @EJB
-    private DocumentLoaderLocal loader;
-
     public DocumentInfo handle(Document document) {
+
+        //Check if there is a sign in database... if it's then just don't sign
         //create names
         //SUNAT format for identifying documents
         String name = buildEntryName(document);
@@ -69,36 +69,33 @@ public class OfflineInvoice {
         //Zip file name in local database
         String zipName = name + ZIP_SUFFIX;
 
+        boolean alreadySigned = prv.seek(e -> e
+                .createQuery("SELECT COUNT(O) FROM DocumentData O WHERE O.document = :document AND O.name = :name", Long.class)
+                .setParameter("document", document)
+                .setParameter("name", zipName)
+                .getSingleResult() == 1
+        );
+
+        if (!alreadySigned) {
+            return signDocument(document, entryName, zipName);
+        } else {
+            return buildDocumentInfo(document);
+        }
+    }
+
+    public DocumentInfo signDocument(Document document, String entryName, String zipName) {
         //create the UBL structure
         InvoiceBuilder ib = mapInvoice(document.getId());
-
         //move to the xml representation
         org.w3c.dom.Document xml = ib.document(DEFAULT_ENCODING);
-
-        //if document type is 07 morph to creditNote
+        //morph to creditNote or debit if needed
         DocumentMorpher.morph(document.getDocumentType(), xml);
-
-        byte[] unsignedDocument = DIGISIGN.createRepresentation(xml, DEFAULT_ENCODING);
-        prv.handle(e -> {
-            final DocumentData data = new DocumentData();
-            data.setDocument(document);
-            data.setName("xmlText");
-            data.setData(unsignedDocument);
-            data.setStatus(DATA_LOADED);
-            data.setReplicate(Boolean.TRUE);
-            e.merge(data);
-
-        });
-
         //sign
         signDocument(document.getClientId(), xml);
         byte[] signedDocument = DIGISIGN.createRepresentation(xml, DEFAULT_ENCODING);
 
         //compress data
         byte[] compressedData = ZipTools.compress(entryName, signedDocument);
-
-        //create the fake response
-        DocumentInfo di = synthDocumentInfo(xml);
 
         prv.handle(e -> {
             final DocumentData data = new DocumentData();
@@ -108,16 +105,16 @@ public class OfflineInvoice {
             data.setStatus(DATA_LOADED);
             //there is no field for the local UBL replicated data... when zipped...
             data.setReplicate(Boolean.FALSE);
-            e.merge(data);
+            e.persist(data);
         });
+        //create the fake response
+        DocumentInfo di = synthDocumentInfo(xml);
 
         Map<String, String> diresponses = new HashMap<>();
         diresponses.put("status", di.getStatus());
         diresponses.put("hashCode", di.getHashCode());
         diresponses.put("signatureValue", di.getSignatureValue());
 
-        //TODO proceder a declarar usando el proceso de envio especial
-        //loader.markSigned(document.getId(), "SIGNED-LOCAL", di.getHashCode(), di.getSignatureValue(), diresponses);
         mark(prv, document.getId(), DocumentStep.REPLICATE, DocumentStatus.NEEDED, diresponses);
         return di;
     }
@@ -269,4 +266,30 @@ public class OfflineInvoice {
         }
     }
 
+    private DocumentInfo buildDocumentInfo(Document document) {
+        //construir la respuesta
+        DocumentInfo di = new DocumentInfo();
+
+        prv.handle(e -> e
+                .createQuery(
+                        "SELECT R FROM DocumentResponse R WHERE R.document = :document",
+                        DocumentResponse.class
+                )
+                .setParameter("document", document)
+                .getResultList()
+                .forEach(r -> tryset(di, r.getName(), r.getName()))
+        );
+
+        mark(prv, document.getId(), DocumentStep.REPLICATE, DocumentStatus.NEEDED);
+        return di;
+    }
+
+    private void tryset(DocumentInfo di, Object name, Object value) {
+        try {
+            PropertyUtils.setProperty(di, name.toString(), value);
+        } catch (Exception ex) {
+            //irrelevant since only valid properties will be mapped
+            Logger.getLogger(this.getClass().getName()).log(Level.FINEST, () -> "Invalid property " + name + " in DocumentInfo. " + ex.getMessage());
+        }
+    }
 }
