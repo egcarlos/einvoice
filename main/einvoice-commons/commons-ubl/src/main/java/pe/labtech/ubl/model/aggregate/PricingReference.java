@@ -6,9 +6,12 @@
 package pe.labtech.ubl.model.aggregate;
 
 import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import pe.labtech.ubl.model.Namespaces;
 
 /**
@@ -19,22 +22,19 @@ import pe.labtech.ubl.model.Namespaces;
 public class PricingReference {
 
     @XmlElement(namespace = Namespaces.CAC)
-    private AlternativeConditionPrice AlternativeConditionPrice;
+    private List<AlternativeConditionPrice> AlternativeConditionPrice;
 
     public PricingReference() {
     }
 
-    public PricingReference(String PriceTypeCode, String currencyID, BigDecimal price) {
-        if (price != null) {
-            this.AlternativeConditionPrice = new AlternativeConditionPrice(PriceTypeCode, currencyID, price);
+    public List<AlternativeConditionPrice> getAlternativeConditionPrice() {
+        if (this.AlternativeConditionPrice == null) {
+            this.AlternativeConditionPrice = new LinkedList<>();
         }
-    }
-
-    public AlternativeConditionPrice getAlternativeConditionPrice() {
         return AlternativeConditionPrice;
     }
 
-    public void setAlternativeConditionPrice(AlternativeConditionPrice AlternativeConditionPrice) {
+    public void setAlternativeConditionPrice(List<AlternativeConditionPrice> AlternativeConditionPrice) {
         this.AlternativeConditionPrice = AlternativeConditionPrice;
     }
 

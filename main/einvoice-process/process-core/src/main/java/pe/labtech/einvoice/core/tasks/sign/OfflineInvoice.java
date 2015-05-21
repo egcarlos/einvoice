@@ -7,6 +7,7 @@ package pe.labtech.einvoice.core.tasks.sign;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -60,6 +61,14 @@ public class OfflineInvoice {
     private DocumentLoaderLocal loader;
 
     public DocumentInfo handle(Document document) {
+        //create names
+        //SUNAT format for identifying documents
+        String name = buildEntryName(document);
+        //Name inside zip file
+        String entryName = name + XML_SUFFIX;
+        //Zip file name in local database
+        String zipName = name + ZIP_SUFFIX;
+
         //create the UBL structure
         InvoiceBuilder ib = mapInvoice(document.getId());
 
@@ -77,20 +86,13 @@ public class OfflineInvoice {
             data.setData(unsignedDocument);
             data.setStatus(DATA_LOADED);
             data.setReplicate(Boolean.TRUE);
-            e.persist(data);
+            e.merge(data);
+
         });
 
         //sign
         signDocument(document.getClientId(), xml);
         byte[] signedDocument = DIGISIGN.createRepresentation(xml, DEFAULT_ENCODING);
-
-        //create names
-        //SUNAT format for identifying documents
-        String name = buildEntryName(document);
-        //Name inside zip file
-        String entryName = name + XML_SUFFIX;
-        //Zip file name in local database
-        String zipName = name + ZIP_SUFFIX;
 
         //compress data
         byte[] compressedData = ZipTools.compress(entryName, signedDocument);
@@ -106,7 +108,7 @@ public class OfflineInvoice {
             data.setStatus(DATA_LOADED);
             //there is no field for the local UBL replicated data... when zipped...
             data.setReplicate(Boolean.FALSE);
-            e.persist(data);
+            e.merge(data);
         });
 
         Map<String, String> diresponses = new HashMap<>();
@@ -229,6 +231,7 @@ public class OfflineInvoice {
                                 buildNumber(ia.get("importeUnitarioConImpuesto")),
                                 buildNumber(ia.get("importeTotalSinImpuesto"))
                         )
+                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), da.get("tipoMoneda"), buildNumber(ia.get("importeReferencial")))
                         .addTax("1000", "IGV", "VAT", buildNumber(ia.get("importeIgv")), ia.get("codigoRazonExoneracion"), null)
                         .addTax("2000", "ISC", "EXT", buildNumber(ia.get("importeIsc")), null, ia.get("tipoSistemaImpuestoISC"))
                         .addAllowance(buildNumber(ia.get("importeDescuento")));

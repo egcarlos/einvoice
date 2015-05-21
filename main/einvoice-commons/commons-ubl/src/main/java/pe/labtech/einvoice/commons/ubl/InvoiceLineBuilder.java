@@ -7,6 +7,7 @@ package pe.labtech.einvoice.commons.ubl;
 
 import java.math.BigDecimal;
 import pe.labtech.ubl.model.aggregate.AllowanceCharge;
+import pe.labtech.ubl.model.aggregate.AlternativeConditionPrice;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
 import pe.labtech.ubl.model.aggregate.Item;
 import pe.labtech.ubl.model.aggregate.Price;
@@ -53,7 +54,7 @@ public class InvoiceLineBuilder implements Builder<InvoiceLine> {
             BigDecimal alternateUnitPrice,
             //total de la linea de deatalle incluye subenciones cargos y descuentos
             BigDecimal totalAmount) {
-        InvoiceLineBuilder ilb = new InvoiceLineBuilder();
+        InvoiceLineBuilder ilb = this;
         InvoiceLine il = new InvoiceLine();
         //id de la linea
         il.setID(lineNumber);
@@ -66,11 +67,19 @@ public class InvoiceLineBuilder implements Builder<InvoiceLine> {
         //precio unitario sin impuestos
         il.setPrice(new Price(currencyID, unitPrice));
         //precio unitario alternativo
-        il.setPricingReference(new PricingReference(alternateUnitPriceCode, currencyID, alternateUnitPrice));
+        il.setPricingReference(new PricingReference());
+        il.getPricingReference().getAlternativeConditionPrice().add(new AlternativeConditionPrice(alternateUnitPriceCode, currencyID, alternateUnitPrice));
         //total de la línea
         il.setLineExtensionAmount(new Amount(currencyID, totalAmount));
         ilb.item = il;
         return ilb;
+    }
+
+    public InvoiceLineBuilder addAlternativeConditionPrice(String PriceTypeCode, String currencyID, BigDecimal price) {
+        if (PriceTypeCode != null && currencyID != null && price != null) {
+            this.item.getPricingReference().getAlternativeConditionPrice().add(new AlternativeConditionPrice(PriceTypeCode, currencyID, price));
+        }
+        return this;
     }
 
     public InvoiceLineBuilder addTax(String taxID, String taxName, String taxCode, BigDecimal amount, String erc, String tr) {

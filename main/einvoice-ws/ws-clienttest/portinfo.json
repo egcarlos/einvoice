@@ -1,5 +1,5 @@
 {
-    "endpoint":"https://integrador.bizlinks.com.pe/sfewsperu/ws/invoker",
+    "endpoint":"http://test3.alignetsac.com/sfewsperu/ws/invoker",
     "user":"avinka",
     "password":"ebiz",
     "connectionTimeout":"600000",
