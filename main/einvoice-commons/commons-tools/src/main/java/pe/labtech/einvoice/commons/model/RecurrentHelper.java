@@ -86,6 +86,26 @@ public class RecurrentHelper {
         );
     }
 
+    public static List<Long> lookupAllSourcedResponses(DatabaseManager db, String source, String... numberPrefixes) {
+        List<String> l = new LinkedList<>();
+        for (int i = 0; i < numberPrefixes.length; i++) {
+            l.add("o.document.documentNumber LIKE (:p" + i + " ||'%')");
+        }
+        String variable = l.stream().reduce(null, (a, b) -> a == null ? b : a + " OR " + b);
+        StringBuilder sb = new StringBuilder("SELECT DISTINCT o.document.id FROM DocumentResponse o WHERE o.replicate = TRUE AND o.document.hash = :source");
+        sb.append(" AND (").append(variable).append(")");
+        String adjustedQuery = sb.toString();
+        return db.seek(e -> {
+            TypedQuery<Long> q = e
+                    .createQuery(adjustedQuery, Long.class)
+                    .setParameter("source", source);
+            for (int i = 0; i < numberPrefixes.length; i++) {
+                q.setParameter("p" + i, numberPrefixes[i]);
+            }
+            return q.getResultList();
+        });
+    }
+
     public static List<Long> lookupAllResponses(DatabaseManager db, String... numberPrefixes) {
         List<String> l = new LinkedList<>();
         for (int i = 0; i < numberPrefixes.length; i++) {
@@ -102,7 +122,6 @@ public class RecurrentHelper {
             }
             return q.getResultList();
         });
-
     }
 
     public static boolean lockResponse(DatabaseManager db, Long id, String name) {

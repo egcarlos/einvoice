@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import org.apache.commons.beanutils.BeanUtils;
@@ -40,6 +41,9 @@ public class PullCancelTask implements PullCancelTaskLocal {
 
     @EJB
     private PrivateDatabaseManagerLocal prv;
+
+    @Resource(lookup = "java:global/einvoice/config/source")
+    private String source;
 
     @Override
     public void replicate(CancelHeaderPK id) {
@@ -75,6 +79,7 @@ public class PullCancelTask implements PullCancelTaskLocal {
         document.setClientId(header.getId().getTipoDocumentoEmisor() + "-" + header.getId().getNumeroDocumentoEmisor());
         document.setDocumentType("RA");
         document.setDocumentNumber(header.getId().getResumenId());
+        document.setHash(source);
 
         try {
             List<DocumentAttribute> attrs = new LinkedList<>();

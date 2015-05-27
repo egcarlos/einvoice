@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.replication.cancel;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
@@ -32,10 +33,14 @@ public class PullCancelRecurrent extends AbstractRecurrentTask<CancelHeaderPK> {
     @EJB
     private SummaryDatabaseManagerLocal db;
 
+    @Resource(lookup = "java:global/einvoice/config/source")
+    private String source;
+
     @PostConstruct
     @Override
     public void init() {
         super.init();
+        logger.info(() -> tm("Pulling documents from: " + (source == null ? "##DEFAULT" : source)));
         this.findTasks = () -> db.seek(e -> e
                 .createQuery(
                         "SELECT o.id FROM CancelHeader o WHERE o.bl_estadoRegistro = 'A'",

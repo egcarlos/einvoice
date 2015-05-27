@@ -104,3 +104,6 @@ $RECYCLE.BIN/
 /main/einvoice-ws/ws-dto/target/
 /customizations/tgestiona/process-download/target/
 /customizations/tgestiona/dist-ear/target/
+/main/einvoice-dist/dist-core/target/
+/main/einvoice-dist/dist-single-core/target/
+/main/einvoice-dist/dist-single-replicate/target/

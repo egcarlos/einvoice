@@ -31,5 +31,7 @@
         <module>dist-console</module>
         <module>dist-ear</module>
         <module>dist-earmin</module>
+        <module>dist-single-core</module>
+        <module>dist-single-replicate</module>
     </modules>
 </project>

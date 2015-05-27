@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
@@ -41,6 +42,9 @@ public class PushSummaryRecurrent extends AbstractRecurrentTask<Long> {
     @EJB
     private PrivateDatabaseManagerLocal prv;
 
+    @Resource(lookup = "java:global/einvoice/config/source")
+    private String source;
+
     /**
      * Bloquear una respuesta de documento para ser replicada
      */
@@ -61,7 +65,8 @@ public class PushSummaryRecurrent extends AbstractRecurrentTask<Long> {
     @PostConstruct
     public void init() {
         super.init();
-        this.findTasks = () -> RecurrentHelper.lookupAllResponses(prv, "RC");
+        logger.info(() -> tm("Pushing documents to: " + (source == null ? "##DEFAULT" : source)));
+        this.findTasks = () -> RecurrentHelper.lookupAllSourcedResponses(prv, source, "RC");
         this.findTasksSingle = t -> RecurrentHelper.lookupResponse(prv, DocumentResponse.class, t);
         this.tryLock = t -> true;
         this.tryLockSingle = t -> RecurrentHelper.lockResponse(prv, t.getDocument().getId(), t.getName());

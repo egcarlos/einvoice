@@ -84,10 +84,10 @@ public class Document implements Serializable {
     @Column(name = "DOCUMENT_DATE", length = 40, updatable = false)
     private String documentDate;
 
-    @Column(name = "SIGNATURE", length = 2000, insertable = false)
+    @Column(name = "SIGNATURE", length = 2000, insertable = true)
     private String signature;
 
-    @Column(name = "DOCUMENT_HASH", length = 1000, insertable = false)
+    @Column(name = "DOCUMENT_HASH", length = 1000, insertable = true)
     private String hash;
 
     @XmlElement(name = "att")

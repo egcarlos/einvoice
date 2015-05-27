@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import org.apache.commons.beanutils.BeanUtils;
@@ -46,12 +47,16 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
     @EJB
     private PrivateDatabaseManagerLocal prv;
 
+    @Resource(lookup = "java:global/einvoice/config/source")
+    private String source;
+
     @Override
     public void replicate(DocumentHeader header, List<DocumentDetail> details, String step, String status) {
         Document document = new Document();
         document.setClientId(header.getId().getTipoDocumentoEmisor() + "-" + header.getId().getNumeroDocumentoEmisor());
         document.setDocumentType(header.getId().getTipoDocumento());
         document.setDocumentNumber(header.getId().getSerieNumero());
+        document.setHash(source);
 
         try {
             List<DocumentAttribute> attrs = new LinkedList<>();

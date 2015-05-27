@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.replication.invoice;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
@@ -32,10 +33,14 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
     @EJB
     private PublicDatabaseManagerLocal pub;
 
+    @Resource(lookup = "java:global/einvoice/config/source")
+    private String source;
+
     @PostConstruct
     @Override
     public void init() {
         super.init();
+        logger.info(() -> tm("Pulling documents from: " + (source == null ? "##DEFAULT" : source)));
         this.findTasks = () -> pub.seek(e -> e
                 .createQuery(
                         "SELECT O.id FROM DocumentHeader O WHERE o.bl_estadoRegistro = 'A' ORDER BY O.id.tipoDocumento ASC, O.id.serieNumero",
