@@ -5,7 +5,12 @@
  */
 package pe.labtech.einvoice.commons.xmlsecurity;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -51,16 +56,26 @@ public class IntegralTest {
                         .init("1", BigDecimal.ONE, "NIU", "IH-107", "articulo 1", "PEN", BigDecimal.valueOf(10000, 2), "01", BigDecimal.valueOf(11800, 2), BigDecimal.valueOf(10000, 2))
                         .addTax("1000", "IGV", "VAT", BigDecimal.valueOf(1800, 2), "10", null)
                         .compile()
-                );
+                )
+                .addOrderReference("12345678");
 
 //        m.marshal(invoice, System.out);
-        Document document = invoiceBuilder.document("ISO-8859-1");
+        Document document = invoiceBuilder.document("UTF-8");
+
+        DigitalSign ds = new DigitalSign();
+
+        try (FileOutputStream fos = new FileOutputStream("out.xml")) {
+            fos.write(ds.createRepresentation(document, "UTF-8"));
+            fos.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(IntegralTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         Invoice i = invoiceBuilder.compile();
         JAXBContext ctx = JAXBContext.newInstance(Invoice.class);
 
         Marshaller m = ctx.createMarshaller();
-        m.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+        m.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 
         m.marshal(i, System.out);
 
@@ -70,9 +85,7 @@ public class IntegralTest {
 
         document.setXmlStandalone(true);
 
-        DigitalSign ds = new DigitalSign();
-
-        String text = ds.createTextRepresentation(document, "ISO-8859-1");
+        String text = ds.createTextRepresentation(document, "UTF-8");
         System.out.println(text);
     }
 

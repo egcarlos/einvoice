@@ -28,6 +28,7 @@ import pe.labtech.ubl.model.aggregate.ExternalReference;
 import pe.labtech.ubl.model.aggregate.InvoiceDocumentReference;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
 import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
+import pe.labtech.ubl.model.aggregate.OrderReference;
 import pe.labtech.ubl.model.aggregate.Party;
 import pe.labtech.ubl.model.aggregate.PartyLegalEntity;
 import pe.labtech.ubl.model.aggregate.PartyName;
@@ -423,6 +424,14 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
+    public InvoiceBuilder addOrderReference(String id) {
+        if (id != null) {
+            invoice.setOrderReference(new OrderReference());
+            invoice.getOrderReference().setID(id);
+        }
+        return this;
+    }
+
     public InvoiceBuilder addLine(InvoiceLine line) {
         invoice.getInvoiceLine().add(line);
         return this;
@@ -477,6 +486,7 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return DOCUMENT_BUILDER_FACTORY;
     }
 
+    //this works for xml... should be implemented as shared memmory
     //TODO migrate to pooled implementation to enhance memmory usage
     public DocumentBuilder getDocumentBuilder() {
         try {

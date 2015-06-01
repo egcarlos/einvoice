@@ -11,22 +11,45 @@ import pe.labtech.ubl.model.aggregate.Signature;
 import pe.labtech.ubl.model.aggregate.DocumentReference;
 import pe.labtech.ubl.model.extensions.UBLExtensions;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
+import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import static pe.labtech.ubl.model.Namespaces.DEFAULT;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
 import pe.labtech.ubl.model.aggregate.BillingReference;
 import pe.labtech.ubl.model.aggregate.DiscrepancyResponse;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
 import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
+import pe.labtech.ubl.model.aggregate.OrderReference;
 
 /**
  *
  * @author carloseg
  */
-@XmlRootElement(name = "Invoice", namespace = Namespaces.DEFAULT)
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Invoice", namespace = DEFAULT)
+@XmlAccessorType(FIELD)
+@XmlType(propOrder = {
+    "UBLExtensions",
+    "UBLVersionID",
+    "CustomizationID",
+    "ID",
+    "IssueDate",
+    "InvoiceTypeCode",
+    "DocumentCurrencyCode",
+    "DiscrepancyResponse",
+    "OrderReference",
+    "BillingReference",
+    "DespatchDocumentReference",
+    "AdditionalDocumentReference",
+    "Signature",
+    "AccountingSupplierParty",
+    "AccountingCustomerParty",
+    "TaxTotal",
+    "LegalMonetaryTotal",
+    "InvoiceLine"
+})
 public class Invoice {
 
     @XmlElement(namespace = Namespaces.EXT)
@@ -60,12 +83,12 @@ public class Invoice {
     @XmlElement(namespace = Namespaces.CAC)
     private List<DiscrepancyResponse> DiscrepancyResponse;
 
+    //referencia de la orden de compra
+    @XmlElement(namespace = Namespaces.CAC)
+    private OrderReference OrderReference;
+
     @XmlElement(namespace = Namespaces.CAC)
     private BillingReference BillingReference;
-
-    //holder para la firma
-    @XmlElement(namespace = Namespaces.CAC)
-    private Signature Signature;
 
     //guías de remisión
     @XmlElement(namespace = Namespaces.CAC)
@@ -74,7 +97,10 @@ public class Invoice {
     //otros documentos asociados
     @XmlElement(namespace = Namespaces.CAC)
     private List<DocumentReference> AdditionalDocumentReference;
+
     //datos de la firma digital
+    @XmlElement(namespace = Namespaces.CAC)
+    private Signature Signature;
 
     //datos el emisor
     @XmlElement(namespace = Namespaces.CAC)
@@ -154,14 +180,19 @@ public class Invoice {
     }
 
     public List<DiscrepancyResponse> getDiscrepancyResponse() {
-        if (DiscrepancyResponse == null) {
-            DiscrepancyResponse = new LinkedList<>();
-        }
         return DiscrepancyResponse;
     }
 
     public void setDiscrepancyResponse(List<DiscrepancyResponse> DiscrepancyResponse) {
         this.DiscrepancyResponse = DiscrepancyResponse;
+    }
+
+    public OrderReference getOrderReference() {
+        return OrderReference;
+    }
+
+    public void setOrderReference(OrderReference OrderReference) {
+        this.OrderReference = OrderReference;
     }
 
     public BillingReference getBillingReference() {
@@ -172,18 +203,7 @@ public class Invoice {
         this.BillingReference = BillingReference;
     }
 
-    public Signature getSignature() {
-        return Signature;
-    }
-
-    public void setSignature(Signature signature) {
-        this.Signature = signature;
-    }
-
     public List<DocumentReference> getDespatchDocumentReference() {
-        if (DespatchDocumentReference == null) {
-            DespatchDocumentReference = new LinkedList<>();
-        }
         return DespatchDocumentReference;
     }
 
@@ -192,14 +212,19 @@ public class Invoice {
     }
 
     public List<DocumentReference> getAdditionalDocumentReference() {
-        if (AdditionalDocumentReference == null) {
-            AdditionalDocumentReference = new LinkedList<>();
-        }
         return AdditionalDocumentReference;
     }
 
     public void setAdditionalDocumentReference(List<DocumentReference> AdditionalDocumentReference) {
         this.AdditionalDocumentReference = AdditionalDocumentReference;
+    }
+
+    public Signature getSignature() {
+        return Signature;
+    }
+
+    public void setSignature(Signature Signature) {
+        this.Signature = Signature;
     }
 
     public AccountingParty getAccountingSupplierParty() {
@@ -219,9 +244,6 @@ public class Invoice {
     }
 
     public List<TaxTotal> getTaxTotal() {
-        if (TaxTotal == null) {
-            TaxTotal = new LinkedList<>();
-        }
         return TaxTotal;
     }
 
@@ -238,9 +260,6 @@ public class Invoice {
     }
 
     public List<InvoiceLine> getInvoiceLine() {
-        if (InvoiceLine == null) {
-            InvoiceLine = new LinkedList<>();
-        }
         return InvoiceLine;
     }
 
@@ -248,4 +267,11 @@ public class Invoice {
         this.InvoiceLine = InvoiceLine;
     }
 
+    {
+        this.AdditionalDocumentReference = new LinkedList<>();
+        this.DespatchDocumentReference = new LinkedList<>();
+        this.DiscrepancyResponse = new LinkedList<>();
+        this.InvoiceLine = new LinkedList<>();
+        this.TaxTotal = new LinkedList<>();
+    }
 }
