@@ -1,0 +1,85 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package pe.labtech.ubl.model.sunat;
+
+import static javax.xml.bind.annotation.XmlAccessType.FIELD;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import org.eclipse.persistence.oxm.annotations.XmlCDATA;
+import static pe.labtech.ubl.model.Namespaces.CBC;
+import static pe.labtech.ubl.model.Namespaces.SAC;
+
+/**
+ *
+ * @author Carlos Echeverria
+ */
+@XmlAccessorType(FIELD)
+@XmlType(propOrder = {
+    "LineID",
+    "DocumentTypeCode",
+    "DocumentSerialID",
+    "DocumentNumberID",
+    "VoidedReasonDescription"
+})
+public class VoidedDocumentsLine {
+
+    @XmlElement(namespace = CBC)
+    private Long LineID;
+    @XmlElement(namespace = CBC)
+    private String DocumentTypeCode;
+    @XmlElement(namespace = SAC)
+    private String DocumentSerialID;
+    @XmlElement(namespace = SAC)
+    private String DocumentNumberID;
+    @XmlElement(namespace = SAC)
+    @XmlCDATA
+    private String VoidedReasonDescription;
+
+    public VoidedDocumentsLine() {
+    }
+
+    public Long getLineID() {
+        return LineID;
+    }
+
+    public void setLineID(Long LineID) {
+        this.LineID = LineID;
+    }
+
+    public String getDocumentTypeCode() {
+        return DocumentTypeCode;
+    }
+
+    public void setDocumentTypeCode(String DocumentTypeCode) {
+        this.DocumentTypeCode = DocumentTypeCode;
+    }
+
+    public String getDocumentSerialID() {
+        return DocumentSerialID;
+    }
+
+    public void setDocumentSerialID(String DocumentSerialID) {
+        this.DocumentSerialID = DocumentSerialID;
+    }
+
+    public String getDocumentNumberID() {
+        return DocumentNumberID;
+    }
+
+    public void setDocumentNumberID(String DocumentNumberID) {
+        this.DocumentNumberID = DocumentNumberID;
+    }
+
+    public String getVoidedReasonDescription() {
+        return VoidedReasonDescription;
+    }
+
+    public void setVoidedReasonDescription(String VoidedReasonDescription) {
+        this.VoidedReasonDescription = VoidedReasonDescription;
+    }
+
+}

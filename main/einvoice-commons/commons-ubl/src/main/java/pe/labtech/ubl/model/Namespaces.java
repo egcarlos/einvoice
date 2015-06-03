@@ -23,5 +23,6 @@ public class Namespaces {
     public static final String QDT = "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2";
     public static final String DS = "http://www.w3.org/2000/09/xmldsig#";
     public static final String SD = "urn:sunat:names:specification:ubl:peru:schema:xsd:SummaryDocuments-1";
+    public static final String VD = "urn:sunat:names:specification:ubl:peru:schema:xsd:VoidedDocuments-1";
 
 }

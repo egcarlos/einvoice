@@ -21,11 +21,11 @@
     </dependencyManagement>
     
     <modules>
+        <module>ws-bom</module>
+        <module>ws-dto</module>
         <module>ws-client</module>
         <module>ws-clientcdi</module>
         <module>ws-clienttest</module>
-        <module>ws-bom</module>
-        <module>ws-dto</module>
     </modules>
     
     <properties>
