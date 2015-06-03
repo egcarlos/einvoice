@@ -29,6 +29,10 @@ public class AccountingParty {
     public AccountingParty() {
     }
 
+    public AccountingParty(String AdditionalAccountID, String CustomerAssignedAccountID, String RegistrationName) {
+        this(AdditionalAccountID, CustomerAssignedAccountID, new Party(null, new PartyLegalEntity(RegistrationName)));
+    }
+
     public AccountingParty(String AdditionalAccountID, String CustomerAssignedAccountID, Party Party) {
         this.CustomerAssignedAccountID = CustomerAssignedAccountID;
         this.AdditionalAccountID = AdditionalAccountID;

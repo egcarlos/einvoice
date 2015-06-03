@@ -26,6 +26,15 @@ public class Signature {
     @XmlElement(namespace = Namespaces.CAC)
     private Attachment DigitalSignatureAttachment;
 
+    public Signature() {
+    }
+
+    public Signature(String id, String partyIdentification, String partyName, String uri) {
+        this.ID = id;
+        this.SignatoryParty = new Party(partyIdentification, partyName);
+        this.DigitalSignatureAttachment = new Attachment(new ExternalReference(uri));
+    }
+
     public String getID() {
         return ID;
     }

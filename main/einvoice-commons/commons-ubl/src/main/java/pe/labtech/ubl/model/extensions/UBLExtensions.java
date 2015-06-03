@@ -5,6 +5,7 @@
  */
 package pe.labtech.ubl.model.extensions;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -20,6 +21,12 @@ public class UBLExtensions {
     private List<UBLExtension> UBLExtension;
 
     public UBLExtensions() {
+    }
+
+    public UBLExtensions(UBLExtension... extensions) {
+        this();
+        this.UBLExtension = new LinkedList<>();
+        this.UBLExtension.addAll(Arrays.asList(extensions));
     }
 
     public UBLExtensions(List<UBLExtension> UBLExtension) {

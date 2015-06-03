@@ -10,13 +10,12 @@
     
     <modules>
         <module>einvoice-bom</module>
-        <module>einvoice-model</module>
         <module>einvoice-commons</module>
+        <module>einvoice-model</module>
         <module>einvoice-ws</module>
         <module>einvoice-process</module>
-        <!--<module>einvoice-default</module>-->
-    <module>einvoice-dist</module>
-  </modules>
+        <module>einvoice-dist</module>
+    </modules>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

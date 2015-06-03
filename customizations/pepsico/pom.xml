@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pe.labtech.einvoice.tgestiona</groupId>
+    <groupId>pe.labtech.einvoice.pepsico</groupId>
     <artifactId>pepsico-reactor</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -10,9 +10,8 @@
     
     <modules>
         <module>process-replicate</module>
-        <module>einvoice-default</module>
         <module>model-public</module>
-        <module>einvoice-process-replicateresponse</module>
+        <module>dist-single-replicate</module>
     </modules>
     
     <properties>

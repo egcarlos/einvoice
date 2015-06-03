@@ -14,4 +14,11 @@
                 <goal>wildfly:undeploy</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-redeploy</actionName>
+            <displayName>redeploy</displayName>
+            <goals>
+                <goal>wildfly:redeploy</goal>
+            </goals>
+        </action>
     </actions>

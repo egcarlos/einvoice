@@ -5,10 +5,11 @@
     <parent>
         <groupId>pe.labtech.einvoice.model</groupId>
         <artifactId>einvoice-model-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>pepsico-model-public</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
     <properties>
