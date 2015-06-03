@@ -20,6 +20,7 @@ import pe.labtech.ubl.model.aggregate.Signature;
 import pe.labtech.ubl.model.extensions.ExtensionContent;
 import pe.labtech.ubl.model.extensions.UBLExtension;
 import pe.labtech.ubl.model.extensions.UBLExtensions;
+import pe.labtech.ubl.model.sunat.SummaryDocumentsLine;
 
 /**
  *
@@ -30,7 +31,7 @@ public class SummaryDocumentsBuilder implements Builder<SummaryDocuments> {
     private static final JAXBContext JAXB_CONTEXT;
     private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY;
 
-    private SummaryDocuments summary;
+    private SummaryDocuments item;
 
     static {
         JAXBContext context;
@@ -47,7 +48,7 @@ public class SummaryDocumentsBuilder implements Builder<SummaryDocuments> {
 
     @Override
     public SummaryDocuments compile() {
-        return summary;
+        return item;
     }
 
     /**
@@ -70,18 +71,25 @@ public class SummaryDocumentsBuilder implements Builder<SummaryDocuments> {
             final String issuerName
     ) {
         //crear un nuevo summary
-        this.summary = new SummaryDocuments();
+        this.item = new SummaryDocuments();
 
         //crear el espacio para almacenar la firma
-        this.summary.setUBLExtensions(new UBLExtensions(new UBLExtension(new ExtensionContent())));
-        this.summary.setUBLVersionID("2.0");
-        this.summary.setCustomizationID("1.0");
-        this.summary.setID(summaryId);
-        this.summary.setReferenceDate(referenceDate);
-        this.summary.setIssueDate(issueDate);
-        this.summary.setSignature(new Signature("IDSignKG", issuerId, issuerName, "#signatureKG"));
-        this.summary.setAccountingSupplierParty(new AccountingParty(issuerIdType, issuerId, issuerName));
+        this.item.setUBLExtensions(new UBLExtensions(new UBLExtension(new ExtensionContent())));
+        this.item.setUBLVersionID("2.0");
+        this.item.setCustomizationID("1.0");
+        this.item.setID(summaryId);
+        this.item.setReferenceDate(referenceDate);
+        this.item.setIssueDate(issueDate);
+        this.item.setSignature(new Signature("IDSignKG", issuerId, issuerName, "#signatureKG"));
+        this.item.setAccountingSupplierParty(new AccountingParty(issuerIdType, issuerId, issuerName));
 
+        return this;
+    }
+
+    public SummaryDocumentsBuilder addLine(SummaryDocumentsLine line) {
+        if (line != null) {
+            this.item.getSummaryDocumentsLine().add(line);
+        }
         return this;
     }
 
