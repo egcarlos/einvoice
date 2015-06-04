@@ -5,12 +5,21 @@
  */
 package pe.labtech.einvoice.commons.xmlsecurity;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
+import org.w3c.dom.Document;
 import pe.labtech.einvoice.commons.ubl.SummaryDocumentsBuilder;
 import pe.labtech.einvoice.commons.ubl.SummaryDocumentsLineBuilder;
 
@@ -21,11 +30,18 @@ import pe.labtech.einvoice.commons.ubl.SummaryDocumentsLineBuilder;
 public class SummaryDocumentsTest {
 
     @Test
-    public void test1() {
+    public void test1() throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
         final SummaryDocumentsBuilder b = new SummaryDocumentsBuilder();
         final SummaryDocumentsLineBuilder lb = new SummaryDocumentsLineBuilder();
+        final DigitalSign ds = new DigitalSign();
 
-        byte[] data = new DigitalSign().createRepresentation(b
+        KeyStore ks = KeyStore.getInstance("jks");
+        ks.load(new FileInputStream("avinka.jks"), "3b1zl4t1n$FE".toCharArray());
+
+        Key pk = ks.getKey("daniel crisostomo (sunat)", "3b1zl4t1n$AVINKA".toCharArray());
+        X509Certificate cert = (X509Certificate) ks.getCertificate("daniel crisostomo (sunat)");
+
+        final Document document = b
                 .init("RC-20150602-001", "2015-06-01", "2015-06-02", "6", "20563330709", "LABTECH SRL")
                 .addLine(lb
                         .init(1l, "03", "B001", "00000001", "00000001", "PEN", new BigDecimal("118.00"))
@@ -39,7 +55,11 @@ public class SummaryDocumentsTest {
                         .addTax("1000", "IGV", "VAT", new BigDecimal("18.00"), null, null)
                         .compile()
                 )
-                .document("UTF-8"),
+                .document("UTF-8");
+
+        ds.sign(document, pk, cert);
+
+        byte[] data = ds.createRepresentation(document,
                 "UTF-8"
         );
 
