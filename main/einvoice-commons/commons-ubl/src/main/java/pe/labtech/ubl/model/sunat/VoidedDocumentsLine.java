@@ -36,7 +36,7 @@ public class VoidedDocumentsLine {
     @XmlElement(namespace = SAC)
     private String DocumentNumberID;
     @XmlElement(namespace = SAC)
-    @XmlCDATA
+//    @XmlCDATA
     private String VoidedReasonDescription;
 
     public VoidedDocumentsLine() {

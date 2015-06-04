@@ -5,16 +5,10 @@
  */
 package pe.labtech.einvoice.core.tasks.replicate;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.xml.ws.WebServiceException;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
@@ -56,12 +50,25 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
                 .getSingleResult()
         );
 
-        String command = "<ReplicateXmlCmd declare-sunat=\"1\" declare-direct-sunat=\"0\" publish=\"1\" output=\"PDF\">"
-                + "<parametros/>"
-                + "<parameter value=\"" + buildClientId(document) + "\" name=\"idEmisor\"/>"
-                + "</ReplicateXmlCmd>";
+        StringBuilder command = new StringBuilder();
+        command.append("<ReplicateXmlCmd declare-sunat=\"1\" declare-direct-sunat=\"0\" publish=\"1\" output=\"PDF\">");
+        command.append("<parametros/>");
+        command.append("<parameter value=\"").append(buildClientId(document)).append("\" name=\"idEmisor\"/>");
+        if (document.getDocumentType().startsWith("R")) {
+            String correoEmisor = prv.seek(e -> e
+                    .createQuery(
+                            "SELECT O.value FROM DocumentAttribute O WHERE O.document = :document AND O.name = :name",
+                            String.class
+                    )
+                    .setParameter("document", document)
+                    .setParameter("name", "correoEmisor")
+                    .getSingleResult()
+            );
+            command.append("<parameter value=\"").append(correoEmisor).append("\" name=\"correoEmisor\"/>");
+        }
+        command.append("</ReplicateXmlCmd>");
 
-        ServiceCommons.replicateXml(prv, loader, invoker, document, command, zippedUBL);
+        ServiceCommons.replicateXml(prv, loader, invoker, document, command.toString(), zippedUBL);
     }
 
     private static Object buildClientId(Document d) {
