@@ -44,15 +44,15 @@ public class SummaryDocumentsTest {
         final Document document = b
                 .init("RC-20150602-001", "2015-06-01", "2015-06-02", "6", "20563330709", "LABTECH SRL")
                 .addLine(lb
-                        .init(1l, "03", "B001", "00000001", "00000001", "PEN", new BigDecimal("118.00"))
-                        .addBillingPayment("01", new BigDecimal("100.00"))
-                        .addBillingPayment("02", new BigDecimal("0.00"))
-                        .addBillingPayment("03", new BigDecimal("0.00"))
+                        .init("1", "03", "B001", "00000001", "00000001", "PEN", "118.00")
+                        .addBillingPayment("01", "100.00")
+                        .addBillingPayment("02", "0.00")
+                        .addBillingPayment("03", "0.00")
                         //.addBillingPayment("04", new BigDecimal("0.00"))
-                        .addAllowance(true, new BigDecimal("0.00"))
-                        .addTax("2000", "ISC", "EXC", new BigDecimal("0.00"), null, null)
-                        .addTax("9999", "OTROS", "OTH", new BigDecimal("0.00"), null, null)
-                        .addTax("1000", "IGV", "VAT", new BigDecimal("18.00"), null, null)
+                        .addAllowance(true, "0.00")
+                        .addTax("2000", "ISC", "EXC", "0.00", null, null)
+                        .addTax("9999", "OTROS", "OTH", "0.00", null, null)
+                        .addTax("1000", "IGV", "VAT", "18.00", null, null)
                         .compile()
                 )
                 .document("UTF-8");

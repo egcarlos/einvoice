@@ -16,7 +16,7 @@ public class VoidedDocumentsLineBuilder implements Builder<VoidedDocumentsLine> 
     private VoidedDocumentsLine item;
 
     public VoidedDocumentsLineBuilder init(
-            Long lineNumber,
+            String lineNumber,
             String documentType,
             String documentSerial,
             String number,

@@ -27,6 +27,8 @@ public class SignTask implements SignTaskLocal {
     @EJB
     PrivateDatabaseManagerLocal db;
     @EJB
+    private OfflineSummary offlineSummary;
+    @EJB
     private OnlineSummary onlineSummary;
     @EJB
     private OfflineInvoice offlineInvoice;
@@ -57,7 +59,7 @@ public class SignTask implements SignTaskLocal {
                     return this.offlineInvoice.handle(document);
                 case Summary:
                 case Cancel:
-                    return this.onlineSummary.handle(document);
+                    return this.offlineSummary.handle(document);
             }
         } else {
             //no hay un keystore... firma online

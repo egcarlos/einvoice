@@ -50,11 +50,15 @@
     </dependencies>
     
     <modules>
+        <!-- bom -->
+        <module>process-bom</module>
+        
         <!-- in / out -->
         <module>process-replicate</module>
         <module>process-replicatesummary</module>
         
         <!--<module>process-download</module>-->
+        <module>process-core</module>
         <module>process-signonline</module>
         <module>process-sync</module>
         <module>process-declare</module>
@@ -66,8 +70,6 @@
         <!-- additional binary data -->
         <module>process-copy</module>
         <module>process-download</module>
-        <module>process-bom</module>
-        <module>process-core</module>
     </modules>
     
     <properties>

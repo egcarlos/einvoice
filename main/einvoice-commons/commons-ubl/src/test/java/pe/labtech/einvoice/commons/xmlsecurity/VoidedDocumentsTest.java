@@ -35,7 +35,7 @@ public class VoidedDocumentsTest {
         final Document document = b
                 .init("RC-20150602-001", "2015-06-01", "2015-06-02", "6", "20563330709", "LABTECH SRL")
                 .addLine(lb
-                        .init(1l, "01", "F001", "00000001", "ERROR EN RUC")
+                        .init("1", "01", "F001", "00000001", "ERROR EN RUC")
                         .compile()
                 )
                 .document("UTF-8");

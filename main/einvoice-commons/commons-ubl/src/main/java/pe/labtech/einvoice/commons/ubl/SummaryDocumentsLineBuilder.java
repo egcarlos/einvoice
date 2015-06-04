@@ -24,13 +24,13 @@ public class SummaryDocumentsLineBuilder implements Builder<SummaryDocumentsLine
     private SummaryDocumentsLine item;
 
     public SummaryDocumentsLineBuilder init(
-            Long lineNumber,
+            String lineNumber,
             String documentType,
             String documentSerial,
             String startNumber,
             String endNumber,
             String currency,
-            BigDecimal totalAmount
+            String totalAmount
     ) {
         this.item = new SummaryDocumentsLine();
         this.item.setLineID(lineNumber);
@@ -38,40 +38,40 @@ public class SummaryDocumentsLineBuilder implements Builder<SummaryDocumentsLine
         this.item.setDocumentSerialID(documentSerial);
         this.item.setStartDocumentNumberID(startNumber);
         this.item.setEndDocumentNumberID(endNumber);
-        this.item.setTotalAmount(new Amount(currency, totalAmount));
+        this.item.setTotalAmount(new Amount(currency, new BigDecimal(totalAmount)));
         return this;
     }
 
-    public SummaryDocumentsLineBuilder addBillingPayment(String instruction, BigDecimal amount) {
+    public SummaryDocumentsLineBuilder addBillingPayment(String instruction, String amount) {
         if (amount != null && instruction != null) {
             this.item.getBillingPayment().add(new BillingPayment(
-                    new Amount(this.item.getTotalAmount().getCurrencyID(), amount),
+                    new Amount(this.item.getTotalAmount().getCurrencyID(), new BigDecimal(amount)),
                     instruction
             ));
         }
         return this;
     }
 
-    public SummaryDocumentsLineBuilder addAllowance(Boolean charge, BigDecimal amount) {
+    public SummaryDocumentsLineBuilder addAllowance(Boolean charge, String amount) {
         if (charge != null && amount != null) {
             this.item.getAllowanceCharge().add(
                     new AllowanceCharge(
                             charge.toString(),
-                            new Amount(this.item.getTotalAmount().getCurrencyID(), amount)
+                            new Amount(this.item.getTotalAmount().getCurrencyID(), new BigDecimal(amount))
                     )
             );
         }
         return this;
     }
 
-    public SummaryDocumentsLineBuilder addTax(String taxID, String taxName, String taxCode, BigDecimal amount, String erc, String tr) {
+    public SummaryDocumentsLineBuilder addTax(String taxID, String taxName, String taxCode, String amount, String erc, String tr) {
         String currency = this.item.getTotalAmount().getCurrencyID();
         if (amount != null) {
             this.item.getTaxTotal().add(
                     new TaxTotal(
-                            new Amount(currency, amount),
+                            new Amount(currency, new BigDecimal(amount)),
                             new TaxSubtotal(
-                                    new Amount(currency, amount),
+                                    new Amount(currency, new BigDecimal(amount)),
                                     new TaxCategory(
                                             erc,
                                             tr,

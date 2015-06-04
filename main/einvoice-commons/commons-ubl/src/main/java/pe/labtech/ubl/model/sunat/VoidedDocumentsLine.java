@@ -28,7 +28,7 @@ import static pe.labtech.ubl.model.Namespaces.SAC;
 public class VoidedDocumentsLine {
 
     @XmlElement(namespace = CBC)
-    private Long LineID;
+    private String LineID;
     @XmlElement(namespace = CBC)
     private String DocumentTypeCode;
     @XmlElement(namespace = SAC)
@@ -42,11 +42,11 @@ public class VoidedDocumentsLine {
     public VoidedDocumentsLine() {
     }
 
-    public Long getLineID() {
+    public String getLineID() {
         return LineID;
     }
 
-    public void setLineID(Long LineID) {
+    public void setLineID(String LineID) {
         this.LineID = LineID;
     }
 

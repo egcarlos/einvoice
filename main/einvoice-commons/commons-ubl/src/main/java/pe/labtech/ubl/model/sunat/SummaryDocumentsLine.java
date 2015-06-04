@@ -37,7 +37,7 @@ import pe.labtech.ubl.model.basic.Amount;
 public class SummaryDocumentsLine {
 
     @XmlElement(namespace = CBC)
-    private Long LineID;
+    private String LineID;
     @XmlElement(namespace = CBC)
     private String DocumentTypeCode;
     @XmlElement(namespace = SAC)
@@ -64,11 +64,11 @@ public class SummaryDocumentsLine {
     public SummaryDocumentsLine() {
     }
 
-    public Long getLineID() {
+    public String getLineID() {
         return LineID;
     }
 
-    public void setLineID(Long LineID) {
+    public void setLineID(String LineID) {
         this.LineID = LineID;
     }
 
