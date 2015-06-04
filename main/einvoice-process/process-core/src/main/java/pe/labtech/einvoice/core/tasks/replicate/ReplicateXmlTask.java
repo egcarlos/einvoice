@@ -73,7 +73,7 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
     private String buildEntryName(Document document) {
         if (document.getDocumentType().startsWith("R")) {
             //caso de resumenes
-            return document.getClientId() + "-" + document.getDocumentNumber();
+            return buildClientId(document) + "-" + document.getDocumentNumber();
         }
         //otros documentos
         return MessageFormat.format(
