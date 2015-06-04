@@ -5,6 +5,7 @@
  */
 package pe.labtech.einvoice.core.tasks.tools;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -12,6 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -182,13 +184,33 @@ public class Tools {
 //</editor-fold>
 
     public static String serializeMessages(Response r) {
+        List<Map<String, String>> errors = new LinkedList<>();
         try {
-            return r.getResponseBody().getCommon().getMessages().stream()
-                    .map(m -> "[" + m.getStatusCode() + ":" + m.getStatusDescription() + "] " + m.getDetailCode() + ":" + m.getDetailDescription())
-                    .reduce(null, (a, b) -> a == null ? b : a + "\n" + b);
+            r.getResponseBody().getCommon().getMessages().stream().forEach(m -> errors.add(
+                    toMap(
+                            String.class, String.class,
+                            "statusCode", m.getStatusCode(),
+                            "statusDescription", m.getStatusDescription(),
+                            "detailCode", m.getDetailCode(),
+                            "detailDescription", m.getDetailDescription()
+                    )
+            ));
+
         } catch (RuntimeException ex) {
-            return "";
         }
+        try {
+            r.getResponseBody().getXml().getDocuments().get(0).getMessages().stream().forEach(m -> errors.add(
+                    toMap(
+                            String.class, String.class,
+                            "statusCode", m.getStatusCode(),
+                            "statusDescription", m.getStatusDescription(),
+                            "detailCode", m.getDetailCode(),
+                            "detailDescription", m.getDetailDescription()
+                    )
+            ));
+        } catch (RuntimeException ex) {
+        }
+        return new Gson().toJson(errors);
     }
 
     public static <K, V> Map<K, V> toMap(Class<K> k, Class<V> v, Object... values) {
