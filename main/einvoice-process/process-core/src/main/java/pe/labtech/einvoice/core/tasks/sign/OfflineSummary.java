@@ -153,7 +153,7 @@ public class OfflineSummary {
             Map<String, String> da = d.getAttributes().stream().collect(toMap(t -> t.getName(), t -> t.getValue()));
 
             builder.init(
-                    da.get("serieNumero"),
+                    da.get("resumenId"),
                     da.get("fechaEmisionComprobante"),
                     da.get("fechaGeneracionResumen"),
                     da.get("tipoDocumentoEmisor"),
@@ -196,7 +196,7 @@ public class OfflineSummary {
             Map<String, String> da = d.getAttributes().stream().collect(toMap(t -> t.getName(), t -> t.getValue()));
 
             builder.init(
-                    da.get("serieNumero"),
+                    da.get("resumenId"),
                     da.get("fechaEmisionComprobante"),
                     da.get("fechaGeneracionResumen"),
                     da.get("tipoDocumentoEmisor"),
