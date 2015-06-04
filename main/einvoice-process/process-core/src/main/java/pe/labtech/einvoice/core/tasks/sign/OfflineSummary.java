@@ -84,7 +84,11 @@ public class OfflineSummary {
 
     private String buildEntryName(Document document) {
         //document type and number
-        return document.getClientId() + "-" + document.getDocumentNumber();
+        return buildClientId(document) + "-" + document.getDocumentNumber();
+    }
+
+    private static String buildClientId(Document d) {
+        return d.getClientId().contains("-") ? d.getClientId().split("-")[1] : d.getClientId();
     }
 
     private DocumentInfo buildDocumentInfo(Document document) {

@@ -56,7 +56,7 @@ public class PushCancelRecurrent extends AbstractRecurrentTask<Long> {
     private Function<Long, List<DocumentResponse>> findTasksSingle;
 
     @Override
-    @Schedule(hour = "*/1", minute = "0", second = "0", persistent = false)
+    @Schedule(hour = "*", minute = "*/1", second = "0", persistent = false)
     public void timeout() {
         super.timeout();
     }
@@ -76,7 +76,7 @@ public class PushCancelRecurrent extends AbstractRecurrentTask<Long> {
             Map<String, String> responses = this.findTasksSingle.apply(t).stream()
                     .filter(r -> this.tryLockSingle.apply(r))
                     .filter(r -> ModelTools.mapResponseName(r.getName()) != null)
-                    .collect(Collectors.toMap(r -> ModelTools.mapDataName(r.getName()), r -> r.getValue()));
+                    .collect(Collectors.toMap(r -> ModelTools.mapResponseName(r.getName()), r -> r.getValue()));
             if (responses.isEmpty()) {
                 return;
             }

@@ -68,12 +68,19 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
         return d.getClientId().contains("-") ? d.getClientId().split("-")[1] : d.getClientId();
     }
 
+    //TODO extraer la logica de los ID a otra clase.
+    //TODO homologar las tablas de datos para aceptar un solo modo de operación
     private String buildEntryName(Document document) {
+        if (document.getDocumentType().startsWith("R")) {
+            //caso de resumenes
+            return document.getClientId() + "-" + document.getDocumentNumber();
+        }
+        //otros documentos
         return MessageFormat.format(
                 "{0}-{1}-{2}",
                 buildClientId(document),
                 document.getDocumentType(),
-                document.getDocumentNumber().startsWith("R") ? document.getDocumentNumber().substring(3) : document.getDocumentNumber()
+                document.getDocumentNumber()
         );
     }
 }
