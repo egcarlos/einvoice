@@ -86,13 +86,13 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
             if (responses.isEmpty()) {
                 return;
             }
-            if ("yes".equals(oss) && id.getSerieNumero().startsWith("B") && responses.containsKey("bl_estadoRegistro")) {
-                String status = responses.get("integratedStatus");
+            if ("yes".equals(oss) && id.getSerieNumero().startsWith("B") && responses.containsKey("bl_estadoProceso")) {
+                String status = responses.get("bl_estadoProceso");
                 status = status.replace("PE_02", "PE_09");
-                responses.put("integratedStatus", status);
+                responses.put("bl_estadoProceso", status);
             }
-            if ("yes".equals(dss) && responses.containsKey("bl_estadoProceso")) {
-                String s = responses.get("bl_estadoProceso");
+            if ("yes".equals(dss) && responses.containsKey("bl_estadoRegistro")) {
+                String s = responses.get("bl_estadoRegistro");
                 if ("NALP".contains(s)) {
                     //noop
                 } else if ("R".contains(s)) {
@@ -100,7 +100,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
                 } else {
                     s = "L";
                 }
-                responses.put("bl_estadoProceso", s);
+                responses.put("bl_estadoRegistro", s);
             }
             RecurrentHelper.sendResponses(pub, id, responses);
         };
