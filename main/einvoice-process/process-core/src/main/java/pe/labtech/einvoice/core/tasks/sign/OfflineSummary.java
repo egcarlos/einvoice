@@ -183,7 +183,8 @@ public class OfflineSummary {
                             .addTax("9999", "OTROS", "OTH", i.get("totalOtrosTributos"), null, null)
                             .addTax("1000", "IGV", "VAT", i.get("totalIgv"), null, null)
                             .compile()
-                    );
+                    )
+                    .forEach(i -> builder.addLine(i));
 
             return builder;
         });
