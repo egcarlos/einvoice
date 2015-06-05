@@ -83,7 +83,7 @@ public class BL_CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
     //TODO ajustar el tiempo de llamada luego de pruebas
     @Override
     @Schedule(hour = "2", minute = "0", second = "0", persistent = false)
-    protected void timeout() {
+    public void timeout() {
         super.timeout();
         try (BL_HandleFile hf = new BL_HandleFile()) {
             logger.info(() -> "tamanio de lsta.............." + lista.size());
