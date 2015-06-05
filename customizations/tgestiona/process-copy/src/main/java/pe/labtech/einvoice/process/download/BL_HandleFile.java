@@ -67,6 +67,7 @@ public class BL_HandleFile implements Closeable {
 //        String mm = c.get(Calendar.MONTH + 1) + "";
 //        String yy = c.get(Calendar.YEAR) + "";
         
+        
         Calendar c = Calendar.getInstance();
 	int dd = c.get(Calendar.DATE) ;
 	int mm = c.get(Calendar.MONTH) ;
@@ -75,10 +76,11 @@ public class BL_HandleFile implements Closeable {
 	String dia = dd <= 9 ? "0"+dd : dd+"";
 	String mes = (mm>= 0 || mm <= 8) ? "0"+(mm+1) : (mm+1)+"";
 	String anio = yy+"";
+        
 
         FileWriter fichero = null;
         BufferedWriter bw = null;
-        File f = new File("../downloads/" + dd + mm + yy + ".txt");
+        File f = new File("../downloads/" + dia + mes + anio + ".txt");
 
         try {
             fichero = new FileWriter(f.getAbsolutePath());
@@ -90,7 +92,10 @@ public class BL_HandleFile implements Closeable {
                         sendFilesToSftp((DocumentHeader) o);
                         generateFile((DocumentHeader) o, fichero, bw);
                     }
-                    
+                    else if(((DocumentHeader) o).getId().getSerieNumero().startsWith("B") ){
+                        sendFilesToSftp((DocumentHeader) o);
+                        generateFile((DocumentHeader) o, fichero, bw);
+                    }
                 } else if (o instanceof SummaryHeader) {
                     if(((SummaryHeader) o).getBl_cdr() != null){
                         sendFilesToSftp((SummaryHeader) o);
@@ -103,11 +108,10 @@ public class BL_HandleFile implements Closeable {
                         generateFile((CancelHeader) o, fichero, bw);
                     }
                 }
-
             }
             bw.close();
             sftp.put(new FileInputStream(f), f.getName());
-            f.delete();
+            f.delete();//prueba
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,17 +137,20 @@ public class BL_HandleFile implements Closeable {
             String fileName = " ";
 
             if (xmlUbl != null) {
-                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumentoEmisor() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + ".xml";
+                //fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumentoEmisor() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + ".xml";
+                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getResumenId() + ".xml";
                 buildFile(xmlUbl, fileName);
             }
 
             if (xmlCdr != null) {
-                fileName = "../downloads/R-" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumentoEmisor() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + ".xml";
+                //fileName = "../downloads/R-" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumentoEmisor() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + ".xml";
+                fileName = "../downloads/R-" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getResumenId() + ".xml";
                 buildFile(xmlCdr, fileName);
             }
 
             if (xmlBizlink != null) {
-                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumentoEmisor() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + "-B.xml";
+                //fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumentoEmisor() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + "-B.xml";
+                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getResumenId() + "-B.xml";
                 buildFile(xmlBizlink, fileName);
             }
         } catch (Exception e) {
@@ -156,7 +163,8 @@ public class BL_HandleFile implements Closeable {
         StringBuilder s = new StringBuilder("");
 
         if (dh.getBl_xml() != null) {
-            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumentoEmisor()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append("-B.xml");
+            //s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumentoEmisor()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append("-B.xml");
+            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getResumenId()).append("-B.xml");
         } else {
             s.append(" ");
         }
@@ -164,7 +172,8 @@ public class BL_HandleFile implements Closeable {
         s.append("|");
 
         if (dh.getBl_xmlubl() != null) {
-            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumentoEmisor()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append(".xml");
+            //s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumentoEmisor()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append(".xml");
+            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getResumenId()).append(".xml");
         } else {
             s.append(" ");
         }
@@ -172,7 +181,8 @@ public class BL_HandleFile implements Closeable {
         s.append("|");
 
         if (dh.getBl_cdr() != null) {
-            s.append("R-").append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumentoEmisor()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append(".xml");
+            //s.append("R-").append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumentoEmisor()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append(".xml");
+            s.append("R-").append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getResumenId()).append(".xml");
         } else {
             s.append(" ");
         }
@@ -183,8 +193,10 @@ public class BL_HandleFile implements Closeable {
 
         s.append("|");
 
+        s.append(dh.getId().getResumenId());
+        s.append("|").append(dh.getFechaEmisionComprobante());
         //s.append(dh.getCodigoAuxiliar40_3()).append("|").append(dh.getFechaEmisionComprobante());
-        s.append(" ").append("|").append(dh.getFechaEmisionComprobante());
+        //s.append(" ").append("|").append(dh.getFechaEmisionComprobante());
 
         bw.write(s.append("\r\n").toString());
     }
@@ -199,17 +211,20 @@ public class BL_HandleFile implements Closeable {
             String fileName = " ";
 
             if (xmlUbl != null) {
-                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getResumenTipo() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + ".xml";
+                //fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getResumenTipo() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + ".xml";
+                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getResumenId() + ".xml";
                 buildFile(xmlUbl, fileName);
             }
 
             if (xmlCdr != null) {
-                fileName = "../downloads/R-" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getResumenTipo() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + ".xml";
+                //fileName = "../downloads/R-" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getResumenTipo() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + ".xml";
+                fileName = "../downloads/R-" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getResumenId() + ".xml";
                 buildFile(xmlCdr, fileName);
             }
 
             if (xmlBizlink != null) {
-                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getResumenTipo() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + "-B.xml";
+                //fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getResumenTipo() + "-" + dh.getFechaEmisionComprobante() + "-" + dh.getId().getResumenId() + "-B.xml";
+                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getResumenId() + "-B.xml";
                 buildFile(xmlBizlink, fileName);
             }
         } catch (Exception e) {
@@ -222,7 +237,8 @@ public class BL_HandleFile implements Closeable {
         StringBuilder s = new StringBuilder("");
 
         if (dh.getBl_xml() != null) {
-            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getResumenTipo()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append("-B.xml");
+            //s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getResumenTipo()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append("-B.xml");
+            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getResumenId()).append("-B.xml");
         } else {
             s.append(" ");
         }
@@ -230,7 +246,8 @@ public class BL_HandleFile implements Closeable {
         s.append("|");
 
         if (dh.getBl_xmlubl() != null) {
-            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getResumenTipo()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append(".xml");
+            //s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getResumenTipo()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append(".xml");
+            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getResumenId()).append(".xml");
         } else {
             s.append(" ");
         }
@@ -238,7 +255,8 @@ public class BL_HandleFile implements Closeable {
         s.append("|");
 
         if (dh.getBl_cdr() != null) {
-            s.append("R-").append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getResumenTipo()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append(".xml");
+            //s.append("R-").append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getResumenTipo()).append("-").append(dh.getFechaEmisionComprobante()).append("-").append(dh.getId().getResumenId()).append(".xml");
+            s.append("R-").append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getResumenId()).append(".xml");
         } else {
             s.append(" ");
         }
@@ -249,8 +267,9 @@ public class BL_HandleFile implements Closeable {
 
         s.append("|");
 
-        //s.append(dh.getCodigoAuxiliar40_3()).append("|").append(dh.getFechaEmisionComprobante());
-        s.append(" ").append("|").append(dh.getFechaEmisionComprobante());
+        s.append(dh.getId().getResumenId());
+        s.append("|").append(dh.getFechaEmisionComprobante());
+        //s.append(" ").append("|").append(dh.getFechaEmisionComprobante());
 
         bw.write(s.append("\r\n").toString());
     }
@@ -264,7 +283,7 @@ public class BL_HandleFile implements Closeable {
         try {
             String fileName = " ";
 
-            if (xmlUbl != null) {
+            if (xmlUbl != null && dh.getId().getSerieNumero().startsWith("F")) {
                 fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumento() + "-" + dh.getId().getSerieNumero() + ".xml";
                 buildFile(xmlUbl, fileName);
             }
@@ -275,7 +294,7 @@ public class BL_HandleFile implements Closeable {
             }
 
             if (xmlCdr != null) {
-                fileName = "../downloads/R" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumento() + "-" + dh.getId().getSerieNumero() + ".xml";
+                fileName = "../downloads/R-" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumento() + "-" + dh.getId().getSerieNumero() + ".xml";
                 buildFile(xmlCdr, fileName);
             }
 
@@ -300,7 +319,7 @@ public class BL_HandleFile implements Closeable {
 
         s.append("|");
 
-        if (dh.getBl_xmlubl() != null) {
+        if (dh.getBl_xmlubl() != null && dh.getId().getSerieNumero().startsWith("F")) {
             s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumento()).append("-").append(dh.getId().getSerieNumero()).append(".xml");
         } else {
             s.append(" ");
@@ -309,7 +328,7 @@ public class BL_HandleFile implements Closeable {
         s.append("|");
 
         if (dh.getBl_cdr() != null) {
-            s.append("R").append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumento()).append("-").append(dh.getId().getSerieNumero()).append(".xml");
+            s.append("R-").append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumento()).append("-").append(dh.getId().getSerieNumero()).append(".xml");
         } else {
             s.append(" ");
         }
@@ -317,14 +336,14 @@ public class BL_HandleFile implements Closeable {
         s.append("|");
 
         if (dh.getBl_pdf() != null) {
-            s.append(dh.getBl_urlpdf());
+            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumento()).append("-").append(dh.getId().getSerieNumero()).append(".pdf");
         } else {
             s.append(" ");
         }
 
         s.append("|");
 
-        s.append(dh.getCodigoAuxiliar40_3()).append("|").append(dh.getFechaEmision());
+        s.append(dh.getTextoAuxiliar40_3()).append("|").append(dh.getFechaEmision());
 
         //logger.log(Level.WARNING, "Validando linea de archivo............."+s.toString());
         bw.write(s.append("\r\n").toString());
@@ -338,6 +357,7 @@ public class BL_HandleFile implements Closeable {
             out.flush();
             out.close();
             sftp.put(new FileInputStream(file), file.getName());
+            file.delete();
         } catch (Exception e) {
             e.printStackTrace();
         }

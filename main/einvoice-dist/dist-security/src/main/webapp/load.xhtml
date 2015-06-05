@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>jks-loader</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <h:outputText>password loader</h:outputText>
+        <h:form>
+            <h:outputText value="use this form to load a password for a protected entity" />
+            <h:panelGrid columns="2">
+                <h:outputText value="reference id" />
+                <h:inputText value="#{securityManager.entityId}" />
+                <h:outputText value="password" />
+                <h:inputSecret value="#{securityManager.password}" />
+            </h:panelGrid>
+            <h:commandButton value="load client security" action="#{securityManager.loadEntity()}" />
+            <h:commandButton value="load client security" action="#{securityManager.loadJKS()}" />
+        </h:form>
+    </h:body>
+</html>

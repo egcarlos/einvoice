@@ -45,6 +45,12 @@ public class PushCancelRecurrent extends AbstractRecurrentTask<Long> {
     @Resource(lookup = "java:global/einvoice/config/source")
     private String source;
 
+    @Resource(lookup = "java:global/einvoice/config/oss")
+    private String oss;
+
+    @Resource(lookup = "java:global/einvoice/config/dss")
+    private String dss;
+
     /**
      * Bloquear una respuesta de documento para ser replicada
      */
@@ -79,6 +85,17 @@ public class PushCancelRecurrent extends AbstractRecurrentTask<Long> {
                     .collect(Collectors.toMap(r -> ModelTools.mapResponseName(r.getName()), r -> r.getValue()));
             if (responses.isEmpty()) {
                 return;
+            }
+            if ("yes".equals(dss) && responses.containsKey("bl_estadoRegistro")) {
+                String s = responses.get("bl_estadoRegistro");
+                if ("NALP".contains(s)) {
+                    //noop
+                } else if ("R".contains(s)) {
+                    s = "P";
+                } else {
+                    s = "L";
+                }
+                responses.put("bl_estadoRegistro", s);
             }
             RecurrentHelper.sendResponses(sum, id, responses);
         };

@@ -7,17 +7,17 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>einvoice-dist-single-core</artifactId>
+    <artifactId>einvoice-dist-single-downloadcopy</artifactId>
     <packaging>ear</packaging>
 
-    <name>einvoice-dist-single-core</name>
+    <name>einvoice-dist-single-downloadcopy</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
   
     <build>
-        <finalName>einvoice-single-core</finalName>
+        <finalName>einvoice-dist-single-downloadcopy</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
@@ -41,48 +41,19 @@
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
                     <skinnyWars>true</skinnyWars>
-                    <modules>
-                        <webModule>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>einvoice-dist-console</artifactId>
-                            <contextRoot>/einvoice/console</contextRoot>
-                        </webModule>
-                        <webModule>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>einvoice-dist-security</artifactId>
-                            <contextRoot>/einvoice/security</contextRoot>
-                        </webModule>
-                    </modules>
                 </configuration>
             </plugin>
         </plugins>
     </build>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>einvoice-dist-console</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>einvoice-dist-security</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-        </dependency>
-        <dependency>
             <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-signonline</artifactId>
+            <artifactId>einvoice-process-download</artifactId>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-declare</artifactId>
-            <type>ejb</type>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-sync</artifactId>
+            <artifactId>einvoice-process-copy</artifactId>
             <type>ejb</type>
         </dependency>
     </dependencies>

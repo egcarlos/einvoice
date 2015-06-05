@@ -9,7 +9,6 @@ import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import org.eclipse.persistence.oxm.annotations.XmlCDATA;
 import static pe.labtech.ubl.model.Namespaces.CBC;
 import static pe.labtech.ubl.model.Namespaces.SAC;
 
@@ -23,7 +22,7 @@ import static pe.labtech.ubl.model.Namespaces.SAC;
     "DocumentTypeCode",
     "DocumentSerialID",
     "DocumentNumberID",
-    "VoidedReasonDescription"
+    "VoidReasonDescription"
 })
 public class VoidedDocumentsLine {
 
@@ -37,7 +36,7 @@ public class VoidedDocumentsLine {
     private String DocumentNumberID;
     @XmlElement(namespace = SAC)
 //    @XmlCDATA
-    private String VoidedReasonDescription;
+    private String VoidReasonDescription;
 
     public VoidedDocumentsLine() {
     }
@@ -74,12 +73,12 @@ public class VoidedDocumentsLine {
         this.DocumentNumberID = DocumentNumberID;
     }
 
-    public String getVoidedReasonDescription() {
-        return VoidedReasonDescription;
+    public String getVoidReasonDescription() {
+        return VoidReasonDescription;
     }
 
-    public void setVoidedReasonDescription(String VoidedReasonDescription) {
-        this.VoidedReasonDescription = VoidedReasonDescription;
+    public void setVoidReasonDescription(String VoidReasonDescription) {
+        this.VoidReasonDescription = VoidReasonDescription;
     }
 
 }

@@ -56,5 +56,15 @@
             <artifactId>einvoice-process-replicatesummary</artifactId>
             <type>ejb</type>
         </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-replicatedata</artifactId>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>pe.labtech.einvoice.process</groupId>
+            <artifactId>einvoice-process-replicatedatasummary</artifactId>
+            <type>ejb</type>
+        </dependency>
     </dependencies>
 </project>

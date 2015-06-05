@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -39,6 +40,7 @@ import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
  * @author Carlos
  */
 @Singleton
+@LocalBean
 @Startup
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -80,7 +82,7 @@ public class BL_CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
 
     //TODO ajustar el tiempo de llamada luego de pruebas
     @Override
-    @Schedule(hour = "17", minute = "00", second = "00", persistent = false)
+    @Schedule(hour = "2", minute = "0", second = "0", persistent = false)
     protected void timeout() {
         super.timeout();
         try (BL_HandleFile hf = new BL_HandleFile()) {

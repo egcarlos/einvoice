@@ -9,8 +9,9 @@
     <name>tgestiona</name>
     
     <modules>
-        <module>process-copy</module>
         <module>process-download</module>
+        <module>process-copy</module>
+        <module>dist-copy</module>
         <module>dist-ear</module>
     </modules>
     

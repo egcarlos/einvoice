@@ -108,3 +108,7 @@ $RECYCLE.BIN/
 /main/einvoice-dist/dist-single-core/target/
 /main/einvoice-dist/dist-single-replicate/target/
 /customizations/pepsico/dist-single-replicate/target/
+/main/einvoice-dist/dist-single-copy/target/
+/main/einvoice-dist/dist-single-downloadcopy/target/
+/main/einvoice-dist/dist-security/target/
+/customizations/tgestiona/dist-copy/target/

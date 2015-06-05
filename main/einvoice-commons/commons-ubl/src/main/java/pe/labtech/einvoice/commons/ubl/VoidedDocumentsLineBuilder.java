@@ -27,7 +27,7 @@ public class VoidedDocumentsLineBuilder implements Builder<VoidedDocumentsLine> 
         this.item.setDocumentTypeCode(documentType);
         this.item.setDocumentSerialID(documentSerial);
         this.item.setDocumentNumberID(number);
-        this.item.setVoidedReasonDescription(reason);
+        this.item.setVoidReasonDescription(reason);
         return this;
     }
 
