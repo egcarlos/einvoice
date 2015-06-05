@@ -42,7 +42,7 @@ public class OnlineSummary {
         return signOnlineOrSync(db, loader, invoker, document, request);
     }
 
-    private String buildSignSummaryCommand(Long id) {
+    public String buildSignSummaryCommand(Long id) {
         pe.labtech.einvoice.core.ws.model.Summary target = new pe.labtech.einvoice.core.ws.model.Summary();
         Document entity = loader.loadForWork(id, source -> {
             map(source, () -> target, () -> new SummaryItem(), (d, il) -> d.setItems(il));

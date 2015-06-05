@@ -13,11 +13,13 @@ import static pe.labtech.einvoice.commons.model.DocumentStatus.COMPLETED;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.ERROR;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.NEEDED;
 import static pe.labtech.einvoice.commons.model.DocumentStatus.RETRY;
+import pe.labtech.einvoice.commons.model.DocumentStep;
 import static pe.labtech.einvoice.commons.model.DocumentStep.DECLARE;
 import static pe.labtech.einvoice.commons.model.DocumentStep.FINAL;
 import static pe.labtech.einvoice.commons.model.DocumentStep.REPLICATE;
 import static pe.labtech.einvoice.commons.model.DocumentStep.SIGN;
 import static pe.labtech.einvoice.commons.model.DocumentStep.SYNC;
+import pe.labtech.einvoice.commons.model.InvoiceType;
 import pe.labtech.einvoice.commons.xmlsecurity.DigitalSign;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
@@ -52,7 +54,10 @@ public class ServiceCommons {
     }
 
     public static DocumentInfo signOnlineOrSync(DatabaseManager db, DocumentLoaderLocal loader, EBizGenericInvoker invoker, Document document, String request) {
-        Tools.saveRequest(db, document, request);
+        //evita guardar el comando como request cuando se esta haciendo otros procesos
+        if (DocumentStep.SIGN.equals(document.getStep())) {
+            Tools.saveRequest(db, document, request);
+        }
         try {
             loader.createEvent(document, document.getStep() + "_REQUEST", request);
             String response = invoker.invoke(request);
@@ -81,7 +86,8 @@ public class ServiceCommons {
     }
 
     public static DocumentInfo replicateXml(DatabaseManager db, DocumentLoaderLocal loader, EBizGenericInvoker invoker, Document document, String request, byte[] zip) {
-        Tools.saveRequest(db, document, request);
+        //command should be queried on the trace table
+        //Tools.saveRequest(db, document, request);
         try {
             //TODO mejorar el mensaje del log
             loader.createEvent(document, "REPLICATE_XML_REQUEST", request);

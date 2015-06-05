@@ -43,7 +43,7 @@ public class OnlineInvoice {
         return signOnlineOrSync(db, loader, invoker, document, request);
     }
 
-    private String buildSignCommand(Long id) {
+    public String buildSignCommand(Long id) {
         pe.labtech.einvoice.core.ws.model.Document target = new pe.labtech.einvoice.core.ws.model.Document();
         Document entity = loader.loadForWork(id, source -> {
             map(source, () -> target, DocumentItem::new, (d, il) -> d.setItems(il));

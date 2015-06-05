@@ -40,6 +40,7 @@ import static pe.labtech.einvoice.core.tasks.tools.SecurityCommons.extractCertif
 import static pe.labtech.einvoice.core.tasks.tools.SecurityCommons.extractKey;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import static pe.labtech.einvoice.core.tasks.tools.ServiceCommons.*;
+import pe.labtech.einvoice.core.tasks.tools.Tools;
 import static pe.labtech.einvoice.core.tasks.tools.Tools.buildNumber;
 
 /**
@@ -56,6 +57,10 @@ public class OfflineInvoice {
 
     @EJB
     private PrivateDatabaseManagerLocal prv;
+
+    //personalizacion agregada porque antonio la para cagando
+    @EJB
+    private OnlineInvoice online;
 
     public DocumentInfo handle(Document document) {
 
@@ -96,6 +101,7 @@ public class OfflineInvoice {
         //compress data
         byte[] compressedData = ZipTools.compress(entryName, signedDocument);
 
+        //create the zipped
         prv.handle(e -> {
             final DocumentData data = new DocumentData();
             data.setDocument(document);
@@ -106,6 +112,11 @@ public class OfflineInvoice {
             data.setReplicate(Boolean.FALSE);
             e.persist(data);
         });
+
+        //create the fake xml request
+        //personalizacion agregada porque antonio la para cagando
+        Tools.saveRequest(prv, document, online.buildSignCommand(document.getId()));
+
         //create the fake response
         DocumentInfo di = synthDocumentInfo(xml);
 

@@ -40,6 +40,7 @@ import static pe.labtech.einvoice.core.tasks.tools.SecurityCommons.extractCertif
 import static pe.labtech.einvoice.core.tasks.tools.SecurityCommons.extractKey;
 import static pe.labtech.einvoice.core.tasks.tools.ServiceCommons.DIGISIGN;
 import static pe.labtech.einvoice.core.tasks.tools.ServiceCommons.synthDocumentInfo;
+import pe.labtech.einvoice.core.tasks.tools.Tools;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 
 /**
@@ -56,6 +57,9 @@ public class OfflineSummary {
 
     @EJB
     private PrivateDatabaseManagerLocal prv;
+
+    @EJB
+    private OnlineSummary online;
 
     public DocumentInfo handle(Document document) {
 
@@ -134,6 +138,11 @@ public class OfflineSummary {
             data.setReplicate(Boolean.FALSE);
             e.persist(data);
         });
+
+        //create the fake xml request
+        //personalizacion agregada porque antonio la para cagando
+        Tools.saveRequest(prv, document, online.buildSignSummaryCommand(document.getId()));
+
         //create the fake response
         DocumentInfo di = synthDocumentInfo(xml);
 
