@@ -16,8 +16,11 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import pe.labtech.einvoice.commons.entity.ValueHolder;
+import pe.labtech.einvoice.commons.model.DocumentStatus;
+import pe.labtech.einvoice.commons.model.DocumentStep;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentAttribute;
+import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
 import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
@@ -48,8 +51,8 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         Document document = mapHeader(h);
         List<Item> items = mapItems(h, document);
         document.setItems(items);
-        document.setStep("PULL");
-        document.setStatus("LOADED");
+        document.setStep(DocumentStep.SIGN);
+        document.setStatus(DocumentStatus.NEEDED);
         privateDB.handle(e -> e.persist(document));
     }
 
@@ -131,6 +134,43 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 new DocumentLegend("2000", 1l, h.getCley3())
         )
                 .stream()
+                .filter(a -> updateValue(a) != null)
+                .map(a -> {
+                    a.setDocument(d);
+                    return a;
+                })
+                .collect(Collectors.toList());
+
+        List<DocumentAuxiliar> dx = Arrays.asList(
+                new DocumentAuxiliar("9103", "40", 1l, h.getCaux1()),
+                new DocumentAuxiliar("9064", "40", 2l, h.getCaux2()),
+                new DocumentAuxiliar("9021", "40", 3l, h.getCaux3()),
+                new DocumentAuxiliar("9024", "40", 4l, h.getCaux4()),
+                new DocumentAuxiliar("", "40", 5l, h.getCaux5()),
+                new DocumentAuxiliar("9018", "40", 6l, h.getCaux6()),
+                new DocumentAuxiliar("9019", "40", 7l, h.getCaux7()),
+                new DocumentAuxiliar("9020", "40", 8l, h.getCaux8()),
+                new DocumentAuxiliar("9025", "40", 9l, h.getCaux9()),
+                new DocumentAuxiliar("9041", "40", 10l, h.getCaux10()),
+                new DocumentAuxiliar("9043", "40", 11l, h.getCaux11()),
+                new DocumentAuxiliar("9143", "40", 12l, h.getCaux12()),
+                new DocumentAuxiliar("9144", "40", 13l, h.getCaux13()),
+                new DocumentAuxiliar("9107", "40", 14l, h.getCaux14()),
+                new DocumentAuxiliar("9022", "40", 15l, h.getCaux15()),
+                new DocumentAuxiliar("9023", "40", 16l, h.getCaux16()),
+                new DocumentAuxiliar("9152", "40", 17l, h.getCaux17()),
+                new DocumentAuxiliar("9027", "40", 18l, h.getCaux18()),
+                new DocumentAuxiliar("9153", "40", 19l, h.getCaux19()),
+                new DocumentAuxiliar("9154", "40", 20l, h.getCaux20()),
+                new DocumentAuxiliar("", "100", 1l, h.getCaux21()),
+                new DocumentAuxiliar("", "100", 2l, h.getCaux22()),
+                new DocumentAuxiliar("9146", "100", 3l, h.getCaux23()),
+                new DocumentAuxiliar("9075", "100", 4l, h.getCaux24()),
+                new DocumentAuxiliar("9151", "100", 5l, h.getCaux25()),
+                new DocumentAuxiliar("", "100", 6l, h.getCaux26())
+        )
+                .stream()
+                .filter(a -> !a.getCode().isEmpty())
                 .filter(a -> updateValue(a) != null)
                 .map(a -> {
                     a.setDocument(d);
