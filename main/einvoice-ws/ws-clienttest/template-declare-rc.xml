@@ -1,0 +1,8 @@
+<DeclareCmd>
+    <parametros />
+    <parameter value="20501827623" name="idEmisor" />
+    <parameter value="RC"          name="tipoDocumento" />
+    <parameter value="RC-20150605" name="serieGrupoDocumento" />
+    <parameter value="007"         name="numeroCorrelativoInicio" />
+    <parameter value="007"         name="numeroCorrelativoFin" />
+</DeclareCmd>

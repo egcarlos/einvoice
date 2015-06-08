@@ -12,6 +12,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.Key;
 import java.security.KeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -49,6 +50,10 @@ import pe.labtech.ubl.model.Namespaces;
  */
 public class DigitalSign {
 
+    static {
+        org.apache.xml.security.Init.init();
+    }
+
     /**
      * Signs the document using the specifications from sunat.
      *
@@ -57,10 +62,12 @@ public class DigitalSign {
      * @param certificate
      */
     public void sign(Document document, Key key, X509Certificate certificate) {
-        Node targetNode = locateTargetNode(document);
-        applysign(key, targetNode, certificate);
+        new PortalSign().sign(document, (PrivateKey) key, certificate);
+
+//        Node targetNode = locateTargetNode(document);
+//        applysign(key, targetNode, certificate);
         //removed since it seems to interfere with signature validation
-        this.fixFormat(document);
+        //this.fixFormat(document);
     }
 
     /**
