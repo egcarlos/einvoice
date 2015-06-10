@@ -47,7 +47,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
     private Function<Long, List<DocumentResponse>> findTasksSingle;
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
+    @Schedule(hour = "*", minute = "*", second = "10,30,50", persistent = false)
     public void timeout() {
         super.timeout();
     }
@@ -111,7 +111,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
         String dn = d.getDocumentNumber();
         List<DocumentHeaderPK> pks = pub.seek(e -> e
                 .createQuery(
-                        "SELECT O FROM DocumentHeader O "
+                        "SELECT O.headerPK FROM DocumentHeader O "
                         + "WHERE O.ctipdocumentoemisor = :it "
                         + "AND O.cdocumentoemisor = :ii "
                         + "AND O.ctipcomprobante = :dt "

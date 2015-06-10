@@ -57,7 +57,7 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
+    @Schedule(hour = "*", minute = "*", second = "0,20,40", persistent = false)
     public void timeout() {
         super.timeout();
     }
