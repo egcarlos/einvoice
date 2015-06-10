@@ -45,7 +45,6 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
-    @Asynchronous
     public void handle(DocumentHeaderPK t) {
         DocumentHeader h = publicDB.seek(e -> e.find(DocumentHeader.class, t));
         Document document = mapHeader(h);
@@ -180,6 +179,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
         d.setAttributes(da);
         d.setLegends(dl);
+        d.setAuxiliars(dx);
 
         d.setItems(
                 mapItems(h, d)

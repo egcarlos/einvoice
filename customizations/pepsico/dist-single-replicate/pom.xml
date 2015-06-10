@@ -53,10 +53,10 @@
             <version>${project.version}</version>
             <type>ejb</type>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-replicatesummary</artifactId>
             <type>ejb</type>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>
