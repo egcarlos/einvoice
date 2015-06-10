@@ -52,6 +52,11 @@
                             <artifactId>einvoice-dist-console</artifactId>
                             <contextRoot>/einvoice/console</contextRoot>
                         </webModule>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>einvoice-dist-security</artifactId>
+                            <contextRoot>/einvoice/security</contextRoot>
+                        </webModule>
                     </modules>
                 </configuration>
             </plugin>
@@ -94,6 +99,12 @@
             <groupId>pe.labtech.einvoice.process</groupId>
             <artifactId>einvoice-process-sync</artifactId>
             <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>einvoice-dist-security</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
         </dependency>
     </dependencies>
 </project>

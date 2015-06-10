@@ -18,7 +18,7 @@
     </properties>
   
     <build>
-        <finalName>einvoice-single-replicate</finalName>
+        <finalName>pepsico-single-replicate</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
