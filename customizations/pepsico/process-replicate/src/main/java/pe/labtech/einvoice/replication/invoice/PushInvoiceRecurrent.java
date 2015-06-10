@@ -72,7 +72,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
                     .collect(
                             Collectors.toMap(
                                     r -> ModelTools.mapResponseName(r.getName()),
-                                    r -> "cestado".equals(r.getValue()) ? r.getValue().charAt(0) : r.getValue()
+                                    r -> "recordStatus".equals(r.getName()) ? r.getValue().charAt(0) : r.getValue()
                             )
                     );
             if (responses.isEmpty()) {
