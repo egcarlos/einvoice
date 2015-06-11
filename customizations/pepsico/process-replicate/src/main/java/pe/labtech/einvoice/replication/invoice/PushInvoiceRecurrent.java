@@ -18,7 +18,6 @@ import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import pe.labtech.einvoice.commons.model.DatabaseManager;
-import pe.labtech.einvoice.commons.model.ModelTools;
 import pe.labtech.einvoice.commons.model.RecurrentHelper;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.core.entity.Document;
@@ -71,7 +70,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
                     .filter(r -> mapNamePepsico(r) != null)
                     .collect(
                             Collectors.toMap(
-                                    r -> ModelTools.mapResponseName(r.getName()),
+                                    r -> mapNamePepsico(r),
                                     r -> r.getValue()
                             )
                     );
