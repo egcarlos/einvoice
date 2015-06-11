@@ -68,11 +68,11 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
             DocumentHeaderPK id = createId(pub, prv.seek(e1 -> e1.find(Document.class, t)));
             Map<String, Object> responses = this.findTasksSingle.apply(t).stream()
                     .filter(r -> this.tryLockSingle.apply(r))
-                    .filter(r -> mapName(r) != null)
+                    .filter(r -> mapNamePepsico(r) != null)
                     .collect(
                             Collectors.toMap(
                                     r -> ModelTools.mapResponseName(r.getName()),
-                                    r -> "recordStatus".equals(r.getName()) ? r.getValue().charAt(0) : r.getValue()
+                                    r -> r.getValue()
                             )
                     );
             if (responses.isEmpty()) {
@@ -82,7 +82,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
         });
     }
 
-    private String mapName(DocumentResponse t) {
+    private String mapNamePepsico(DocumentResponse t) {
         switch (t.getName()) {
             case "hashCode":
                 return "lgFirmaHash";

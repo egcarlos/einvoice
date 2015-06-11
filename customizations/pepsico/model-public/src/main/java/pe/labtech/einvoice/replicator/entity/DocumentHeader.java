@@ -25,7 +25,7 @@ public class DocumentHeader implements Serializable {
     @EmbeddedId
     protected DocumentHeaderPK headerPK;
     @Column(name = "CTIPDOCUMENTOEMISOR")
-    private Character ctipdocumentoemisor;
+    private String ctipdocumentoemisor;
     @Size(max = 11)
     @Column(name = "CDOCUMENTOEMISOR")
     private String cdocumentoemisor;
@@ -75,7 +75,7 @@ public class DocumentHeader implements Serializable {
     @Column(name = "CCOMPROBANTEAFECTO")
     private String ccomprobanteafecto;
     @Column(name = "CTIPDOCUMENTOUSUARIO")
-    private Character ctipdocumentousuario;
+    private String ctipdocumentousuario;
     @Size(max = 15)
     @Column(name = "CDOCUMENTOUSUARIO")
     private String cdocumentousuario;
@@ -158,7 +158,7 @@ public class DocumentHeader implements Serializable {
     @Column(name = "CBONIFICACION")
     private BigDecimal cbonificacion;
     @Column(name = "CHABILITADO")
-    private Character chabilitado;
+    private String chabilitado;
     @Size(max = 100)
     @Column(name = "CLEY1")
     private String cley1;
@@ -277,7 +277,7 @@ public class DocumentHeader implements Serializable {
     @Column(name = "CAUX36")
     private String caux36;
     @Column(name = "CESTADO")
-    private Character cestado;
+    private String cestado;
     @Size(max = 100)
     @Column(name = "CNUMEROAUTORIZACION")
     private String cnumeroautorizacion;
@@ -294,7 +294,7 @@ public class DocumentHeader implements Serializable {
     @Column(name = "CRUTAPDF")
     private String crutapdf;
     @Column(name = "LG_PROCESS_STATUS")
-    private Character lgProcessStatus;
+    private String lgProcessStatus;
     @Size(max = 20)
     @Column(name = "LG_RECORD_STATUS")
     private String lgRecordStatus;
@@ -330,11 +330,11 @@ public class DocumentHeader implements Serializable {
         this.headerPK = headerPK;
     }
 
-    public Character getCtipdocumentoemisor() {
+    public String getCtipdocumentoemisor() {
         return ctipdocumentoemisor;
     }
 
-    public void setCtipdocumentoemisor(Character ctipdocumentoemisor) {
+    public void setCtipdocumentoemisor(String ctipdocumentoemisor) {
         this.ctipdocumentoemisor = ctipdocumentoemisor;
     }
 
@@ -466,11 +466,11 @@ public class DocumentHeader implements Serializable {
         this.ccomprobanteafecto = ccomprobanteafecto;
     }
 
-    public Character getCtipdocumentousuario() {
+    public String getCtipdocumentousuario() {
         return ctipdocumentousuario;
     }
 
-    public void setCtipdocumentousuario(Character ctipdocumentousuario) {
+    public void setCtipdocumentousuario(String ctipdocumentousuario) {
         this.ctipdocumentousuario = ctipdocumentousuario;
     }
 
@@ -746,11 +746,11 @@ public class DocumentHeader implements Serializable {
         this.cbonificacion = cbonificacion;
     }
 
-    public Character getChabilitado() {
+    public String getChabilitado() {
         return chabilitado;
     }
 
-    public void setChabilitado(Character chabilitado) {
+    public void setChabilitado(String chabilitado) {
         this.chabilitado = chabilitado;
     }
 
@@ -1066,11 +1066,11 @@ public class DocumentHeader implements Serializable {
         this.caux36 = caux36;
     }
 
-    public Character getCestado() {
+    public String getCestado() {
         return cestado;
     }
 
-    public void setCestado(Character cestado) {
+    public void setCestado(String cestado) {
         this.cestado = cestado;
     }
 
@@ -1114,11 +1114,11 @@ public class DocumentHeader implements Serializable {
         this.crutapdf = crutapdf;
     }
 
-    public Character getLgProcessStatus() {
+    public String getLgProcessStatus() {
         return lgProcessStatus;
     }
 
-    public void setLgProcessStatus(Character lgProcessStatus) {
+    public void setLgProcessStatus(String lgProcessStatus) {
         this.lgProcessStatus = lgProcessStatus;
     }
 

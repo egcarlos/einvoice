@@ -40,15 +40,15 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
                 e -> e.createQuery(
                         "SELECT o.headerPK from DocumentHeader o where o.cestado = :estado",
                         DocumentHeaderPK.class
-                ).setParameter("estado", 'A')
+                ).setParameter("estado", "A")
                 .getResultList()
         );
         this.tryLock = t -> db.seek(
                 e -> e.createQuery(
                         "UPDATE DocumentHeader o SET o.cestado = :nuevoEstado where o.cestado = :viejoEstado and o.headerPK = :id"
                 )
-                .setParameter("nuevoEstado", 'L')
-                .setParameter("viejoEstado", 'A')
+                .setParameter("nuevoEstado", "L")
+                .setParameter("viejoEstado", "A")
                 .setParameter("id", t)
                 .executeUpdate() == 1
         );
