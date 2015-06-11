@@ -289,8 +289,17 @@ public class BL_HandleFile implements Closeable {
             }
 
             if (xmlPdf != null) {
-                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumento() + "-" + dh.getId().getSerieNumero() + ".pdf";
-                buildFile(xmlPdf, fileName);
+//                fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumento() + "-" + dh.getId().getSerieNumero() + ".pdf";
+//                buildFile(xmlPdf, fileName);
+                if(dh.getId().getTipoDocumento().equals("03") && !dh.getId().getSerieNumero().startsWith("B") && (dh.getBl_estadoProceso().contains("PE_02") || dh.getBl_estadoProceso().contains("PE_09"))){
+                   fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumento() + "-" + dh.getId().getSerieNumero() + ".pdf";
+                   buildFile(xmlPdf, fileName);
+                }
+                else
+                if(!dh.getId().getTipoDocumento().equals("03")) {
+                    fileName = "../downloads/" + dh.getId().getNumeroDocumentoEmisor() + "-" + dh.getId().getTipoDocumento() + "-" + dh.getId().getSerieNumero() + ".pdf";
+                    buildFile(xmlPdf, fileName);
+                }
             }
 
             if (xmlCdr != null) {
@@ -336,7 +345,15 @@ public class BL_HandleFile implements Closeable {
         s.append("|");
 
         if (dh.getBl_pdf() != null) {
-            s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumento()).append("-").append(dh.getId().getSerieNumero()).append(".pdf");
+            //s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumento()).append("-").append(dh.getId().getSerieNumero()).append(".pdf");
+            if(dh.getId().getTipoDocumento().equals("03") && dh.getId().getSerieNumero().startsWith("B") && (dh.getBl_estadoProceso().contains("PE_02") || dh.getBl_estadoProceso().contains("PE_09"))){
+                s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumento()).append("-").append(dh.getId().getSerieNumero()).append(".pdf");
+            }
+            else
+                 if(!dh.getId().getTipoDocumento().equals("03") )
+            {
+                s.append(dh.getId().getNumeroDocumentoEmisor()).append("-").append(dh.getId().getTipoDocumento()).append("-").append(dh.getId().getSerieNumero()).append(".pdf");
+            }
         } else {
             s.append(" ");
         }
