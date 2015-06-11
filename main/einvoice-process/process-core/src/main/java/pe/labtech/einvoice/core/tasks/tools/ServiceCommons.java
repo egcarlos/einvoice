@@ -19,13 +19,15 @@ import static pe.labtech.einvoice.commons.model.DocumentStep.FINAL;
 import static pe.labtech.einvoice.commons.model.DocumentStep.REPLICATE;
 import static pe.labtech.einvoice.commons.model.DocumentStep.SIGN;
 import static pe.labtech.einvoice.commons.model.DocumentStep.SYNC;
-import pe.labtech.einvoice.commons.model.InvoiceType;
 import pe.labtech.einvoice.commons.xmlsecurity.DigitalSign;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import static pe.labtech.einvoice.core.tasks.tools.DatabaseCommons.hasLocalSignature;
 import static pe.labtech.einvoice.core.tasks.tools.DatabaseCommons.mark;
-import static pe.labtech.einvoice.core.tasks.tools.Tools.isFinishedInSunat;
+import static pe.labtech.einvoice.core.tasks.tools.Tools.isAccepted;
+import static pe.labtech.einvoice.core.tasks.tools.Tools.isPending;
+import static pe.labtech.einvoice.core.tasks.tools.Tools.isRejected;
+import static pe.labtech.einvoice.core.tasks.tools.Tools.isRelatedToInvoice03;
 import static pe.labtech.einvoice.core.tasks.tools.Tools.serializeMessages;
 import static pe.labtech.einvoice.core.tasks.tools.Tools.wasReplicatedBefore;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
@@ -141,20 +143,22 @@ public class ServiceCommons {
         } else {
             Map<String, String> responses = Tools.describe(di);
             if (Tools.isSigned(di)) {
-                if (di.getSunatStatus() == null) {
+                String statusSunat = di.getSunatStatus();
+                String documentNumber = document.getDocumentNumber();
+                if (statusSunat == null) {
                     //no hay estado de sunat entonces se presume que hay que declararlo
                     mark(db, document.getId(), DECLARE, NEEDED, responses);
-                } else if (isFinishedInSunat(di.getSunatStatus())) {
-                    //no hay nada más que hacer... se puede marcar como completado
-                    if (di.getSunatStatus().startsWith("AC")) {
-                        responses.put("recordStatus", "P");
-                    } else {
-                        responses.put("recordStatus", "R");
-                    }
+                } else if (isRelatedToInvoice03(documentNumber) && isPending(statusSunat)) {
+                    //Prevents the overload of sync requests of type 03 related documents
+                    responses.put("recordStatus", "P");
+                    mark(db, document.getId(), FINAL, COMPLETED, responses);
+                } else if (isAccepted(statusSunat)) {
+                    responses.put("recordStatus", "P");
+                    mark(db, document.getId(), FINAL, COMPLETED, responses);
+                } else if (isRejected(statusSunat)) {
+                    responses.put("recordStatus", "R");
                     mark(db, document.getId(), FINAL, COMPLETED, responses);
                 } else {
-                    //tiene estado sunat... eso quiere decir que esta declarado,
-                    //pero esta en un estado intermedio entonces debe sincronizar
                     responses.put("recordStatus", "Y");
                     mark(db, document.getId(), SYNC, NEEDED, responses);
                 }

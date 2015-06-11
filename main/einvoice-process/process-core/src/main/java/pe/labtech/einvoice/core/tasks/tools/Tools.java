@@ -169,7 +169,7 @@ public class Tools {
      * @return
      */
     public static boolean isNotFinishedInSunat(String sunatStatus) {
-        return sunatStatus == null || !(isFinishedInSunat(sunatStatus));
+        return !(isFinishedInSunat(sunatStatus));
     }
 
     /**
@@ -181,8 +181,24 @@ public class Tools {
     public static boolean isFinishedInSunat(String sunatStatus) {
         return sunatStatus != null && (sunatStatus.startsWith("RC") || sunatStatus.startsWith("AC"));
     }
-//</editor-fold>
 
+    public static boolean isRelatedToInvoice03(String documentNumber) {
+        return documentNumber != null && documentNumber.startsWith("B");
+    }
+
+    public static boolean isPending(String sunatStatus) {
+        return sunatStatus != null && sunatStatus.startsWith("PE");
+    }
+
+    public static boolean isAccepted(String sunatStatus) {
+        return sunatStatus != null && sunatStatus.startsWith("AC");
+    }
+
+    public static boolean isRejected(String sunatStatus) {
+        return sunatStatus != null && sunatStatus.startsWith("RC");
+    }
+
+//</editor-fold>
     public static String serializeMessages(Response r) {
         List<Map<String, String>> errors = new LinkedList<>();
         try {
