@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
@@ -40,6 +41,12 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
 
     @EJB
     private PrivateDatabaseManagerLocal prv;
+
+    @Resource(lookup = "java:global/einvoice/config/oss")
+    private String oss;
+
+    @Resource(lookup = "java:global/einvoice/config/dss")
+    private String dss;
 
     private Function<DocumentResponse, Boolean> tryLockSingle;
 
@@ -76,6 +83,22 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
                     );
             if (responses.isEmpty()) {
                 return;
+            }
+//            if ("yes".equals(oss) && id.getSerieNumero().startsWith("B") && responses.containsKey("bl_estadoProceso")) {
+//                String status = responses.get("bl_estadoProceso");
+//                status = status.replace("PE_02", "PE_09");
+//                responses.put("bl_estadoProceso", status);
+//            }
+            if ("yes".equals(dss) && responses.containsKey("cestado")) {
+                String s = (String) responses.get("cestado");
+                if ("NALP".contains(s)) {
+                    //noop
+                } else if ("R".contains(s)) {
+                    s = "P";
+                } else {
+                    s = "L";
+                }
+                responses.put("cestado", s);
             }
             RecurrentHelper.sendResponses(pub, id, responses);
         });
