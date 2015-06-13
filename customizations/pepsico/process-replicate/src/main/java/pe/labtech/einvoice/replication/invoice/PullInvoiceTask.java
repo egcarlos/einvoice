@@ -5,15 +5,23 @@
  */
 package pe.labtech.einvoice.replication.invoice;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import org.apache.commons.lang3.StringUtils;
 import pe.labtech.einvoice.commons.entity.ValueHolder;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
 import pe.labtech.einvoice.commons.model.DocumentStep;
@@ -77,8 +85,6 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 new DocumentAttribute("departamentoEmisor", h.getCdepartamentoemisor()),
                 new DocumentAttribute("paisEmisor", h.getCcodpaisemisor()),
                 new DocumentAttribute("correoEmisor", h.getCcorreoemisor()),
-                new DocumentAttribute("codigoSerieNumeroAfectado", h.getCtipncreditodebito()),
-                new DocumentAttribute("serieNumeroAfectado", h.getCcomprobanteafecto()),
                 new DocumentAttribute("tipoDocumentoAdquiriente", h.getCtipdocumentousuario()),
                 new DocumentAttribute("numeroDocumentoAdquiriente", h.getCdocumentousuario()),
                 new DocumentAttribute("razonSocialAdquiriente", h.getCrsocialusuario()),
@@ -98,16 +104,22 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 new DocumentAttribute("totalDescuentos", h.getCdescuento()),
                 new DocumentAttribute("descuentosGlobales", h.getCdescuentoglobal()),
                 new DocumentAttribute("totalVenta", h.getCtotal()),
+                //referidos a ND, NC
+                new DocumentAttribute("codigoSerieNumeroAfectado", h.getCtipncreditodebito()),
+                new DocumentAttribute("serieNumeroAfectado", h.getCcomprobanteafecto()),
                 new DocumentAttribute("tipoDocumentoReferenciaPrincipal", h.getCtipncreditodebito1()),
                 new DocumentAttribute("numeroDocumentoReferenciaPrincipal", h.getCcomprobanteafecto1()),
                 new DocumentAttribute("tipoDocumentoReferenciaCorregido", h.getCtipncreditodebito2()),
                 new DocumentAttribute("numeroDocumentoReferenciaCorregido", h.getCcomprobanteafecto2()),
-                new DocumentAttribute("baseImponiblePercepcion", h.getCbasepercepcion()),
+                //percepcion
                 new DocumentAttribute("totalPercepcion", h.getCtotalpercepcion()),
+                new DocumentAttribute("baseImponiblePercepcion", h.getCbasepercepcion()),
                 new DocumentAttribute("totalVentaConPercepcion", h.getCventapercepcion()),
                 new DocumentAttribute("porcentajePercepcion", h.getCporcpercepcion()),
+                //retencion
                 new DocumentAttribute("totalRetencion", h.getCtotalretencion()),
                 new DocumentAttribute("porcentajeRetencion", h.getCporcretencion()),
+                //detraccion
                 new DocumentAttribute("totalDetraccion", h.getCtotaldetraccion()),
                 new DocumentAttribute("porcentajeDetraccion", h.getCporcdetraccion()),
                 new DocumentAttribute("descripcionDetraccion", h.getCdescdetraccion()),
@@ -116,23 +128,50 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 new DocumentAttribute("inHabilitado", h.getChabilitado())
         )
                 .stream()
-                .filter(a -> updateValue(a) != null)
+                .map(a -> handleOptionalNumber(a))
+                .map(a -> updateValue(a))
+                .filter(a -> a.getValue() != null)
                 .map(a -> {
                     a.setDocument(d);
                     return a;
                 })
                 .collect(Collectors.toList());
 
-        //CLEY1 -> 1000
-        //CLEY2 -> 1002
-        //CLEY3 -> 2000
+        //sanitize the data for correlated null values
+        conditionalRemove(da, lda, "totalPercepcion",
+                "baseImponiblePercepcion",
+                "totalVentaConPercepcion",
+                "porcentajePercepcion"
+        );
+        conditionalRemove(da, lda, "totalDetraccion",
+                "porcentajeDetraccion",
+                "descripcionDetraccion",
+                "valorReferencialDetraccion"
+        );
+        conditionalRemove(da, lda, "totalRetencion",
+                "porcentajeRetencion"
+        );
+
+        //sanitize document type
+        if ("01".equals(h.getCtipcomprobante()) || "03".equals(h.getCtipcomprobante())) {
+            remove(da, lda,
+                    "codigoSerieNumeroAfectado",
+                    "serieNumeroAfectado",
+                    "tipoDocumentoReferenciaPrincipal",
+                    "numeroDocumentoReferenciaPrincipal",
+                    "tipoDocumentoReferenciaCorregido",
+                    "numeroDocumentoReferenciaCorregido"
+            );
+        }
+
         List<DocumentLegend> dl = Arrays.asList(
                 new DocumentLegend("1000", 1l, h.getCley1()),
                 new DocumentLegend("1002", 1l, h.getCley2()),
                 new DocumentLegend("2000", 1l, h.getCley3())
         )
                 .stream()
-                .filter(a -> updateValue(a) != null)
+                .map(a -> updateValue(a))
+                .filter(a -> a.getValue() != null)
                 .map(a -> {
                     a.setDocument(d);
                     return a;
@@ -144,7 +183,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 new DocumentAuxiliar("9064", "40", 2l, h.getCaux2()),
                 new DocumentAuxiliar("9021", "40", 3l, h.getCaux3()),
                 new DocumentAuxiliar("9024", "40", 4l, h.getCaux4()),
-                new DocumentAuxiliar("", "40", 5l, h.getCaux5()),
+                new DocumentAuxiliar("9044", "40", 5l, h.getCaux5()),
                 new DocumentAuxiliar("9018", "40", 6l, h.getCaux6()),
                 new DocumentAuxiliar("9019", "40", 7l, h.getCaux7()),
                 new DocumentAuxiliar("9020", "40", 8l, h.getCaux8()),
@@ -166,10 +205,12 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 new DocumentAuxiliar("9075", "100", 4l, h.getCaux24()),
                 new DocumentAuxiliar("9151", "100", 5l, h.getCaux25()),
                 new DocumentAuxiliar("", "100", 6l, h.getCaux26())
+        //TODO agregar los dos campos a mapear Caux27, Caux28
         )
                 .stream()
                 .filter(a -> !a.getCode().isEmpty())
-                .filter(a -> updateValue(a) != null)
+                .map(a -> updateValue(a))
+                .filter(a -> a.getValue() != null)
                 .map(a -> {
                     a.setDocument(d);
                     return a;
@@ -184,6 +225,13 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 mapItems(h, d)
         );
         return d;
+    }
+
+    private DocumentAttribute handleOptionalNumber(DocumentAttribute a) {
+        if (isNumericOptionalAttribute(a) && shouldReduce(a)) {
+            a.setValue(null);
+        }
+        return a;
     }
 
     private List<Item> mapItems(DocumentHeader h, Document document) {
@@ -229,7 +277,8 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 new ItemAttribute("importeIsc", detail.getDisc())
         )
                 .stream()
-                .filter(a -> updateValue(a) != null)
+                .map(a -> updateValue(a))
+                .filter(a -> a.getValue() != null)
                 .collect(Collectors.toList());
         attr.forEach(child -> child.setItem(item));
 
@@ -239,27 +288,16 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
             attr.remove(ir);
         }
 
-//        List<ItemAuxiliar> aux = Arrays.asList(
-//                new ItemAuxiliar("9000", "100", 1l, detail.getDaux1()),
-//                new ItemAuxiliar("9001", "100", 2l, detail.getDaux2()),
-//                new ItemAuxiliar("9147", "100", 3l, detail.getDaux3()),
-//                new ItemAuxiliar("9148", "100", 4l, detail.getDaux4())
-//        )
-//                .stream()
-//                .filter(a -> a.getValue() != null)
-//                .collect(Collectors.toList());
-//        aux.forEach(child -> child.setItem(item));
-//        item.setAuxiliars(aux);
         item.setAttributes(attr);
         return item;
     }
 
     //Actualiza los valores leidos de los atributos y auxiliares permitiendo
     //filtrar todos los que tienen valores nulos
-    private String updateValue(ValueHolder a) {
+    private <T extends ValueHolder> T updateValue(T a) {
         String value = trimToNull(a.getValue());
         a.setValue(value);
-        return value;
+        return a;
     }
 
     public static String trimToNull(final String str) {
@@ -275,11 +313,71 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         return cs == null || cs.length() == 0;
     }
 
-    public <T> T find(List<T> source, Predicate<? super T> predicate) {
+    public static <T> T find(List<T> source, Predicate<? super T> predicate) {
         Optional<T> opt = source.stream().filter(predicate).findAny();
         if (opt.isPresent()) {
             return opt.get();
         }
         return null;
     }
+
+    public static <T, K> void conditionalRemove(List<T> collection, BiFunction<List<T>, K, T> lookup, K groupKey, K... groupReferences) {
+        T key = lookup.apply(collection, groupKey);
+        if (key != null) {
+            //since there's a key the group is valid
+            return;
+        }
+        remove(collection, lookup, groupReferences);
+    }
+
+    public static <T, K> void remove(List<T> collection, BiFunction<List<T>, K, T> lookup, K... groupReferences) {
+        Arrays
+                .stream(groupReferences)
+                .map(r -> lookup.apply(collection, r))
+                .filter(r -> r != null)
+                .forEach(r -> collection.remove(r));
+    }
+
+    private static final List<String> NUMERIC_OPTIONAl;
+    private static final BiFunction<List<DocumentAttribute>, String, DocumentAttribute> lda = (l, n) -> {
+        return find(l, a -> n.equals(a.getName()));
+    };
+
+    static {
+        List<String> no = loadConfigFileForNumericOptionals();
+        NUMERIC_OPTIONAl = Collections.unmodifiableList(no);
+    }
+
+    private static List<String> loadConfigFileForNumericOptionals() {
+        List<String> no = new LinkedList<>();
+        File config = new File("input-optional.config");
+        if (config.exists()) {
+            try (BufferedReader br = new BufferedReader(new FileReader(config))) {
+                String s;
+                while ((s = br.readLine()) != null) {
+                    s = StringUtils.trimToNull(s);
+                    //this is a comment
+                    if (s == null) {
+                        continue;
+                    }
+                    if (s.startsWith("#")) {
+                        continue;
+                    }
+                    no.add(s);
+                }
+            } catch (IOException ex) {
+                //TODO log error procesing file
+            }
+        }
+        return no;
+    }
+
+    private static boolean shouldReduce(DocumentAttribute a) {
+        return "0.00".equals(a.getValue());
+    }
+
+    private static boolean isNumericOptionalAttribute(DocumentAttribute a) {
+        return NUMERIC_OPTIONAl.contains(a.getName());
+    }
+
 }
