@@ -32,15 +32,16 @@ public class PortalSign {
             NodeList lista1 = elemento.getChildNodes();
             Node segundoNodo = lista1.item(0);
 
-            Element extensionContentType = doc.createElement("ext:ExtensionContent");
-            extensionContentType.appendChild(xmlSignature.getElement());
             Element ublExtensionsType = doc.createElement("ext:UBLExtensions");
             Element ublExtensionType = doc.createElement("ext:UBLExtension");
+            Element extensionContentType = doc.createElement("ext:ExtensionContent");
+            extensionContentType.appendChild(xmlSignature.getElement());
             ublExtensionType.appendChild(extensionContentType);
             ublExtensionsType.appendChild(ublExtensionType);
             if (segundoNodo != null && segundoNodo.getNodeName().startsWith("ext:UBLExtensions")) {
                 segundoNodo.appendChild(ublExtensionType);
             } else {
+                //este caso nunca ocurre
                 elemento.insertBefore(ublExtensionsType, elemento.getFirstChild());
             }
 

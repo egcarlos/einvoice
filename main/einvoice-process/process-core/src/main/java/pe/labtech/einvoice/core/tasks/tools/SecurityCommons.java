@@ -86,6 +86,6 @@ public class SecurityCommons {
     }
 
     private static String unobfuscateX(String password) {
-        return NcCrypt.desencriptarPassword(password);
+        return NcCrypt2.getInstance().decode(password);
     }
 }

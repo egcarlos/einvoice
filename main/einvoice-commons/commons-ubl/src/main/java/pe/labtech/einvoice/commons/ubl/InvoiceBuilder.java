@@ -399,7 +399,11 @@ public class InvoiceBuilder implements Builder<Invoice> {
     }
 
     public InvoiceBuilder addDiscrepancyResponse(String ReferenceID, String ResponseCode, String Description) {
-        if (ReferenceID != null && ResponseCode != null && Description != null) {
+        //la descripción es olbigatoria siempre
+        if (Description == null) {
+            return this;
+        }
+        if ((ReferenceID != null && ResponseCode != null) || ("03".equals(ResponseCode))) {
             invoice
                     .getDiscrepancyResponse()
                     .add(

@@ -34,11 +34,6 @@
             <artifactId>einvoice-commons-ubl</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ibm.wcs</groupId>
-            <artifactId>wcsmisc</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
