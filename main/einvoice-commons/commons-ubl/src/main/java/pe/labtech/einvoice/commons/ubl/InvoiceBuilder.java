@@ -356,12 +356,11 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
-    //TODO map description
     public InvoiceBuilder addDetraction(String reference, String payable, String percent, String description) {
         if (payable != null) {
             AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
                     "2003",
-                    null,
+                    description,
                     reference == null ? null : new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(reference)),
                     new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(payable)),
                     percent,

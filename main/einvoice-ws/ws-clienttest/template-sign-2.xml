@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SignOnLineCmd declare-sunat="0" declare-direct-sunat="0" publish="1" output="PDF">
+    <parameter value="20379085505" name="idEmisor"/>
+    <parameter value="01" name="tipoDocumento"/>
+    <parameter value="" name="estadoDocumento"/>
+    <documento>
+        <indicador>C</indicador>
+        <tipoDocumentoEmisor>6</tipoDocumentoEmisor>
+        <numeroDocumentoEmisor>20379085505</numeroDocumentoEmisor>
+        <razonSocialEmisor>TOPSA Productos Ópticos S.A.</razonSocialEmisor>
+        <nombreComercialEmisor>TOPSA Productos Ópticos S.A.</nombreComercialEmisor>
+        <tipoDocumento>01</tipoDocumento>
+        <serieNumero>FLT5-00000001</serieNumero>
+        <fechaEmision>2015-06-15T00:00:00-05:00</fechaEmision>
+        <ubigeoEmisor>150108</ubigeoEmisor>
+        <direccionEmisor>JIRON COMUNIDAD INDUSTRIAL 391</direccionEmisor>
+        <urbanizacion>LA VILLA</urbanizacion>
+        <provinciaEmisor>LIMA</provinciaEmisor>
+        <departamentoEmisor>LIMA</departamentoEmisor>
+        <distritoEmisor>CHORRILLOS</distritoEmisor>
+        <paisEmisor>PE</paisEmisor>
+        <correoEmisor>rvelasquez@topsa.com.pe</correoEmisor>
+        <tipoDocumentoAdquiriente>6</tipoDocumentoAdquiriente>
+        <numeroDocumentoAdquiriente>20563330709</numeroDocumentoAdquiriente>
+        <razonSocialAdquiriente>LABTECH SRL</razonSocialAdquiriente>
+        <lugarDestino>CLL. GARCIA CALDERON MZ. P LT. 8 LA MOLINA</lugarDestino>
+        <correoAdquiriente>info@labtech.pe</correoAdquiriente>
+        <tipoMoneda>PEN</tipoMoneda>
+        <totalValorVentaNetoOpGravadas>100.00</totalValorVentaNetoOpGravadas>
+        <totalValorVentaNetoOpNoGravada>0.00</totalValorVentaNetoOpNoGravada>
+        <totalValorVentaNetoOpExoneradas>0.00</totalValorVentaNetoOpExoneradas>
+        <totalValorVentaNetoOpGratuitas>0.00</totalValorVentaNetoOpGratuitas>
+        <descuentosGlobales>0.00</descuentosGlobales>
+        <subTotal>100.00</subTotal>
+        <totalIgv>18.00</totalIgv>
+        <totalIsc>0.00</totalIsc>
+        <totalOtrosTributos>0.00</totalOtrosTributos>
+        <totalOtrosCargos>0.00</totalOtrosCargos>
+        <totalDescuentos>0.00</totalDescuentos>
+        <totalVenta>118.00</totalVenta>
+        <inHabilitado>1</inHabilitado>
+        <totalBonificacion>0.00</totalBonificacion>
+        <item>
+            <numeroOrdenItem>1</numeroOrdenItem>
+            <codigoProducto>8039</codigoProducto>
+            <descripcion>NATUCHIPS CAMOTE X40GRX63</descripcion>
+            <cantidad>1.00</cantidad>
+            <unidadMedida>NIU</unidadMedida>
+            <importeUnitarioSinImpuesto>100.00</importeUnitarioSinImpuesto>
+            <importeUnitarioConImpuesto>118.00</importeUnitarioConImpuesto>
+            <codigoImporteUnitarioConImpuesto>01</codigoImporteUnitarioConImpuesto>
+            <importeTotalSinImpuesto>100.00</importeTotalSinImpuesto>
+            <importeDescuento>0.00</importeDescuento>
+            <importeCargo>0.00</importeCargo>
+            <codigoRazonExoneracion>10</codigoRazonExoneracion>
+            <importeIgv>18.00</importeIgv>
+        </item>
+    </documento>
+</SignOnLineCmd>

@@ -8,6 +8,7 @@ package pe.labtech.ubl.model.sunat;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import org.eclipse.persistence.oxm.annotations.XmlCDATA;
 import pe.labtech.ubl.model.Namespaces;
 import pe.labtech.ubl.model.basic.Amount;
 
@@ -21,6 +22,7 @@ public class AdditionalMonetaryTotal {
     @XmlElement(namespace = Namespaces.CBC)
     private String ID;
     @XmlElement(namespace = Namespaces.CBC)
+    @XmlCDATA
     private String Name;
     @XmlElement(namespace = Namespaces.SAC)
     private Amount ReferenceAmount;
