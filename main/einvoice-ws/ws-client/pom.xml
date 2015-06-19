@@ -5,7 +5,7 @@
     <parent>
         <groupId>pe.labtech.einvoice.ws</groupId>
         <artifactId>einvoice-ws-parent</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>einvoice-ws-client</artifactId>
