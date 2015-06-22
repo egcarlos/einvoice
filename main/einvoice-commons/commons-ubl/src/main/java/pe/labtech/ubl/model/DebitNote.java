@@ -6,27 +6,31 @@
 package pe.labtech.ubl.model;
 
 import java.util.LinkedList;
-import pe.labtech.ubl.model.aggregate.TaxTotal;
-import pe.labtech.ubl.model.aggregate.Signature;
-import pe.labtech.ubl.model.aggregate.DocumentReference;
-import pe.labtech.ubl.model.extensions.UBLExtensions;
 import java.util.List;
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import static pe.labtech.ubl.model.Namespaces.DEFAULT;
+import static pe.labtech.ubl.model.Namespaces.CAC;
+import static pe.labtech.ubl.model.Namespaces.CBC;
+import static pe.labtech.ubl.model.Namespaces.DEBIT;
+import static pe.labtech.ubl.model.Namespaces.EXT;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
-import pe.labtech.ubl.model.aggregate.InvoiceLine;
+import pe.labtech.ubl.model.aggregate.BillingReference;
+import pe.labtech.ubl.model.aggregate.DebitNoteLine;
+import pe.labtech.ubl.model.aggregate.DiscrepancyResponse;
+import pe.labtech.ubl.model.aggregate.DocumentReference;
 import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
-import pe.labtech.ubl.model.aggregate.OrderReference;
+import pe.labtech.ubl.model.aggregate.Signature;
+import pe.labtech.ubl.model.aggregate.TaxTotal;
+import pe.labtech.ubl.model.extensions.UBLExtensions;
 
 /**
  *
- * @author carloseg
+ * @author Carlos Echeverria
  */
-@XmlRootElement(name = "Invoice", namespace = DEFAULT)
+@XmlRootElement(name = "DebitNote", namespace = DEBIT)
 @XmlAccessorType(FIELD)
 @XmlType(propOrder = {
     "UBLExtensions",
@@ -34,82 +38,89 @@ import pe.labtech.ubl.model.aggregate.OrderReference;
     "CustomizationID",
     "ID",
     "IssueDate",
-    "InvoiceTypeCode",
     "DocumentCurrencyCode",
-    "OrderReference",
+    "DiscrepancyResponse",
+    "BillingReference",
     "DespatchDocumentReference",
     "AdditionalDocumentReference",
     "Signature",
     "AccountingSupplierParty",
     "AccountingCustomerParty",
     "TaxTotal",
-    "LegalMonetaryTotal",
-    "InvoiceLine"
+    "RequestedMonetaryTotal",
+    "DebitNoteLine"
 })
-public class Invoice {
+public class DebitNote {
 
-    @XmlElement(namespace = Namespaces.EXT)
+    @XmlElement(namespace = EXT)
     private UBLExtensions UBLExtensions;
 
     //Siempre 2.0
-    @XmlElement(namespace = Namespaces.CBC)
+    @XmlElement(namespace = CBC)
     private String UBLVersionID;
 
     //Siempre 1.0
-    @XmlElement(namespace = Namespaces.CBC)
+    @XmlElement(namespace = CBC)
     private String CustomizationID;
 
     //mapea a serie numero
-    @XmlElement(namespace = Namespaces.CBC)
+    @XmlElement(namespace = CBC)
     private String ID;
 
     //mapea a fecha de emision en GMT-5
-    @XmlElement(namespace = Namespaces.CBC)
+    @XmlElement(namespace = CBC)
     private String IssueDate;
 
-    //mapea a tipoDocumento
-    @XmlElement(namespace = Namespaces.CBC)
-    private String InvoiceTypeCode;
-
     //mapea a moneda documento
-    @XmlElement(namespace = Namespaces.CBC)
+    @XmlElement(namespace = CBC)
     private String DocumentCurrencyCode;
 
-    //referencia de la orden de compra
-    @XmlElement(namespace = Namespaces.CAC)
-    private OrderReference OrderReference;
+    //campos adicionales para la nota de crédito
+    @XmlElement(namespace = CAC)
+    private List<DiscrepancyResponse> DiscrepancyResponse;
+
+    @XmlElement(namespace = CAC)
+    private BillingReference BillingReference;
 
     //guías de remisión
-    @XmlElement(namespace = Namespaces.CAC)
+    @XmlElement(namespace = CAC)
     private List<DocumentReference> DespatchDocumentReference;
 
     //otros documentos asociados
-    @XmlElement(namespace = Namespaces.CAC)
+    @XmlElement(namespace = CAC)
     private List<DocumentReference> AdditionalDocumentReference;
 
     //datos de la firma digital
-    @XmlElement(namespace = Namespaces.CAC)
+    @XmlElement(namespace = CAC)
     private Signature Signature;
 
     //datos el emisor
-    @XmlElement(namespace = Namespaces.CAC)
+    @XmlElement(namespace = CAC)
     private AccountingParty AccountingSupplierParty;
 
     //datos del receptor
-    @XmlElement(namespace = Namespaces.CAC)
+    @XmlElement(namespace = CAC)
     private AccountingParty AccountingCustomerParty;
 
     //impuestos
-    @XmlElement(namespace = Namespaces.CAC)
+    @XmlElement(namespace = CAC)
     private List<TaxTotal> TaxTotal;
 
-    @XmlElement(namespace = Namespaces.CAC)
-    private LegalMonetaryTotal LegalMonetaryTotal;
+    @XmlElement(namespace = CAC)
+    private LegalMonetaryTotal RequestedMonetaryTotal;
 
-    @XmlElement(namespace = Namespaces.CAC)
-    private List<InvoiceLine> InvoiceLine;
+    @XmlElement(namespace = CAC)
+    private List<DebitNoteLine> DebitNoteLine;
 
-    public Invoice() {
+    {
+        this.AdditionalDocumentReference = new LinkedList<>();
+        this.DebitNoteLine = new LinkedList<>();
+        this.DespatchDocumentReference = new LinkedList<>();
+        this.DiscrepancyResponse = new LinkedList<>();
+        this.TaxTotal = new LinkedList<>();
+    }
+
+    public DebitNote() {
     }
 
     public UBLExtensions getUBLExtensions() {
@@ -152,14 +163,6 @@ public class Invoice {
         this.IssueDate = IssueDate;
     }
 
-    public String getInvoiceTypeCode() {
-        return InvoiceTypeCode;
-    }
-
-    public void setInvoiceTypeCode(String InvoiceTypeCode) {
-        this.InvoiceTypeCode = InvoiceTypeCode;
-    }
-
     public String getDocumentCurrencyCode() {
         return DocumentCurrencyCode;
     }
@@ -168,28 +171,22 @@ public class Invoice {
         this.DocumentCurrencyCode = DocumentCurrencyCode;
     }
 
-//    public List<DiscrepancyResponse> getDiscrepancyResponse() {
-//        return DiscrepancyResponse;
-//    }
-//
-//    public void setDiscrepancyResponse(List<DiscrepancyResponse> DiscrepancyResponse) {
-//        this.DiscrepancyResponse = DiscrepancyResponse;
-//    }
-    public OrderReference getOrderReference() {
-        return OrderReference;
+    public List<DiscrepancyResponse> getDiscrepancyResponse() {
+        return DiscrepancyResponse;
     }
 
-    public void setOrderReference(OrderReference OrderReference) {
-        this.OrderReference = OrderReference;
+    public void setDiscrepancyResponse(List<DiscrepancyResponse> DiscrepancyResponse) {
+        this.DiscrepancyResponse = DiscrepancyResponse;
     }
 
-//    public BillingReference getBillingReference() {
-//        return BillingReference;
-//    }
-//
-//    public void setBillingReference(BillingReference BillingReference) {
-//        this.BillingReference = BillingReference;
-//    }
+    public BillingReference getBillingReference() {
+        return BillingReference;
+    }
+
+    public void setBillingReference(BillingReference BillingReference) {
+        this.BillingReference = BillingReference;
+    }
+
     public List<DocumentReference> getDespatchDocumentReference() {
         return DespatchDocumentReference;
     }
@@ -238,26 +235,20 @@ public class Invoice {
         this.TaxTotal = TaxTotal;
     }
 
-    public LegalMonetaryTotal getLegalMonetaryTotal() {
-        return LegalMonetaryTotal;
+    public LegalMonetaryTotal getRequestedMonetaryTotal() {
+        return RequestedMonetaryTotal;
     }
 
-    public void setLegalMonetaryTotal(LegalMonetaryTotal LegalMonetaryTotal) {
-        this.LegalMonetaryTotal = LegalMonetaryTotal;
+    public void setRequestedMonetaryTotal(LegalMonetaryTotal RequestedMonetaryTotal) {
+        this.RequestedMonetaryTotal = RequestedMonetaryTotal;
     }
 
-    public List<InvoiceLine> getInvoiceLine() {
-        return InvoiceLine;
+    public List<DebitNoteLine> getDebitNoteLine() {
+        return DebitNoteLine;
     }
 
-    public void setInvoiceLine(List<InvoiceLine> InvoiceLine) {
-        this.InvoiceLine = InvoiceLine;
+    public void setDebitNoteLine(List<DebitNoteLine> DebitNoteLine) {
+        this.DebitNoteLine = DebitNoteLine;
     }
 
-    {
-        this.AdditionalDocumentReference = new LinkedList<>();
-        this.DespatchDocumentReference = new LinkedList<>();
-        this.InvoiceLine = new LinkedList<>();
-        this.TaxTotal = new LinkedList<>();
-    }
 }

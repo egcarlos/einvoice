@@ -5,7 +5,7 @@
     <parent>
         <groupId>pe.labtech.einvoice.process</groupId>
         <artifactId>einvoice-process-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     
     <artifactId>einvoice-process-replicate</artifactId>

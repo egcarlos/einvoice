@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -31,6 +32,11 @@ import org.xml.sax.SAXException;
 public class SignTest {
 
     public SignTest() {
+    }
+
+    @BeforeClass
+    public static void bc() {
+
     }
 
     @Test
@@ -97,7 +103,7 @@ public class SignTest {
 
     public void signPortal() throws ParserConfigurationException, SAXException, IOException, NoSuchAlgorithmException, CertificateException, KeyStoreException, UnrecoverableKeyException {
         org.apache.xml.security.Init.init();
-        
+
         File f = new File("tosign_1.xml");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
@@ -111,11 +117,11 @@ public class SignTest {
         X509Certificate cert = (X509Certificate) ks.getCertificate("jaime fernando urquiza rivera (gcz)");
 
         new PortalSign().sign(d, (PrivateKey) pk, cert);
-        
+
         DigitalSign ds = new DigitalSign();
-        
+
         System.out.println(ds.createTextRepresentation(d));;
-        
+
         String[] responses = ds.getResponses(d);
         System.out.println(MessageFormat.format("hash:{0}\nsign:{1}", responses[0], responses[1]));
     }

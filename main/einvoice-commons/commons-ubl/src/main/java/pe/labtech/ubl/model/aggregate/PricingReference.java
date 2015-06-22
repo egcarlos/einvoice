@@ -5,13 +5,11 @@
  */
 package pe.labtech.ubl.model.aggregate;
 
-import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import jdk.nashorn.internal.codegen.CompilerConstants;
 import pe.labtech.ubl.model.Namespaces;
 
 /**

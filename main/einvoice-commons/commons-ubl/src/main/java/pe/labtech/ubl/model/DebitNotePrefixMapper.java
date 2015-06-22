@@ -6,29 +6,36 @@
 package pe.labtech.ubl.model;
 
 import org.eclipse.persistence.oxm.NamespacePrefixMapper;
+import static pe.labtech.ubl.model.Namespaces.CAC;
+import static pe.labtech.ubl.model.Namespaces.CBC;
+import static pe.labtech.ubl.model.Namespaces.DEBIT;
+import static pe.labtech.ubl.model.Namespaces.DS;
+import static pe.labtech.ubl.model.Namespaces.EXT;
+import static pe.labtech.ubl.model.Namespaces.QDT;
+import static pe.labtech.ubl.model.Namespaces.SAC;
 
 /**
  *
  * @author carloseg
  */
-public class InvoicePrefixMapper extends NamespacePrefixMapper {
+public class DebitNotePrefixMapper extends NamespacePrefixMapper {
 
     @Override
     public String getPreferredPrefix(String uri, String suggestion, boolean requirePrefix) {
         switch (uri) {
-            case Namespaces.DEFAULT:
+            case DEBIT:
                 return "";
-            case Namespaces.CAC:
+            case CAC:
                 return "cac";
-            case Namespaces.CBC:
+            case CBC:
                 return "cbc";
-            case Namespaces.DS:
+            case DS:
                 return "ds";
-            case Namespaces.EXT:
+            case EXT:
                 return "ext";
-            case Namespaces.QDT:
+            case QDT:
                 return "qdt";
-            case Namespaces.SAC:
+            case SAC:
                 return "sac";
         }
         return suggestion;
@@ -37,13 +44,13 @@ public class InvoicePrefixMapper extends NamespacePrefixMapper {
     @Override
     public String[] getPreDeclaredNamespaceUris() {
         return new String[]{
-            Namespaces.DEFAULT,
-            Namespaces.CAC,
-            Namespaces.CBC,
-            Namespaces.DS,
-            Namespaces.EXT,
-            Namespaces.QDT,
-            Namespaces.SAC
+            DEBIT,
+            CAC,
+            CBC,
+            DS,
+            EXT,
+            QDT,
+            SAC
         };
     }
 

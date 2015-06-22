@@ -26,9 +26,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.commons.ext.ZipTools;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
 import pe.labtech.einvoice.commons.model.DocumentStep;
-import pe.labtech.einvoice.commons.ubl.DocumentMorpher;
-import pe.labtech.einvoice.commons.ubl.InvoiceBuilder;
-import pe.labtech.einvoice.commons.ubl.InvoiceLineBuilder;
+import pe.labtech.einvoice.commons.ubl.*;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
@@ -88,12 +86,22 @@ public class OfflineInvoice {
     }
 
     public DocumentInfo signDocument(Document document, String entryName, String zipName) {
-        //create the UBL structure
-        InvoiceBuilder ib = mapInvoice(document.getId());
-        //move to the xml representation
-        org.w3c.dom.Document xml = ib.document(DEFAULT_ENCODING);
-        //morph to creditNote or debit if needed
-        DocumentMorpher.morph(document.getDocumentType(), xml);
+        org.w3c.dom.Document xml = null;
+        switch (document.getDocumentType()) {
+            case "01":
+            case "03":
+                xml = mapInvoice(document.getId()).document(DEFAULT_ENCODING);
+                break;
+            case "07":
+                xml = mapCreditNote(document.getId()).document(DEFAULT_ENCODING);
+                break;
+            case "08":
+                xml = mapDebitNote(document.getId()).document(DEFAULT_ENCODING);
+                break;
+            default://TODO mark as insvalid document for current version
+                break;
+        }
+
         //sign
         signDocument(document.getClientId(), xml);
         byte[] signedDocument = DIGISIGN.createRepresentation(xml, DEFAULT_ENCODING);
@@ -138,6 +146,222 @@ public class OfflineInvoice {
                 document.getDocumentNumber()
         );
         return fileName;
+    }
+
+    private DebitNoteBuilder mapDebitNote(Long id) {
+        return prv.seek(e -> {
+            Document d = e.find(Document.class, id);
+
+            Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
+            //add document main data
+            DebitNoteBuilder ib = new DebitNoteBuilder()
+                    .init(
+                            da.get("serieNumero"),
+                            da.get("fechaEmision"),
+                            da.get("tipoMoneda"),
+                            da.get("tipoDocumentoEmisor"),
+                            da.get("numeroDocumentoEmisor"),
+                            da.get("razonSocialEmisor"),
+                            da.get("tipoDocumentoAdquiriente"),
+                            da.get("numeroDocumentoAdquiriente"),
+                            da.get("razonSocialAdquiriente")
+                    )
+                    .setIssuerName(da.get("nombreComercialEmisor"))
+                    .setIssuerAddress(
+                            da.get("ubigeoEmisor"),
+                            da.get("direccionEmisor"),
+                            da.get("urbanizacion"),
+                            da.get("distritoEmisor"),
+                            da.get("provinciaEmisor"),
+                            da.get("departamentoEmisor"),
+                            da.get("paisEmisor")
+                    )
+                    .addAmount("1001", da.get("totalValorVentaNetoOpGravadas"))
+                    .addAmount("1002", da.get("totalValorVentaNetoOpNoGravada"))
+                    .addAmount("1003", da.get("totalValorVentaNetoOpExoneradas"))
+                    .addAmount("1004", da.get("totalValorVentaNetoOpGratuitas"))
+                    .addPerception(
+                            da.get("baseImponiblePercepcion"),
+                            da.get("totalPercepcion"),
+                            da.get("totalVentaConPercepcion"),
+                            da.get("porcentajePercepcion")
+                    )
+                    .addRetention(
+                            da.get("totalRetencion"),
+                            da.get("porcentajeRetencion")
+                    )
+                    .addDetraction(
+                            da.get("valorReferencialDetraccion"),
+                            da.get("totalDetraccion"),
+                            da.get("porcentajeDetraccion"),
+                            da.get("descripcionDetraccion")
+                    )
+                    .addAmount("2004", da.get("totalBonificacion"))
+                    .addAmount("2005", da.get("totalDescuentos"))
+                    .addAmount("3001", (String) null)
+                    .addTax("1000", "IGV", "VAT", da.get("totalIgv"))
+                    .addTax("2000", "ISC", "EXC", da.get("totalIsc"))
+                    .addTax("9999", "OTROS", "OTH", da.get("totalOtrosTributos"))
+                    .addDespatchReference(da.get("tipoReferencia_1"), da.get("numeroDocumentoReferencia_1"))
+                    .addDespatchReference(da.get("tipoReferencia_2"), da.get("numeroDocumentoReferencia_2"))
+                    .addDespatchReference(da.get("tipoReferencia_3"), da.get("numeroDocumentoReferencia_3"))
+                    .addDespatchReference(da.get("tipoReferencia_4"), da.get("numeroDocumentoReferencia_4"))
+                    .addDespatchReference(da.get("tipoReferencia_5"), da.get("numeroDocumentoReferencia_5"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_1"), da.get("numeroDocumentoReferenciaAdicional_1"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_2"), da.get("numeroDocumentoReferenciaAdicional_2"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_3"), da.get("numeroDocumentoReferenciaAdicional_3"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_4"), da.get("numeroDocumentoReferenciaAdicional_4"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_5"), da.get("numeroDocumentoReferenciaAdicional_5"))
+                    .addTotalAllowance(da.get("descuentosGlobales"))
+                    .addTotalCharge(da.get("totalOtrosCargos"))
+                    .addTotalPayable(da.get("totalVenta"))
+                    //fix para notas de credito y debito
+                    .addDiscrepancyResponse(da.get("serieNumeroAfectado"), da.get("codigoSerieNumeroAfectado"), da.get("motivoDocumento"))
+                    .addBillingReference(da.get("numeroDocumentoReferenciaPrincipal"), da.get("tipoDocumentoReferenciaPrincipal"));
+
+            //add document legend data
+            if (d.getLegends() != null && !d.getLegends().isEmpty()) {
+                d.getLegends().forEach(l -> ib.addNote(l.getCode(), l.getValue()));
+            }
+
+            //add document auxiliar data
+            if (d.getAuxiliars() != null && !d.getAuxiliars().isEmpty()) {
+                d.getAuxiliars().forEach(l -> ib.addCustomNote(l.getCode(), l.getValue()));
+            }
+
+            //add item information
+            d.getItems().forEach(i -> {
+                Map<String, String> ia = i.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
+                DebitNoteLineBuilder ilb = new DebitNoteLineBuilder()
+                        .init(
+                                ia.get("numeroOrdenItem"),
+                                buildNumber(ia.get("cantidad")),
+                                ia.get("unidadMedida"),
+                                ia.get("codigoProducto"),
+                                ia.get("descripcion"),
+                                da.get("tipoMoneda"),
+                                buildNumber(ia.get("importeUnitarioSinImpuesto")),
+                                ia.get("codigoImporteUnitarioConImpuesto"),
+                                buildNumber(ia.get("importeUnitarioConImpuesto")),
+                                buildNumber(ia.get("importeTotalSinImpuesto"))
+                        )
+                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), da.get("tipoMoneda"), buildNumber(ia.get("importeReferencial")))
+                        .addTax("1000", "IGV", "VAT", buildNumber(ia.get("importeIgv")), ia.get("codigoRazonExoneracion"), null)
+                        .addTax("2000", "ISC", "EXT", buildNumber(ia.get("importeIsc")), null, ia.get("tipoSistemaImpuestoISC"));
+
+                ib.addLine(ilb.compile());
+            });
+
+            return ib;
+        });
+    }
+
+    private CreditNoteBuilder mapCreditNote(Long id) {
+        return prv.seek(e -> {
+            Document d = e.find(Document.class, id);
+
+            Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
+            //add document main data
+            CreditNoteBuilder ib = new CreditNoteBuilder()
+                    .init(
+                            da.get("serieNumero"),
+                            da.get("fechaEmision"),
+                            da.get("tipoMoneda"),
+                            da.get("tipoDocumentoEmisor"),
+                            da.get("numeroDocumentoEmisor"),
+                            da.get("razonSocialEmisor"),
+                            da.get("tipoDocumentoAdquiriente"),
+                            da.get("numeroDocumentoAdquiriente"),
+                            da.get("razonSocialAdquiriente")
+                    )
+                    .setIssuerName(da.get("nombreComercialEmisor"))
+                    .setIssuerAddress(
+                            da.get("ubigeoEmisor"),
+                            da.get("direccionEmisor"),
+                            da.get("urbanizacion"),
+                            da.get("distritoEmisor"),
+                            da.get("provinciaEmisor"),
+                            da.get("departamentoEmisor"),
+                            da.get("paisEmisor")
+                    )
+                    .addAmount("1001", da.get("totalValorVentaNetoOpGravadas"))
+                    .addAmount("1002", da.get("totalValorVentaNetoOpNoGravada"))
+                    .addAmount("1003", da.get("totalValorVentaNetoOpExoneradas"))
+                    .addAmount("1004", da.get("totalValorVentaNetoOpGratuitas"))
+                    .addPerception(
+                            da.get("baseImponiblePercepcion"),
+                            da.get("totalPercepcion"),
+                            da.get("totalVentaConPercepcion"),
+                            da.get("porcentajePercepcion")
+                    )
+                    .addRetention(
+                            da.get("totalRetencion"),
+                            da.get("porcentajeRetencion")
+                    )
+                    .addDetraction(
+                            da.get("valorReferencialDetraccion"),
+                            da.get("totalDetraccion"),
+                            da.get("porcentajeDetraccion"),
+                            da.get("descripcionDetraccion")
+                    )
+                    .addAmount("2004", da.get("totalBonificacion"))
+                    .addAmount("2005", da.get("totalDescuentos"))
+                    .addAmount("3001", (String) null)
+                    .addTax("1000", "IGV", "VAT", da.get("totalIgv"))
+                    .addTax("2000", "ISC", "EXC", da.get("totalIsc"))
+                    .addTax("9999", "OTROS", "OTH", da.get("totalOtrosTributos"))
+                    .addDespatchReference(da.get("tipoReferencia_1"), da.get("numeroDocumentoReferencia_1"))
+                    .addDespatchReference(da.get("tipoReferencia_2"), da.get("numeroDocumentoReferencia_2"))
+                    .addDespatchReference(da.get("tipoReferencia_3"), da.get("numeroDocumentoReferencia_3"))
+                    .addDespatchReference(da.get("tipoReferencia_4"), da.get("numeroDocumentoReferencia_4"))
+                    .addDespatchReference(da.get("tipoReferencia_5"), da.get("numeroDocumentoReferencia_5"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_1"), da.get("numeroDocumentoReferenciaAdicional_1"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_2"), da.get("numeroDocumentoReferenciaAdicional_2"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_3"), da.get("numeroDocumentoReferenciaAdicional_3"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_4"), da.get("numeroDocumentoReferenciaAdicional_4"))
+                    .addAdditionalReference(da.get("tipoReferenciaAdicional_5"), da.get("numeroDocumentoReferenciaAdicional_5"))
+                    .addTotalAllowance(da.get("descuentosGlobales"))
+                    .addTotalCharge(da.get("totalOtrosCargos"))
+                    .addTotalPayable(da.get("totalVenta"))
+                    //fix para notas de credito y debito
+                    .addDiscrepancyResponse(da.get("serieNumeroAfectado"), da.get("codigoSerieNumeroAfectado"), da.get("motivoDocumento"))
+                    .addBillingReference(da.get("numeroDocumentoReferenciaPrincipal"), da.get("tipoDocumentoReferenciaPrincipal"));
+
+            //add document legend data
+            if (d.getLegends() != null && !d.getLegends().isEmpty()) {
+                d.getLegends().forEach(l -> ib.addNote(l.getCode(), l.getValue()));
+            }
+
+            //add document auxiliar data
+            if (d.getAuxiliars() != null && !d.getAuxiliars().isEmpty()) {
+                d.getAuxiliars().forEach(l -> ib.addCustomNote(l.getCode(), l.getValue()));
+            }
+
+            //add item information
+            d.getItems().forEach(i -> {
+                Map<String, String> ia = i.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
+                CreditNoteLineBuilder ilb = new CreditNoteLineBuilder()
+                        .init(
+                                ia.get("numeroOrdenItem"),
+                                buildNumber(ia.get("cantidad")),
+                                ia.get("unidadMedida"),
+                                ia.get("codigoProducto"),
+                                ia.get("descripcion"),
+                                da.get("tipoMoneda"),
+                                buildNumber(ia.get("importeUnitarioSinImpuesto")),
+                                ia.get("codigoImporteUnitarioConImpuesto"),
+                                buildNumber(ia.get("importeUnitarioConImpuesto")),
+                                buildNumber(ia.get("importeTotalSinImpuesto"))
+                        )
+                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), da.get("tipoMoneda"), buildNumber(ia.get("importeReferencial")))
+                        .addTax("1000", "IGV", "VAT", buildNumber(ia.get("importeIgv")), ia.get("codigoRazonExoneracion"), null)
+                        .addTax("2000", "ISC", "EXT", buildNumber(ia.get("importeIsc")), null, ia.get("tipoSistemaImpuestoISC"));
+
+                ib.addLine(ilb.compile());
+            });
+
+            return ib;
+        });
     }
 
     private InvoiceBuilder mapInvoice(Long id) {
@@ -207,10 +431,7 @@ public class OfflineInvoice {
                     .addAdditionalReference(da.get("tipoReferenciaAdicional_5"), da.get("numeroDocumentoReferenciaAdicional_5"))
                     .addTotalAllowance(da.get("descuentosGlobales"))
                     .addTotalCharge(da.get("totalOtrosCargos"))
-                    .addTotalPayable(da.get("totalVenta"))
-                    //fix para notas de credito y debito
-                    .addDiscrepancyResponse(da.get("serieNumeroAfectado"), da.get("codigoSerieNumeroAfectado"), da.get("motivoDocumento"))
-                    .addInvoiceDocumentReference(da.get("numeroDocumentoReferenciaPrincipal"), da.get("tipoDocumentoReferenciaPrincipal"));
+                    .addTotalPayable(da.get("totalVenta"));
 
             //add document legend data
             if (d.getLegends() != null && !d.getLegends().isEmpty()) {

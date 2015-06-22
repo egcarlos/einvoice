@@ -17,17 +17,19 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.w3c.dom.Document;
-import pe.labtech.ubl.model.Invoice;
-import pe.labtech.ubl.model.InvoicePrefixMapper;
+import pe.labtech.ubl.model.DebitNotePrefixMapper;
+import pe.labtech.ubl.model.DebitNote;
 import pe.labtech.ubl.model.aggregate.AccountingParty;
 import pe.labtech.ubl.model.aggregate.Address;
 import pe.labtech.ubl.model.aggregate.Attachment;
+import pe.labtech.ubl.model.aggregate.BillingReference;
 import pe.labtech.ubl.model.aggregate.Country;
+import pe.labtech.ubl.model.aggregate.DebitNoteLine;
+import pe.labtech.ubl.model.aggregate.DiscrepancyResponse;
 import pe.labtech.ubl.model.aggregate.DocumentReference;
 import pe.labtech.ubl.model.aggregate.ExternalReference;
-import pe.labtech.ubl.model.aggregate.InvoiceLine;
+import pe.labtech.ubl.model.aggregate.InvoiceDocumentReference;
 import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
-import pe.labtech.ubl.model.aggregate.OrderReference;
 import pe.labtech.ubl.model.aggregate.Party;
 import pe.labtech.ubl.model.aggregate.PartyLegalEntity;
 import pe.labtech.ubl.model.aggregate.PartyName;
@@ -48,19 +50,19 @@ import pe.labtech.ubl.model.sunat.AdditionalProperty;
  *
  * @author Carlos
  */
-public class InvoiceBuilder implements Builder<Invoice> {
+public class DebitNoteBuilder implements Builder<DebitNote> {
 
     private static final JAXBContext JAXB_CONTEXT;
     private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY;
 
-    private Invoice invoice;
+    private DebitNote document;
 
     static {
         JAXBContext context;
         try {
-            context = JAXBContext.newInstance(Invoice.class);
+            context = JAXBContext.newInstance(DebitNote.class);
         } catch (JAXBException ex) {
-            Logger.getGlobal().log(Level.SEVERE, null, ex);
+            Logger.getAnonymousLogger().log(Level.SEVERE, null, ex);
             context = null;
         }
         JAXB_CONTEXT = context;
@@ -69,70 +71,13 @@ public class InvoiceBuilder implements Builder<Invoice> {
 
     }
 
-    public InvoiceBuilder init(final String invoiceType, final String invoiceNumber, final String invoiceDate, final String currency, final String supplierType, final String supplierId, final String supplierName, final String clientType, final String clientId, final String clientName) {
-        this.invoice = createInvoice(invoiceType, invoiceNumber, invoiceDate, currency, supplierType, supplierId, supplierName, clientType, clientId, clientName);
+    public DebitNoteBuilder init(final String invoiceNumber, final String invoiceDate, final String currency, final String supplierType, final String supplierId, final String supplierName, final String clientType, final String clientId, final String clientName) {
+        this.document = createDebitNote(invoiceNumber, invoiceDate, currency, supplierType, supplierId, supplierName, clientType, clientId, clientName);
         return this;
     }
 
-    public InvoiceBuilder addAmount(String id, String amount) {
-        if (amount == null) {
-            return this;
-        }
-        return this.addAmount(id, new BigDecimal(amount));
-    }
-
-    public InvoiceBuilder addAmount(String id, BigDecimal amount) {
-        if (amount != null && id != null) {
-            AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
-                    id,
-                    null,
-                    null,
-                    new Amount(invoice.getDocumentCurrencyCode(), amount),
-                    null,
-                    null
-            );
-            invoice
-                    .getUBLExtensions()
-                    .getUBLExtension()
-                    .get(0)
-                    .getExtensionContent()
-                    .getSunatAdditionalInformation()
-                    .getAdditionalMonetaryTotal()
-                    .add(amt);
-        }
-        return this;
-    }
-
-    public InvoiceBuilder addNote(String id, String value) {
-        if (id != null && value != null) {
-            invoice
-                    .getUBLExtensions()
-                    .getUBLExtension()
-                    .get(0)
-                    .getExtensionContent()
-                    .getSunatAdditionalInformation()
-                    .getAdditionalProperty()
-                    .add(new AdditionalProperty(id, null, value));
-        }
-        return this;
-    }
-
-    public InvoiceBuilder addCustomNote(String id, String value) {
-        if (id != null && value != null) {
-            invoice
-                    .getUBLExtensions()
-                    .getUBLExtension()
-                    .get(1)
-                    .getExtensionContent()
-                    .getBasicAdditionalInformation()
-                    .getAdditionalProperty()
-                    .add(new AdditionalProperty(id, null, value));
-        }
-        return this;
-    }
-
-    private static Invoice createInvoice(final String invoiceType, final String invoiceNumber, final String invoiceDate, final String currency, final String supplierType, final String supplierId, final String supplierName, final String clientType, final String clientId, final String clientName) {
-        Invoice i = new Invoice();
+    private static DebitNote createDebitNote(final String invoiceNumber, final String invoiceDate, final String currency, final String supplierType, final String supplierId, final String supplierName, final String clientType, final String clientId, final String clientName) {
+        DebitNote i = new DebitNote();
         i.setUBLExtensions(new UBLExtensions());
         i.getUBLExtensions().getUBLExtension().addAll(
                 Arrays.asList(
@@ -146,7 +91,6 @@ public class InvoiceBuilder implements Builder<Invoice> {
         //valores variables pero mandatorios
         i.setID(invoiceNumber);
         i.setIssueDate(invoiceDate);
-        i.setInvoiceTypeCode(invoiceType);
         //el valor de la moneda del documento es mandatorio antes de iniciar todo el proceso
         i.setDocumentCurrencyCode(currency);
         //estructura obligatoria
@@ -179,19 +123,76 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return i;
     }
 
-    public InvoiceBuilder addTax(String id, String name, String typeCode, String amount) {
+    public DebitNoteBuilder addAmount(String id, String amount) {
+        if (amount == null) {
+            return this;
+        }
+        return this.addAmount(id, new BigDecimal(amount));
+    }
+
+    public DebitNoteBuilder addAmount(String id, BigDecimal amount) {
+        if (amount != null && id != null) {
+            AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
+                    id,
+                    null,
+                    null,
+                    new Amount(document.getDocumentCurrencyCode(), amount),
+                    null,
+                    null
+            );
+            document
+                    .getUBLExtensions()
+                    .getUBLExtension()
+                    .get(0)
+                    .getExtensionContent()
+                    .getSunatAdditionalInformation()
+                    .getAdditionalMonetaryTotal()
+                    .add(amt);
+        }
+        return this;
+    }
+
+    public DebitNoteBuilder addNote(String id, String value) {
+        if (id != null && value != null) {
+            document
+                    .getUBLExtensions()
+                    .getUBLExtension()
+                    .get(0)
+                    .getExtensionContent()
+                    .getSunatAdditionalInformation()
+                    .getAdditionalProperty()
+                    .add(new AdditionalProperty(id, null, value));
+        }
+        return this;
+    }
+
+    public DebitNoteBuilder addCustomNote(String id, String value) {
+        if (id != null && value != null) {
+            document
+                    .getUBLExtensions()
+                    .getUBLExtension()
+                    .get(1)
+                    .getExtensionContent()
+                    .getBasicAdditionalInformation()
+                    .getAdditionalProperty()
+                    .add(new AdditionalProperty(id, null, value));
+        }
+        return this;
+    }
+
+    public DebitNoteBuilder addTax(String id, String name, String typeCode, String amount) {
         if (amount == null) {
             return this;
         }
         return addTax(id, name, typeCode, new BigDecimal(amount));
     }
 
-    public InvoiceBuilder addTax(String id, String name, String typeCode, BigDecimal amount) {
+    public DebitNoteBuilder addTax(String id, String name, String typeCode, BigDecimal amount) {
         TaxTotal tt = new TaxTotal();
-        tt.setTaxAmount(new Amount(this.invoice.getDocumentCurrencyCode(), amount));
+        tt.setTaxAmount(new Amount(this.document.getDocumentCurrencyCode(), amount));
 
         TaxSubtotal tst = new TaxSubtotal();
-        tst.setTaxAmount(new Amount(this.invoice.getDocumentCurrencyCode(), amount));
+        tst.setTaxAmount(new Amount(this.document.getDocumentCurrencyCode(), amount));
         TaxCategory tc = new TaxCategory();
         TaxScheme ts = new TaxScheme();
         ts.setID(id);
@@ -200,25 +201,25 @@ public class InvoiceBuilder implements Builder<Invoice> {
         tc.setTaxScheme(ts);
         tst.setTaxCategory(tc);
         tt.setTaxSubtotal(tst);
-        this.invoice.getTaxTotal().add(tt);
+        this.document.getTaxTotal().add(tt);
         return this;
     }
 
-    public InvoiceBuilder addTotalAllowance(String amount) {
+    public DebitNoteBuilder addTotalAllowance(String amount) {
         if (amount != null) {
             addTotalAllowance(new BigDecimal(amount));
         }
         return this;
     }
 
-    public InvoiceBuilder addTotalAllowance(BigDecimal amount) {
+    public DebitNoteBuilder addTotalAllowance(BigDecimal amount) {
         if (amount != null) {
-            if (this.invoice.getLegalMonetaryTotal() == null) {
-                this.invoice.setLegalMonetaryTotal(new LegalMonetaryTotal());
+            if (this.document.getRequestedMonetaryTotal() == null) {
+                this.document.setRequestedMonetaryTotal(new LegalMonetaryTotal());
             }
-            this.invoice.getLegalMonetaryTotal().setAllowanceTotalAmount(
+            this.document.getRequestedMonetaryTotal().setAllowanceTotalAmount(
                     new Amount(
-                            this.invoice.getDocumentCurrencyCode(),
+                            this.document.getDocumentCurrencyCode(),
                             amount
                     )
             );
@@ -226,21 +227,21 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
-    public InvoiceBuilder addTotalCharge(String amount) {
+    public DebitNoteBuilder addTotalCharge(String amount) {
         if (amount != null) {
             addTotalCharge(new BigDecimal(amount));
         }
         return this;
     }
 
-    public InvoiceBuilder addTotalCharge(BigDecimal amount) {
+    public DebitNoteBuilder addTotalCharge(BigDecimal amount) {
         if (amount != null) {
-            if (this.invoice.getLegalMonetaryTotal() == null) {
-                this.invoice.setLegalMonetaryTotal(new LegalMonetaryTotal());
+            if (this.document.getRequestedMonetaryTotal() == null) {
+                this.document.setRequestedMonetaryTotal(new LegalMonetaryTotal());
             }
-            this.invoice.getLegalMonetaryTotal().setChargeTotalAmount(
+            this.document.getRequestedMonetaryTotal().setChargeTotalAmount(
                     new Amount(
-                            this.invoice.getDocumentCurrencyCode(),
+                            this.document.getDocumentCurrencyCode(),
                             amount
                     )
             );
@@ -248,21 +249,21 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
-    public InvoiceBuilder addTotalPayable(String amount) {
+    public DebitNoteBuilder addTotalPayable(String amount) {
         if (amount != null) {
             addTotalPayable(new BigDecimal(amount));
         }
         return this;
     }
 
-    public InvoiceBuilder addTotalPayable(BigDecimal amount) {
+    public DebitNoteBuilder addTotalPayable(BigDecimal amount) {
         if (amount != null) {
-            if (this.invoice.getLegalMonetaryTotal() == null) {
-                this.invoice.setLegalMonetaryTotal(new LegalMonetaryTotal());
+            if (this.document.getRequestedMonetaryTotal() == null) {
+                this.document.setRequestedMonetaryTotal(new LegalMonetaryTotal());
             }
-            this.invoice.getLegalMonetaryTotal().setPayableAmount(
+            this.document.getRequestedMonetaryTotal().setPayableAmount(
                     new Amount(
-                            this.invoice.getDocumentCurrencyCode(),
+                            this.document.getDocumentCurrencyCode(),
                             amount
                     )
             );
@@ -270,11 +271,11 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
-    public InvoiceBuilder setIssuerName(String name) {
+    public DebitNoteBuilder setIssuerName(String name) {
         if (name == null) {
             return this;
         }
-        invoice.getAccountingSupplierParty().getParty().setPartyName(new PartyName(name));
+        document.getAccountingSupplierParty().getParty().setPartyName(new PartyName(name));
         return this;
     }
 
@@ -290,9 +291,9 @@ public class InvoiceBuilder implements Builder<Invoice> {
      * @param country código iso del país
      * @return
      */
-    public InvoiceBuilder setIssuerAddress(String id, String address, String zone, String disctrict, String city, String state, String country) {
+    public DebitNoteBuilder setIssuerAddress(String id, String address, String zone, String disctrict, String city, String state, String country) {
 
-        Address a = invoice.getAccountingSupplierParty().getParty().getPostalAddress();
+        Address a = document.getAccountingSupplierParty().getParty().getPostalAddress();
 
         a.setID(id);
         a.setStreetName(address);
@@ -309,18 +310,18 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
-    public InvoiceBuilder addPerception(String reference, String payable, String total, String percent) {
+    public DebitNoteBuilder addPerception(String reference, String payable, String total, String percent) {
         if (payable != null) {
             AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
                     "2001",
                     null,
-                    reference == null ? null : new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(reference)),
-                    new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(payable)),
+                    reference == null ? null : new Amount(document.getDocumentCurrencyCode(), new BigDecimal(reference)),
+                    new Amount(document.getDocumentCurrencyCode(), new BigDecimal(payable)),
                     percent,
-                    total == null ? null : new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(total))
+                    total == null ? null : new Amount(document.getDocumentCurrencyCode(), new BigDecimal(total))
             );
 
-            invoice
+            document
                     .getUBLExtensions()
                     .getUBLExtension()
                     .get(0)
@@ -332,18 +333,18 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
-    public InvoiceBuilder addRetention(String payable, String percent) {
+    public DebitNoteBuilder addRetention(String payable, String percent) {
         if (payable != null) {
             AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
                     "2003",
                     null,
                     null,
-                    new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(payable)),
+                    new Amount(document.getDocumentCurrencyCode(), new BigDecimal(payable)),
                     percent,
                     null
             );
 
-            invoice
+            document
                     .getUBLExtensions()
                     .getUBLExtension()
                     .get(0)
@@ -355,18 +356,18 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
-    public InvoiceBuilder addDetraction(String reference, String payable, String percent, String description) {
+    public DebitNoteBuilder addDetraction(String reference, String payable, String percent, String description) {
         if (payable != null) {
             AdditionalMonetaryTotal amt = new AdditionalMonetaryTotal(
                     "2003",
                     description,
-                    reference == null ? null : new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(reference)),
-                    new Amount(invoice.getDocumentCurrencyCode(), new BigDecimal(payable)),
+                    reference == null ? null : new Amount(document.getDocumentCurrencyCode(), new BigDecimal(reference)),
+                    new Amount(document.getDocumentCurrencyCode(), new BigDecimal(payable)),
                     percent,
                     null
             );
 
-            invoice
+            document
                     .getUBLExtensions()
                     .getUBLExtension()
                     .get(0)
@@ -378,34 +379,56 @@ public class InvoiceBuilder implements Builder<Invoice> {
         return this;
     }
 
-    public InvoiceBuilder addDespatchReference(String type, String number) {
+    public DebitNoteBuilder addDespatchReference(String type, String number) {
         if (type != null && number != null) {
-            invoice.getDespatchDocumentReference().add(
+            document.getDespatchDocumentReference().add(
                     new DocumentReference(type, number)
             );
         }
         return this;
     }
 
-    public InvoiceBuilder addAdditionalReference(String type, String number) {
+    public DebitNoteBuilder addAdditionalReference(String type, String number) {
         if (type != null && number != null) {
-            invoice.getAdditionalDocumentReference().add(
+            document.getAdditionalDocumentReference().add(
                     new DocumentReference(type, number)
             );
         }
         return this;
     }
 
-    public InvoiceBuilder addOrderReference(String id) {
-        if (id != null) {
-            invoice.setOrderReference(new OrderReference());
-            invoice.getOrderReference().setID(id);
+    public DebitNoteBuilder addDiscrepancyResponse(String ReferenceID, String ResponseCode, String Description) {
+        //la descripción es olbigatoria siempre
+        if (Description == null) {
+            return this;
+        }
+        if ((ReferenceID != null && ResponseCode != null) || ("03".equals(ResponseCode))) {
+            document
+                    .getDiscrepancyResponse()
+                    .add(
+                            new DiscrepancyResponse(ReferenceID, ResponseCode, Description)
+                    );
         }
         return this;
     }
 
-    public InvoiceBuilder addLine(InvoiceLine line) {
-        invoice.getInvoiceLine().add(line);
+    public DebitNoteBuilder addBillingReference(String ID, String DocumentTypeCode) {
+        if (ID != null && DocumentTypeCode != null) {
+            if (document.getBillingReference() == null) {
+                document.setBillingReference(new BillingReference());
+            }
+            document
+                    .getBillingReference()
+                    .getInvoiceDocumentReference()
+                    .add(
+                            new InvoiceDocumentReference(ID, DocumentTypeCode)
+                    );
+        }
+        return this;
+    }
+
+    public DebitNoteBuilder addLine(DebitNoteLine line) {
+        document.getDebitNoteLine().add(line);
         return this;
     }
 
@@ -415,8 +438,8 @@ public class InvoiceBuilder implements Builder<Invoice> {
      * @return
      */
     @Override
-    public Invoice compile() {
-        return invoice;
+    public DebitNote compile() {
+        return document;
     }
 
     /**
@@ -447,7 +470,7 @@ public class InvoiceBuilder implements Builder<Invoice> {
         try {
             Marshaller marshaller = getContext().createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_ENCODING, charsetName);
-            marshaller.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, new InvoicePrefixMapper());
+            marshaller.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, new DebitNotePrefixMapper());
             return marshaller;
         } catch (JAXBException ex) {
             throw new InvoiceBuilderException(ex);

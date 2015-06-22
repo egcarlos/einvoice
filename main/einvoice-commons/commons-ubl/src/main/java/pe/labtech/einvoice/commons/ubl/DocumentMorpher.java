@@ -15,11 +15,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pe.labtech.einvoice.commons.xmlsecurity.SignatureException;
 import pe.labtech.einvoice.commons.xmlsecurity.UniversalNamespaceCache;
-import pe.labtech.ubl.model.Namespaces;
 import static pe.labtech.ubl.model.Namespaces.CAC;
 import static pe.labtech.ubl.model.Namespaces.CBC;
-import static pe.labtech.ubl.model.Namespaces.NS6;
-import static pe.labtech.ubl.model.Namespaces.NS7;
+import static pe.labtech.ubl.model.Namespaces.CREDIT;
+import static pe.labtech.ubl.model.Namespaces.DEBIT;
 
 /**
  *
@@ -28,46 +27,36 @@ import static pe.labtech.ubl.model.Namespaces.NS7;
 public class DocumentMorpher {
 
     private static final String CREDIT_NOTE = "07";
-    private static final String[][] CREDIT_NOTE_FIX = new String[][]{
-        new String[]{Namespaces.CAC, "InvoiceLine", "CreditNoteLine"},
-        new String[]{Namespaces.CBC, "InvoicedQuantity", "CreditedQuantity"}
-    };
     private static final String DEBIT_NOTE = "08";
-    private static final String[][] DEBIT_NOTE_FIX = new String[][]{
-        new String[]{Namespaces.CAC, "InvoiceLine", "DebitNoteLine"},
-        new String[]{Namespaces.CBC, "InvoicedQuantity", "DebitedQuantity"},
-        new String[]{Namespaces.CAC, "LegalMonetaryTotal", "RequestedMonetaryTotal"}
-    };
-    private static final String[][] REMOVES = new String[][]{
-        new String[]{Namespaces.CBC, "InvoiceTypeCode"}
-    };
 
     public static void morph(String documentType, Document document) {
         switch (documentType) {
             case CREDIT_NOTE:
                 morph(
                         document,
-                        a(NS6, "CreditNote"),
+                        a(CREDIT, "CreditNote"),
                         new String[][]{
                             a(CAC, "InvoiceLine", "CreditNoteLine"),
                             a(CBC, "InvoicedQuantity", "CreditedQuantity")
                         },
                         new String[][]{
-                            a(CBC, "InvoiceTypeCode")
+                            a(CBC, "InvoiceTypeCode"),
+                            a(CAC, "AdditionalItemProperty")
                         }
                 );
                 break;
             case DEBIT_NOTE:
                 morph(
                         document,
-                        a(NS7, "DebitNote"),
+                        a(DEBIT, "DebitNote"),
                         new String[][]{
                             a(CAC, "InvoiceLine", "DebitNoteLine"),
                             a(CBC, "InvoicedQuantity", "DebitedQuantity"),
                             a(CAC, "LegalMonetaryTotal", "RequestedMonetaryTotal")
                         },
                         new String[][]{
-                            a(CBC, "InvoiceTypeCode")
+                            a(CBC, "InvoiceTypeCode"),
+                            a(CAC, "AdditionalItemProperty")
                         }
                 );
                 break;

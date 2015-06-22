@@ -51,7 +51,9 @@ import pe.labtech.ubl.model.Namespaces;
 public class DigitalSign {
 
     static {
+        System.setProperty("org.apache.xml.security.ignoreLineBreaks", "true");
         org.apache.xml.security.Init.init();
+        
     }
 
     /**
