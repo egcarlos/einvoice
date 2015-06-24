@@ -5,6 +5,12 @@
  */
 package pe.labtech.einvoice.api.restful;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -18,6 +24,7 @@ import pe.labtech.einvoice.commons.entity.Detail;
 import pe.labtech.einvoice.commons.entity.Header;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.sign.SignTaskLocal;
+import pe.labtech.einvoice.core.ws.messages.response.ResponseMessage;
 import pe.labtech.einvoice.replication.cancel.PullCancelTaskLocal;
 import pe.labtech.einvoice.replication.invoice.PullInvoiceTaskLocal;
 import pe.labtech.einvoice.replication.summary.PullSummaryTaskLocal;
@@ -174,7 +181,26 @@ public class RestHelper implements RestHelperLocal {
                         )
                         .setParameter("id", id)
                         .getResultList()
-                        .forEach(r -> tryset(di, r[0], r[1])));
+                        .forEach(r -> {
+                            switch (r[0].toString()) {
+                                case "messages":
+                                    Type t = new TypeToken<LinkedList<ResponseMessage>>() {
+                                    }.getType();
+                                    List<ResponseMessage> list;
+                                    try {
+                                        list = new Gson().fromJson((String) r[1], t);
+                                    } catch (JsonSyntaxException ex) {
+                                        list = Arrays.asList(
+                                                new ResponseMessage("500", "Check Messages", "9999", (String) r[1], null)
+                                        );
+                                    }
+                                    tryset(di, r[0], list);
+                                    break;
+                                default:
+                                    tryset(di, r[0], r[1]);
+                            }
+                        })
+                );
         return di;
     }
 

@@ -43,7 +43,7 @@ public class RestTools {
     public static void tryset(DocumentInfo di, Object name, Object value) {
         try {
             PropertyUtils.setProperty(di, name.toString(), value);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | IllegalArgumentException ex) {
             //irrelevant since only valid properties will be mapped
             Logger.getLogger(RestHelper.class.getName()).log(Level.FINEST, ex, () -> "Invalid property " + name + " in DocumentInfo");
         }
