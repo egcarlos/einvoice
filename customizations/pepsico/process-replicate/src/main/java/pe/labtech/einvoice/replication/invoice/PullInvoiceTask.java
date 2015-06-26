@@ -179,33 +179,41 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 .collect(Collectors.toList());
 
         List<DocumentAuxiliar> dx = Arrays.asList(
-                new DocumentAuxiliar("9103", "40", 1l, h.getCaux1()),
-                new DocumentAuxiliar("9064", "40", 2l, h.getCaux2()),
-                new DocumentAuxiliar("9021", "40", 3l, h.getCaux3()),
-                new DocumentAuxiliar("9024", "40", 4l, h.getCaux4()),
-                new DocumentAuxiliar("9044", "40", 5l, h.getCaux5()),
-                new DocumentAuxiliar("9018", "40", 6l, h.getCaux6()),
-                new DocumentAuxiliar("9019", "40", 7l, h.getCaux7()),
-                new DocumentAuxiliar("9020", "40", 8l, h.getCaux8()),
-                new DocumentAuxiliar("9025", "40", 9l, h.getCaux9()),
-                new DocumentAuxiliar("9041", "40", 10l, h.getCaux10()),
-                new DocumentAuxiliar("9043", "40", 11l, h.getCaux11()),
-                new DocumentAuxiliar("9143", "40", 12l, h.getCaux12()),
-                new DocumentAuxiliar("9144", "40", 13l, h.getCaux13()),
-                new DocumentAuxiliar("9107", "40", 14l, h.getCaux14()),
-                new DocumentAuxiliar("9022", "40", 15l, h.getCaux15()),
-                new DocumentAuxiliar("9023", "40", 16l, h.getCaux16()),
-                new DocumentAuxiliar("9152", "40", 17l, h.getCaux17()),
-                new DocumentAuxiliar("9027", "40", 18l, h.getCaux18()),
-                new DocumentAuxiliar("9153", "40", 19l, h.getCaux19()),
-                new DocumentAuxiliar("9154", "40", 20l, h.getCaux20()),
-                new DocumentAuxiliar("", "100", 1l, h.getCaux21()),
-                new DocumentAuxiliar("", "100", 2l, h.getCaux22()),
-                new DocumentAuxiliar("9146", "100", 3l, h.getCaux23()),
-                new DocumentAuxiliar("9075", "100", 4l, h.getCaux24()),
-                new DocumentAuxiliar("9151", "100", 5l, h.getCaux25()),
-                new DocumentAuxiliar("", "100", 6l, h.getCaux26())
-        //TODO agregar los dos campos a mapear Caux27, Caux28
+                /*
+                 * DATOS PARA LA CABECERA
+                 */
+                //codigo del cliente
+                new DocumentAuxiliar("9511", "40", 1l, h.getCaux4()),
+                //numero del erp
+                new DocumentAuxiliar("9512", "40", 2l, h.getCaux3()),
+                //fecha de vencimiento
+                new DocumentAuxiliar("9515", "40", 3l, h.getCaux8()),
+                //orden de compra
+                new DocumentAuxiliar("9043", "40", 4l, h.getCaux11()),
+                //almacen
+                new DocumentAuxiliar("9513", "40", 5l, h.getCaux12()),
+                //guia de remision
+                new DocumentAuxiliar("9513", "40", 6l, h.getCaux28()),
+                /*
+                 * DATOS PARA LOS TOTALES
+                 */
+                //total bruto
+                new DocumentAuxiliar("9514", "100", 7l, h.getCaux24()),
+                //precio venta
+                new DocumentAuxiliar("9517", "100", 8l, h.getCaux25()),
+                /*
+                 * DATOS ADICIONALES QUE SE PRESERVAN
+                 */
+                //total bultos
+                new DocumentAuxiliar("9152", "40", 9l, h.getCaux17()),
+                //cajas retornables
+                new DocumentAuxiliar("9027", "40", 10l, h.getCaux18()),
+                //unidades
+                new DocumentAuxiliar("9153", "40", 11l, h.getCaux19()),
+                //condicion de pago
+                new DocumentAuxiliar("9018", "40", 12l, h.getCaux6()),
+                //plazo de pago
+                new DocumentAuxiliar("9019", "40", 13l, h.getCaux7())
         )
                 .stream()
                 .filter(a -> !a.getCode().isEmpty())

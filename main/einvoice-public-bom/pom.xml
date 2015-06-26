@@ -16,6 +16,34 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>pe.labtech.einvoice.commons</groupId>
+                <artifactId>einvoice-commons-bom</artifactId>
+                <version>1.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>pe.labtech.einvoice.model</groupId>
+                <artifactId>einvoice-model-bom</artifactId>
+                <version>1.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>pe.labtech.einvoice.ws</groupId>
+                <artifactId>einvoice-ws-bom</artifactId>
+                <version>1.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>pe.labtech.einvoice.process</groupId>
+                <artifactId>einvoice-process-bom</artifactId>
+                <version>1.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     
