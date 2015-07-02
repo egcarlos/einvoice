@@ -7,46 +7,8 @@ package pe.labtech.einvoice.core.ws.model;
 
 /**
  *
- * @author Arturo
+ * @author Carlos
  */
 public class DocumentReference {
-    
-    private String tipoDocumentoReferencia;
-    
-    private String numeroDocumentoReferencia;
-
-    /**
-     * @return the tipoDocumentoReferencia
-     */
-    public String getTipoDocumentoReferencia() {
-        return tipoDocumentoReferencia;
-    }
-
-    /**
-     * @param tipoDocumentoReferencia the tipoDocumentoReferencia to set
-     */
-    public void setTipoDocumentoReferencia(String tipoDocumentoReferencia) {
-        this.tipoDocumentoReferencia = tipoDocumentoReferencia;
-    }
-
-    /**
-     * @return the numeroDocumentoReferencia
-     */
-    public String getNumeroDocumentoReferencia() {
-        return numeroDocumentoReferencia;
-    }
-
-    /**
-     * @param numeroDocumentoReferencia the numeroDocumentoReferencia to set
-     */
-    public void setNumeroDocumentoReferencia(String numeroDocumentoReferencia) {
-        this.numeroDocumentoReferencia = numeroDocumentoReferencia;
-    }
-    
-    public DocumentReference(){
-        
-    }            
-    
-    
     
 }
