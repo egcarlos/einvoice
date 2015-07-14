@@ -31,6 +31,7 @@ import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
 import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
+import pe.labtech.einvoice.core.entity.ItemAuxiliar;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
@@ -166,8 +167,8 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
         List<DocumentLegend> dl = Arrays.asList(
                 new DocumentLegend("1000", 1l, h.getCley1()),
-                new DocumentLegend("1002", 1l, h.getCley2()),
-                new DocumentLegend("2000", 1l, h.getCley3())
+                new DocumentLegend("1002", 2l, h.getCley2()),
+                new DocumentLegend("2000", 3l, h.getCley3())
         )
                 .stream()
                 .map(a -> updateValue(a))
@@ -179,41 +180,32 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 .collect(Collectors.toList());
 
         List<DocumentAuxiliar> dx = Arrays.asList(
-                /*
-                 * DATOS PARA LA CABECERA
-                 */
-                //codigo del cliente
-                new DocumentAuxiliar("9511", "40", 1l, h.getCaux4()),
                 //numero del erp
                 new DocumentAuxiliar("9512", "40", 2l, h.getCaux3()),
+                //codigo del cliente
+                new DocumentAuxiliar("9511", "40", 1l, h.getCaux4()),
+                //condicion de pago
+                new DocumentAuxiliar("9018", "40", 12l, h.getCaux6()),
+                //plazo de pago
+                new DocumentAuxiliar("9019", "40", 13l, h.getCaux7()),
                 //fecha de vencimiento
                 new DocumentAuxiliar("9515", "40", 3l, h.getCaux8()),
                 //orden de compra
                 new DocumentAuxiliar("9043", "40", 4l, h.getCaux11()),
                 //almacen
                 new DocumentAuxiliar("9513", "40", 5l, h.getCaux12()),
-                //guia de remision
-                new DocumentAuxiliar("9513", "40", 6l, h.getCaux28()),
-                /*
-                 * DATOS PARA LOS TOTALES
-                 */
-                //total bruto
-                new DocumentAuxiliar("9514", "100", 7l, h.getCaux24()),
-                //precio venta
-                new DocumentAuxiliar("9517", "100", 8l, h.getCaux25()),
-                /*
-                 * DATOS ADICIONALES QUE SE PRESERVAN
-                 */
                 //total bultos
                 new DocumentAuxiliar("9152", "40", 9l, h.getCaux17()),
                 //cajas retornables
                 new DocumentAuxiliar("9027", "40", 10l, h.getCaux18()),
                 //unidades
                 new DocumentAuxiliar("9153", "40", 11l, h.getCaux19()),
-                //condicion de pago
-                new DocumentAuxiliar("9018", "40", 12l, h.getCaux6()),
-                //plazo de pago
-                new DocumentAuxiliar("9019", "40", 13l, h.getCaux7())
+                //total bruto
+                new DocumentAuxiliar("9514", "100", 7l, h.getCaux24()),
+                //precio venta
+                new DocumentAuxiliar("9517", "100", 8l, h.getCaux25()),
+                //guia de remision
+                new DocumentAuxiliar("9516", "40", 6l, h.getCaux28())
         )
                 .stream()
                 .filter(a -> !a.getCode().isEmpty())
@@ -295,8 +287,19 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         if (cir == null && ir != null) {
             attr.remove(ir);
         }
-
         item.setAttributes(attr);
+
+        List<ItemAuxiliar> aux = Arrays.asList(
+                new ItemAuxiliar("9000", "100", 1l, detail.getDaux1()),
+                new ItemAuxiliar("9001", "100", 2l, detail.getDaux2())
+        )
+                .stream()
+                .map(a -> updateValue(a))
+                .filter(a -> a.getValue() != null)
+                .collect(Collectors.toList());
+        aux.forEach(child -> child.setItem(item));
+        item.setAuxiliars(aux);
+
         return item;
     }
 

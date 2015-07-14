@@ -65,6 +65,11 @@ public class ItemAuxiliar implements Serializable, Coded, ValueHolder {
     @XmlValue
     private String value;
 
+    @Override
+    public String toString() {
+        return "ItemAuxiliar{" + "item=" + item + ", code=" + code + '}';
+    }
+
     public ItemAuxiliar() {
     }
 

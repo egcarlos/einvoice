@@ -58,6 +58,11 @@ public class Item implements Serializable {
     @XmlElement(name = "aux")
     private List<ItemAuxiliar> auxiliars;
 
+    @Override
+    public String toString() {
+        return "Item{" + "document=" + document + ", id=" + id + '}';
+    }
+
     public Document getDocument() {
         return document;
     }

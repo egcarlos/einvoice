@@ -124,6 +124,11 @@ public class Document implements Serializable {
     @Column(name = "DOCUMENT_STATUS")
     private String status;
 
+    @Override
+    public String toString() {
+        return "Document{" + "id=" + id + ", clientId=" + clientId + ", documentType=" + documentType + ", documentNumber=" + documentNumber + '}';
+    }
+
     public Document() {
     }
 
