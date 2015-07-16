@@ -40,7 +40,7 @@ public class PushSummaryDataRecurrent extends AbstractRecurrentTask<DocumentData
     PrivateDatabaseManagerLocal privateManager;
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
+    @Schedule(hour = "*/1", minute = "0", second = "0", persistent = false)
     public void timeout() {
         super.timeout();
     }

@@ -62,7 +62,7 @@ public class PushSummaryRecurrent extends AbstractRecurrentTask<Long> {
     private Function<Long, List<DocumentResponse>> findTasksSingle;
 
     @Override
-    @Schedule(hour = "*", minute = "*/1", second = "0", persistent = false)
+    @Schedule(hour = "*", minute = "*/15", second = "45", persistent = false)
     public void timeout() {
         super.timeout();
     }

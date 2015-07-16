@@ -60,7 +60,7 @@ public class PullCancelRecurrent extends AbstractRecurrentTask<CancelHeaderPK> {
     }
 
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/3", persistent = false)
+    @Schedule(hour = "*", minute = "*/15", second = "5", persistent = false)
     public void timeout() {
         super.timeout();
     }

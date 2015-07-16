@@ -8,6 +8,7 @@ package pe.labtech.einvoice.commons.recurrent;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -24,10 +25,13 @@ import javax.annotation.PostConstruct;
  */
 public abstract class AbstractRecurrentTask<T> implements RecurrentTask {
 
+    //BUGFIX for ASE 15
+    private static final ConcurrentHashMap<String, Boolean> lock = new ConcurrentHashMap<>();
+
     /**
      * Logger instance to be used in subclasses.
      */
-    protected final Logger logger = Logger.getLogger(this.getClass().getName());
+    protected final Logger logger = Logger.getLogger(getTaskId());
 
     /**
      * Holder for the working flag. Read only.
@@ -69,6 +73,7 @@ public abstract class AbstractRecurrentTask<T> implements RecurrentTask {
         logger.info(() -> "Task " + this.getClass().getSimpleName() + ": created.");
         this.working = new AtomicBoolean(false);
         this.enabled = new AtomicBoolean(true);
+        this.lock.putIfAbsent(getTaskId(), Boolean.FALSE);
         this.getId = t -> t != null ? t.toString() : "invaid";
     }
 
@@ -76,13 +81,12 @@ public abstract class AbstractRecurrentTask<T> implements RecurrentTask {
         if (!enabled.get()) {
             return;
         }
+        //Obteniendo lock en el bean para procesar
+        if (tryLock()) {
+            logger.fine(() -> "Task " + this.getClass().getSimpleName() + ": in use, skipping.");
+            return;
+        }
         try {
-            //Obteniendo lock en el bean para procesar
-            if (!working.compareAndSet(false, true)) {
-                logger.fine(() -> "Task " + this.getClass().getSimpleName() + ": in use, skipping.");
-                return;
-            }
-
             //Obteniendo la lista de tareas
             if (findTasks == null) {
                 logger.warning(() -> "Unable to recover task list, findTask lambda is null.");
@@ -120,7 +124,7 @@ public abstract class AbstractRecurrentTask<T> implements RecurrentTask {
             });
 
         } finally {
-            working.set(false);
+            unlock();
         }
     }
 
@@ -141,6 +145,23 @@ public abstract class AbstractRecurrentTask<T> implements RecurrentTask {
     @Override
     public boolean isWorking() {
         return this.working.get();
+    }
+
+    private String getTaskId() {
+        return this.getClass().getName();
+    }
+
+    public boolean tryLock() {
+        return lock.replace(getTaskId(),
+                Boolean.FALSE,
+                Boolean.TRUE
+        );
+    }
+
+    public void unlock() {
+        lock.replace(getTaskId(),
+                Boolean.FALSE
+        );
     }
 
 }
