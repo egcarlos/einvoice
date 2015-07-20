@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
+import pe.labtech.einvoice.core.tasks.tools.DatabaseCommons;
 import pe.labtech.einvoice.core.tasks.tools.ServiceCommons;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 
@@ -51,24 +52,51 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
         );
 
         StringBuilder command = new StringBuilder();
-        command.append("<ReplicateXmlCmd declare-sunat=\"1\" declare-direct-sunat=\"0\" publish=\"1\" output=\"PDF\">");
-        command.append("<parametros/>");
-        command.append("<parameter value=\"").append(buildClientId(document)).append("\" name=\"idEmisor\"/>");
+
+        //Fragmento de código para agregar la optimización de envío de
+        //documentos en ambiente de homologación.
+        //TODO parametriar para activación permanente
+        String dds = "0";
+        //if (isSunatTest(document)) {
+        //    dds = "1";
+        //}
+
+        command
+                .append("<ReplicateXmlCmd ")
+                .append("\n        ").append("declare-sunat=\"1\" ")
+                .append("\n        ").append("\n\tdeclare-direct-sunat=\"").append(dds).append("\" ")
+                .append("\n        ").append("\n\tpublish=\"1\" ")
+                .append("\n        ").append("\n\toutput=\"PDF\"")
+                .append(">")
+                .append("\n    ").append("<parametros/>")
+                .append("\n    ").append("<parameter value=\"").append(buildClientId(document)).append("\" name=\"idEmisor\"/>");
+
         if (document.getDocumentType().startsWith("R")) {
-            String correoEmisor = prv.seek(e -> e
-                    .createQuery(
-                            "SELECT O.value FROM DocumentAttribute O WHERE O.document = :document AND O.name = :name",
-                            String.class
-                    )
-                    .setParameter("document", document)
-                    .setParameter("name", "correoEmisor")
-                    .getSingleResult()
-            );
+            String correoEmisor = DatabaseCommons.getAttributeValue(prv, document, "correoEmisor");
             command.append("<parameter value=\"").append(correoEmisor).append("\" name=\"correoEmisor\"/>");
         }
+
         command.append("</ReplicateXmlCmd>");
 
         ServiceCommons.replicateXml(prv, loader, invoker, document, command.toString(), zippedUBL);
+    }
+
+    private boolean isSunatTest(Document document) {
+        String prefix = document.getDocumentNumber().substring(0, 4);
+        switch (prefix) {
+            case "BB11":
+            case "BB12":
+            case "BB13":
+            case "BB14":
+            case "BB50":
+            case "FF11":
+            case "FF12":
+            case "FF13":
+            case "FF14":
+            case "FF50":
+                return true;
+        }
+        return false;
     }
 
     private static Object buildClientId(Document d) {

@@ -165,4 +165,16 @@ public class DatabaseCommons {
                 .getSingleResult()
         ) == 1l;
     }
+
+    public static String getAttributeValue(DatabaseManager db, Document document, String name) {
+        return db.seek(e -> e
+                .createQuery(
+                        "SELECT O.value FROM DocumentAttribute O WHERE O.document = :document AND O.name = :name",
+                        String.class
+                )
+                .setParameter("document", document)
+                .setParameter("name", name)
+                .getSingleResult()
+        );
+    }
 }
