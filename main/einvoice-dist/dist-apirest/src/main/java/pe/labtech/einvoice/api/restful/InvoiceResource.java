@@ -161,6 +161,7 @@ public class InvoiceResource {
             SummaryHeader content
     ) {
         Logger.getLogger(this.getClass().getName()).info("sign_RC");
+        content.setInHabilitado("1");
         return help.sign(issuerType, issuerId, "RC", documentNumber, content);
     }
 
@@ -175,6 +176,7 @@ public class InvoiceResource {
             CancelHeader content
     ) {
         Logger.getLogger(this.getClass().getName()).info("sign_RA");
+        content.setInHabilitado("1");
         return help.sign(issuerType, issuerId, "RA", documentNumber, content);
     }
 }

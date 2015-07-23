@@ -22,6 +22,7 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 import pe.labtech.einvoice.commons.entity.BLResponse;
 import pe.labtech.einvoice.commons.entity.Detail;
 import pe.labtech.einvoice.commons.entity.Header;
+import pe.labtech.einvoice.commons.model.DatabaseManager;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.sign.SignTaskLocal;
 import pe.labtech.einvoice.core.ws.messages.response.ResponseMessage;
@@ -30,9 +31,13 @@ import pe.labtech.einvoice.replication.invoice.PullInvoiceTaskLocal;
 import pe.labtech.einvoice.replication.summary.PullSummaryTaskLocal;
 import pe.labtech.einvoice.replicator.entity.CancelDetail;
 import pe.labtech.einvoice.replicator.entity.CancelHeader;
+import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
 import pe.labtech.einvoice.replicator.entity.SummaryDetail;
 import pe.labtech.einvoice.replicator.entity.SummaryHeader;
+import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManager;
+import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
  *
@@ -45,6 +50,9 @@ public class RestHelper implements RestHelperLocal {
     private PublicDatabaseManagerLocal pub;
     @EJB
     private PrivateDatabaseManagerLocal priv;
+    @EJB
+    private SummaryDatabaseManagerLocal sum;
+
     @EJB
     private PullInvoiceTaskLocal pullInvoice;
     @EJB
@@ -109,7 +117,7 @@ public class RestHelper implements RestHelperLocal {
         configureId(content, issuerType, issuerId, documentType, documentNumber);
         List<SummaryDetail> details = content.getItem();
         //Se trata de localizar el registro anterior
-        DocumentHeader old = findPublic(DocumentHeader.class, content.getId());
+        SummaryHeader old = findPublic(SummaryHeader.class, content.getId());
         //criterio si el anterior existe y el hash es valido hacer retorno de corto
         if (old != null && old.getBl_hashFirma() != null && !old.getBl_hashFirma().isEmpty()) {
             return invalid(
@@ -140,7 +148,7 @@ public class RestHelper implements RestHelperLocal {
         configureId(content, issuerType, issuerId, documentType, documentNumber);
         List<CancelDetail> details = content.getItem();
         //Se trata de localizar el registro anterior
-        DocumentHeader old = findPublic(DocumentHeader.class, content.getId());
+        CancelHeader old = findPublic(CancelHeader.class, content.getId());
         //criterio si el anterior existe y el hash es valido hacer retorno de corto
         if (old != null && old.getBl_hashFirma() != null && !old.getBl_hashFirma().isEmpty()) {
             return invalid(
@@ -167,7 +175,11 @@ public class RestHelper implements RestHelperLocal {
     }
 
     private <T> T findPublic(Class<T> clazz, Object id) {
-        return pub.seek(e -> e.find(clazz, id));
+        //FIX PARA ATENDER LA SEPARACION DEL MODELO PUBLICO
+        if (clazz == DocumentHeader.class) {
+            return pub.seek(e -> e.find(clazz, id));
+        }
+        return sum.seek(e -> e.find(clazz, id));
     }
 
     private DocumentInfo buildDocumentInfo(Long id) {
@@ -215,14 +227,21 @@ public class RestHelper implements RestHelperLocal {
                 .setParameter("clientId", issuerType + "-" + issuerId)
                 .setParameter("documentType", documentType)
                 //for summaries prepend the document type
-                .setParameter("documentNumber", (documentType.startsWith("R") ? documentType : "") + documentNumber)
+                .setParameter("documentNumber", (documentType.startsWith("R") ? (documentType + "-") : "") + documentNumber)
                 .getSingleResult());
         return id;
     }
 
     private <T extends Detail> void saveNewData(Header<T> content) {
         //Grabar los nuevos datos en la BD
-        pub.handle(e -> {
+        //FIX AGREGADO PARA CUBRIR LA SEPARACIÓN DE ORIGENES PUBLICOS
+        DatabaseManager db;
+        if (content instanceof DocumentHeader) {
+            db = pub;
+        } else {
+            db = sum;
+        }
+        db.handle(e -> {
             //insertar los nuevos datos
             BLResponse.configureForCreate(content);
             List<T> dd = content.getItem();
@@ -248,6 +267,48 @@ public class RestHelper implements RestHelperLocal {
             e
                     .createQuery(
                             "DELETE FROM DocumentHeader D WHERE D.id = :id"
+                    )
+                    .setParameter("id", id)
+                    .executeUpdate();
+        });
+    }
+
+    private void cleanOldData(SummaryHeaderPK id) {
+        //si no hay hash se puede volver a generar la firma
+        //se debe borrar las existencias anteriores
+        sum.handle(e -> {
+            e
+                    .createQuery(
+                            "DELETE FROM SummaryDetail D WHERE D.id.tipoDocumentoEmisor = :tde AND D.id.numeroDocumentoEmisor = :nde AND D.id.resumenId = :ri"
+                    )
+                    .setParameter("tde", id.getTipoDocumentoEmisor())
+                    .setParameter("nde", id.getNumeroDocumentoEmisor())
+                    .setParameter("ri", id.getResumenId())
+                    .executeUpdate();
+            e
+                    .createQuery(
+                            "DELETE FROM SummaryHeader D WHERE D.id = :id"
+                    )
+                    .setParameter("id", id)
+                    .executeUpdate();
+        });
+    }
+
+    private void cleanOldData(CancelHeaderPK id) {
+        //si no hay hash se puede volver a generar la firma
+        //se debe borrar las existencias anteriores
+        sum.handle(e -> {
+            e
+                    .createQuery(
+                            "DELETE FROM CancelDetail D WHERE D.id.tipoDocumentoEmisor = :tde AND D.id.numeroDocumentoEmisor = :nde AND D.id.resumenId = :ri"
+                    )
+                    .setParameter("tde", id.getTipoDocumentoEmisor())
+                    .setParameter("nde", id.getNumeroDocumentoEmisor())
+                    .setParameter("ri", id.getResumenId())
+                    .executeUpdate();
+            e
+                    .createQuery(
+                            "DELETE FROM CancelHeader D WHERE D.id = :id"
                     )
                     .setParameter("id", id)
                     .executeUpdate();
