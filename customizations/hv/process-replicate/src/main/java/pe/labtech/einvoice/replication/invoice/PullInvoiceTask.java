@@ -59,14 +59,6 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
             List<DocumentAuxiliar> auxs = new LinkedList<>();
             List<DocumentLegend> legs = new LinkedList<>();
 
-            //no aplica porque esta en el cuerpo
-            //mapeo automático de la llave primaria
-//            BeanUtils.describe(header.getId()).entrySet().stream()
-//                    .filter(e -> e.getValue() != null)
-//                    .filter(e -> !"class".equals(e.getKey()))
-//                    .map(e -> new DocumentAttribute(document, e.getKey(), e.getValue()))
-//                    .forEach(a -> attrs.add(a));
-            //mapeo automático del cuerpo
             final Map<String, String> bean = BeanUtils.describe(header);
             bean.entrySet().stream()
                     .filter(e -> e.getValue() != null)
@@ -127,7 +119,8 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                         .filter(e -> !"id".equals(e.getKey()))
                         .filter(e -> !"class".equals(e.getKey()))
                         .filter(e -> !e.getKey().startsWith("bl_"))
-                        .filter(e -> !e.getKey().startsWith("x_"))//TODO migrar ignorar campos con x_ al componente principal
+                        //TODO migrar ignorar campos con x_ al componente principal
+                        .filter(e -> !e.getKey().startsWith("x_"))
                         .map(e -> new ItemAttribute(item, e.getKey(), e.getValue()))
                         .collect(Collectors.toList());
                 attrs.add(new ItemAttribute(item, "numeroOrdenItem", "" + item.getId()));

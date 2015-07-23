@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -72,9 +73,12 @@ public class DocumentDetail implements Serializable {
     private String tipoSistemaImpuestoISC;
     @Column(name = "DISC", precision = 19, scale = 2)
     private BigDecimal importeIsc;
+    //siempre el valor 9999
+    @Transient
+    private String codigoAuxiliar100_1;
     @Size(max = 100)
     @Column(name = "DAUX1", length = 100)
-    private String x_daux1;
+    private String textoAuxiliar100_1;
     @Size(max = 100)
     @Column(name = "DAUX2", length = 100)
     private String x_daux2;
@@ -254,12 +258,23 @@ public class DocumentDetail implements Serializable {
         this.importeIsc = importeIsc;
     }
 
-    public String getX_daux1() {
-        return x_daux1;
+    public String getCodigoAuxiliar100_1() {
+        if (textoAuxiliar100_1 != null || !"".equals(textoAuxiliar100_1)) {
+            codigoAuxiliar100_1 = "9999";
+        }
+        return codigoAuxiliar100_1;
     }
 
-    public void setX_daux1(String x_daux1) {
-        this.x_daux1 = x_daux1;
+    public void setCodigoAuxiliar100_1(String codigoAuxiliar100_1) {
+        this.codigoAuxiliar100_1 = codigoAuxiliar100_1;
+    }
+
+    public String getTextoAuxiliar100_1() {
+        return textoAuxiliar100_1;
+    }
+
+    public void setTextoAuxiliar100_1(String textoAuxiliar100_1) {
+        this.textoAuxiliar100_1 = textoAuxiliar100_1;
     }
 
     public String getX_daux2() {

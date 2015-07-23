@@ -165,10 +165,10 @@ public class DocumentHeader implements Serializable {
     @Column(name = "CANTICIPO", precision = 19, scale = 2)
     private BigDecimal totalDocumentoAnticipo;
     @Transient
-    private String tipoReferenciaAdicional_1;
+    private String tipoDocumentoAnticipo;
     @Size(max = 13)
     @Column(name = "CDOCANTICIPO1", length = 13)
-    private String numeroDocumentoReferenciaAdicional_1;
+    private String serieNumeroDocumentoAnticipo;
     @Transient
     private String tipoReferenciaAdicional_2;
     @Size(max = 13)
@@ -270,6 +270,8 @@ public class DocumentHeader implements Serializable {
     @Size(max = 100)
     @Column(name = "CAUX21", length = 100)
     private String textoAuxiliar100_1;
+    @Transient//siempre 9420: notas
+    private String codigoAuxiliar100_2;
     @Size(max = 100)
     @Column(name = "CAUX22", length = 100)
     private String textoAuxiliar100_2;
@@ -790,32 +792,23 @@ public class DocumentHeader implements Serializable {
         this.totalDocumentoAnticipo = totalDocumentoAnticipo;
     }
 
-    public String getTipoReferenciaAdicional_1() {
-        if (numeroDocumentoReferenciaAdicional_1 != null) {
-            if (null != tipoDocumento) {
-                switch (tipoDocumento) {
-                    case "01":
-                        tipoReferenciaAdicional_1 = "02";
-                        break;
-                    case "03":
-                        tipoReferenciaAdicional_1 = "03";
-                        break;
-                }
-            }
+    public String getTipoDocumentoAnticipo() {
+        if (serieNumeroDocumentoAnticipo != null) {
+            tipoDocumentoAnticipo = tipoDocumento;
         }
-        return tipoReferenciaAdicional_1;
+        return tipoDocumentoAnticipo;
     }
 
-    public void setTipoReferenciaAdicional_1(String tipoReferenciaAdicional_1) {
-        this.tipoReferenciaAdicional_1 = tipoReferenciaAdicional_1;
+    public void setTipoDocumentoAnticipo(String tipoDocumentoAnticipo) {
+        this.tipoDocumentoAnticipo = tipoDocumentoAnticipo;
     }
 
-    public String getNumeroDocumentoReferenciaAdicional_1() {
-        return numeroDocumentoReferenciaAdicional_1;
+    public String getSerieNumeroDocumentoAnticipo() {
+        return serieNumeroDocumentoAnticipo;
     }
 
-    public void setNumeroDocumentoReferenciaAdicional_1(String numeroDocumentoReferenciaAdicional_1) {
-        this.numeroDocumentoReferenciaAdicional_1 = numeroDocumentoReferenciaAdicional_1;
+    public void setSerieNumeroDocumentoAnticipo(String serieNumeroDocumentoAnticipo) {
+        this.serieNumeroDocumentoAnticipo = serieNumeroDocumentoAnticipo;
     }
 
     public String getTipoReferenciaAdicional_2() {
@@ -1160,6 +1153,15 @@ public class DocumentHeader implements Serializable {
 
     public void setTextoAuxiliar100_1(String textoAuxiliar100_1) {
         this.textoAuxiliar100_1 = textoAuxiliar100_1;
+    }
+
+    public String getCodigoAuxiliar100_2() {
+        codigoAuxiliar100_1 = textoAuxiliar100_1 == null ? null : "9420";
+        return codigoAuxiliar100_1;
+    }
+
+    public void setCodigoAuxiliar100_2(String codigoAuxiliar100_1) {
+        this.codigoAuxiliar100_1 = codigoAuxiliar100_1;
     }
 
     public String getTextoAuxiliar100_2() {
