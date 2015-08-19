@@ -19,4 +19,8 @@ public interface DatabaseManager {
 
     void handle(Consumer<EntityManager> consumer);
 
+    <T> T seekNT(Function<EntityManager, T> function);
+
+    void handleNT(Consumer<EntityManager> consumer);
+
 }

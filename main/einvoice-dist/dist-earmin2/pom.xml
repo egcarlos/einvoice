@@ -7,17 +7,17 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>hv-dist-ear</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>einvoice-dist-earmin2</artifactId>
     <packaging>ear</packaging>
 
-    <name>hv-dist-ear</name>
+    <name>einvoice-dist-earmin2</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
   
     <build>
+        <finalName>einvoice-min</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
@@ -41,16 +41,25 @@
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
                     <skinnyWars>true</skinnyWars>
+                    <applicationName>core</applicationName>
                     <modules>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>einvoice-dist-apirest2</artifactId>
+                            <contextRoot>/einvoice/rest</contextRoot>
+                            <moduleId>apirest</moduleId>
+                        </webModule>
                         <webModule>
                             <groupId>${project.groupId}</groupId>
                             <artifactId>einvoice-dist-console</artifactId>
                             <contextRoot>/einvoice/console</contextRoot>
+                            <moduleId>console</moduleId>
                         </webModule>
                         <webModule>
-                            <groupId>pe.labtech.einvoice.external</groupId>
-                            <artifactId>PDFServer</artifactId>
-                            <contextRoot>/einvoice/resources</contextRoot>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>einvoice-dist-security</artifactId>
+                            <contextRoot>/einvoice/security</contextRoot>
+                            <moduleId>security</moduleId>
                         </webModule>
                     </modules>
                 </configuration>
@@ -60,20 +69,15 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>einvoice-dist-console</artifactId>
-            <version>1.0</version>
+            <artifactId>einvoice-dist-apirest2</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
         <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>hv-process-replicate</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <type>ejb</type>
-        </dependency>
-        <dependency>
-            <groupId>pe.labtech.einvoice.process</groupId>
-            <artifactId>einvoice-process-replicatesummary</artifactId>
-            <type>ejb</type>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>einvoice-dist-console</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
         </dependency>
         <dependency>
             <groupId>pe.labtech.einvoice.process</groupId>
@@ -91,9 +95,9 @@
             <type>ejb</type>
         </dependency>
         <dependency>
-            <groupId>pe.labtech.einvoice.external</groupId>
-            <artifactId>PDFServer</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>einvoice-dist-security</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
     </dependencies>

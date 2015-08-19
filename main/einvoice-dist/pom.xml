@@ -30,10 +30,14 @@
         <module>dist-apirest</module>
         <module>dist-console</module>
         <module>dist-security</module>
+        <module>dist-input-document</module>
         <module>dist-ear</module>
         <module>dist-earmin</module>
         <module>dist-single-core</module>
         <module>dist-single-replicate</module>
         <module>dist-single-downloadcopy</module>
+        <module>dist-apirest2</module>
+        <module>dist-earmin2</module>
+        <module>dist-new-replicate</module>
     </modules>
 </project>

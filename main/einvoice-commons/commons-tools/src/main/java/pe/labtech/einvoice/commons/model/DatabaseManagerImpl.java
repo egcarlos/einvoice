@@ -29,5 +29,17 @@ public abstract class DatabaseManagerImpl implements DatabaseManager {
         consumer.accept(this.getEntityManager());
     }
 
+    @Override
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public <T> T seekNT(Function<EntityManager, T> function) {
+        return function.apply(this.getEntityManager());
+    }
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public void handleNT(Consumer<EntityManager> consumer) {
+        consumer.accept(this.getEntityManager());
+    }
+
     public abstract EntityManager getEntityManager();
 }

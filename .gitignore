@@ -115,3 +115,7 @@ $RECYCLE.BIN/
 main/einvoice-commons/commons-ubl/out.xml
 main/einvoice-commons/commons-ubl/voideddocuments.xml
 main/einvoice-commons/commons-ubl/summarydocuments.xml
+/main/einvoice-dist/dist-input-document/target/
+/main/einvoice-dist/dist-new-replicate/target/
+/main/einvoice-dist/dist-apirest2/target/
+/main/einvoice-dist/dist-earmin2/target/
