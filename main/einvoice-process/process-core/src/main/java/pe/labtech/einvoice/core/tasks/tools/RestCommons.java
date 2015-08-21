@@ -11,7 +11,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import pe.labtech.einvoice.commons.jndi.JNDI;
-import pe.labtech.einvoice.core.entity.Document;
 
 /**
  *
@@ -26,6 +25,9 @@ public class RestCommons {
         WebTarget target = targets.get(driverId);
         if (target == null) {
             String targetURL = JNDI.getInstance().lookup("java:global/einvoice/remote/" + driverId);
+            if (targetURL == null) {
+                return null;
+            }
             target = client.target(targetURL);
             targets.putIfAbsent(driverId, target);
         }

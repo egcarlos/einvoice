@@ -6,13 +6,7 @@
 package pe.labtech.einvoice.api.restful;
 
 import java.util.logging.Logger;
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Singleton;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
+import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -22,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
 import static pe.labtech.einvoice.api.restful.RestTools.buildItemId;
+import pe.labtech.einvoice.commons.jndi.JNDI;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.replicator.entity.CancelDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
@@ -38,14 +33,11 @@ import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
  *
  * @author Carlos
  */
-@Singleton
+@RequestScoped
 @Path("{issuerType}/{issuerId}")
-@TransactionManagement(TransactionManagementType.BEAN)
-@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class InvoiceResource {
 
-    @EJB
-    private RestHelperLocal help;
+    private static final Logger logger = Logger.getLogger(InvoiceResource.class.getSimpleName());
 
     /**
      * Creates a new instance of GenericResource
@@ -64,6 +56,7 @@ public class InvoiceResource {
         if (documentType.startsWith("R")) {
             documentNumber = documentType + "-" + documentNumber;
         }
+        RestHelperLocal help = JNDI.getInstance().lookup("java:module/RestHelper");
         return help.find(issuerType, issuerId, documentType, documentNumber);
     }
 
@@ -89,9 +82,10 @@ public class InvoiceResource {
             @QueryParam("source") @DefaultValue("##NONE") String source,
             DocumentHeader content
     ) {
-        Logger.getLogger(this.getClass().getName()).info("sign_01");
+        logger.info(() -> "sign " + issuerType + "-" + issuerId + "-01-" + documentNumber + "(" + source + ")");
         content.setInHabilitado("1");
         configureId(content, issuerType, issuerId, "01", documentNumber);
+        RestHelperLocal help = JNDI.getInstance().lookup("java:module/RestHelper");
         return help.sign(content, source);
     }
 
@@ -116,9 +110,10 @@ public class InvoiceResource {
             @QueryParam("source") @DefaultValue("##NONE") String source,
             DocumentHeader content
     ) {
-        Logger.getLogger(this.getClass().getName()).info("sign_03");
+        logger.info(() -> "sign " + issuerType + "-" + issuerId + "-03-" + documentNumber + "(" + source + ")");
         content.setInHabilitado("1");
         configureId(content, issuerType, issuerId, "03", documentNumber);
+        RestHelperLocal help = JNDI.getInstance().lookup("java:module/RestHelper");
         return help.sign(content, source);
     }
 
@@ -143,9 +138,10 @@ public class InvoiceResource {
             @QueryParam("source") @DefaultValue("##NONE") String source,
             DocumentHeader content
     ) {
-        Logger.getLogger(this.getClass().getName()).info("sign_07");
+        logger.info(() -> "sign " + issuerType + "-" + issuerId + "-07-" + documentNumber + "(" + source + ")");
         content.setInHabilitado("1");
         configureId(content, issuerType, issuerId, "07", documentNumber);
+        RestHelperLocal help = JNDI.getInstance().lookup("java:module/RestHelper");
         return help.sign(content, source);
     }
 
@@ -170,9 +166,10 @@ public class InvoiceResource {
             @QueryParam("source") @DefaultValue("##NONE") String source,
             DocumentHeader content
     ) {
-        Logger.getLogger(this.getClass().getName()).info("sign_08");
+        logger.info(() -> "sign " + issuerType + "-" + issuerId + "-08-" + documentNumber + "(" + source + ")");
         content.setInHabilitado("1");
         configureId(content, issuerType, issuerId, "08", documentNumber);
+        RestHelperLocal help = JNDI.getInstance().lookup("java:module/RestHelper");
         return help.sign(content, source);
     }
 
@@ -187,9 +184,10 @@ public class InvoiceResource {
             @QueryParam("source") @DefaultValue("##NONE") String source,
             SummaryHeader content
     ) {
-        Logger.getLogger(this.getClass().getName()).info("sign_RC");
+        logger.info(() -> "sign " + issuerType + "-" + issuerId + "-RC-" + documentNumber + "(" + source + ")");
         content.setInHabilitado("1");
         configureId(content, issuerType, issuerId, "RC", documentNumber);
+        RestHelperLocal help = JNDI.getInstance().lookup("java:module/RestHelper");
         return help.sign(content, source);
     }
 
@@ -204,9 +202,10 @@ public class InvoiceResource {
             @QueryParam("source") @DefaultValue("##NONE") String source,
             CancelHeader content
     ) {
-        Logger.getLogger(this.getClass().getName()).info("sign_RA");
+        logger.info(() -> "sign " + issuerType + "-" + issuerId + "-RA-" + documentNumber + "(" + source + ")");
         content.setInHabilitado("1");
         configureId(content, issuerType, issuerId, "RA", documentNumber);
+        RestHelperLocal help = JNDI.getInstance().lookup("java:module/RestHelper");
         return help.sign(content, source);
     }
 

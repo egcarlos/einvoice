@@ -6,12 +6,8 @@
 package pe.labtech.einvoice.driver.ss;
 
 import java.util.concurrent.ExecutorService;
-import java.util.logging.Logger;
-import javax.annotation.Resource;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
-import javax.ejb.LocalBean;
-import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.ws.rs.DefaultValue;
@@ -19,21 +15,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import pe.labtech.einvoice.commons.jndi.JNDI;
 
 /**
  * REST Web Service
  *
  * @author Carlos Echeverria
  */
-@Singleton
-@LocalBean
 @Path("load")
-@TransactionManagement(TransactionManagementType.BEAN)
-@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class LoadDocumentResource {
-
-    @Resource(name = "java:global/einvoice/executor/load")
-    private ExecutorService executor;
 
     /**
      * Creates a new instance of LoadDocumentResource
@@ -58,8 +48,9 @@ public class LoadDocumentResource {
             @QueryParam("source") @DefaultValue("A") String source,
             @QueryParam("target") @DefaultValue("L") String target
     ) {
-        Logger.getAnonymousLogger().info("Start replication process");
-        executor.execute(new LoadDocumentTask(batch, source, target));
+//        Logger.getAnonymousLogger().info("Start replication process");
+        ExecutorService executor = JNDI.getInstance().lookup("java:global/einvoice/executor/load");
+        executor.submit(new LoadDocumentTask(batch, source, target));
         return "<done />";
     }
 

@@ -16,6 +16,7 @@
         <module>einvoice-ws</module>
         <module>einvoice-process</module>
         <module>einvoice-dist</module>
+        <module>einvoice-dist2</module>
     </modules>
     
     <properties>
