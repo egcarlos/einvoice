@@ -9,6 +9,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -16,6 +17,7 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import pe.labtech.einvoice.commons.jndi.JNDI;
 
 /**
  * Abstract template for recurrent tasks that will handle the
@@ -68,13 +70,19 @@ public abstract class AbstractRecurrentTask<T> implements RecurrentTask {
      */
     protected BiConsumer<T, ? super Throwable> onTaskError;
 
+    /**
+     * Async executor service.
+     */
+    protected ExecutorService service;
+
     @PostConstruct
     public void init() {
         logger.info(() -> "Task " + this.getClass().getSimpleName() + ": created.");
         this.working = new AtomicBoolean(false);
         this.enabled = new AtomicBoolean(true);
-        this.lock.putIfAbsent(getTaskId(), Boolean.FALSE);
+        lock.putIfAbsent(getTaskId(), Boolean.FALSE);
         this.getId = t -> t != null ? t.toString() : "invaid";
+        this.service = JNDI.getInstance().lookup("java:global/einvoice/executor/" + this.getClass().getSimpleName());
     }
 
     protected void timeout() {
@@ -108,23 +116,31 @@ public abstract class AbstractRecurrentTask<T> implements RecurrentTask {
             //procesando cada tarea
             tasks.forEach(t -> {
                 String id = getId.apply(t);
-                try {
-                    //se bloquea la tarea y si es exitoso se procesa
-                    if (tryLock.apply(t)) {
-                        logger.info(() -> tm(id + " dispatching."));
-                        consumer.accept(t);
-                        logger.info(() -> tm(id + " procesed."));
-                    }
-                } catch (Exception ex) {
-                    logger.log(Level.SEVERE, ex, () -> tm(id + " error while executing task. " + ex.getMessage()));
-                    if (this.onTaskError != null) {
-                        this.onTaskError.accept(t, ex);
+                if (tryLock.apply(t)) {
+                    if (this.service == null) {
+                        dispatch(id, t);
+                    } else {
+                        service.submit(() -> dispatch(id, t));
                     }
                 }
             });
 
         } finally {
             unlock();
+        }
+    }
+
+    private void dispatch(String id, T t) {
+        try {
+            logger.info(() -> tm(id + " dispatching."));
+            //se bloquea la tarea y si es exitoso se procesa
+            consumer.accept(t);
+            logger.info(() -> tm(id + " procesed."));
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex, () -> tm(id + " error while executing task. " + ex.getMessage()));
+            if (this.onTaskError != null) {
+                this.onTaskError.accept(t, ex);
+            }
         }
     }
 

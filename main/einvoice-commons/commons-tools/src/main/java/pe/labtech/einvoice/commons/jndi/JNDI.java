@@ -6,20 +6,12 @@
 package pe.labtech.einvoice.commons.jndi;
 
 import java.util.Map;
-import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.EJBHome;
-import javax.ejb.EJBLocalHome;
-import javax.jms.ConnectionFactory;
-import javax.jms.Destination;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.rmi.PortableRemoteObject;
-import javax.sql.DataSource;
-import javax.mail.Session;
 
 /**
  *
@@ -30,6 +22,7 @@ public class JNDI {
     private static JNDI me;
     private final InitialContext ic;
     private final Map<String, Object> cache;
+    private static final Logger logger = Logger.getLogger(JNDI.class.getName());
 
     static {
         try {
@@ -55,7 +48,7 @@ public class JNDI {
                 cachedObj = ic.lookup(jndiName);
                 cache.put(jndiName, cachedObj);
             } catch (NamingException ex) {
-                Logger.getLogger(JNDI.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, ex.getMessage());
             }
         }
         return (T) cachedObj;

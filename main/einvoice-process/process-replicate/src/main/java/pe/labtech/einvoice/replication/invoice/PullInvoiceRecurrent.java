@@ -5,6 +5,7 @@
  */
 package pe.labtech.einvoice.replication.invoice;
 
+import java.util.concurrent.ExecutorService;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.ConcurrencyManagement;
@@ -14,6 +15,7 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import pe.labtech.einvoice.commons.jndi.JNDI;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
@@ -41,7 +43,7 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
     public void init() {
         super.init();
         logger.info(() -> tm("Pulling documents from: " + (source == null ? "##DEFAULT" : source)));
-        this.findTasks = () -> pub.seek(e -> e
+        this.findTasks = () -> pub.seekNT(e -> e
                 .createQuery(
                         "SELECT O.id FROM DocumentHeader O WHERE o.bl_estadoRegistro = 'A' ORDER BY O.id.tipoDocumento ASC, O.id.serieNumero",
                         DocumentHeaderPK.class
@@ -57,7 +59,14 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
                 .executeUpdate() == 1
         );
         this.getId = t -> t.getTipoDocumentoEmisor() + "-" + t.getNumeroDocumentoEmisor() + "-" + t.getTipoDocumento() + "-" + t.getSerieNumero();
-        this.consumer = t -> task.replicate(t);
+        this.consumer = t -> {
+            ExecutorService executor = JNDI.getInstance().lookup("java:global/einvoice/async/" + this.getClass().getSimpleName());
+            if (executor == null) {
+                task.replicate(t);
+            } else {
+                executor.submit(() -> task.replicate(t));
+            }
+        };
     }
 
     @Override

@@ -38,7 +38,7 @@ public class RecurrentHelper {
      */
     public static List<Long> lookup(DatabaseManager db, String step, String status, UnaryOperator<TypedQuery<Long>> uo) {
         UnaryOperator<TypedQuery<Long>> safeUo = (uo == null ? noop : uo);
-        return db.seek(e -> safeUo
+        return db.seekNT(e -> safeUo
                 .apply(
                         e.createQuery(
                                 "SELECT O.id FROM Document O WHERE O.step = :step AND O.status = :status",
