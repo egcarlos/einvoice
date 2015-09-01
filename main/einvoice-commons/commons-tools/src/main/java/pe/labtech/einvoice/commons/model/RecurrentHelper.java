@@ -26,15 +26,12 @@ public class RecurrentHelper {
     private static final UnaryOperator<TypedQuery<Long>> noop = q -> q;
 
     /**
-     * Looksup for Documents in said database that match the said step and
-     * status. Also can apply an unnary operator in order to alter the generated
-     * query.
      *
-     * @param db database to look in
-     * @param step step of the document
-     * @param status status of the document
-     * @param uo unary operator to apply to the generated query
-     * @return a list of document identifiers (Long) of chosen records
+     * @param db
+     * @param step
+     * @param status
+     * @param uo
+     * @return
      */
     public static List<Long> lookup(DatabaseManager db, String step, String status, UnaryOperator<TypedQuery<Long>> uo) {
         UnaryOperator<TypedQuery<Long>> safeUo = (uo == null ? noop : uo);
@@ -52,26 +49,47 @@ public class RecurrentHelper {
     }
 
     /**
-     * Looksup for Documents in said database that match the said step and
-     * status.
      *
-     * @param db database to look in
-     * @param step step of the document
-     * @param status status of the document
-     * @return a list of document identifiers (Long) of chosen records
+     * @param db
+     * @param step
+     * @param status
+     * @return
      */
     public static List<Long> lookup(DatabaseManager db, String step, String status) {
         return lookup(db, step, status, null);
     }
 
+    /**
+     *
+     * @param t
+     * @param action
+     * @return
+     */
     public static String buildId(Long t, String action) {
         return MessageFormat.format("Document[id:{0}].{1}()", t, action);
     }
 
+    /**
+     *
+     * @param t
+     * @param action
+     * @param args
+     * @return
+     */
     public static String buildId(Long t, String action, String... args) {
         return MessageFormat.format("Document[id:{0}].{1}(" + StringTools.join(args, ", ", "'") + ")", t, action);
     }
 
+    /**
+     *
+     * @param db
+     * @param id
+     * @param oldStep
+     * @param oldStatus
+     * @param newStep
+     * @param newStatus
+     * @return
+     */
     public static boolean lock(DatabaseManager db, Long id, String oldStep, String oldStatus, String newStep, String newStatus) {
         return db.seek(e -> e
                 .createQuery(
@@ -86,6 +104,13 @@ public class RecurrentHelper {
         );
     }
 
+    /**
+     *
+     * @param db
+     * @param source
+     * @param numberPrefixes
+     * @return
+     */
     public static List<Long> lookupAllSourcedResponses(DatabaseManager db, String source, String... numberPrefixes) {
         List<String> l = new LinkedList<>();
         for (int i = 0; i < numberPrefixes.length; i++) {
@@ -95,17 +120,24 @@ public class RecurrentHelper {
         StringBuilder sb = new StringBuilder("SELECT DISTINCT o.document.id FROM DocumentResponse o WHERE o.replicate = TRUE AND o.document.hash = :source");
         sb.append(" AND (").append(variable).append(")");
         String adjustedQuery = sb.toString();
-        return db.seek(e -> {
+        return db.seekNT(e -> {
             TypedQuery<Long> q = e
                     .createQuery(adjustedQuery, Long.class)
                     .setParameter("source", source);
             for (int i = 0; i < numberPrefixes.length; i++) {
                 q.setParameter("p" + i, numberPrefixes[i]);
             }
-            return q.getResultList();
+            //Se establece el máximo de respuestas concurrentes
+            return q.setMaxResults(50).getResultList();
         });
     }
 
+    /**
+     *
+     * @param db
+     * @param numberPrefixes
+     * @return
+     */
     public static List<Long> lookupAllResponses(DatabaseManager db, String... numberPrefixes) {
         List<String> l = new LinkedList<>();
         for (int i = 0; i < numberPrefixes.length; i++) {
@@ -115,7 +147,7 @@ public class RecurrentHelper {
         StringBuilder sb = new StringBuilder("SELECT DISTINCT o.document.id FROM DocumentResponse o WHERE o.replicate = TRUE");
         sb.append(" AND (").append(variable).append(")");
         String adjustedQuery = sb.toString();
-        return db.seek(e -> {
+        return db.seekNT(e -> {
             TypedQuery<Long> q = e.createQuery(adjustedQuery, Long.class);
             for (int i = 0; i < numberPrefixes.length; i++) {
                 q.setParameter("p" + i, numberPrefixes[i]);
@@ -124,6 +156,13 @@ public class RecurrentHelper {
         });
     }
 
+    /**
+     *
+     * @param db
+     * @param id
+     * @param name
+     * @return
+     */
     public static boolean lockResponse(DatabaseManager db, Long id, String name) {
         return db.seek(e -> e
                 .createQuery(
@@ -135,8 +174,16 @@ public class RecurrentHelper {
         );
     }
 
+    /**
+     *
+     * @param <T>
+     * @param db
+     * @param clazz
+     * @param id
+     * @return
+     */
     public static <T> List<T> lookupResponse(DatabaseManager db, Class<T> clazz, Long id) {
-        return db.seek(e -> e
+        return db.seekNT(e -> e
                 .createQuery(
                         "SELECT o FROM DocumentResponse o WHERE o.replicate = TRUE AND o.document.id = :id",
                         clazz
@@ -146,6 +193,13 @@ public class RecurrentHelper {
         );
     }
 
+    /**
+     *
+     * @param <T>
+     * @param db
+     * @param id
+     * @param responses
+     */
     public static final <T> void sendResponses(DatabaseManager db, T id, Map<String, ? extends Object> responses) {
         String entity = id.getClass().getSimpleName().replace("PK", "");
         String setPart = responses.entrySet().stream()

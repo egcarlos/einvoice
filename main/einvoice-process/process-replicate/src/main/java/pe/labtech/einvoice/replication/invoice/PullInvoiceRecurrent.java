@@ -48,7 +48,8 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
                         "SELECT O.id FROM DocumentHeader O WHERE o.bl_estadoRegistro = 'A' ORDER BY O.id.tipoDocumento ASC, O.id.serieNumero",
                         DocumentHeaderPK.class
                 )
-                .setMaxResults(10000)
+                //se ha cambiado la transaccionalidad a bloques de 50
+                .setMaxResults(50)
                 .getResultList()
         );
         this.tryLock = t -> pub.seek(e -> e

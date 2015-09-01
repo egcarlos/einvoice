@@ -91,10 +91,16 @@ public class DatabaseCommons {
     public static void addSynthResponses(Map<String, String> responses) {
         //Se agrega el campo sintético a las respuestas
         if (responses != null) {
-            responses.put(
-                    "integratedStatus",
-                    responses.get("status") + "/" + responses.get("documentStatus") + "/" + responses.get("sunatStatus")
-            );
+            String status = responses.get("status") + "/"
+                    + responses.get("documentStatus") + "/"
+                    + responses.get("sunatStatus");
+
+            if (!"null/null/null".equals(status)) {
+                responses.put(
+                        "integratedStatus",
+                        status
+                );
+            }
         }
     }
 
