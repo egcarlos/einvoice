@@ -18,8 +18,8 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Addr
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AttachmentType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.BillingReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CountryType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CreditNoteLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DebitNoteLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ExternalReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType;
@@ -67,11 +67,11 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueTyp
 import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.ExtensionContentType;
 import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionType;
 import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionsType;
-import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
+import oasis.names.specification.ubl.schema.xsd.debitnote_2.DebitNoteType;
 import org.w3c.dom.Document;
 import pe.labtech.einvoice.commons2.ubl.api.HeaderBuilder;
 import pe.labtech.einvoice.commons2.ubl.jaxb.AdditionalInformationContext;
-import pe.labtech.einvoice.commons2.ubl.jaxb.CreditNoteContext;
+import pe.labtech.einvoice.commons2.ubl.jaxb.DebitNoteContext;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.AdditionalInformationType;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.AdditionalMonetaryTotalType;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.AdditionalPropertyType;
@@ -81,18 +81,18 @@ import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContent
  *
  * @author Carlos
  */
-public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements HeaderBuilder<CreditNoteType, CreditNoteLineType> {
+public class DebitNoteBuilder extends BaseBuilder<DebitNoteType> implements HeaderBuilder<DebitNoteType, DebitNoteLineType> {
 
     private CurrencyCodeContentType currency;
     private AdditionalInformationType sunatElements;
     private AdditionalInformationType otherElements;
 
-    public CreditNoteBuilder() {
-        super(CreditNoteType::new);
+    public DebitNoteBuilder() {
+        super(DebitNoteType::new);
     }
 
     @Override
-    public CreditNoteBuilder init() {
+    public DebitNoteBuilder init() {
         super.init();
         sunatElements = new AdditionalInformationType();
         otherElements = new AdditionalInformationType();
@@ -111,20 +111,20 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
         return this;
     }
 
-    public CreditNoteBuilder addCurrency(String currency) {
+    public DebitNoteBuilder addCurrency(String currency) {
         this.currency = CurrencyCodeContentType.valueOf(currency);
         reference.setDocumentCurrencyCode(init(DocumentCurrencyCodeType::new, DocumentCurrencyCodeType::setValue, currency));
         return this;
     }
 
-    public CreditNoteBuilder addIdentification(String invoiceTypeCode, String invoiceNumber, String invoiceDate) {
+    public DebitNoteBuilder addIdentification(String invoiceTypeCode, String invoiceNumber, String invoiceDate) {
         reference.setID(id(invoiceNumber));
 //        reference.setInvoiceTypeCode(code(InvoiceTypeCodeType::new, invoiceTypeCode));
         reference.setIssueDate(init(IssueDateType::new, ref -> ref.setValue(toXMLGregorianCalendar(invoiceDate))));
         return this;
     }
 
-    public CreditNoteBuilder addSignatureElement(String supplierId, String supplierName) {
+    public DebitNoteBuilder addSignatureElement(String supplierId, String supplierName) {
         reference.getSignature().add(init(SignatureType::new, st -> {
             st.setID(id("IDSignKG"));
             st.setSignatoryParty(init(PartyType::new, pt -> {
@@ -142,7 +142,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
         return this;
     }
 
-    public CreditNoteBuilder addSupplierInformation(String supplierType, String supplierId, String supplierName) {
+    public DebitNoteBuilder addSupplierInformation(String supplierType, String supplierId, String supplierName) {
         reference.setAccountingSupplierParty(init(SupplierPartyType::new, spt -> {
             spt.getAdditionalAccountID().add(identifier(AdditionalAccountIDType::new, supplierType));
             spt.setCustomerAssignedAccountID(identifier(CustomerAssignedAccountIDType::new, supplierId));
@@ -158,7 +158,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
         return this;
     }
 
-    public CreditNoteBuilder addCustomerInformation(String clientType, String clientId, String clientName) {
+    public DebitNoteBuilder addCustomerInformation(String clientType, String clientId, String clientName) {
         reference.setAccountingCustomerParty(init(CustomerPartyType::new, cpt -> {
             cpt.getAdditionalAccountID().add(identifier(AdditionalAccountIDType::new, clientType));
             cpt.setCustomerAssignedAccountID(identifier(CustomerAssignedAccountIDType::new, clientId));
@@ -174,7 +174,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
         return this;
     }
 
-    public CreditNoteBuilder addNote(String id, String value) {
+    public DebitNoteBuilder addNote(String id, String value) {
         if (id != null && value != null) {
             sunatElements.getAdditionalProperty().add(init(AdditionalPropertyType::new, ref -> {
                 ref.setID(id(id));
@@ -184,21 +184,21 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
         return this;
     }
 
-    public CreditNoteBuilder addCustomNote(String id, String value) {
+    public DebitNoteBuilder addCustomNote(String id, String value) {
         if (id != null && value != null) {
             otherElements.getAdditionalProperty().add(AdditionalPropertyType(id, value));
         }
         return this;
     }
 
-    public CreditNoteBuilder addTax(String id, String name, String typeCode, String amount) {
+    public DebitNoteBuilder addTax(String id, String name, String typeCode, String amount) {
         if (amount == null) {
             return this;
         }
         return addTax(id, name, typeCode, new BigDecimal(amount));
     }
 
-    public CreditNoteBuilder addTax(String id, String name, String typeCode, BigDecimal amount) {
+    public DebitNoteBuilder addTax(String id, String name, String typeCode, BigDecimal amount) {
         this.reference.getTaxTotal().add(init(TaxTotalType::new, ttt -> {
             ttt.setTaxAmount(amount(TaxAmountType::new, currency, amount));
             ttt.getTaxSubtotal().add(init(TaxSubtotalType::new, tst -> {
@@ -215,27 +215,27 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
         return this;
     }
 
-    public CreditNoteBuilder addTotalAllowance(String amount) {
+    public DebitNoteBuilder addTotalAllowance(String amount) {
         if (amount != null) {
             addTotalAllowance(new BigDecimal(amount));
         }
         return this;
     }
 
-    public CreditNoteBuilder addTotalAllowance(BigDecimal amount) {
-        return this.addLegalMonetaryTotal(
+    public DebitNoteBuilder addTotalAllowance(BigDecimal amount) {
+        return this.addRequestedMonetaryTotal(
                 AllowanceTotalAmountType::new,
                 MonetaryTotalType::setAllowanceTotalAmount,
                 amount
         );
     }
 
-    public CreditNoteBuilder addTotalCharge(String amount) {
+    public DebitNoteBuilder addTotalCharge(String amount) {
         return this.addTotalCharge(bigDecimal(amount));
     }
 
-    public CreditNoteBuilder addTotalCharge(BigDecimal amount) {
-        return this.addLegalMonetaryTotal(
+    public DebitNoteBuilder addTotalCharge(BigDecimal amount) {
+        return this.addRequestedMonetaryTotal(
                 ChargeTotalAmountType::new,
                 MonetaryTotalType::setChargeTotalAmount,
                 amount
@@ -243,16 +243,16 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
     }
 
     public <M extends un.unece.uncefact.data.specification.unqualifieddatatypesschemamodule._2.AmountType>
-            CreditNoteBuilder addLegalMonetaryTotal(
+            DebitNoteBuilder addRequestedMonetaryTotal(
                     Supplier<M> supplier,
                     BiConsumer<MonetaryTotalType, M> consumer,
                     BigDecimal amount
             ) {
         if (amount != null) {
-            if (this.reference.getLegalMonetaryTotal() == null) {
-                this.reference.setLegalMonetaryTotal(new MonetaryTotalType());
+            if (this.reference.getRequestedMonetaryTotal() == null) {
+                this.reference.setRequestedMonetaryTotal(new MonetaryTotalType());
             }
-            consumer.accept(this.reference.getLegalMonetaryTotal(), amount(supplier, currency, amount));
+            consumer.accept(this.reference.getRequestedMonetaryTotal(), amount(supplier, currency, amount));
         }
         return this;
     }
@@ -281,23 +281,23 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
 //        }
 //        return this;
 //    }
-    public CreditNoteBuilder addPrepaidAmount(String amount) {
+    public DebitNoteBuilder addPrepaidAmount(String amount) {
         return this.addPrepaidAmount(bigDecimal(amount));
     }
 
-    public CreditNoteBuilder addPrepaidAmount(BigDecimal amount) {
-        return this.addLegalMonetaryTotal(PrepaidAmountType::new, MonetaryTotalType::setPrepaidAmount, amount);
+    public DebitNoteBuilder addPrepaidAmount(BigDecimal amount) {
+        return this.addRequestedMonetaryTotal(PrepaidAmountType::new, MonetaryTotalType::setPrepaidAmount, amount);
     }
 
-    public CreditNoteBuilder addTotalPayable(String amount) {
+    public DebitNoteBuilder addTotalPayable(String amount) {
         return this.addTotalPayable(bigDecimal(amount));
     }
 
-    public CreditNoteBuilder addTotalPayable(BigDecimal amount) {
-        return this.addLegalMonetaryTotal(PayableAmountType::new, MonetaryTotalType::setPayableAmount, amount);
+    public DebitNoteBuilder addTotalPayable(BigDecimal amount) {
+        return this.addRequestedMonetaryTotal(PayableAmountType::new, MonetaryTotalType::setPayableAmount, amount);
     }
 
-    public CreditNoteBuilder addDiscrepancyResponse(String referenceID, String responseCode, String description) {
+    public DebitNoteBuilder addDiscrepancyResponse(String referenceID, String responseCode, String description) {
         reference.getDiscrepancyResponse().add(init(ResponseType::new, r -> {
             r.setReferenceID(identifier(ReferenceIDType::new, referenceID));
             r.setResponseCode(code(ResponseCodeType::new, responseCode));
@@ -306,7 +306,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
         return this;
     }
 
-    public CreditNoteBuilder addBillingReference(String id, String documentTypeCode) {
+    public DebitNoteBuilder addBillingReference(String id, String documentTypeCode) {
         reference.getBillingReference().add(init(BillingReferenceType::new,
                 BillingReferenceType::setInvoiceDocumentReference,
                 init(DocumentReferenceType::new, r -> {
@@ -322,7 +322,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param name
      * @return
      */
-    public CreditNoteBuilder setIssuerName(String name) {
+    public DebitNoteBuilder setIssuerName(String name) {
         if (name == null) {
             return this;
         }
@@ -348,7 +348,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param country código iso del país
      * @return
      */
-    public CreditNoteBuilder setIssuerAddress(String id, String address, String zone, String district, String city, String state, String country) {
+    public DebitNoteBuilder setIssuerAddress(String id, String address, String zone, String district, String city, String state, String country) {
 
         AddressType a = reference.getAccountingSupplierParty().getParty().getPostalAddress();
         if (id != null) {
@@ -381,7 +381,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param name
      * @return
      */
-    public CreditNoteBuilder setAcquirerName(String name) {
+    public DebitNoteBuilder setAcquirerName(String name) {
         if (name == null) {
             return this;
         }
@@ -407,7 +407,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param country código iso del país
      * @return
      */
-    public CreditNoteBuilder setAcquirerAddress(String id, String address, String zone, String district, String city, String state, String country) {
+    public DebitNoteBuilder setAcquirerAddress(String id, String address, String zone, String district, String city, String state, String country) {
 
         AddressType a = reference.getAccountingCustomerParty().getParty().getPostalAddress();
         if (id != null) {
@@ -443,7 +443,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param percent
      * @return
      */
-    public CreditNoteBuilder addPerception(String reference, String payable, String total, String percent) {
+    public DebitNoteBuilder addPerception(String reference, String payable, String total, String percent) {
         return addAmount("2001", payable, reference, total, percent, null);
     }
 
@@ -457,7 +457,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param description
      * @return
      */
-    public CreditNoteBuilder addAmount(
+    public DebitNoteBuilder addAmount(
             String id,
             String payable,
             String reference,
@@ -495,7 +495,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param amount
      * @return
      */
-    public CreditNoteBuilder addAmount(String id, String amount) {
+    public DebitNoteBuilder addAmount(String id, String amount) {
         return this.addAmount(id, amount, null, null, null, null);
     }
 
@@ -505,7 +505,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param percent
      * @return
      */
-    public CreditNoteBuilder addRetention(String payable, String percent) {
+    public DebitNoteBuilder addRetention(String payable, String percent) {
         return addAmount("2002", payable, null, null, percent, null);
     }
 
@@ -517,7 +517,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param description
      * @return
      */
-    public CreditNoteBuilder addDetraction(String reference, String payable, String percent, String description) {
+    public DebitNoteBuilder addDetraction(String reference, String payable, String percent, String description) {
         return addAmount("2003", payable, reference, null, percent, description);
     }
 
@@ -527,7 +527,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param number
      * @return
      */
-    public CreditNoteBuilder addDespatchReference(String type, String number) {
+    public DebitNoteBuilder addDespatchReference(String type, String number) {
         if (type != null && number != null) {
             DocumentReferenceType drt = new DocumentReferenceType();
             drt.setDocumentTypeCode(new DocumentTypeCodeType());
@@ -545,7 +545,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param number
      * @return
      */
-    public CreditNoteBuilder addAdditionalReference(String type, String number) {
+    public DebitNoteBuilder addAdditionalReference(String type, String number) {
         if (type != null && number != null) {
             DocumentReferenceType drt = new DocumentReferenceType();
             drt.setDocumentTypeCode(new DocumentTypeCodeType());
@@ -562,7 +562,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @param id
      * @return
      */
-    public CreditNoteBuilder addOrderReference(String id) {
+    public DebitNoteBuilder addOrderReference(String id) {
         if (id != null) {
             reference.setOrderReference(init(
                     OrderReferenceType::new,
@@ -573,8 +573,8 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
     }
 
     @Override
-    public CreditNoteBuilder addLine(CreditNoteLineType line) {
-        reference.getCreditNoteLine().add(line);
+    public DebitNoteBuilder addLine(DebitNoteLineType line) {
+        reference.getDebitNoteLine().add(line);
         return this;
     }
 
@@ -584,7 +584,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      * @return
      */
     @Override
-    public CreditNoteType compile() {
+    public DebitNoteType compile() {
         DocumentBuilder db = getDocumentBuilder();
         ExtensionContentType ext = reference.getUBLExtensions().getUBLExtension().get(0).getExtensionContent();
         ExtensionContentType ebz = reference.getUBLExtensions().getUBLExtension().get(1).getExtensionContent();
@@ -599,7 +599,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
                 m.marshal(ie, document);
 
             } catch (JAXBException ex) {
-                Logger.getLogger(CreditNoteBuilder.class
+                Logger.getLogger(DebitNoteBuilder.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
             return document.getDocumentElement();
@@ -615,7 +615,7 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
                 m.marshal(ie, document);
 
             } catch (JAXBException ex) {
-                Logger.getLogger(CreditNoteBuilder.class
+                Logger.getLogger(DebitNoteBuilder.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
             document.renameNode(document.getDocumentElement(), "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2", "AdditionalInformation");
@@ -635,16 +635,16 @@ public class CreditNoteBuilder extends BaseBuilder<CreditNoteType> implements He
      */
     public Document document(String charsetName) {
         DocumentBuilder db = getDocumentBuilder();
-        CreditNoteType compiled = this.compile();
+        DebitNoteType compiled = this.compile();
 
-        return CreditNoteContext.reference.doWork((c, m) -> {
+        return DebitNoteContext.reference.doWork((c, m) -> {
             Document document = db.newDocument();
-            JAXBElement<CreditNoteType> ie = c.getElement(compiled);
+            JAXBElement<DebitNoteType> ie = c.getElement(compiled);
             try {
                 m.marshal(ie, document);
 
             } catch (JAXBException ex) {
-                Logger.getLogger(CreditNoteBuilder.class
+                Logger.getLogger(DebitNoteBuilder.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
             return document;

@@ -26,7 +26,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.commons.ext.ZipTools;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
 import pe.labtech.einvoice.commons.model.DocumentStep;
-import pe.labtech.einvoice.commons.ubl.*;
+import pe.labtech.einvoice.commons2.ubl.builder.*;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
@@ -155,13 +155,19 @@ public class OfflineInvoice {
             Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
             //add document main data
             DebitNoteBuilder ib = new DebitNoteBuilder()
-                    .init(
+                    .init()
+                    .addIdentification(
+                            da.get("tipoDocumento"),
                             da.get("serieNumero"),
-                            da.get("fechaEmision"),
-                            da.get("tipoMoneda"),
+                            da.get("fechaEmision")
+                    )
+                    .addCurrency(da.get("tipoMoneda"))
+                    .addSupplierInformation(
                             da.get("tipoDocumentoEmisor"),
                             da.get("numeroDocumentoEmisor"),
-                            da.get("razonSocialEmisor"),
+                            da.get("razonSocialEmisor")
+                    )
+                    .addCustomerInformation(
                             da.get("tipoDocumentoAdquiriente"),
                             da.get("numeroDocumentoAdquiriente"),
                             da.get("razonSocialAdquiriente")
@@ -176,6 +182,7 @@ public class OfflineInvoice {
                             da.get("departamentoEmisor"),
                             da.get("paisEmisor")
                     )
+                    .setAcquirerAddress(null, da.get("lugarDestino"), null, null, null, null, null)
                     .addAmount("1001", da.get("totalValorVentaNetoOpGravadas"))
                     .addAmount("1002", da.get("totalValorVentaNetoOpNoGravada"))
                     .addAmount("1003", da.get("totalValorVentaNetoOpExoneradas"))
@@ -245,7 +252,8 @@ public class OfflineInvoice {
                                 buildNumber(ia.get("importeUnitarioConImpuesto")),
                                 buildNumber(ia.get("importeTotalSinImpuesto"))
                         )
-                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), da.get("tipoMoneda"), buildNumber(ia.get("importeReferencial")))
+                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), buildNumber(ia.get("importeReferencial")))
+                        //                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), da.get("tipoMoneda"), buildNumber(ia.get("importeReferencial")))
                         .addTax("1000", "IGV", "VAT", buildNumber(ia.get("importeIgv")), ia.get("codigoRazonExoneracion"), null)
                         .addTax("2000", "ISC", "EXT", buildNumber(ia.get("importeIsc")), null, ia.get("tipoSistemaImpuestoISC"));
 
@@ -263,13 +271,19 @@ public class OfflineInvoice {
             Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
             //add document main data
             CreditNoteBuilder ib = new CreditNoteBuilder()
-                    .init(
+                    .init()
+                    .addIdentification(
+                            da.get("tipoDocumento"),
                             da.get("serieNumero"),
-                            da.get("fechaEmision"),
-                            da.get("tipoMoneda"),
+                            da.get("fechaEmision")
+                    )
+                    .addCurrency(da.get("tipoMoneda"))
+                    .addSupplierInformation(
                             da.get("tipoDocumentoEmisor"),
                             da.get("numeroDocumentoEmisor"),
-                            da.get("razonSocialEmisor"),
+                            da.get("razonSocialEmisor")
+                    )
+                    .addCustomerInformation(
                             da.get("tipoDocumentoAdquiriente"),
                             da.get("numeroDocumentoAdquiriente"),
                             da.get("razonSocialAdquiriente")
@@ -284,6 +298,7 @@ public class OfflineInvoice {
                             da.get("departamentoEmisor"),
                             da.get("paisEmisor")
                     )
+                    .setAcquirerAddress(null, da.get("lugarDestino"), null, null, null, null, null)
                     .addAmount("1001", da.get("totalValorVentaNetoOpGravadas"))
                     .addAmount("1002", da.get("totalValorVentaNetoOpNoGravada"))
                     .addAmount("1003", da.get("totalValorVentaNetoOpExoneradas"))
@@ -353,7 +368,8 @@ public class OfflineInvoice {
                                 buildNumber(ia.get("importeUnitarioConImpuesto")),
                                 buildNumber(ia.get("importeTotalSinImpuesto"))
                         )
-                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), da.get("tipoMoneda"), buildNumber(ia.get("importeReferencial")))
+                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), buildNumber(ia.get("importeReferencial")))
+                        //                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), da.get("tipoMoneda"), buildNumber(ia.get("importeReferencial")))
                         .addTax("1000", "IGV", "VAT", buildNumber(ia.get("importeIgv")), ia.get("codigoRazonExoneracion"), null)
                         .addTax("2000", "ISC", "EXT", buildNumber(ia.get("importeIsc")), null, ia.get("tipoSistemaImpuestoISC"));
 
@@ -371,14 +387,19 @@ public class OfflineInvoice {
             Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
             //add document main data
             InvoiceBuilder ib = new InvoiceBuilder()
-                    .init(
+                    .init()
+                    .addIdentification(
                             da.get("tipoDocumento"),
                             da.get("serieNumero"),
-                            da.get("fechaEmision"),
-                            da.get("tipoMoneda"),
+                            da.get("fechaEmision")
+                    )
+                    .addCurrency(da.get("tipoMoneda"))
+                    .addSupplierInformation(
                             da.get("tipoDocumentoEmisor"),
                             da.get("numeroDocumentoEmisor"),
-                            da.get("razonSocialEmisor"),
+                            da.get("razonSocialEmisor")
+                    )
+                    .addCustomerInformation(
                             da.get("tipoDocumentoAdquiriente"),
                             da.get("numeroDocumentoAdquiriente"),
                             da.get("razonSocialAdquiriente")
@@ -393,6 +414,7 @@ public class OfflineInvoice {
                             da.get("departamentoEmisor"),
                             da.get("paisEmisor")
                     )
+                    .setAcquirerAddress(null, da.get("lugarDestino"), null, null, null, null, null)
                     .addAmount("1001", da.get("totalValorVentaNetoOpGravadas"))
                     .addAmount("1002", da.get("totalValorVentaNetoOpNoGravada"))
                     .addAmount("1003", da.get("totalValorVentaNetoOpExoneradas"))
@@ -459,7 +481,8 @@ public class OfflineInvoice {
                                 buildNumber(ia.get("importeUnitarioConImpuesto")),
                                 buildNumber(ia.get("importeTotalSinImpuesto"))
                         )
-                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), da.get("tipoMoneda"), buildNumber(ia.get("importeReferencial")))
+                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), buildNumber(ia.get("importeReferencial")))
+                        //                        .addAlternativeConditionPrice(ia.get("codigoImporteReferencial"), da.get("tipoMoneda"), buildNumber(ia.get("importeReferencial")))
                         .addTax("1000", "IGV", "VAT", buildNumber(ia.get("importeIgv")), ia.get("codigoRazonExoneracion"), null)
                         .addTax("2000", "ISC", "EXT", buildNumber(ia.get("importeIsc")), null, ia.get("tipoSistemaImpuestoISC"))
                         .addAllowance(buildNumber(ia.get("importeDescuento")));

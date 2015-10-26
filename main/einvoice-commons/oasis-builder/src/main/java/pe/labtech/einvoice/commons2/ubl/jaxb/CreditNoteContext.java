@@ -18,7 +18,7 @@ public class CreditNoteContext extends AbstractContextManager<CreditNoteType> im
     private static final ObjectFactory factory = new ObjectFactory();
 
     protected CreditNoteContext() {
-        super(CreditNoteType.class, i -> factory.createCreditNote(i));
+        super(CreditNoteType.class, (CreditNoteType t) -> factory.createCreditNote(t));
     }
 
 }
