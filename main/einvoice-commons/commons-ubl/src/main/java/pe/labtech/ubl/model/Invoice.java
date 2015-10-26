@@ -21,6 +21,7 @@ import pe.labtech.ubl.model.aggregate.AccountingParty;
 import pe.labtech.ubl.model.aggregate.InvoiceLine;
 import pe.labtech.ubl.model.aggregate.LegalMonetaryTotal;
 import pe.labtech.ubl.model.aggregate.OrderReference;
+import pe.labtech.ubl.model.aggregate.PrepaidPayment;
 
 /**
  *
@@ -43,6 +44,7 @@ import pe.labtech.ubl.model.aggregate.OrderReference;
     "AccountingSupplierParty",
     "AccountingCustomerParty",
     "TaxTotal",
+    "PrepaidPayment",
     "LegalMonetaryTotal",
     "InvoiceLine"
 })
@@ -102,6 +104,9 @@ public class Invoice {
     //impuestos
     @XmlElement(namespace = Namespaces.CAC)
     private List<TaxTotal> TaxTotal;
+
+    @XmlElement(namespace = Namespaces.CAC)
+    private List<PrepaidPayment> PrepaidPayment;
 
     @XmlElement(namespace = Namespaces.CAC)
     private LegalMonetaryTotal LegalMonetaryTotal;

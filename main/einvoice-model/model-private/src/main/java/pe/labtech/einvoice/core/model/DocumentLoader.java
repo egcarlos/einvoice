@@ -75,6 +75,14 @@ public class DocumentLoader implements DocumentLoaderLocal {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void createEvent(Long id, final String eventType, final String eventMessage) {
+        Document d = new Document();
+        d.setId(id);
+        createEvent(new Document(), eventType, eventMessage);
+    }
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void createEvent(Document d, final String eventType, final String eventMessage) {
         EventTrace trace = new EventTrace();
         trace.setDocument(d);

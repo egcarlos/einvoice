@@ -27,36 +27,61 @@ import static pe.labtech.einvoice.core.tasks.tools.Tools.isNotFinishedInSunat;
 
 /**
  *
- * @author Carlos
+ * Clase de utilitarios para interacción con la base de datos.
+ *
+ * @author info@labtech.pe
  */
 public class DatabaseCommons {
 
     /**
-     * Marks a document as ERROR considering that an exception was raised
+     * Marca la transacción para reintento.
      *
-     * @param db
-     * @param document
+     * @param db apunta a la base de datos privada
+     * @param document documento analizado
      * @param loader
      * @param ex
      */
+    @Deprecated
     public static void markAsRetry(DatabaseManager db, Document document, DocumentLoaderLocal loader, Exception ex) {
-        Map<String, String> responses = new HashMap<>();
-        responses.put("messages", "Soap Fault raised!");
-        mark(db, document.getId(), null, DocumentStatus.RETRY, responses);
-        loader.createEvent(document, "WARN", Tools.exToString(ex, "Document will retry"));
+        markAsRetry(db, document.getId(), loader, ex);
     }
 
+    /**
+     * Marca la transacción para reintento.
+     *
+     * @param db apunta a la base de datos privada
+     * @param id identificador de documento analizado
+     * @param loader
+     * @param ex
+     */
+    public static void markAsRetry(DatabaseManager db, Long id, DocumentLoaderLocal loader, Exception ex) {
+        Map<String, String> responses = new HashMap<>();
+        responses.put("messages", "Soap Fault raised!");
+        mark(db, id, null, DocumentStatus.RETRY, responses);
+        loader.createEvent(id, "WARN", Tools.exToString(ex, "Document will retry"));
+    }
+
+    /**
+     * Marca un a transacción en un estado y gestiona las respuestas.
+     *
+     * @param db apunta a la base de datos privada
+     * @param id identificador del documento
+     * @param step paso del proceso
+     * @param status estado dentro del paso
+     * @param responses
+     */
     public static void mark(DatabaseManager db, Long id, String step, String status, Object... responses) {
         mark(db, id, step, status, Tools.toMap(String.class, String.class, responses));
     }
 
     /**
+     * Marca un a transacción en un estado y gestiona las respuestas.
      *
-     * @param db reference to database
-     * @param id document identifier
-     * @param step next step for the document or null to keep current
-     * @param status next status for the document or null to keep current
-     * @param responses responses or null for empty
+     * @param db apunta a la base de datos privada
+     * @param id identificador del documento
+     * @param step paso del proceso
+     * @param status estado dentro del paso
+     * @param responses
      */
     public static void mark(DatabaseManager db, Long id, String step, String status, Map<String, String> responses) {
         Document d = new Document();
@@ -77,11 +102,8 @@ public class DatabaseCommons {
                 }
             });
         } finally {
-            //TODO enviar a un procesador asíncrono, probablemente serializado
-            relayResponses(db, id, responses);
-            updateStepAndStatus(step, status, db, id);
+            updateStepAndStatus(db, id, step, status);
         }
-
     }
 
     /**
@@ -104,7 +126,14 @@ public class DatabaseCommons {
         }
     }
 
-    private static void updateResponse(DatabaseManager db, Long id, String name, String value) {
+    /**
+     *
+     * @param db apunta a la base de datos privada
+     * @param id identificador del documento
+     * @param name nombre del atributo de respuesta
+     * @param value
+     */
+    public static void updateResponse(DatabaseManager db, Long id, String name, String value) {
         db.handle(e -> {
             CriteriaBuilder cb = e.getCriteriaBuilder();
             CriteriaUpdate<DocumentResponse> cu = cb.createCriteriaUpdate(DocumentResponse.class);
@@ -118,10 +147,18 @@ public class DatabaseCommons {
                     cb.equal(da.get(DocumentResponse_.name), name),
                     cb.notEqual(da.get(DocumentResponse_.value), value)
             );
+            e.createQuery(cu).executeUpdate();
         });
     }
 
-    private static void createResponse(DatabaseManager db, Long id, String name, String value) {
+    /**
+     *
+     * @param db apunta a la base de datos privada
+     * @param id identificador del documento
+     * @param name nombre del atributo de respuesta
+     * @param value
+     */
+    public static void createResponse(DatabaseManager db, Long id, String name, String value) {
         //si el atributo no existe se debe crear un nuevo registro
         Document d = new Document();
         d.setId(id);
@@ -130,11 +167,23 @@ public class DatabaseCommons {
         db.handle(e -> e.persist(dr));
     }
 
-    private static boolean parameterShouldSkip(String name, Map<String, String> responses) {
+    /**
+     *
+     * @param name nombre de atributo de respuesta
+     * @param responses
+     * @return
+     */
+    public static boolean parameterShouldSkip(String name, Map<String, String> responses) {
         return name.equals("xmlFileSunatUrl") && isNotFinishedInSunat(responses.get("sunatStatus"));
     }
 
-    private static void relayResponses(DatabaseManager db, Long id, Map<String, String> responses) {
+    /**
+     *
+     * @param db apunta a la base de datos privada
+     * @param id identificador del documento
+     * @param responses
+     */
+    public static void relayResponses(DatabaseManager db, Long id, Map<String, String> responses) {
         Document d1 = db.seekNT(e -> e.find(Document.class, id));
         if (d1.getHash() != null && !d1.getHash().equals("##NONE")) {
             WebTarget target = RestCommons.driverTarget(d1.getHash());
@@ -155,7 +204,14 @@ public class DatabaseCommons {
         }
     }
 
-    private static void updateStepAndStatus(String step, String status, DatabaseManager db, Long id) {
+    /**
+     *
+     * @param db apunta a la base de datos privada
+     * @param id identificador del documento
+     * @param step paso del proceso
+     * @param status estado dentro del paso
+     */
+    public static void updateStepAndStatus(DatabaseManager db, Long id, String step, String status) {
         if (step != null || status != null) {
             db.handle(e -> {
                 CriteriaBuilder cb = e.getCriteriaBuilder();
@@ -174,7 +230,15 @@ public class DatabaseCommons {
         }
     }
 
-    private static boolean checkIfResponseExists(DatabaseManager db, Long id, String name) {
+    /**
+     *
+     *
+     * @param db apunta a la base de datos privada
+     * @param id identificador del documento
+     * @param name nombre del atributo de respuesta
+     * @return
+     */
+    public static boolean checkIfResponseExists(DatabaseManager db, Long id, String name) {
         Long count = db.seekNT(e -> {
             CriteriaBuilder cb = e.getCriteriaBuilder();
             CriteriaQuery<Long> cq = cb.createQuery(Long.class);
@@ -189,7 +253,15 @@ public class DatabaseCommons {
         return count != 0;
     }
 
-    private static boolean checkIfDataExists(DatabaseManager db, Long id, String name) {
+    /**
+     * Verifica si estan cargados los atributos de datos de un documento.
+     *
+     * @param db apunta a la base de datos privada
+     * @param id identificador del documento
+     * @param name nombre de atributo de datos
+     * @return
+     */
+    public static boolean checkIfDataExists(DatabaseManager db, Long id, String name) {
         Long count = db.seekNT(e -> {
             CriteriaBuilder cb = e.getCriteriaBuilder();
             CriteriaQuery<Long> cq = cb.createQuery(Long.class);
@@ -205,13 +277,14 @@ public class DatabaseCommons {
     }
 
     /**
-     * Checks if the parameter is candidate for replication.
+     * Verifica si un nombre de parámetro es candidato para replicación.
      *
-     * @param parameter
-     * @return
+     * NOTA: Trasladar aun archivo externo o a la base de datos.
+     *
+     * @param parameter nombre del parametro a analizar
+     * @return true si el atributo es replicable o false si no lo es
      */
     public static boolean isReplicable(String parameter) {
-        //TODO trasladar a la base de datos
         switch (parameter) {
             case "pdfFileUrl":
             case "xmlFileSignUrl":
@@ -228,11 +301,12 @@ public class DatabaseCommons {
     }
 
     /**
-     * Checks if document has a local signature in the server.
+     * Determina si un documento tiene una firma local registrada en la base de
+     * datos.
      *
-     * @param db
-     * @param id
-     * @return
+     * @param db apunta a la base de datos privada
+     * @param id identificador del documento
+     * @return true si hay una firma o false si no
      */
     public static boolean hasLocalSignature(DatabaseManager db, Long id) {
         return db.seekNT(e -> e
@@ -247,11 +321,12 @@ public class DatabaseCommons {
     }
 
     /**
+     * Obtiene el nombre de atributo asociado a un documento.
      *
-     * @param db
-     * @param document
-     * @param name
-     * @return
+     * @param db apunta a la base de datos privada
+     * @param document documento analizado
+     * @param name nombre de atributo
+     * @return valor del atributo
      */
     public static String getAttributeValue(DatabaseManager db, Document document, String name) {
         return db.seekNT(e -> e

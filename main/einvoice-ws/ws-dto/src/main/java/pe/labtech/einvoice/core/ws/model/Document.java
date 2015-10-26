@@ -7,6 +7,7 @@ package pe.labtech.einvoice.core.ws.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -322,6 +323,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
             "codigoAuxiliar500_5",
             "textoAuxiliar500_5",
             "items",
+            "advances",
             "referencias"
         })
 public class Document {
@@ -632,6 +634,8 @@ public class Document {
     private String textoAdicionalLeyenda_20;
     @XmlElement(name = "item")
     private List<DocumentItem> items;
+    @XmlElement(name = "anticipo")
+    private List<DocumentAdvance> advances;
     @XmlElement(name = "referencia")
     private List<DocumentReference> referencias;
     @XmlElement(name = "codigoAuxiliar100_1")
@@ -2308,11 +2312,25 @@ public class Document {
     }
 
     public List<DocumentItem> getItems() {
+        if (items == null) {
+            items = new LinkedList<>();
+        }
         return items;
     }
 
     public void setItems(List<DocumentItem> items) {
         this.items = items;
+    }
+
+    public List<DocumentAdvance> getAdvances() {
+        if (advances == null) {
+            advances = new LinkedList<>();
+        }
+        return advances;
+    }
+
+    public void setAdvances(List<DocumentAdvance> advances) {
+        this.advances = advances;
     }
 
     public List<DocumentReference> getReferencias() {

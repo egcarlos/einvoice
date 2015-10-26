@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="file:/C:/GitHub/einvoice/main/einvoice-ws/sunat/sunat-refs/billService.wsdl" uri="wsdl/billService.wsdl"/>
+    <system systemId="file:/C:/GitHub/einvoice/main/einvoice-ws/sunat/sunat-refs/billService.port.wsdl" uri="wsdl/billService.port.wsdl"/>
+    <system systemId="file:/C:/GitHub/einvoice/main/einvoice-ws/sunat/sunat-refs/billService.xsd" uri="wsdl/billService.xsd"/>
+</catalog>

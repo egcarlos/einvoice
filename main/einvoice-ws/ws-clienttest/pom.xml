@@ -9,6 +9,45 @@
     <artifactId>einvoice-ws-clienttest</artifactId>
     <packaging>jar</packaging>
     
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>                            
+                            <classpathPrefix>${dependencies.target}/</classpathPrefix>
+                            <mainClass>pe.labtech.einvoice.ws.test.SubmitFrame</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${dependencies.target}</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -16,5 +55,9 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+    
+    <properties>
+        <dependencies.target>lib</dependencies.target>
+    </properties>
     
 </project>

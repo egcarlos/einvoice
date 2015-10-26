@@ -61,12 +61,12 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
         );
         this.getId = t -> t.getTipoDocumentoEmisor() + "-" + t.getNumeroDocumentoEmisor() + "-" + t.getTipoDocumento() + "-" + t.getSerieNumero();
         this.consumer = t -> {
-            ExecutorService executor = JNDI.getInstance().lookup("java:global/einvoice/async/" + this.getClass().getSimpleName());
-            if (executor == null) {
+//            ExecutorService executor = JNDI.getInstance().lookup("java:global/einvoice/async/" + this.getClass().getSimpleName());
+//            if (executor == null) {
                 task.replicate(t);
-            } else {
-                executor.submit(() -> task.replicate(t));
-            }
+//            } else {
+//                executor.submit(() -> task.replicate(t));
+//            }
         };
     }
 
