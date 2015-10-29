@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.cancel;
 
@@ -28,8 +27,10 @@ import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
 import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
+ * Clase PullCancelTask.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Stateless
 public class PullCancelTask implements PullCancelTaskLocal {
@@ -45,11 +46,23 @@ public class PullCancelTask implements PullCancelTaskLocal {
     @Resource(lookup = "java:global/einvoice/config/source")
     private String source;
 
+    /**
+     * Replica un RA de la base privada a la pública.
+     *
+     * @param id identificador del RA
+     */
     @Override
     public void replicate(CancelHeaderPK id) {
         this.replicate(id, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
+    /**
+     * Replica un RA de la base privada a la pública.
+     *
+     * @param id identificador del RA
+     * @param step paso interno
+     * @param status estado interno
+     */
     @Override
     public void replicate(CancelHeaderPK id, String step, String status) {
         //recuperar la cabecera
@@ -68,11 +81,25 @@ public class PullCancelTask implements PullCancelTaskLocal {
         this.replicate(header, details, step, status);
     }
 
+    /**
+     * Replica un RA de la base privada a la pública.
+     *
+     * @param header cabecera del RA
+     * @param details detalle del RA
+     */
     @Override
     public void replicate(CancelHeader header, List<CancelDetail> details) {
         this.replicate(header, details, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
+    /**
+     * Replica un RA de la base privada a la pública.
+     *
+     * @param header cabecera del RA
+     * @param details detalle del RA
+     * @param step paso interno
+     * @param status estado interno
+     */
     @Override
     public void replicate(CancelHeader header, List<CancelDetail> details, String step, String status) {
         Document document = new Document();

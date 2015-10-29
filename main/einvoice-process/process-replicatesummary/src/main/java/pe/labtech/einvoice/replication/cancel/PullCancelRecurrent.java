@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.cancel;
 
@@ -19,8 +18,10 @@ import pe.labtech.einvoice.replicator.entity.CancelHeaderPK;
 import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
+ * Clase PullCancelRecurrent.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -36,6 +37,9 @@ public class PullCancelRecurrent extends AbstractRecurrentTask<CancelHeaderPK> {
     @Resource(lookup = "java:global/einvoice/config/source")
     private String source;
 
+    /**
+     * Inicializador.
+     */
     @PostConstruct
     @Override
     public void init() {
@@ -59,6 +63,9 @@ public class PullCancelRecurrent extends AbstractRecurrentTask<CancelHeaderPK> {
 
     }
 
+    /**
+     * Funcion recurrente.
+     */
     @Override
     @Schedule(hour = "*", minute = "*/15", second = "5", persistent = false)
     public void timeout() {

@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.summary;
 
@@ -12,18 +11,46 @@ import pe.labtech.einvoice.replicator.entity.SummaryHeader;
 import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
 
 /**
+ * Clase PullSummaryTaskLocal.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Local
 public interface PullSummaryTaskLocal {
 
-    void replicate(SummaryHeaderPK header);
+    /**
+     * Replica un RC de la base privada a la pública.
+     *
+     * @param id identificador del RC
+     */
+    void replicate(SummaryHeaderPK id);
 
-    void replicate(SummaryHeaderPK header, String step, String status);
+    /**
+     * Replica un RC de la base privada a la pública.
+     *
+     * @param id identificador del RC
+     * @param step paso interno
+     * @param status estado interno
+     */
+    void replicate(SummaryHeaderPK id, String step, String status);
 
+    /**
+     * Replica un RC de la base privada a la pública.
+     *
+     * @param header cabecera del RC
+     * @param details detalle del RC
+     */
     void replicate(SummaryHeader header, List<SummaryDetail> details);
 
+    /**
+     * Replica un RC de la base privada a la pública.
+     *
+     * @param header cabecera del RC
+     * @param details detalle del RC
+     * @param step paso interno
+     * @param status estado interno
+     */
     void replicate(SummaryHeader header, List<SummaryDetail> details, String step, String status);
 
 }

@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.summary;
 
@@ -28,8 +27,10 @@ import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
 import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
+ * Clase PushSummaryRecurrent.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -61,12 +62,18 @@ public class PushSummaryRecurrent extends AbstractRecurrentTask<Long> {
      */
     private Function<Long, List<DocumentResponse>> findTasksSingle;
 
+    /**
+     * Funcion recurrente.
+     */
     @Override
     @Schedule(hour = "*", minute = "*/15", second = "45", persistent = false)
     public void timeout() {
         super.timeout();
     }
 
+    /**
+     * Inicializador.
+     */
     @Override
     @PostConstruct
     public void init() {

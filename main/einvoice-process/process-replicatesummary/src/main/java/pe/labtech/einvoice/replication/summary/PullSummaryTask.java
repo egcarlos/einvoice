@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.summary;
 
@@ -28,8 +27,10 @@ import pe.labtech.einvoice.replicator.entity.SummaryHeaderPK;
 import pe.labtech.einvoice.replicator.model.SummaryDatabaseManagerLocal;
 
 /**
+ * Clase PullSummaryTask.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Stateless
 public class PullSummaryTask implements PullSummaryTaskLocal {
@@ -45,11 +46,23 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
     @Resource(lookup = "java:global/einvoice/config/source")
     private String source;
 
+    /**
+     * Replica un RC de la base privada a la pública.
+     *
+     * @param id identificador del RC
+     */
     @Override
     public void replicate(SummaryHeaderPK id) {
         replicate(id, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
+    /**
+     * Replica un RC de la base privada a la pública.
+     *
+     * @param id identificador del RC
+     * @param step paso interno
+     * @param status estado interno
+     */
     @Override
     public void replicate(SummaryHeaderPK id, String step, String status) {
         SummaryHeader header = pub.seek(e -> e.find(SummaryHeader.class, id));
@@ -66,11 +79,25 @@ public class PullSummaryTask implements PullSummaryTaskLocal {
         this.replicate(header, details, step, status);
     }
 
+    /**
+     * Replica un RC de la base privada a la pública.
+     *
+     * @param header cabecera del RC
+     * @param details detalle del RC
+     */
     @Override
     public void replicate(SummaryHeader header, List<SummaryDetail> details) {
         this.replicate(header, details, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
+    /**
+     * Replica un RC de la base privada a la pública.
+     *
+     * @param header cabecera del RC
+     * @param details detalle del RC
+     * @param step paso interno
+     * @param status estado interno
+     */
     @Override
     public void replicate(SummaryHeader header, List<SummaryDetail> details, String step, String status) {
         Document document = new Document();
