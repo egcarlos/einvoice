@@ -73,10 +73,10 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
         super.init();
         logger.info(() -> tm("Pushing documents to: " + (source == null ? "##DEFAULT" : source)));
         this.findTasks = () -> RecurrentHelper.lookupAllSourcedResponses(prv, source, "F", "B");
-        this.findTasksSingle = t -> RecurrentHelper.lookupResponse(prv, DocumentResponse.class, t);
         this.tryLock = t -> true;
-        this.tryLockSingle = t -> RecurrentHelper.lockResponse(prv, t.getDocument().getId(), t.getName());
         this.getId = t -> RecurrentHelper.buildId(t, "replicate");
+        this.findTasksSingle = t -> RecurrentHelper.lookupResponse(prv, DocumentResponse.class, t);
+        this.tryLockSingle = t -> RecurrentHelper.lockResponse(prv, t.getDocument().getId(), t.getName());
         this.consumer = t -> {
             DocumentHeaderPK id = createId(prv.seek(e -> e.find(Document.class, t)));
             Map<String, String> responses = this.findTasksSingle.apply(t).stream()
@@ -86,11 +86,14 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
             if (responses.isEmpty()) {
                 return;
             }
+            //POR UN BUG DE LA PLATAFORMA
             if ("yes".equals(oss) && id.getSerieNumero().startsWith("B") && responses.containsKey("bl_estadoProceso")) {
                 String status = responses.get("bl_estadoProceso");
                 status = status.replace("PE_02", "PE_09");
                 responses.put("bl_estadoProceso", status);
             }
+            //NALYPRE
+            //Carateristica para reducir a 4 estados
             if ("yes".equals(dss) && responses.containsKey("bl_estadoRegistro")) {
                 String s = responses.get("bl_estadoRegistro");
                 if ("NALP".contains(s)) {

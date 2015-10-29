@@ -34,6 +34,8 @@ public interface DocumentLoaderLocal {
 
     void markDeclared(Long id);
 
+    void createEvent(Long id, final String eventType, final String eventMessage);
+
     void createEvent(Document d, final String eventType, final String eventMessage);
 
     Document markAsError(Long id);

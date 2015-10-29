@@ -48,7 +48,7 @@ public class PushDocumentDataRecurrent extends AbstractRecurrentTask<DocumentDat
     public void init() {
         super.init();
 
-        this.findTasks = () -> prv.seek(e -> e
+        this.findTasks = () -> prv.seekNT(e -> e
                 .createQuery(
                         "SELECT o FROM DocumentData o WHERE (o.document.documentNumber LIKE 'F%' OR o.document.documentNumber LIKE 'B%') AND o.replicate = TRUE AND o.data <> NULL",
                         DocumentData.class

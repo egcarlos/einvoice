@@ -1,1 +1,7 @@
-{"endpoint":"http://test3.alignetsac.com/sfewsperu/ws/invoker","user":"avinka","password":"ebiz","connectionTimeout":"600000","receiveTimeout":"600000"}
+{
+    "endpoint": "http://test3.alignetsac.com/sfewsperu/ws/invoker",
+    "user": "avinka",
+    "password": "ebiz",
+    "connectionTimeout": "600000",
+    "receiveTimeout": "600000"
+}

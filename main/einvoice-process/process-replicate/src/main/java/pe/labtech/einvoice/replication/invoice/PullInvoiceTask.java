@@ -6,7 +6,6 @@
 package pe.labtech.einvoice.replication.invoice;
 
 import java.lang.reflect.InvocationTargetException;
-import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +78,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 if (StringUtils.trimToNull(value) == null) {
                     return;
                 }
-                logger.info(() -> MessageFormat.format("property({0},{1})", key, value));
+                //logger.info(() -> MessageFormat.format("property({0},{1})", key, value));
                 if (key.startsWith("codigoLeyenda")) {
                     Long order = Long.parseLong(key.split("_")[1]);
                     DocumentLegend dl = buildLegend(bean, order, document);
@@ -168,8 +167,8 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
     @Override
     public void replicate(DocumentHeaderPK id, String step, String status) {
-        DocumentHeader header = pub.seek(e -> e.find(DocumentHeader.class, id));
-        List<DocumentDetail> details = pub.seek(e -> e
+        DocumentHeader header = pub.seekNT(e -> e.find(DocumentHeader.class, id));
+        List<DocumentDetail> details = pub.seekNT(e -> e
                 .createQuery(
                         "SELECT O FROM DocumentDetail O WHERE O.id.tipoDocumentoEmisor = :tde AND O.id.numeroDocumentoEmisor = :nde AND O.id.tipoDocumento = :td AND O.id.serieNumero = :sn",
                         DocumentDetail.class

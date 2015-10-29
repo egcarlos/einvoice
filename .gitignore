@@ -121,3 +121,7 @@ main/einvoice-commons/commons-ubl/summarydocuments.xml
 /main/einvoice-dist/dist-earmin2/target/
 /main/einvoice-dist2/dist2-api/target/
 /main/einvoice-dist2/dist2-driver/target/
+/main/einvoice-commons/oasis/target/
+/main/einvoice-commons/oasis-builder/target/
+/main/einvoice-ws/sunat/target/
+main/einvoice-commons/oasis-builder/out.xml

@@ -30,9 +30,11 @@
     </dependencies>
     
     <modules>
+        <module>commons-bom</module>
         <module>commons-tools</module>
         <module>commons-ubl</module>
-        <module>commons-bom</module>
+        <module>oasis</module>
+        <module>oasis-builder</module>
     </modules>
     
     <properties>
