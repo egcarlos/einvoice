@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.recurrent;
 
@@ -9,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
@@ -26,8 +24,10 @@ import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.sign.SignTaskLocal;
 
 /**
+ * Clase SignRetryTimer.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Singleton
 @Startup

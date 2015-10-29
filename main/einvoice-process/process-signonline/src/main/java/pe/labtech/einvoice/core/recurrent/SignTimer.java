@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.recurrent;
 
@@ -23,8 +22,10 @@ import static pe.labtech.einvoice.commons.model.DocumentStep.*;
 import pe.labtech.einvoice.core.tasks.sign.SignTaskLocal;
 
 /**
+ * Clase SignTimer.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Singleton
 @Startup
@@ -41,6 +42,9 @@ public class SignTimer extends AbstractRecurrentTask<Long> {
     @EJB
     private AsyncWrapperLocal asw;
 
+    /**
+     * Inicializador.
+     */
     @PostConstruct
     @Override
     public void init() {
@@ -51,6 +55,9 @@ public class SignTimer extends AbstractRecurrentTask<Long> {
         super.consumer = t -> asw.perform(() -> task.handle(t));
     }
 
+    /**
+     * Funcion recurrente.
+     */
     @Override
     @Schedule(hour = "*", minute = "*", second = "*/1", persistent = false)
     public void timeout() {

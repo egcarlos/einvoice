@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.process.download;
 
@@ -26,8 +25,10 @@ import pe.labtech.einvoice.core.model.DocumentDataLoaderLocal;
 import static pe.labtech.einvoice.core.model.DocumentDataLoaderLocal.*;
 
 /**
+ * Clase CopyRecurrent.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)
@@ -41,6 +42,9 @@ public class CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
 
     }
 
+    /**
+     * Inicializador.
+     */
     @Override
     @PostConstruct
     public void init() {
@@ -136,7 +140,9 @@ public class CopyRecurrent extends AbstractRecurrentTask<DocumentData> {
         }
     }
 
-    //TODO ajustar el tiempo de llamada luego de pruebas
+    /**
+     * Funcion recurrente.
+     */
     @Override
     @Schedule(hour = "*", minute = "*", second = "*/15", persistent = false)
     protected void timeout() {

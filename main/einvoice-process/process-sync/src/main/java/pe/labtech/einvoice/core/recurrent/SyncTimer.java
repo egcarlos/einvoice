@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.recurrent;
 
@@ -26,8 +25,10 @@ import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.sync.SyncTaskLocal;
 
 /**
+ * Clase SyncTimer.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Singleton
 @Startup
@@ -44,6 +45,9 @@ public class SyncTimer extends AbstractRecurrentTask<Long> {
     @EJB
     private AsyncWrapperLocal asw;
 
+    /**
+     * Inicializador.
+     */
     @PostConstruct
     @Override
     public void init() {
@@ -54,6 +58,9 @@ public class SyncTimer extends AbstractRecurrentTask<Long> {
         super.consumer = t -> asw.perform(() -> task.handle(t));
     }
 
+    /**
+     * Funcion recurrente.
+     */
     @Override
     @Schedule(hour = "*", minute = "*/1", persistent = false)
     public void timeout() {
