@@ -5,13 +5,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Describe al comando de consulta de documentos.
- *
- * @author Labtech (info@labtech.pe)
- * @version 1.00
- * @since jan 30 2015
- */
 @XmlRootElement(name = "ConsultCmd")
 public class QueryDocument {
 

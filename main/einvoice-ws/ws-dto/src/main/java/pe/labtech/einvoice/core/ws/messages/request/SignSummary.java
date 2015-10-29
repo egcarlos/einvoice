@@ -9,13 +9,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-/**
- * Describe al comando de firma de resúmenes de documentos.
- *
- * @author Labtech (info@labtech.pe)
- * @version 1.00
- * @since jan 30 2015
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"parameters", "documents"})
 @XmlRootElement(name = "SignOnLineSummaryCmd")

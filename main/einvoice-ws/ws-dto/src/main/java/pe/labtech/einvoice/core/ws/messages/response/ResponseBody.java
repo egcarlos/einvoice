@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pe.labtech.einvoice.core.ws.messages.response;
 
 import javax.xml.bind.annotation.XmlElement;
 
-/**
- *
- * @author Carlos
- */
 public class ResponseBody {
 
     private CommonBody common;
