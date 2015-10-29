@@ -1,11 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.invoice;
 
-import java.util.concurrent.ExecutorService;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.ConcurrencyManagement;
@@ -15,14 +13,16 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import pe.labtech.einvoice.commons.jndi.JNDI;
 import pe.labtech.einvoice.commons.recurrent.AbstractRecurrentTask;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
  *
- * @author Carlos
+ * Clase PullInvoiceRecurrent.
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -38,6 +38,9 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
     @Resource(lookup = "java:global/einvoice/config/source")
     private String source;
 
+    /**
+     * Inicializador.
+     */
     @PostConstruct
     @Override
     public void init() {
@@ -48,7 +51,6 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
                         "SELECT O.id FROM DocumentHeader O WHERE o.bl_estadoRegistro = 'A' ORDER BY O.id.tipoDocumento ASC, O.id.serieNumero",
                         DocumentHeaderPK.class
                 )
-                //se ha cambiado la transaccionalidad a bloques de 50
                 .setMaxResults(50)
                 .getResultList()
         );
@@ -60,16 +62,12 @@ public class PullInvoiceRecurrent extends AbstractRecurrentTask<DocumentHeaderPK
                 .executeUpdate() == 1
         );
         this.getId = t -> t.getTipoDocumentoEmisor() + "-" + t.getNumeroDocumentoEmisor() + "-" + t.getTipoDocumento() + "-" + t.getSerieNumero();
-        this.consumer = t -> {
-//            ExecutorService executor = JNDI.getInstance().lookup("java:global/einvoice/async/" + this.getClass().getSimpleName());
-//            if (executor == null) {
-                task.replicate(t);
-//            } else {
-//                executor.submit(() -> task.replicate(t));
-//            }
-        };
+        this.consumer = t -> task.replicate(t);
     }
 
+    /**
+     * Funcion recurrente.
+     */
     @Override
     @Schedule(hour = "*", minute = "*", second = "*/2", persistent = false)
     public void timeout() {

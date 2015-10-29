@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.invoice;
 
@@ -33,7 +32,10 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
  *
- * @author Carlos
+ * Clase PullInvoiceTask.
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Stateless
 public class PullInvoiceTask implements PullInvoiceTaskLocal {
@@ -49,6 +51,14 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
     @Resource(lookup = "java:global/einvoice/config/source")
     private String source;
 
+    /**
+     * Replica un documento de la base privada a la pública.
+     *
+     * @param header cabecera del documento
+     * @param details detalle del documento
+     * @param step paso interno
+     * @param status estado interno
+     */
     @Override
     public void replicate(DocumentHeader header, List<DocumentDetail> details, String step, String status) {
         Document document = new Document();
@@ -107,7 +117,6 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             logger.log(Level.SEVERE, null, ex);
-            //TODO mark as error... y decidir que hacer luego con el mapeo!
         }
 
         List<Item> items = details.stream().map(detail -> {
@@ -139,10 +148,25 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
 
     }
 
+    /**
+     * Determina si el parámetro no es analizado para la replicación.
+     *
+     * @param k nombre del parámetro
+     * @return true/false
+     */
     public static boolean skippedKey(String k) {
         return "id".equals(k) || "class".equals(k) || k.startsWith("bl_") || k.startsWith("textoLeyenda") || k.startsWith("textoAdicionalLeyenda") || k.startsWith("textoAuxiliar");
     }
 
+    /**
+     * Arma la estructura de un campo auxiliar.
+     *
+     * @param bean datos a mapear
+     * @param length longitud del campo auxiliar
+     * @param order orden del campo auxiliar
+     * @param document documento destino
+     * @return
+     */
     private DocumentAuxiliar buildAuxiliar(final Map<String, String> bean, String length, Long order, Document document) {
         DocumentAuxiliar da = new DocumentAuxiliar(
                 bean.get("codigoAuxiliar" + length + "_" + order),
@@ -154,6 +178,14 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         return da;
     }
 
+    /**
+     * Arma la estructura de un campo de leyenda.
+     *
+     * @param bean datos a mapear
+     * @param order orden del campo de leyenda
+     * @param document documento destino
+     * @return
+     */
     private DocumentLegend buildLegend(final Map<String, String> bean, Long order, Document document) {
         DocumentLegend dl = new DocumentLegend(
                 bean.get("codigoLeyenda_" + order),
@@ -165,6 +197,14 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         return dl;
     }
 
+    /**
+     *
+     * Replica un documento de la base privada a la pública.
+     *
+     * @param id identificador del documento
+     * @param step paso interno
+     * @param status estado interno
+     */
     @Override
     public void replicate(DocumentHeaderPK id, String step, String status) {
         DocumentHeader header = pub.seekNT(e -> e.find(DocumentHeader.class, id));
@@ -181,11 +221,24 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         this.replicate(header, details, step, status);
     }
 
+    /**
+     *
+     * Replica un documento de la base privada a la pública.
+     *
+     * @param header cabecera del documento
+     * @param details detalle del documento
+     */
     @Override
     public void replicate(DocumentHeader header, List<DocumentDetail> details) {
         this.replicate(header, details, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
+    /**
+     *
+     * Replica un documento de la base privada a la pública.
+     *
+     * @param id identificador del documento
+     */
     @Override
     public void replicate(DocumentHeaderPK id) {
         this.replicate(id, DocumentStep.SIGN, DocumentStatus.NEEDED);

@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.invoice;
 
@@ -13,42 +12,48 @@ import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 
 /**
  *
- * @author Carlos
+ * Interfaz PullInvoiceTaskLocal. Comportamiento en la implementación.
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Local
 public interface PullInvoiceTaskLocal {
 
     /**
-     * Async method for document replication.
      *
-     * @param id
+     * Replica un documento de la base privada a la pública.
+     *
+     * @param id identificador del documento
      */
     void replicate(DocumentHeaderPK id);
 
     /**
-     * Async method for document replication.
      *
-     * @param id
-     * @param step
-     * @param status
+     * Replica un documento de la base privada a la pública.
+     *
+     * @param id identificador del documento
+     * @param step paso interno
+     * @param status estado interno
      */
     void replicate(DocumentHeaderPK id, String step, String status);
 
     /**
-     * Sync method for document replication.
      *
-     * @param header
-     * @param details
+     * Replica un documento de la base privada a la pública.
+     *
+     * @param header cabecera del documento
+     * @param details detalle del documento
      */
     void replicate(DocumentHeader header, List<DocumentDetail> details);
 
     /**
-     * Sync method for document replication.
+     * Replica un documento de la base privada a la pública.
      *
-     * @param header
-     * @param details
-     * @param step
-     * @param status
+     * @param header cabecera del documento
+     * @param details detalle del documento
+     * @param step paso interno
+     * @param status estado interno
      */
     void replicate(DocumentHeader header, List<DocumentDetail> details, String step, String status);
 

@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.invoice;
 
@@ -29,7 +28,10 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 
 /**
  *
- * @author Carlos
+ * Clase PushInvoiceRecurrent.
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -67,6 +69,9 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
         super.timeout();
     }
 
+    /**
+     * Inicializador.
+     */
     @Override
     @PostConstruct
     public void init() {
@@ -109,6 +114,12 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
         };
     }
 
+    /**
+     * Crea el identificador publico.
+     *
+     * @param t documento
+     * @return
+     */
     private DocumentHeaderPK createId(Document t) {
         DocumentHeaderPK id = new DocumentHeaderPK(
                 t.getClientId().split("-")[0],
