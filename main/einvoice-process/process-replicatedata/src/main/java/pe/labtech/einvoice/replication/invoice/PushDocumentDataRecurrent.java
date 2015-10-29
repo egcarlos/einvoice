@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.replication.invoice;
 
@@ -23,8 +22,10 @@ import pe.labtech.einvoice.replicator.model.PublicDatabaseManagerLocal;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
 
 /**
+ * Clase PushDocumentDataRecurrent.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Singleton
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -37,12 +38,18 @@ public class PushDocumentDataRecurrent extends AbstractRecurrentTask<DocumentDat
     @EJB
     PrivateDatabaseManagerLocal prv;
 
+    /**
+     * Funcion recurrente.
+     */
     @Override
     @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
     public void timeout() {
         super.timeout();
     }
 
+    /**
+     * Inicializador.
+     */
     @Override
     @PostConstruct
     public void init() {
