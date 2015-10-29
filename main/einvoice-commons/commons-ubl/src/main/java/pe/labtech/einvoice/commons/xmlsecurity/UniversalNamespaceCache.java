@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.xmlsecurity;
 
 import java.util.HashMap;
@@ -17,9 +17,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
- *
- * @author Carlos
- */
+* Clase UniversalNamespaceCache.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class UniversalNamespaceCache implements NamespaceContext {
 
     private static final Logger logger = Logger.getLogger(UniversalNamespaceCache.class.getName());

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.ubl.model.sunat;
 
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
@@ -13,9 +13,11 @@ import static pe.labtech.ubl.model.Namespaces.CBC;
 import pe.labtech.ubl.model.basic.Amount;
 
 /**
- *
- * @author Carlos Echeverria
- */
+* Clase BillingPayment.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 @XmlAccessorType(FIELD)
 @XmlType(propOrder = {
     "PaidAmount",

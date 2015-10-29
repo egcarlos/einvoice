@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.xmlsecurity;
 
 import java.io.FileOutputStream;
@@ -22,9 +22,11 @@ import pe.labtech.einvoice.commons.ubl.InvoiceLineBuilder;
 import pe.labtech.ubl.model.Invoice;
 
 /**
- *
- * @author carloseg
- */
+* Clase IntegralTest.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class IntegralTest {
 
     @Test

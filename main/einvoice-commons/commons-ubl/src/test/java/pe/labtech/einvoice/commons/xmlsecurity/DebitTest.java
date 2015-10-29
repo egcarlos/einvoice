@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.xmlsecurity;
 
 import java.math.BigDecimal;
@@ -15,9 +15,11 @@ import pe.labtech.einvoice.commons.ubl.DebitNoteLineBuilder;
 import pe.labtech.einvoice.commons.ubl.DocumentMorpher;
 
 /**
- *
- * @author carloseg
- */
+* Clase DebitTest.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class DebitTest {
 
     @Test

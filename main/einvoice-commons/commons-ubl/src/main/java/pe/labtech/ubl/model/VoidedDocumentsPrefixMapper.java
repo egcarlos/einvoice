@@ -1,16 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.ubl.model;
 
 import org.eclipse.persistence.oxm.NamespacePrefixMapper;
 
 /**
- *
- * @author carloseg
- */
+* Clase VoidedDocumentsPrefixMapper.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class VoidedDocumentsPrefixMapper extends NamespacePrefixMapper {
 
     @Override

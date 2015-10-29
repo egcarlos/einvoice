@@ -1,3 +1,8 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.xmlsecurity;
 
 import org.apache.xml.security.signature.XMLSignature;
@@ -14,8 +19,11 @@ import java.security.cert.X509Certificate;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 
 /**
- * User: RAC Date: 06/03/12
- */
+* Clase PortalSign.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class PortalSign {
 
     @PostConstruct

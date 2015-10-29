@@ -1,16 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.ext;
 
 import java.util.Arrays;
 
 /**
- *
- * @author Carlos
- */
+* Clase StringTools.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class StringTools {
 
     public static <T> String join(T[] tokens) {

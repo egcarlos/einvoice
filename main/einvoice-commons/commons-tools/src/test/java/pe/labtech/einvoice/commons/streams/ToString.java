@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.streams;
 
 import org.junit.After;
@@ -14,9 +14,11 @@ import static org.junit.Assert.*;
 import pe.labtech.einvoice.commons.ext.StringTools;
 
 /**
- *
- * @author Carlos
- */
+* Clase ToString.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class ToString {
 
     @Test

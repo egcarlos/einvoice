@@ -1,19 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.entity;
 
 import java.util.List;
 
 /**
- * Identifica a un objeto como tipo de cabecera.
- *
- * @param <I> tipo del item agrupado en la cabecera
- *
- * @author Carlos
- */
+* Clase Header.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public interface Header<I extends Detail> extends BLResponse {
 
     /**

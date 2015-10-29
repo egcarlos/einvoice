@@ -1,14 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.ubl.model;
 
 /**
- *
- * @author carloseg
- */
+* Clase Namespaces.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class Namespaces {
 
     public static final String DEFAULT = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2";

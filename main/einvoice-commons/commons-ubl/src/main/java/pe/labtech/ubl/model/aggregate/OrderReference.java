@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.ubl.model.aggregate;
 
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
@@ -11,9 +11,11 @@ import javax.xml.bind.annotation.XmlElement;
 import static pe.labtech.ubl.model.Namespaces.CBC;
 
 /**
- *
- * @author Carlos Echeverria
- */
+* Clase OrderReference.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 @XmlAccessorType(FIELD)
 public class OrderReference {
 

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.ubl.model.sunat;
 
 import java.util.LinkedList;
@@ -13,10 +13,11 @@ import javax.xml.bind.annotation.XmlElement;
 import pe.labtech.ubl.model.Namespaces;
 
 /**
- *
- *
- * @author carloseg
- */
+* Clase AdditionalInformation.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AdditionalInformation {
 

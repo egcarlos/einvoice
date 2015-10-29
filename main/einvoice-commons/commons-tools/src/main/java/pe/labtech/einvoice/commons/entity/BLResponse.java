@@ -1,17 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.entity;
 
 /**
- * Interfaz que describe los campos de respuesta de bizlinks que se agregan a
- * las tablas de datos de cabecera. Los campos de respuesta son los mismos para
- * los tres tipos de mensajes.
- *
- * @author Carlos
- */
+* Clase BLResponse.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public interface BLResponse {
 
     /**

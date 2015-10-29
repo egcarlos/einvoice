@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.ext;
 
 import java.io.ByteArrayInputStream;
@@ -16,9 +16,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- *
- * @author Carlos
- */
+* Clase ZipTools.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class ZipTools {
 
     /**

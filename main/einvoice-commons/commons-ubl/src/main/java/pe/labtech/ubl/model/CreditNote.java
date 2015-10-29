@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.ubl.model;
 
 import java.util.LinkedList;
@@ -27,9 +27,11 @@ import pe.labtech.ubl.model.aggregate.TaxTotal;
 import pe.labtech.ubl.model.extensions.UBLExtensions;
 
 /**
- *
- * @author Carlos Echeverria
- */
+* Clase CreditNote.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 @XmlRootElement(name = "CreditNote", namespace = CREDIT)
 @XmlAccessorType(FIELD)
 @XmlType(propOrder = {

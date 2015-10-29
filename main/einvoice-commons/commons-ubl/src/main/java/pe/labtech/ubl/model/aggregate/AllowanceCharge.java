@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.ubl.model.aggregate;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -12,9 +12,11 @@ import pe.labtech.ubl.model.Namespaces;
 import pe.labtech.ubl.model.basic.Amount;
 
 /**
- *
- * @author Carlos
- */
+* Clase AllowanceCharge.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AllowanceCharge {
 

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.model;
 
 import java.lang.reflect.InvocationTargetException;
@@ -11,10 +11,11 @@ import java.util.logging.Logger;
 import org.apache.commons.beanutils.PropertyUtils;
 
 /**
- *
- *
- * @author carloseg
- */
+* Clase ModelTools.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class ModelTools {
 
     public static Object getTargetId(

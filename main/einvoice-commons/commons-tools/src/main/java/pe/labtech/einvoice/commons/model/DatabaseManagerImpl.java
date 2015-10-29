@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.model;
 
 import java.util.function.Consumer;
@@ -12,9 +12,11 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 
 /**
- *
- * @author Carlos
- */
+* Clase DatabaseManagerImpl.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public abstract class DatabaseManagerImpl implements DatabaseManager {
 
     @Override

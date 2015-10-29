@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.commons.ubl;
 
 import java.math.BigDecimal;
@@ -47,9 +47,11 @@ import pe.labtech.ubl.model.sunat.AdditionalMonetaryTotal;
 import pe.labtech.ubl.model.sunat.AdditionalProperty;
 
 /**
- *
- * @author Carlos
- */
+* Clase CreditNoteBuilder.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class CreditNoteBuilder implements Builder<CreditNote> {
 
     private static final JAXBContext JAXB_CONTEXT;
