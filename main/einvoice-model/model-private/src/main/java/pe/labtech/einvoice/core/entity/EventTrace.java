@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.core.entity;
 
 import java.io.Serializable;
@@ -21,9 +21,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
- * @author Carlos
- */
+* Clase EventTrace.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 @Entity
 @Table(name = "BL_MESSAGE_TRACE")
 @SequenceGenerator(name = "EVENT_ID_GENERATOR", sequenceName = "BL_MESSAGE_TRACE_SEQ")

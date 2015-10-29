@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.replicator.model;
 
 import javax.ejb.Stateless;
@@ -12,9 +12,10 @@ import pe.labtech.einvoice.commons.model.Database;
 import pe.labtech.einvoice.commons.model.DatabaseManagerImpl;
 
 /**
- *
- * @author Carlos
- */
+* Clase PublicDatabaseManager
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @Database("public")
 @Stateless
 public class PublicDatabaseManager extends DatabaseManagerImpl implements PublicDatabaseManagerLocal {

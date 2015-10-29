@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.core.entity;
 
 import java.io.Serializable;
@@ -14,9 +14,11 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
- *
- * @author Carlos
- */
+* Clase KeystoreReference.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 @Entity
 @Table(name = "CF_KEYSTORE")
 public class KeystoreReference implements Serializable {

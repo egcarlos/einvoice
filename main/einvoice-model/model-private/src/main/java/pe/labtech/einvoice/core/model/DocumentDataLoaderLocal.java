@@ -1,8 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.model;
 
 import java.net.URL;
@@ -11,9 +10,10 @@ import javax.ejb.Local;
 import pe.labtech.einvoice.core.entity.DocumentData;
 
 /**
- *
- * @author Carlos
- */
+* Clase DocumentDataLoaderLocal
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @Local
 public interface DocumentDataLoaderLocal {
 
