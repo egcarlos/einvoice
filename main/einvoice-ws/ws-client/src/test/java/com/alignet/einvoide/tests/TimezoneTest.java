@@ -1,8 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package com.alignet.einvoide.tests;
 
 import java.text.ParseException;
@@ -12,9 +11,10 @@ import java.util.TimeZone;
 import org.testng.annotations.Test;
 
 /**
- *
- * @author Carlos
- */
+* Clase TimezoneTest.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 public class TimezoneTest {
 
     @Test

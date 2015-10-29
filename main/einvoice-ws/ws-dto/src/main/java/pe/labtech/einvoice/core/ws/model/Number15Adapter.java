@@ -1,8 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.model;
 
 import java.math.BigDecimal;
@@ -12,9 +11,10 @@ import java.text.NumberFormat;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
- *
- * @author Raúl
- */
+* Clase Number15Adapter.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 public class Number15Adapter extends XmlAdapter<String, BigDecimal> {
 
     @Override

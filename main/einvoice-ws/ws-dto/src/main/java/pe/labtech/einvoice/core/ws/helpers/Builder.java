@@ -1,8 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.helpers;
 
 import pe.labtech.einvoice.core.ws.messages.request.CommandParameter;
@@ -26,14 +25,11 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 /**
- * Clase de utilidad para construir los mensajes Xml usados con el servidor de
- * facturación electrónica.
- *
- * @author Labtech (info@labtech.pe)
- * @version 1.00
- * @since jan 30 2015
- *
- */
+* Clase Builder.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class Builder {
 
     /**

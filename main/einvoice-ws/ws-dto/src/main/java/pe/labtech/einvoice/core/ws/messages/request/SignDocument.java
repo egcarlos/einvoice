@@ -1,3 +1,7 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.messages.request;
 
 import pe.labtech.einvoice.core.ws.model.Document;
@@ -8,12 +12,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Describe al comando de firma de documentos.
- *
- * @author Labtech (info@labtech.pe)
- * @version 1.00
- * @since jan 30 2015
- */
+* Clase NOMBRE.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @XmlRootElement(name = "SignOnLineCmd")
 @XmlType(propOrder = {
     "declareSunat",

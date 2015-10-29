@@ -1,17 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.messages.response;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
- * @author Carlos
- */
+* Clase Response.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @XmlRootElement(name = "ebizResponse")
 public class Response {
 

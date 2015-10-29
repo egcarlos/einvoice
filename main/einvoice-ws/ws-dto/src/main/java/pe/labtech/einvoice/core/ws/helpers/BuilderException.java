@@ -1,16 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.helpers;
 
 /**
- * Excepción de tipo de tiempo de ejecución emitida en los métodos de utilidad
- * de la clase builder.
- *
- * @author carloseg
- */
+* Clase BuilderException.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 public class BuilderException extends RuntimeException {
 
     public BuilderException() {
