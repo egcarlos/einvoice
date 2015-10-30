@@ -1,8 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
-
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.entity;
 
 import java.io.Serializable;
@@ -21,11 +20,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
-* Clase EventTrace.
-*
+ * Clase EventTrace.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ */
 @Entity
 @Table(name = "BL_MESSAGE_TRACE")
 @SequenceGenerator(name = "EVENT_ID_GENERATOR", sequenceName = "BL_MESSAGE_TRACE_SEQ")

@@ -1,8 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
-
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
@@ -23,11 +22,10 @@ import pe.labtech.einvoice.commons.entity.BLResponseImpl;
 import pe.labtech.einvoice.commons.entity.Header;
 
 /**
-* Clase SummaryHeader
-*
+ * Clase SummaryHeader
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ */
 @XmlRootElement
 @Entity
 @Table(name = "SPE_SUMMARYHEADER")

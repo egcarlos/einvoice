@@ -1,8 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
-
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.replicator.model;
 
 import javax.ejb.Stateless;
@@ -12,10 +11,10 @@ import pe.labtech.einvoice.commons.model.Database;
 import pe.labtech.einvoice.commons.model.DatabaseManagerImpl;
 
 /**
-* Clase SummaryDatabaseManager
-*
+ * Clase SummaryDatabaseManager
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
+ */
 @Database("summary")
 @Stateless
 public class SummaryDatabaseManager extends DatabaseManagerImpl implements SummaryDatabaseManagerLocal {

@@ -1,8 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
-
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.model;
 
 import java.util.function.UnaryOperator;
@@ -13,11 +12,10 @@ import pe.labtech.einvoice.commons.model.DatabaseManager;
 import pe.labtech.einvoice.commons.model.RecurrentHelper;
 
 /**
-* Clase AbstractDocumentTask.
-*
+ * Clase AbstractDocumentTask.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ */
 public abstract class AbstractDocumentTask extends AbstractRecurrentTask<Long> implements RecurrentTask {
 
     protected String action;

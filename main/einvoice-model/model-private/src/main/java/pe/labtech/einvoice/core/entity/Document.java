@@ -1,8 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
-
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.entity;
 
 import java.io.Serializable;
@@ -28,11 +27,10 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
-* Clase Document.
-*
+ * Clase Document.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ */
 @Entity
 @Table(name = "BL_DOCUMENT")
 @SequenceGenerator(name = "DOCUMENT_ID_GENERATOR", sequenceName = "BL_DOCUMENT_SEQ")

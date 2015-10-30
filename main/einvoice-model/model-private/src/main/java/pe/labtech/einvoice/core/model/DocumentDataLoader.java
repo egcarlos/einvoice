@@ -1,7 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.model;
 
 import java.io.BufferedInputStream;
@@ -20,10 +20,10 @@ import javax.persistence.PersistenceContext;
 import pe.labtech.einvoice.core.entity.DocumentData;
 
 /**
-* Clase DocumentDataLoader.
-*
+ * Clase DocumentDataLoader.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
+ */
 @Stateless
 public class DocumentDataLoader implements DocumentDataLoaderLocal {
 

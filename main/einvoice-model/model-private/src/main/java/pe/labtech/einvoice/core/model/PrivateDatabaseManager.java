@@ -1,7 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.model;
 
 import javax.ejb.Stateless;
@@ -11,10 +11,10 @@ import pe.labtech.einvoice.commons.model.Database;
 import pe.labtech.einvoice.commons.model.DatabaseManagerImpl;
 
 /**
-* Clase PrivateDatabaseManager.
-*
+ * Clase PrivateDatabaseManager.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
+ */
 @Database("private")
 @Stateless
 public class PrivateDatabaseManager extends DatabaseManagerImpl implements PrivateDatabaseManagerLocal {

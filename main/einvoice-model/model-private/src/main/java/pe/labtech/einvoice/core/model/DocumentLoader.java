@@ -1,7 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.model;
 
 import java.io.PrintWriter;
@@ -24,10 +24,10 @@ import pe.labtech.einvoice.core.entity.DocumentResponse;
 import pe.labtech.einvoice.core.entity.EventTrace;
 
 /**
-* Clase DocumentLoader
-*
+ * Clase DocumentLoader
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
+ */
 @Stateless
 public class DocumentLoader implements DocumentLoaderLocal {
 

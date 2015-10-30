@@ -1,8 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
-
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.entity;
 
 import pe.labtech.einvoice.commons.entity.ValueHolder;
@@ -25,11 +24,10 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
 /**
-* Clase ItemAttribute.
-*
+ * Clase ItemAttribute.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ */
 @Entity
 @Table(name = "BL_ITEM_ATTR")
 @XmlType(

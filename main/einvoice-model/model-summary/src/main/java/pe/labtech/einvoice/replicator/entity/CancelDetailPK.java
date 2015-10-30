@@ -1,8 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
-
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.replicator.entity;
 
 import java.io.Serializable;
@@ -13,10 +12,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
-* Clase CancelDetailPK
-*
+ * Clase CancelDetailPK
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
+ */
 public class CancelDetailPK implements Serializable {
 
     @Size(min = 1, max = 1)

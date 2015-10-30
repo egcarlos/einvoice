@@ -1,8 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
-
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.entity;
 
 import java.io.Serializable;
@@ -15,11 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
-* Clase SecurityValues.
-*
+ * Clase SecurityValues.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ */
 @Entity
 @Table(name = "CF_SECURITYVALUES")
 public class SecurityValues implements Serializable {

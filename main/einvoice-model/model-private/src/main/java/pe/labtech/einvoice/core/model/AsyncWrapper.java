@@ -1,7 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.model;
 
 import javax.ejb.Asynchronous;
@@ -12,10 +12,10 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 
 /**
-* Clase AsyncWrapper
-*
+ * Clase AsyncWrapper
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
+ */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @ConcurrencyManagement(ConcurrencyManagementType.BEAN)

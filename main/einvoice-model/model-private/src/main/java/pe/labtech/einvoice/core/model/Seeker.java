@@ -1,18 +1,17 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.model;
 
 import java.util.List;
 import pe.labtech.einvoice.core.entity.Document;
 
 /**
-* Clase Seeker.
-*
+ * Clase Seeker.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ */
 public interface Seeker {
 
     List<Document> pullDocuments(String step, String status);

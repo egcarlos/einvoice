@@ -1,7 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.model;
 
 import java.util.List;
@@ -14,10 +14,10 @@ import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
 
 /**
-* Clase InvoiceSeeker.
-*
+ * Clase InvoiceSeeker.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
+ */
 @Stateless
 public class InvoiceSeeker implements InvoiceSeekerLocal {
 

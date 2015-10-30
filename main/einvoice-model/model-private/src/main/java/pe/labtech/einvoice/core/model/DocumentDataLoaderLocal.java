@@ -1,7 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.model;
 
 import java.net.URL;
@@ -10,10 +10,10 @@ import javax.ejb.Local;
 import pe.labtech.einvoice.core.entity.DocumentData;
 
 /**
-* Clase DocumentDataLoaderLocal
-*
+ * Clase DocumentDataLoaderLocal
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
+ */
 @Local
 public interface DocumentDataLoaderLocal {
 
