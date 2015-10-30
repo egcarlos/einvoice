@@ -1,3 +1,7 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.messages.request;
 
 import pe.labtech.einvoice.core.ws.model.Summary;
@@ -9,6 +13,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+* Clase SignSummary.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"parameters", "documents"})
 @XmlRootElement(name = "SignOnLineSummaryCmd")

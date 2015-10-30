@@ -1,3 +1,7 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.messages.response;
 
 import java.text.MessageFormat;
@@ -5,6 +9,11 @@ import java.util.function.BiFunction;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+* Clase ResponseMessage.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @XmlType(propOrder = {
     "statusCode",
     "statusDescription",

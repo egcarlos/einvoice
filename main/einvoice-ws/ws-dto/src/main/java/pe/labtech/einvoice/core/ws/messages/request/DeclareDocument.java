@@ -1,8 +1,18 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.messages.request;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+/**
+* Clase DeclareDocument.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 
 @XmlRootElement(name = "DeclareCmd")
 public class DeclareDocument {

@@ -1,7 +1,15 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.messages.response;
 
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ *
+ * @author SummaryResponse
+ */
 @XmlType(propOrder = {
     "total",
     "totalError",

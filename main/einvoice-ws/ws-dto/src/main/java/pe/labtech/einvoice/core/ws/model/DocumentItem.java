@@ -1,3 +1,8 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.core.ws.model;
 
 import java.math.BigDecimal;
@@ -7,6 +12,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+/**
+* Clase DocumentItem.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(
         name = "Item",

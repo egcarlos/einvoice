@@ -1,3 +1,7 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.messages.request;
 
 import pe.labtech.einvoice.core.ws.model.Document;
@@ -7,6 +11,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+* Clase NOMBRE.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @XmlRootElement(name = "SignOnLineCmd")
 @XmlType(propOrder = {
     "declareSunat",

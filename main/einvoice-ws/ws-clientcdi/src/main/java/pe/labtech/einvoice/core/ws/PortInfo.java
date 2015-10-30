@@ -1,8 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws;
 
 import com.google.gson.Gson;
@@ -16,9 +15,10 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
 /**
- *
- * @author Carlos
- */
+* Clase PortInfo.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @ApplicationScoped
 public class PortInfo {
 

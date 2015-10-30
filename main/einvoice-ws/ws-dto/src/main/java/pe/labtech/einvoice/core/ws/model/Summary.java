@@ -1,3 +1,7 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.model;
 
 import java.util.Date;
@@ -9,9 +13,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- *
- * @author Carlos
- */
+* Clase Summary.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(
         name = "Resumen",

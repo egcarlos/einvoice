@@ -1,9 +1,18 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.messages.response;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+* Clase CommonBody.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 @XmlType(propOrder = {
     "summary",
     "status",

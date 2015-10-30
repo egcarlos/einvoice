@@ -1,8 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.ws.sunat;
 
 import java.util.Arrays;
@@ -26,9 +25,10 @@ import pe.gob.sunat.servicio.registro.comppago.factura.gem.service.BillService_S
 //import pe.gob.sunat.service.BillService;
 
 /**
- *
- * @author Carlos Echeverria
- */
+* Clase NewEmptyJUnitTest.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 public class NewEmptyJUnitTest {
 
     public NewEmptyJUnitTest() {

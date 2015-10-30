@@ -1,3 +1,7 @@
+/*
+* Producto elaborado para Alignet S.A.C.
+*
+*/
 package pe.labtech.einvoice.core.ws.model;
 
 import java.math.BigDecimal;
@@ -6,6 +10,11 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+/**
+* Clase Number15Adapter.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
 public class Number15Adapter extends XmlAdapter<String, BigDecimal> {
 
     @Override
