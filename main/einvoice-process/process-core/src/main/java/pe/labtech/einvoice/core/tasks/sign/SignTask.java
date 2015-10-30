@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.tasks.sign;
 
@@ -35,6 +34,11 @@ public class SignTask implements SignTaskLocal {
     @EJB
     private OnlineInvoice onlineInvoice;
 
+    /**
+     * Firma un documento.
+     *
+     * @param document documento
+     */
     @Asynchronous
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
@@ -42,6 +46,12 @@ public class SignTask implements SignTaskLocal {
         sign(document);
     }
 
+    /**
+     * Firma un documento.
+     *
+     * @param id identificador del documento
+     * @return informacion del documento
+     */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
     public DocumentInfo handle(Long id) {

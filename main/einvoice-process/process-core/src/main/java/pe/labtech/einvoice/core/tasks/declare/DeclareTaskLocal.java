@@ -1,18 +1,24 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.tasks.declare;
 
 import javax.ejb.Local;
 
 /**
+ * Clase DeclareTaskLocal.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Local
 public interface DeclareTaskLocal {
 
+    /**
+     * Declara un documento.
+     *
+     * @param id identificador del documento
+     */
     void handle(Long id);
 }

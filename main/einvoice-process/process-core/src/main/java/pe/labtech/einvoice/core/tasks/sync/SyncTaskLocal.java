@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.tasks.sync;
 
@@ -9,14 +8,26 @@ import javax.ejb.Local;
 import pe.labtech.einvoice.core.entity.Document;
 
 /**
+ * Clase SyncTaskLocal.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Local
 public interface SyncTaskLocal {
 
+    /**
+     * Sincroniza un documento.
+     *
+     * @param id identificador del documento.
+     */
     void handle(Long id);
 
+    /**
+     * Sincroniza un documento.
+     *
+     * @param document documento
+     */
     void handle(Document document);
 
 }

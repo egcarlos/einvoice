@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.tasks.replicate;
 
@@ -17,8 +16,10 @@ import pe.labtech.einvoice.core.tasks.tools.ServiceCommons;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 
 /**
+ * Clase ReplicateXmlTask.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Stateless
 public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
@@ -32,6 +33,11 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
     @EJB
     private PrivateDatabaseManagerLocal prv;
 
+    /**
+     * Replica un documento.
+     *
+     * @param t identificador del documento.
+     */
     @Override
     public void handle(final Long t) {
         //marcar en trabajo
@@ -55,7 +61,6 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
 
         //Fragmento de código para agregar la optimización de envío de
         //documentos en ambiente de homologación.
-        //TODO parametriar para activación permanente
         String dds = "0";
         //if (isSunatTest(document)) {
         //    dds = "1";
@@ -81,7 +86,16 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
         ServiceCommons.replicateXml(prv, loader, invoker, document, command.toString(), zippedUBL);
     }
 
-    private boolean isSunatTest(Document document) {
+    /**
+     * Usado solo en builds de homologación para establecer con
+     * declare-direct-sunat = 1.
+     *
+     * @param document
+     * @return
+     * @deprecated
+     */
+    @Deprecated
+    public boolean isSunatTest(Document document) {
         String prefix = document.getDocumentNumber().substring(0, 4);
         switch (prefix) {
             case "BB11":
@@ -99,13 +113,23 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
         return false;
     }
 
-    private static Object buildClientId(Document d) {
+    /**
+     * Obtiene el ruc del emisor.
+     *
+     * @param d documento
+     * @return ruc del emisor
+     */
+    public static Object buildClientId(Document d) {
         return d.getClientId().contains("-") ? d.getClientId().split("-")[1] : d.getClientId();
     }
 
-    //TODO extraer la logica de los ID a otra clase.
-    //TODO homologar las tablas de datos para aceptar un solo modo de operación
-    private String buildEntryName(Document document) {
+    /**
+     * Crea el identificador de documento en formato sunat.
+     *
+     * @param document documento
+     * @return identificador formato suant
+     */
+    public String buildEntryName(Document document) {
         if (document.getDocumentType().startsWith("R")) {
             //caso de resumenes
             return buildClientId(document) + "-" + document.getDocumentNumber();

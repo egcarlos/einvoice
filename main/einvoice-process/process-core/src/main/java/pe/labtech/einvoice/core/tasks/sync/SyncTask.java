@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.tasks.sync;
 
@@ -18,8 +17,10 @@ import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 import pe.labtech.einvoice.core.ws.helpers.Builder;
 
 /**
+ * Clase SyncTaskLocal.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Stateless
 public class SyncTask implements SyncTaskLocal {
@@ -33,12 +34,22 @@ public class SyncTask implements SyncTaskLocal {
     @Inject
     private EBizGenericInvoker invoker;
 
+    /**
+     * Sincroniza un documento.
+     *
+     * @param id identificador del documento.
+     */
     @Override
     public void handle(Long id) {
         Document d = db.seek(e -> e.find(Document.class, id));
         this.handle(d);
     }
 
+    /**
+     * Sincroniza un documento.
+     *
+     * @param document documento
+     */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
     public void handle(Document document) {
@@ -46,6 +57,12 @@ public class SyncTask implements SyncTaskLocal {
         signOnlineOrSync(db, loader, invoker, document, request);
     }
 
+    /**
+     * Arma el comando de sincronización.
+     *
+     * @param document documento
+     * @return comando
+     */
     public String buildSyncCommand(Document document) {
         return new Builder()
                 .buildQuery(

@@ -1,11 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.tasks.declare;
 
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -19,8 +17,10 @@ import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 import pe.labtech.einvoice.core.ws.helpers.Builder;
 
 /**
+ * Clase DeclareTask.
  *
- * @author Carlos
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Stateless
 public class DeclareTask implements DeclareTaskLocal {
@@ -34,6 +34,11 @@ public class DeclareTask implements DeclareTaskLocal {
     @Inject
     EBizGenericInvoker invoker;
 
+    /**
+     * Declara un documento.
+     *
+     * @param id identificador del documento
+     */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @Override
     public void handle(Long id) {
@@ -42,7 +47,13 @@ public class DeclareTask implements DeclareTaskLocal {
         ServiceCommons.declare(prv, loader, invoker, document, request);
     }
 
-    private String buildDeclareCommand(Document document) {
+    /**
+     * Arma el comando de declaración.
+     *
+     * @param document documento
+     * @return comando de declaración.
+     */
+    public String buildDeclareCommand(Document document) {
         return new Builder().buildDeclare(document.getClientId().split("-")[1], document.getDocumentType(), document.getDocumentNumber());
     }
 }
