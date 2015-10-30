@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.core.tasks.tools;
 
 import com.google.gson.Gson;
@@ -29,11 +29,20 @@ import pe.labtech.einvoice.core.ws.messages.response.Response;
 import pe.labtech.einvoice.core.ws.messages.response.ResponseMessage;
 
 /**
- *
- * @author Carlos
- */
+* Clase Tools.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class Tools {
 
+    
+    /**
+     * Arma un número.
+     * 
+     * @param amount monto
+     * @return número
+     */
     public static BigDecimal buildNumber(String amount) {
         if (amount == null) {
             return null;
@@ -41,6 +50,13 @@ public class Tools {
         return new BigDecimal(amount);
     }
 
+    /**
+     * Graba un requerimiento en la base de datos.
+     * 
+     * @param db Manejador de base de datos.
+     * @param document documento
+     * @param request requerimiento 
+     */
     public static void saveRequest(DatabaseManager db, Document document, String request) {
         //save request
         db.handle(e -> {
@@ -66,6 +82,13 @@ public class Tools {
         });
     }
 
+    /**
+     * Convierte una excepción en texto descriptivo.
+     * 
+     * @param ex excepción 
+     * @param headers cabecera 
+     * @return texto descriptivo 
+     */
     public static String exToString(Exception ex, String... headers) {
         try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
             Arrays.stream(headers).forEach(s -> pw.println(s));
@@ -82,6 +105,12 @@ public class Tools {
         }
     }
 
+    /**
+     * Covierte un objeto en un mapa.
+     * 
+     * @param di objeto
+     * @return mapa de datos
+     */
     public static Map<String, String> describe(DocumentInfo di) {
         try {
             Map<String, String> responses = BeanUtils.describe(di).entrySet().stream()
@@ -100,6 +129,12 @@ public class Tools {
         }
     }
 
+    /**
+     * Obtiene el RUC a partir del identificador del emisor.
+     * 
+     * @param clientId identificador del emisor
+     * @return RUC del emisor
+     */
     public static String buildClientID(String clientId) {
         if (clientId.contains("-")) {
             return clientId.split("-")[1];
@@ -199,6 +234,12 @@ public class Tools {
     }
 
 //</editor-fold>
+    /**
+     * Serializa el mensaje de respuesta.
+     * 
+     * @param r respuesta
+     * @return mensaje serializado 
+     */
     public static String serializeMessages(Response r) {
         List<Map<String, String>> errors = new LinkedList<>();
         try {
@@ -229,6 +270,16 @@ public class Tools {
         return new Gson().toJson(errors);
     }
 
+    /**
+     * Convierte una lista de atributos en un mapa.
+     * 
+     * @param <K> tipo de la llave
+     * @param <V> tipo del valor
+     * @param k clase base de la llave
+     * @param v clase base del valor
+     * @param values valores
+     * @return  mapa
+     */
     public static <K, V> Map<K, V> toMap(Class<K> k, Class<V> v, Object... values) {
         Map<K, V> map = new LinkedHashMap<>();
         for (int i = 0; i < values.length; i += 2) {

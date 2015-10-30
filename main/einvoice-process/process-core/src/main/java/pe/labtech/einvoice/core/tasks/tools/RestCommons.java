@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.core.tasks.tools;
 
 import java.util.Map;
@@ -13,9 +13,11 @@ import javax.ws.rs.client.WebTarget;
 import pe.labtech.einvoice.commons.jndi.JNDI;
 
 /**
- *
- * @author Carlos Echeverria
- */
+* Clase RestCommons.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class RestCommons {
 
     private static final Client client = ClientBuilder.newClient();

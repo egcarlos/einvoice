@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.core.tasks.tools;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,21 +22,23 @@ import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.Item;
 
 /**
- *
- * @author Carlos
- */
+* Clase ParseCommons.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class ParseCommons {
 
     /**
-     * Utility class to convert a document into another target.
+     * Convierte un documento a otro tipo de dato.
      *
-     * @param <D> type of the target
-     * @param <I> type of the item of the target
-     * @param source document to convert
-     * @param d creates new instances of the target
-     * @param i creates new items of the target
-     * @param set sets the item list in the target
-     * @return
+     * @param <D> tipo del destino
+     * @param <I> tipo del elemento de destino
+     * @param source documento para convertir
+     * @param d creación de nuevas instancias para el destino
+     * @param i creación de nuevos elementos para el destino
+     * @param set establece la lista de elementos para el destino
+     * @return nuevo tipo de dato
      */
     public static <D, I> D map(Document source, Supplier<D> d, Supplier<I> i, BiConsumer<D, List<I>> set) {
         D target = d.get();
@@ -60,12 +62,12 @@ public class ParseCommons {
     }
 
     /**
-     * Utility class to convert an item into another target
+     * Convierte un item en otro tipo de dato
      *
-     * @param <I> type of the target
-     * @param source item source
-     * @param target item target
-     * @return the item target (same as argument)
+     * @param <I> tipo de objetivo
+     * @param source origen del elemento
+     * @param target objetivo del elemento
+     * @return the item target dato convertido
      */
     public static <I> I mapItem(Item source, I target) {
         if (source.getAttributes() != null) {
@@ -78,11 +80,11 @@ public class ParseCommons {
     }
 
     /**
-     * Sets the value of an attribute in a target object
+     * Establece el valor de un atributo en un objetivo de destino
      *
-     * @param target
-     * @param attribute
-     * @param value
+     * @param objetivo
+     * @param atributo
+     * @param valor
      */
     public static void mapAttribute(final Object target, final String attribute, final String value) {
         if (value == null || "".equals(value.trim())) {
@@ -113,13 +115,13 @@ public class ParseCommons {
     }
 
     /**
-     * Map a legend field
+     * Asignar un campo leyenda
      *
-     * @param target
-     * @param code
-     * @param order
-     * @param value
-     * @param additional
+     * @param objetivo
+     * @param codigo
+     * @param orden
+     * @param valor
+     * @param adicional 
      */
     public static void mapLegend(Object target, String code, Long order, String value, String additional) {
         if (code == null || value == null) {
@@ -139,13 +141,13 @@ public class ParseCommons {
     }
 
     /**
-     * Map an auxiliar field
+     * Asignar un campo auxiliar
      *
-     * @param target
-     * @param code
-     * @param length
-     * @param order
-     * @param value
+     * @param objetivo
+     * @param codigo
+     * @param longitud del campo
+     * @param orden
+     * @param valor
      */
     public static void mapAuxiliar(Object target, String code, String length, Long order, String value) {
         if (code == null || value == null) {

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.core.tasks.tools;
 
 import java.security.GeneralSecurityException;
@@ -15,12 +15,11 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 /**
- * Drop in substitution for the NCCrypt class. Removes dependencies on legacy
- * apis. by replacing all with a pure java implementation. Also creates a thread
- * reusable scope of the cipher boosting performante in concurrent scenarios.
- *
- * @author Carlos Echeverria
- */
+* Clase NcCrypt2.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class NcCrypt2 {
 
     private final Key key = new SecretKeySpec(DatatypeConverter.parseHexBinary("7C91DE760CCDFEEF3BA3F1951D2B5DF3B1486F2B0D2BFAC0"), "DESede");
@@ -49,10 +48,10 @@ public class NcCrypt2 {
     }
 
     /**
+     * Decodifica una clave decodificada
      *
-     *
-     * @param x_encoded passphrase enconded in bizlinks platform format
-     * @return
+     * @param x_encoded clave codificada
+     * @return clave decodificada
      */
     public String decode(String x_encoded) {
         try {
@@ -79,6 +78,11 @@ public class NcCrypt2 {
 
     private static final NcCrypt2 INSTANCE = new NcCrypt2();
 
+    /**
+     * Obtiene una referencia al objeto
+     * 
+     * @return referencia
+     */
     public static NcCrypt2 getInstance() {
         return INSTANCE;
     }

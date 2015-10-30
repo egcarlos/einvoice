@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* Producto elaborado para Alignet S.A.C.
+*
+*/
+
 package pe.labtech.einvoice.core.tasks.tools;
 
 import java.util.HashMap;
@@ -26,11 +26,11 @@ import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import static pe.labtech.einvoice.core.tasks.tools.Tools.isNotFinishedInSunat;
 
 /**
- *
- * Clase de utilitarios para interacción con la base de datos.
- *
- * @author info@labtech.pe
- */
+* Clase DatabaseCommons.
+*
+* @author Labtech S.R.L. (info@labtech.pe)
+*/
+
 public class DatabaseCommons {
 
     /**
