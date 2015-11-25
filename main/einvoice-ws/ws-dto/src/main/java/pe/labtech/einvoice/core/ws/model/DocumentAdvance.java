@@ -1,7 +1,7 @@
 /*
-* Producto elaborado para Alignet S.A.C.
-*
-*/
+ * Producto elaborado para Alignet S.A.C.
+ *
+ */
 package pe.labtech.einvoice.core.ws.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -9,10 +9,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
-* Clase DocumentAdvance.
-*
+ * Clase DocumentAdvance.
+ * 
 * @author Labtech S.R.L. (info@labtech.pe)
-*/
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {
     "indicador",
