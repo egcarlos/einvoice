@@ -106,6 +106,10 @@ public class Document implements Serializable {
     @OneToMany(orphanRemoval = true, mappedBy = "document", cascade = CascadeType.ALL)
     private List<Item> items;
 
+    @XmlElement(name = "prepaid")
+    @OneToMany(orphanRemoval = true, mappedBy = "document", cascade = CascadeType.ALL)
+    private List<Prepaid> prepaids;
+
     @OneToMany(orphanRemoval = true, mappedBy = "document", cascade = CascadeType.ALL)
     @XmlTransient
     private List<DocumentResponse> responses;
@@ -219,6 +223,17 @@ public class Document implements Serializable {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public List<Prepaid> getPrepaids() {
+        if (this.prepaids == null) {
+            this.prepaids = new LinkedList<>();
+        }
+        return prepaids;
+    }
+
+    public void setPrepaids(List<Prepaid> prepaids) {
+        this.prepaids = prepaids;
     }
 
     public List<DocumentAttribute> getAttributes() {
