@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Producto elaborado para Alignet S.A.C.
+ *
  */
 package pe.labtech.einvoice.core.tasks.sign;
 
@@ -44,8 +43,10 @@ import pe.labtech.einvoice.core.tasks.tools.Tools;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 
 /**
+ * Clase OfflineSummary.
  *
- * @author Carlos Echeverria
+ * @author Labtech S.R.L. (info@labtech.pe)
+ *
  */
 @Stateless
 @LocalBean

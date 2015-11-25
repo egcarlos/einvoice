@@ -164,33 +164,7 @@ public class DocumentHeader implements Serializable {
     private Character inHabilitado;
     @Column(name = "CANTICIPO", precision = 19, scale = 2)
     private BigDecimal totalDocumentoAnticipo;
-    @Transient
-    private String tipoDocumentoAnticipo;
-    @Size(max = 13)
-    @Column(name = "CDOCANTICIPO1", length = 13)
-    private String serieNumeroDocumentoAnticipo;
-    @Transient
-    private String tipoReferenciaAdicional_2;
-    @Size(max = 13)
-    @Column(name = "CDOCANTICIPO2", length = 13)
-    private String numeroDocumentoReferenciaAdicional_2;
-    @Transient
-    private String tipoReferenciaAdicional_3;
-    @Size(max = 13)
-    @Column(name = "CDOCANTICIPO3", length = 13)
-    private String numeroDocumentoReferenciaAdicional_3;
-    @Transient
-    private String tipoReferenciaAdicional_4;
-    @Size(max = 13)
-    @Column(name = "CDOCANTICIPO4", length = 13)
-    private String numeroDocumentoReferenciaAdicional_4;
-    @Transient
-    private String tipoReferenciaAdicional_5;
-    @Size(max = 13)
-    @Column(name = "CDOCANTICIPO5", length = 13)
-    private String numeroDocumentoReferenciaAdicional_5;
     @Size(max = 200)
-
     @Transient//siempre 1000:monto en letras
     private String codigoLeyenda_1;
     @Column(name = "CLEY1", length = 200)
@@ -214,39 +188,19 @@ public class DocumentHeader implements Serializable {
     @Size(max = 40)
     @Column(name = "CAUX1", length = 40)
     private String textoAuxiliar40_1;
+    //indicador de factura es anticipo padre
     @Size(max = 40)
     @Column(name = "CAUX8", length = 40)
     private String textoAuxiliar40_2;
+    //numero de ERP para uso futuro
+    @Transient//siempre 9512:numero de ERP
+    private String codigoAuxiliar40_3;
     @Size(max = 40)
     @Column(name = "CAUX9", length = 40)
     private String textoAuxiliar40_3;
     @Size(max = 40)
     @Column(name = "CAUX10", length = 40)
     private String textoAuxiliar40_4;
-    @Size(max = 40)
-    @Column(name = "CAUX11", length = 40)
-    private String textoAuxiliar40_5;
-    @Size(max = 40)
-    @Column(name = "CAUX12", length = 40)
-    private String textoAuxiliar40_6;
-    @Size(max = 40)
-    @Column(name = "CAUX13", length = 40)
-    private String textoAuxiliar40_7;
-    @Size(max = 40)
-    @Column(name = "CAUX14", length = 40)
-    private String textoAuxiliar40_8;
-    @Size(max = 40)
-    @Column(name = "CAUX15", length = 40)
-    private String textoAuxiliar40_9;
-    @Size(max = 40)
-    @Column(name = "CAUX16", length = 40)
-    private String textoAuxiliar40_10;
-    @Size(max = 40)
-    @Column(name = "CAUX17", length = 40)
-    private String textoAuxiliar40_11;
-    @Size(max = 40)
-    @Column(name = "CAUX18", length = 40)
-    private String textoAuxiliar40_12;
 
     //bloque de observaciones
     @Transient//siempre 9606:Observaciones
@@ -270,50 +224,7 @@ public class DocumentHeader implements Serializable {
     @Size(max = 100)
     @Column(name = "CAUX21", length = 100)
     private String textoAuxiliar100_1;
-    @Transient//siempre 9420: notas
-    private String codigoAuxiliar100_2;
-    @Size(max = 100)
-    @Column(name = "CAUX22", length = 100)
-    private String textoAuxiliar100_2;
-    @Size(max = 100)
-    @Column(name = "CAUX23", length = 100)
-    private String textoAuxiliar100_3;
-    @Size(max = 100)
-    @Column(name = "CAUX24", length = 100)
-    private String textoAuxiliar100_4;
-    @Size(max = 100)
-    @Column(name = "CAUX25", length = 100)
-    private String textoAuxiliar100_5;
-    @Size(max = 100)
-    @Column(name = "CAUX26", length = 100)
-    private String textoAuxiliar100_6;
-    @Size(max = 100)
-    @Column(name = "CAUX27", length = 100)
-    private String textoAuxiliar100_7;
-    @Size(max = 100)
-    @Column(name = "CAUX28", length = 100)
-    private String textoAuxiliar100_8;
-    @Size(max = 100)
-    @Column(name = "CAUX29", length = 100)
-    private String textoAuxiliar100_9;
-    @Size(max = 100)
-    @Column(name = "CAUX30", length = 100)
-    private String textoAuxiliar100_10;
-    @Size(max = 100)
-    @Column(name = "CAUX31", length = 100)
-    private String textoAuxiliar100_11;
-    @Size(max = 100)
-    @Column(name = "CAUX32", length = 100)
-    private String textoAuxiliar100_12;
-    @Size(max = 100)
-    @Column(name = "CAUX33", length = 100)
-    private String textoAuxiliar100_13;
-    @Size(max = 100)
-    @Column(name = "CAUX34", length = 100)
-    private String textoAuxiliar100_14;
-    @Size(max = 100)
-    @Column(name = "CAUX35", length = 100)
-    private String textoAuxiliar100_15;
+
     @Column(name = "CESTADO")
     private Character bl_estadoRegistro;
     @Size(max = 10)
@@ -792,137 +703,6 @@ public class DocumentHeader implements Serializable {
         this.totalDocumentoAnticipo = totalDocumentoAnticipo;
     }
 
-    public String getTipoDocumentoAnticipo() {
-        if (serieNumeroDocumentoAnticipo != null) {
-            tipoDocumentoAnticipo = tipoDocumento;
-        }
-        return tipoDocumentoAnticipo;
-    }
-
-    public void setTipoDocumentoAnticipo(String tipoDocumentoAnticipo) {
-        this.tipoDocumentoAnticipo = tipoDocumentoAnticipo;
-    }
-
-    public String getSerieNumeroDocumentoAnticipo() {
-        return serieNumeroDocumentoAnticipo;
-    }
-
-    public void setSerieNumeroDocumentoAnticipo(String serieNumeroDocumentoAnticipo) {
-        this.serieNumeroDocumentoAnticipo = serieNumeroDocumentoAnticipo;
-    }
-
-    public String getTipoReferenciaAdicional_2() {
-        if (numeroDocumentoReferenciaAdicional_2 != null) {
-            if (null != tipoDocumento) {
-                switch (tipoDocumento) {
-                    case "01":
-                        tipoReferenciaAdicional_2 = "02";
-                        break;
-                    case "03":
-                        tipoReferenciaAdicional_2 = "03";
-                        break;
-                }
-            }
-        }
-        return tipoReferenciaAdicional_2;
-    }
-
-    public void setTipoReferenciaAdicional_2(String tipoReferenciaAdicional_2) {
-        this.tipoReferenciaAdicional_2 = tipoReferenciaAdicional_2;
-    }
-
-    public String getNumeroDocumentoReferenciaAdicional_2() {
-        return numeroDocumentoReferenciaAdicional_2;
-    }
-
-    public void setNumeroDocumentoReferenciaAdicional_2(String numeroDocumentoReferenciaAdicional_2) {
-        this.numeroDocumentoReferenciaAdicional_2 = numeroDocumentoReferenciaAdicional_2;
-    }
-
-    public String getTipoReferenciaAdicional_3() {
-        if (numeroDocumentoReferenciaAdicional_3 != null) {
-            if (null != tipoDocumento) {
-                switch (tipoDocumento) {
-                    case "01":
-                        tipoReferenciaAdicional_3 = "02";
-                        break;
-                    case "03":
-                        tipoReferenciaAdicional_3 = "03";
-                        break;
-                }
-            }
-        }
-        return tipoReferenciaAdicional_3;
-    }
-
-    public void setTipoReferenciaAdicional_3(String tipoReferenciaAdicional_3) {
-        this.tipoReferenciaAdicional_3 = tipoReferenciaAdicional_3;
-    }
-
-    public String getNumeroDocumentoReferenciaAdicional_3() {
-        return numeroDocumentoReferenciaAdicional_3;
-    }
-
-    public void setNumeroDocumentoReferenciaAdicional_3(String numeroDocumentoReferenciaAdicional_3) {
-        this.numeroDocumentoReferenciaAdicional_3 = numeroDocumentoReferenciaAdicional_3;
-    }
-
-    public String getTipoReferenciaAdicional_4() {
-        if (numeroDocumentoReferenciaAdicional_4 != null) {
-            if (null != tipoDocumento) {
-                switch (tipoDocumento) {
-                    case "01":
-                        tipoReferenciaAdicional_4 = "02";
-                        break;
-                    case "03":
-                        tipoReferenciaAdicional_4 = "03";
-                        break;
-                }
-            }
-        }
-        return tipoReferenciaAdicional_4;
-    }
-
-    public void setTipoReferenciaAdicional_4(String tipoReferenciaAdicional_4) {
-        this.tipoReferenciaAdicional_4 = tipoReferenciaAdicional_4;
-    }
-
-    public String getNumeroDocumentoReferenciaAdicional_4() {
-        return numeroDocumentoReferenciaAdicional_4;
-    }
-
-    public void setNumeroDocumentoReferenciaAdicional_4(String numeroDocumentoReferenciaAdicional_4) {
-        this.numeroDocumentoReferenciaAdicional_4 = numeroDocumentoReferenciaAdicional_4;
-    }
-
-    public String getTipoReferenciaAdicional_5() {
-        if (numeroDocumentoReferenciaAdicional_5 != null) {
-            if (null != tipoDocumento) {
-                switch (tipoDocumento) {
-                    case "01":
-                        tipoReferenciaAdicional_5 = "02";
-                        break;
-                    case "03":
-                        tipoReferenciaAdicional_5 = "03";
-                        break;
-                }
-            }
-        }
-        return tipoReferenciaAdicional_5;
-    }
-
-    public void setTipoReferenciaAdicional_5(String tipoReferenciaAdicional_5) {
-        this.tipoReferenciaAdicional_5 = tipoReferenciaAdicional_5;
-    }
-
-    public String getNumeroDocumentoReferenciaAdicional_5() {
-        return numeroDocumentoReferenciaAdicional_5;
-    }
-
-    public void setNumeroDocumentoReferenciaAdicional_5(String numeroDocumentoReferenciaAdicional_5) {
-        this.numeroDocumentoReferenciaAdicional_5 = numeroDocumentoReferenciaAdicional_5;
-    }
-
     public String getCodigoLeyenda_1() {
         codigoLeyenda_1 = textoLeyenda_1 == null ? null : "1000";
         return codigoLeyenda_1;
@@ -1007,6 +787,15 @@ public class DocumentHeader implements Serializable {
         this.textoAuxiliar40_2 = textoAuxiliar40_2;
     }
 
+    public String getCodigoAuxiliar40_3() {
+        codigoAuxiliar40_3 = textoAuxiliar40_3 == null ? null : "9512";
+        return codigoAuxiliar40_3;
+    }
+
+    public void setCodigoAuxiliar40_3(String codigoAuxiliar40_3) {
+        this.codigoAuxiliar40_3 = codigoAuxiliar40_3;
+    }
+
     public String getTextoAuxiliar40_3() {
         return textoAuxiliar40_3;
     }
@@ -1021,70 +810,6 @@ public class DocumentHeader implements Serializable {
 
     public void setTextoAuxiliar40_4(String textoAuxiliar40_4) {
         this.textoAuxiliar40_4 = textoAuxiliar40_4;
-    }
-
-    public String getTextoAuxiliar40_5() {
-        return textoAuxiliar40_5;
-    }
-
-    public void setTextoAuxiliar40_5(String textoAuxiliar40_5) {
-        this.textoAuxiliar40_5 = textoAuxiliar40_5;
-    }
-
-    public String getTextoAuxiliar40_6() {
-        return textoAuxiliar40_6;
-    }
-
-    public void setTextoAuxiliar40_6(String textoAuxiliar40_6) {
-        this.textoAuxiliar40_6 = textoAuxiliar40_6;
-    }
-
-    public String getTextoAuxiliar40_7() {
-        return textoAuxiliar40_7;
-    }
-
-    public void setTextoAuxiliar40_7(String textoAuxiliar40_7) {
-        this.textoAuxiliar40_7 = textoAuxiliar40_7;
-    }
-
-    public String getTextoAuxiliar40_8() {
-        return textoAuxiliar40_8;
-    }
-
-    public void setTextoAuxiliar40_8(String textoAuxiliar40_8) {
-        this.textoAuxiliar40_8 = textoAuxiliar40_8;
-    }
-
-    public String getTextoAuxiliar40_9() {
-        return textoAuxiliar40_9;
-    }
-
-    public void setTextoAuxiliar40_9(String textoAuxiliar40_9) {
-        this.textoAuxiliar40_9 = textoAuxiliar40_9;
-    }
-
-    public String getTextoAuxiliar40_10() {
-        return textoAuxiliar40_10;
-    }
-
-    public void setTextoAuxiliar40_10(String textoAuxiliar40_10) {
-        this.textoAuxiliar40_10 = textoAuxiliar40_10;
-    }
-
-    public String getTextoAuxiliar40_11() {
-        return textoAuxiliar40_11;
-    }
-
-    public void setTextoAuxiliar40_11(String textoAuxiliar40_11) {
-        this.textoAuxiliar40_11 = textoAuxiliar40_11;
-    }
-
-    public String getTextoAuxiliar40_12() {
-        return textoAuxiliar40_12;
-    }
-
-    public void setTextoAuxiliar40_12(String textoAuxiliar40_12) {
-        this.textoAuxiliar40_12 = textoAuxiliar40_12;
     }
 
     public String getCodigoAuxiliar250_1() {
@@ -1162,118 +887,6 @@ public class DocumentHeader implements Serializable {
 
     public void setCodigoAuxiliar100_2(String codigoAuxiliar100_1) {
         this.codigoAuxiliar100_1 = codigoAuxiliar100_1;
-    }
-
-    public String getTextoAuxiliar100_2() {
-        return textoAuxiliar100_2;
-    }
-
-    public void setTextoAuxiliar100_2(String textoAuxiliar100_2) {
-        this.textoAuxiliar100_2 = textoAuxiliar100_2;
-    }
-
-    public String getTextoAuxiliar100_3() {
-        return textoAuxiliar100_3;
-    }
-
-    public void setTextoAuxiliar100_3(String textoAuxiliar100_3) {
-        this.textoAuxiliar100_3 = textoAuxiliar100_3;
-    }
-
-    public String getTextoAuxiliar100_4() {
-        return textoAuxiliar100_4;
-    }
-
-    public void setTextoAuxiliar100_4(String textoAuxiliar100_4) {
-        this.textoAuxiliar100_4 = textoAuxiliar100_4;
-    }
-
-    public String getTextoAuxiliar100_5() {
-        return textoAuxiliar100_5;
-    }
-
-    public void setTextoAuxiliar100_5(String textoAuxiliar100_5) {
-        this.textoAuxiliar100_5 = textoAuxiliar100_5;
-    }
-
-    public String getTextoAuxiliar100_6() {
-        return textoAuxiliar100_6;
-    }
-
-    public void setTextoAuxiliar100_6(String textoAuxiliar100_6) {
-        this.textoAuxiliar100_6 = textoAuxiliar100_6;
-    }
-
-    public String getTextoAuxiliar100_7() {
-        return textoAuxiliar100_7;
-    }
-
-    public void setTextoAuxiliar100_7(String textoAuxiliar100_7) {
-        this.textoAuxiliar100_7 = textoAuxiliar100_7;
-    }
-
-    public String getTextoAuxiliar100_8() {
-        return textoAuxiliar100_8;
-    }
-
-    public void setTextoAuxiliar100_8(String textoAuxiliar100_8) {
-        this.textoAuxiliar100_8 = textoAuxiliar100_8;
-    }
-
-    public String getTextoAuxiliar100_9() {
-        return textoAuxiliar100_9;
-    }
-
-    public void setTextoAuxiliar100_9(String textoAuxiliar100_9) {
-        this.textoAuxiliar100_9 = textoAuxiliar100_9;
-    }
-
-    public String getTextoAuxiliar100_10() {
-        return textoAuxiliar100_10;
-    }
-
-    public void setTextoAuxiliar100_10(String textoAuxiliar100_10) {
-        this.textoAuxiliar100_10 = textoAuxiliar100_10;
-    }
-
-    public String getTextoAuxiliar100_11() {
-        return textoAuxiliar100_11;
-    }
-
-    public void setTextoAuxiliar100_11(String textoAuxiliar100_11) {
-        this.textoAuxiliar100_11 = textoAuxiliar100_11;
-    }
-
-    public String getTextoAuxiliar100_12() {
-        return textoAuxiliar100_12;
-    }
-
-    public void setTextoAuxiliar100_12(String textoAuxiliar100_12) {
-        this.textoAuxiliar100_12 = textoAuxiliar100_12;
-    }
-
-    public String getTextoAuxiliar100_13() {
-        return textoAuxiliar100_13;
-    }
-
-    public void setTextoAuxiliar100_13(String textoAuxiliar100_13) {
-        this.textoAuxiliar100_13 = textoAuxiliar100_13;
-    }
-
-    public String getTextoAuxiliar100_14() {
-        return textoAuxiliar100_14;
-    }
-
-    public void setTextoAuxiliar100_14(String textoAuxiliar100_14) {
-        this.textoAuxiliar100_14 = textoAuxiliar100_14;
-    }
-
-    public String getTextoAuxiliar100_15() {
-        return textoAuxiliar100_15;
-    }
-
-    public void setTextoAuxiliar100_15(String textoAuxiliar100_15) {
-        this.textoAuxiliar100_15 = textoAuxiliar100_15;
     }
 
     public Character getBl_estadoRegistro() {
