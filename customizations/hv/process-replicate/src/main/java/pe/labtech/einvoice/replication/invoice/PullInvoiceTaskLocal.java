@@ -7,6 +7,7 @@ package pe.labtech.einvoice.replication.invoice;
 
 import java.util.List;
 import javax.ejb.Local;
+import pe.labtech.einvoice.replicator.entity.DocumentAdvance;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
@@ -47,9 +48,10 @@ public interface PullInvoiceTaskLocal {
      *
      * @param header
      * @param details
+     * @param advances
      * @param step
      * @param status
      */
-    void replicate(DocumentHeader header, List<DocumentDetail> details, String step, String status);
+    void replicate(DocumentHeader header, List<DocumentDetail> details, List<DocumentAdvance> advances, String step, String status);
 
 }

@@ -6,6 +6,7 @@
 package pe.labtech.einvoice.replication.invoice;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,9 @@ import pe.labtech.einvoice.core.entity.DocumentAuxiliar;
 import pe.labtech.einvoice.core.entity.DocumentLegend;
 import pe.labtech.einvoice.core.entity.Item;
 import pe.labtech.einvoice.core.entity.ItemAttribute;
+import pe.labtech.einvoice.core.entity.Prepaid;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
+import pe.labtech.einvoice.replicator.entity.DocumentAdvance;
 import pe.labtech.einvoice.replicator.entity.DocumentDetail;
 import pe.labtech.einvoice.replicator.entity.DocumentHeader;
 import pe.labtech.einvoice.replicator.entity.DocumentHeaderPK;
@@ -48,7 +51,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
     private PrivateDatabaseManagerLocal prv;
 
     @Override
-    public void replicate(DocumentHeader header, List<DocumentDetail> details, String step, String status) {
+    public void replicate(DocumentHeader header, List<DocumentDetail> details, List<DocumentAdvance> advances, String step, String status) {
         Document document = new Document();
         document.setClientId(header.getTipoDocumentoEmisor() + "-" + header.getNumeroDocumentoEmisor());
         document.setDocumentType(header.getTipoDocumento());
@@ -131,6 +134,18 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
             }
             return item;
         }).collect(Collectors.toList());
+
+        List<Prepaid> prepaids = advances.stream().map(advance -> {
+            Prepaid prepaid = new Prepaid();
+            prepaid.setDocument(document);
+            prepaid.setIssuerType(new String(new char[]{advance.getId().getTipoDocumentoEmisor()}));
+            prepaid.setIssuerId(advance.getId().getNumeroDocumentoEmisor());
+            prepaid.setType(advance.getId().getTipoDocumento());
+            prepaid.setId(advance.getId().getSerieNumero());
+            prepaid.setAmount(advance.getTotalDocumentoAnticipo());
+            return prepaid;
+        }).collect(Collectors.toList());
+
         document.setItems(items);
         document.setStep(step);
         document.setStatus(status);
@@ -174,12 +189,20 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                 .setParameter("hr", id.getHv_recaudacion())
                 .setParameter("htr", id.getHv_tipoRecaudacion())
                 .getResultList());
-        this.replicate(header, details, step, status);
+        List<DocumentAdvance> prepaids = pub.seek(e -> e
+                .createQuery("SELECT o FROM DocumentAdvance o WHERE O.id.hv_compania = :hc AND O.id.hv_localidad = :hl AND O.id.hv_recaudacion = :hr AND O.id.hv_tipoRecaudacion = :htr", DocumentAdvance.class)
+                .setParameter("hc", id.getHv_compania())
+                .setParameter("hl", id.getHv_localidad())
+                .setParameter("hr", id.getHv_recaudacion())
+                .setParameter("htr", id.getHv_tipoRecaudacion())
+                .getResultList()
+        );
+        this.replicate(header, details, prepaids, step, status);
     }
 
     @Override
     public void replicate(DocumentHeader header, List<DocumentDetail> details) {
-        this.replicate(header, details, DocumentStep.SIGN, DocumentStatus.NEEDED);
+        this.replicate(header, details, null, DocumentStep.SIGN, DocumentStatus.NEEDED);
     }
 
     @Override

@@ -18,6 +18,7 @@ import static pe.labtech.einvoice.core.tasks.tools.ServiceCommons.signOnlineOrSy
 import pe.labtech.einvoice.core.tasks.tools.Tools;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
+import pe.labtech.einvoice.core.ws.model.DocumentAdvance;
 import pe.labtech.einvoice.core.ws.model.DocumentItem;
 
 /**
@@ -47,7 +48,7 @@ public class OnlineInvoice {
     public String buildSignCommand(Long id) {
         pe.labtech.einvoice.core.ws.model.Document target = new pe.labtech.einvoice.core.ws.model.Document();
         Document entity = loader.loadForWork(id, source -> {
-            map(source, () -> target, DocumentItem::new, (d, il) -> d.setItems(il));
+            map(source, () -> target, DocumentItem::new, (d, il) -> d.setItems(il), DocumentAdvance::new, (d, il) -> d.setAdvances(il));
         });
         return ServiceCommons.BUILDER.buildSign(
                 Tools.buildClientID(entity.getClientId()), entity.getDocumentType(),
