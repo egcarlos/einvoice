@@ -5,6 +5,7 @@
  */
 package pe.labtech.einvoice.replicator.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -16,8 +17,8 @@ import javax.persistence.Table;
  * @author Carlos Echeverria
  */
 @Entity
-@Table(name = "SPE_EINVOICEADVANCE")
-public class DocumentAdvance {
+@Table(name = "SPE_EINVOICEPREPAID")
+public class DocumentAdvance implements Serializable {
 
     @EmbeddedId
     private DocumentAdvancePK id;
