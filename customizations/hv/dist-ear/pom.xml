@@ -47,11 +47,11 @@
                             <artifactId>einvoice-dist-console</artifactId>
                             <contextRoot>/einvoice/console</contextRoot>
                         </webModule>
-                        <webModule>
+<!--                        <webModule>
                             <groupId>pe.labtech.einvoice.external</groupId>
                             <artifactId>PDFServer</artifactId>
                             <contextRoot>/einvoice/resources</contextRoot>
-                        </webModule>
+                        </webModule>-->
                     </modules>
                 </configuration>
             </plugin>
@@ -90,11 +90,11 @@
             <artifactId>einvoice-process-sync</artifactId>
             <type>ejb</type>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>pe.labtech.einvoice.external</groupId>
             <artifactId>PDFServer</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>war</type>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>

@@ -4,14 +4,16 @@
  */
 package pe.labtech.einvoice.core.ws.model;
 
+import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Clase DocumentAdvance.
- * 
-* @author Labtech S.R.L. (info@labtech.pe)
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {
@@ -29,7 +31,8 @@ public class DocumentAdvance {
     private String numeroDocumentoEmisorAnticipo;
     private String tipoDocumentoAnticipo;
     private String serieNumeroDocumentoAnticipo;
-    private String totalPrepagadoAnticipo;
+    @XmlJavaTypeAdapter(Number2Adapter.class)
+    private BigDecimal totalPrepagadoAnticipo;
 
     public DocumentAdvance() {
     }
@@ -74,11 +77,11 @@ public class DocumentAdvance {
         this.serieNumeroDocumentoAnticipo = serieNumeroDocumentoAnticipo;
     }
 
-    public String getTotalPrepagadoAnticipo() {
+    public BigDecimal getTotalPrepagadoAnticipo() {
         return totalPrepagadoAnticipo;
     }
 
-    public void setTotalPrepagadoAnticipo(String totalPrepagadoAnticipo) {
+    public void setTotalPrepagadoAnticipo(BigDecimal totalPrepagadoAnticipo) {
         this.totalPrepagadoAnticipo = totalPrepagadoAnticipo;
     }
 

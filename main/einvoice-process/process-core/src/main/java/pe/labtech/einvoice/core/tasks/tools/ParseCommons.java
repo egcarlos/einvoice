@@ -25,8 +25,8 @@ import pe.labtech.einvoice.core.ws.model.DocumentItem;
 
 /**
  * Clase ParseCommons.
- * 
-* @author Labtech S.R.L. (info@labtech.pe)
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
  */
 public class ParseCommons {
 
@@ -103,10 +103,7 @@ public class ParseCommons {
                         tgt.setNumeroDocumentoEmisorAnticipo(prepaid.getIssuerId());
                         tgt.setTipoDocumentoAnticipo(prepaid.getType());
                         tgt.setSerieNumeroDocumentoAnticipo(prepaid.getId());
-                        DecimalFormat df = new DecimalFormat("0.00");
-                        df.setGroupingUsed(false);
-                        df.getDecimalFormatSymbols().setDecimalSeparator('.');
-                        tgt.setTotalPrepagadoAnticipo(df.format(prepaid.getAmount()));
+                        tgt.setTotalPrepagadoAnticipo(prepaid.getAmount());
                         return tgt;
                     })
                     .collect(Collectors.toList());

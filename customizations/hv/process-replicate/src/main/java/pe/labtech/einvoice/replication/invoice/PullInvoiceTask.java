@@ -6,7 +6,6 @@
 package pe.labtech.einvoice.replication.invoice;
 
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
 import pe.labtech.einvoice.commons.model.DocumentStep;
 import pe.labtech.einvoice.core.entity.Document;
@@ -69,10 +69,10 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                     .filter(e -> !"class".equals(e.getKey()))
                     .filter(e -> !e.getKey().startsWith("bl_"))
                     .filter(e -> !e.getKey().startsWith("x_"))
-                    .forEach(e -> {
-                        final String key = e.getKey();
-                        final String value = e.getValue();
-                        if (key.startsWith("codigoLeyenda") || e.getKey().startsWith("textoLeyenda") || e.getKey().startsWith("textoAdicionalLeyenda")) {
+                    .filter(e -> !StringUtils.isEmpty(e.getValue()))
+                    .collect(Collectors.toMap(e -> e.getKey(), e -> StringUtils.trim(e.getValue())))
+                    .forEach((key, value) -> {
+                        if (key.startsWith("codigoLeyenda") || key.startsWith("textoLeyenda") || key.startsWith("textoAdicionalLeyenda")) {
                             if (key.startsWith("codigoLeyenda")) {
                                 Long order = Long.parseLong(key.split("_")[1]);
                                 DocumentLegend dl = buildLegend(bean, order, document);
@@ -90,15 +90,13 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
                                     auxs.add(da);
                                 }
                             }
-                        } else {
-                            if ("fechaEmision".equals(key)) {
-                                //fix para el formato de la fecha de emisión
-                                attrs.add(new DocumentAttribute(document, key, value.substring(6, 10) + "-" + value.substring(3, 5) + "-" + value.substring(0, 2)));
-                            } else if (key.startsWith("tipoReferenciaAdicional") || key.startsWith("numeroDocumentoReferenciaAdicional")) {
+                        } else if ("fechaEmision".equals(key)) {
+                            //fix para el formato de la fecha de emisión
+                            attrs.add(new DocumentAttribute(document, key, value.substring(6, 10) + "-" + value.substring(3, 5) + "-" + value.substring(0, 2)));
+                        } else if (key.startsWith("tipoReferenciaAdicional") || key.startsWith("numeroDocumentoReferenciaAdicional")) {
 //                                attrs.add(new DocumentAttribute(document, key.replace("Adicional", ""), value));
-                            } else {
-                                attrs.add(new DocumentAttribute(document, key, value));
-                            }
+                        } else {
+                            attrs.add(new DocumentAttribute(document, key, value));
                         }
                     });
 
@@ -149,6 +147,7 @@ public class PullInvoiceTask implements PullInvoiceTaskLocal {
         document.setItems(items);
         document.setStep(step);
         document.setStatus(status);
+        document.setPrepaids(prepaids);
 
         prv.handle(e -> e.persist(document));
 

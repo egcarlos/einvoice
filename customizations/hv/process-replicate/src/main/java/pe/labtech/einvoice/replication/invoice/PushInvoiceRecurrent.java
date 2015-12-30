@@ -71,6 +71,9 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
         this.getId = t -> RecurrentHelper.buildId(t, "replicate");
         this.consumer = t -> {
             DocumentHeaderPK id = createId(prv.seek(e -> e.find(Document.class, t)));
+            if (id == null) {
+                return;
+            }
             Map<String, Object> responses = this.findTasksSingle.apply(t).stream()
                     .filter(r -> this.tryLockSingle.apply(r))
                     .filter(r -> isValid(ModelTools.mapResponseName(r.getName())))
@@ -105,7 +108,7 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
     }
 
     private DocumentHeaderPK createId(Document t) {
-        return pub.seek(e -> e
+        List<DocumentHeaderPK> result = pub.seek(e -> e
                 .createQuery(
                         "SELECT O.id FROM DocumentHeader O WHERE O.tipoDocumentoEmisor = :tde AND O.numeroDocumentoEmisor = :nde AND O.tipoDocumento = :td AND O.serieNumero = :sn",
                         DocumentHeaderPK.class
@@ -114,7 +117,11 @@ public class PushInvoiceRecurrent extends AbstractRecurrentTask<Long> {
                 .setParameter("nde", t.getClientId().split("-")[1])
                 .setParameter("td", t.getDocumentType())
                 .setParameter("sn", t.getDocumentNumber())
-                .getSingleResult());
+                .getResultList());
+        if (result.isEmpty()) {
+            return null;
+        }
+        return result.get(0);
     }
 
 }
