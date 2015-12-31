@@ -5,8 +5,13 @@
  */
 package pe.labtech.einvoice.commons2.ubl.jaxb;
 
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
 import oasis.names.specification.ubl.schema.xsd.creditnote_2.ObjectFactory;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
+import pe.labtech.einvoice.commons2.ubl.model.CreditNotePrefixMapper;
+import pe.labtech.einvoice.commons2.ubl.model.InvoicePrefixMapper;
 
 /**
  *
@@ -19,6 +24,17 @@ public class CreditNoteContext extends AbstractContextManager<CreditNoteType> im
 
     protected CreditNoteContext() {
         super(CreditNoteType.class, (CreditNoteType t) -> factory.createCreditNote(t));
+    }
+
+    @Override
+    public Marshaller getMarshaller(String charsetName) {
+        Marshaller m = super.getMarshaller(charsetName);
+        try {
+            m.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, new CreditNotePrefixMapper());
+        } catch (PropertyException ex) {
+            throw new RuntimeException(ex);
+        }
+        return m;
     }
 
 }

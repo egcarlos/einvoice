@@ -1,8 +1,7 @@
 /*
 * Producto elaborado para Alignet S.A.C.
 *
-*/
-
+ */
 package pe.labtech.einvoice.commons.xmlsecurity;
 
 import java.io.File;
@@ -26,11 +25,10 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
-* Clase SignTest.
-*
-* @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ * Clase SignTest.
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
+ */
 public class SignTest {
 
     public SignTest() {
@@ -102,7 +100,6 @@ public class SignTest {
     }
 
     @Test
-
     public void signPortal() throws ParserConfigurationException, SAXException, IOException, NoSuchAlgorithmException, CertificateException, KeyStoreException, UnrecoverableKeyException {
         org.apache.xml.security.Init.init();
 

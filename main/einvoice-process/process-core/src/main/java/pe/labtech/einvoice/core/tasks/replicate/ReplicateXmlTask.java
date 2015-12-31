@@ -5,6 +5,10 @@
 package pe.labtech.einvoice.core.tasks.replicate;
 
 import java.text.MessageFormat;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -13,6 +17,7 @@ import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import pe.labtech.einvoice.core.model.PrivateDatabaseManagerLocal;
 import pe.labtech.einvoice.core.tasks.tools.DatabaseCommons;
 import pe.labtech.einvoice.core.tasks.tools.ServiceCommons;
+import pe.labtech.einvoice.core.tasks.tools.Tools;
 import pe.labtech.einvoice.core.ws.generated.EBizGenericInvoker;
 
 /**
@@ -59,29 +64,39 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
 
         StringBuilder command = new StringBuilder();
 
-        //Fragmento de código para agregar la optimización de envío de
-        //documentos en ambiente de homologación.
-        String dds = "0";
-        //if (isSunatTest(document)) {
-        //    dds = "1";
-        //}
+        //armado de la secuencia de comandos
+        String options = Tools.toMap(String.class, String.class,
+                "declare-sunat", "1",
+                "declare-direct-sunat", "0",
+                "publish", "1",
+                "output", "PDF"
+        ).entrySet().stream()
+                .map(e -> MessageFormat.format("{0}=\"{1}\"", e.getKey(), e.getValue()))
+                .reduce("", (a, b) -> a + " " + b);
+
+        //armado de la secuencia de parametros
+        Map<String, String> parametersMap = new LinkedHashMap<>();
+        //closure para procesar los atributos asociados
+        BiConsumer<String, String> parameterConsumer = (dbName, xmlName) -> {
+            String value = DatabaseCommons.getAttributeValue(prv, document, dbName);
+            if (value != null) {
+                parametersMap.put(xmlName, value);
+            }
+        };
+
+        parametersMap.put("idEmisor", buildClientId(document));
+        parameterConsumer.accept("correoEmisor", "correoEmisor");
+        parameterConsumer.accept("correoAdquiriente", "correoAdquiriente");
+
+        String parameters = parametersMap.entrySet().stream()
+                .map(e -> MessageFormat.format("<parameter value=\"{1}\" name=\"{0}\" />", e.getKey(), e.getValue()))
+                .reduce("", (a, b) -> a + b);
 
         command
-                .append("<ReplicateXmlCmd ")
-                .append("\n        ").append("declare-sunat=\"1\" ")
-                .append("\n        ").append("\n\tdeclare-direct-sunat=\"").append(dds).append("\" ")
-                .append("\n        ").append("\n\tpublish=\"1\" ")
-                .append("\n        ").append("\n\toutput=\"PDF\"")
-                .append(">")
-                .append("\n    ").append("<parametros/>")
-                .append("\n    ").append("<parameter value=\"").append(buildClientId(document)).append("\" name=\"idEmisor\"/>");
-
-        if (document.getDocumentType().startsWith("R")) {
-            String correoEmisor = DatabaseCommons.getAttributeValue(prv, document, "correoEmisor");
-            command.append("<parameter value=\"").append(correoEmisor).append("\" name=\"correoEmisor\"/>");
-        }
-
-        command.append("</ReplicateXmlCmd>");
+                .append("<ReplicateXmlCmd ").append(options).append(">")
+                .append("<parametros/>")
+                .append(parameters)
+                .append("</ReplicateXmlCmd>");
 
         ServiceCommons.replicateXml(prv, loader, invoker, document, command.toString(), zippedUBL);
     }
@@ -119,7 +134,7 @@ public class ReplicateXmlTask implements ReplicateXmlTaskLocal {
      * @param d documento
      * @return ruc del emisor
      */
-    public static Object buildClientId(Document d) {
+    public static String buildClientId(Document d) {
         return d.getClientId().contains("-") ? d.getClientId().split("-")[1] : d.getClientId();
     }
 

@@ -1,12 +1,13 @@
 /*
 * Producto elaborado para Alignet S.A.C.
 *
-*/
-
+ */
 package pe.labtech.einvoice.core.tasks.tools;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,11 +27,10 @@ import pe.labtech.einvoice.core.model.DocumentLoaderLocal;
 import static pe.labtech.einvoice.core.tasks.tools.Tools.isNotFinishedInSunat;
 
 /**
-* Clase DatabaseCommons.
-*
-* @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ * Clase DatabaseCommons.
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
+ */
 public class DatabaseCommons {
 
     /**
@@ -329,15 +329,19 @@ public class DatabaseCommons {
      * @return valor del atributo
      */
     public static String getAttributeValue(DatabaseManager db, Document document, String name) {
-        return db.seekNT(e -> e
-                .createQuery(
-                        "SELECT O.value FROM DocumentAttribute O WHERE O.document = :document AND O.name = :name",
-                        String.class
-                )
-                .setParameter("document", document)
-                .setParameter("name", name)
-                .getSingleResult()
-        );
+        try {
+            return db.seekNT(e -> e
+                    .createQuery(
+                            "SELECT O.value FROM DocumentAttribute O WHERE O.document = :document AND O.name = :name",
+                            String.class
+                    )
+                    .setParameter("document", document)
+                    .setParameter("name", name)
+                    .getSingleResult()
+            );
+        } catch (NonUniqueResultException | NoResultException ex) {
+            return null;
+        }
     }
 
 }

@@ -54,7 +54,7 @@ public class IntegralTest {
                 .addAmount("1003", "0.00")
                 .addAmount("2005", "0.00")
                 .addNote("1000", "CIENTO DIECIOCHO Y 00/100 NUEVOS SOLES")
-                .addCustomNote("9999", "COMENTARIO")
+                //.addCustomNote("9999", "COMENTARIO")
                 .addTax("1000", "IGV", "VAT", BigDecimal.valueOf(1800, 2))
                 .addPrepaidPayment(tipoIdEmisor, idEmisor, "01", "FA00-00000001", "100.00")
                 .addPrepaidPayment(tipoIdEmisor, idEmisor, "01", "FA00-00000001", "50.00")
@@ -104,6 +104,13 @@ public class IntegralTest {
 
         document.setXmlStandalone(true);
 
+        
+        try (FileOutputStream fos = new FileOutputStream("out.signed.xml")) {
+            fos.write(ds.createRepresentation(document, "UTF-8"));
+            fos.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(IntegralTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String text = ds.createTextRepresentation(document, "UTF-8");
         System.out.println(text);
     }

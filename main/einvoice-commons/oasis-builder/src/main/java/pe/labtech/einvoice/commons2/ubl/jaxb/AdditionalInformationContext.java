@@ -5,6 +5,11 @@
  */
 package pe.labtech.einvoice.commons2.ubl.jaxb;
 
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
+import pe.labtech.einvoice.commons2.ubl.model.AdditionalInformationPrefixMapper;
+import pe.labtech.einvoice.commons2.ubl.model.InvoicePrefixMapper;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.AdditionalInformationType;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.ObjectFactory;
 
@@ -21,4 +26,14 @@ public class AdditionalInformationContext extends AbstractContextManager<Additio
         super(AdditionalInformationType.class, i -> factory.createAdditionalInformation(i));
     }
 
+    @Override
+    public Marshaller getMarshaller(String charsetName) {
+        Marshaller m = super.getMarshaller(charsetName);
+        try {
+            m.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, new AdditionalInformationPrefixMapper());
+        } catch (PropertyException ex) {
+            throw new RuntimeException(ex);
+        }
+        return m;
+    }
 }

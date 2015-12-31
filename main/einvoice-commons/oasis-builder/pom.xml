@@ -10,6 +10,10 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>oasis</artifactId>
             <version>${project.version}</version>

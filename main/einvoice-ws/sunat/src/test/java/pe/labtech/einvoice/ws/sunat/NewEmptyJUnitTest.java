@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.xml.soap.SOAPFault;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
@@ -61,11 +62,13 @@ public class NewEmptyJUnitTest {
     public void hello() {
         PortFactory pf = new PortFactory();
 
-        final String user = "20101705839MODDATOS";
+        final String user = "20100047137MODDATOS";
         final String password = "moddatos";
-        final String name = "20101705839-01-FLT1-00000001.zip";
-        final DataHandler file = new DataHandler(new byte[]{(byte) 12, (byte) 12, (byte) 12, (byte) 12, (byte) 12, (byte) 12, (byte) 12, (byte) 12}, "application/octet-stream");
-
+        final String name = "20100047137-01-F098-00000017.zip";
+        final FileDataSource fds = new FileDataSource(name);
+        final DataHandler file = new DataHandler(fds);
+        //final DataHandler file = new DataHandler(new byte[]{(byte) 12, (byte) 12, (byte) 12, (byte) 12, (byte) 12, (byte) 12, (byte) 12, (byte) 12}, "application/octet-stream");
+        
         byte[] result = pf.invoke((s, h) -> {
             h.setUser(user);
             h.setPassword(password);

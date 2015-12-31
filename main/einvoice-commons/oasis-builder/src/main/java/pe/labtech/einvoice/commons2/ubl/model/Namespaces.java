@@ -11,7 +11,7 @@ package pe.labtech.einvoice.commons2.ubl.model;
  */
 public class Namespaces {
 
-    public static final String DEFAULT = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2";
+    public static final String INVOICE = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2";
     public static final String CREDIT = "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2";
     public static final String DEBIT = "urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2";
     public static final String SD = "urn:sunat:names:specification:ubl:peru:schema:xsd:SummaryDocuments-1";

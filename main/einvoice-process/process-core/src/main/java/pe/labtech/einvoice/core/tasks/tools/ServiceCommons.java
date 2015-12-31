@@ -1,8 +1,7 @@
 /*
 * Producto elaborado para Alignet S.A.C.
 *
-*/
-
+ */
 package pe.labtech.einvoice.core.tasks.tools;
 
 import java.util.Map;
@@ -36,17 +35,16 @@ import pe.labtech.einvoice.core.ws.messages.response.DocumentInfo;
 import pe.labtech.einvoice.core.ws.messages.response.Response;
 
 /**
-* Clase ServiceCommons.
-*
-* @author Labtech S.R.L. (info@labtech.pe)
-*/
-
+ * Clase ServiceCommons.
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
+ */
 public class ServiceCommons {
 
     //TODO make cache of xml marshaller instances
     public static final Builder BUILDER = new Builder();
 
-    public static final DigitalSign DIGISIGN = new DigitalSign();
+    public static final pe.labtech.einvoice.commons2.xmlsecurity.DigitalSign DIGISIGN = new pe.labtech.einvoice.commons2.xmlsecurity.DigitalSign();
 
     public static DocumentInfo synthDocumentInfo(org.w3c.dom.Document xml) {
         String[] responses = DIGISIGN.getResponses(xml);

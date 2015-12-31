@@ -69,8 +69,11 @@ import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLE
 import oasis.names.specification.ubl.schema.xsd.commonextensioncomponents_2.UBLExtensionsType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import pe.labtech.einvoice.commons2.ubl.api.HeaderBuilder;
 import pe.labtech.einvoice.commons2.ubl.jaxb.AdditionalInformationContext;
+import pe.labtech.einvoice.commons2.ubl.model.Namespaces;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.AdditionalInformationType;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.AdditionalMonetaryTotalType;
 import sunat.names.specification.ubl.peru.schema.xsd.sunataggregatecomponents_1.AdditionalPropertyType;
@@ -587,9 +590,9 @@ public class InvoiceBuilder extends BaseBuilder<InvoiceType> implements HeaderBu
         }));
 
         ebz.setAny(AdditionalInformationContext.reference.doWork((c, m) -> {
-            if (otherElements.getAdditionalProperty().isEmpty()) {
-                return null;
-            }
+//            if (otherElements.getAdditionalProperty().isEmpty()) {
+//                return null;
+//            }
             Document document = db.newDocument();
             JAXBElement<AdditionalInformationType> ie = c.getElement(otherElements);
             try {
@@ -627,6 +630,14 @@ public class InvoiceBuilder extends BaseBuilder<InvoiceType> implements HeaderBu
             } catch (JAXBException ex) {
                 Logger.getLogger(InvoiceBuilder.class
                         .getName()).log(Level.SEVERE, null, ex);
+            }
+            NodeList nl = document.getElementsByTagNameNS(Namespaces.CBC, "IssueDate");
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node n = nl.item(0).getFirstChild();
+                String date = n.getNodeValue();
+                if (date.contains("T")) {
+                    n.setNodeValue(date.split("T")[0]);
+                }
             }
             return document;
         });

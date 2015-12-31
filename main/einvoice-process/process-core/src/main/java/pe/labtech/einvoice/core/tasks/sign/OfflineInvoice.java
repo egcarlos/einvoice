@@ -25,7 +25,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import pe.labtech.einvoice.commons.ext.ZipTools;
 import pe.labtech.einvoice.commons.model.DocumentStatus;
 import pe.labtech.einvoice.commons.model.DocumentStep;
-import pe.labtech.einvoice.commons2.ubl.builder.*;
 import pe.labtech.einvoice.core.entity.Document;
 import pe.labtech.einvoice.core.entity.DocumentData;
 import pe.labtech.einvoice.core.entity.DocumentResponse;
@@ -149,13 +148,13 @@ public class OfflineInvoice {
         return fileName;
     }
 
-    private DebitNoteBuilder mapDebitNote(Long id) {
+    private pe.labtech.einvoice.commons2.ubl.builder.DebitNoteBuilder mapDebitNote(Long id) {
         return prv.seek(e -> {
             Document d = e.find(Document.class, id);
 
             Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
             //add document main data
-            DebitNoteBuilder ib = new DebitNoteBuilder()
+            pe.labtech.einvoice.commons2.ubl.builder.DebitNoteBuilder ib = new pe.labtech.einvoice.commons2.ubl.builder.DebitNoteBuilder()
                     .init()
                     .addIdentification(
                             da.get("tipoDocumento"),
@@ -172,6 +171,10 @@ public class OfflineInvoice {
                             da.get("tipoDocumentoAdquiriente"),
                             da.get("numeroDocumentoAdquiriente"),
                             da.get("razonSocialAdquiriente")
+                    )
+                    .addSignatureElement(
+                            da.get("numeroDocumentoEmisor"),
+                            da.get("razonSocialEmisor")
                     )
                     .setIssuerName(da.get("nombreComercialEmisor"))
                     .setIssuerAddress(
@@ -240,7 +243,7 @@ public class OfflineInvoice {
             //add item information
             d.getItems().forEach(i -> {
                 Map<String, String> ia = i.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
-                DebitNoteLineBuilder ilb = new DebitNoteLineBuilder()
+                pe.labtech.einvoice.commons2.ubl.builder.DebitNoteLineBuilder ilb = new pe.labtech.einvoice.commons2.ubl.builder.DebitNoteLineBuilder()
                         .init(
                                 ia.get("numeroOrdenItem"),
                                 buildNumber(ia.get("cantidad")),
@@ -265,13 +268,13 @@ public class OfflineInvoice {
         });
     }
 
-    private CreditNoteBuilder mapCreditNote(Long id) {
+    private pe.labtech.einvoice.commons2.ubl.builder.CreditNoteBuilder mapCreditNote(Long id) {
         return prv.seek(e -> {
             Document d = e.find(Document.class, id);
 
             Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
             //add document main data
-            CreditNoteBuilder ib = new CreditNoteBuilder()
+            pe.labtech.einvoice.commons2.ubl.builder.CreditNoteBuilder ib = new pe.labtech.einvoice.commons2.ubl.builder.CreditNoteBuilder()
                     .init()
                     .addIdentification(
                             da.get("tipoDocumento"),
@@ -288,6 +291,10 @@ public class OfflineInvoice {
                             da.get("tipoDocumentoAdquiriente"),
                             da.get("numeroDocumentoAdquiriente"),
                             da.get("razonSocialAdquiriente")
+                    )
+                    .addSignatureElement(
+                            da.get("numeroDocumentoEmisor"),
+                            da.get("razonSocialEmisor")
                     )
                     .setIssuerName(da.get("nombreComercialEmisor"))
                     .setIssuerAddress(
@@ -356,7 +363,7 @@ public class OfflineInvoice {
             //add item information
             d.getItems().forEach(i -> {
                 Map<String, String> ia = i.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
-                CreditNoteLineBuilder ilb = new CreditNoteLineBuilder()
+                pe.labtech.einvoice.commons2.ubl.builder.CreditNoteLineBuilder ilb = new pe.labtech.einvoice.commons2.ubl.builder.CreditNoteLineBuilder()
                         .init(
                                 ia.get("numeroOrdenItem"),
                                 buildNumber(ia.get("cantidad")),
@@ -381,13 +388,13 @@ public class OfflineInvoice {
         });
     }
 
-    private InvoiceBuilder mapInvoice(Long id) {
+    private pe.labtech.einvoice.commons2.ubl.builder.InvoiceBuilder mapInvoice(Long id) {
         return prv.seek(e -> {
             Document d = e.find(Document.class, id);
 
             Map<String, String> da = d.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
             //add document main data
-            InvoiceBuilder ib = new InvoiceBuilder()
+            pe.labtech.einvoice.commons2.ubl.builder.InvoiceBuilder ib = new pe.labtech.einvoice.commons2.ubl.builder.InvoiceBuilder()
                     .init()
                     .addIdentification(
                             da.get("tipoDocumento"),
@@ -404,6 +411,10 @@ public class OfflineInvoice {
                             da.get("tipoDocumentoAdquiriente"),
                             da.get("numeroDocumentoAdquiriente"),
                             da.get("razonSocialAdquiriente")
+                    )
+                    .addSignatureElement(
+                            da.get("numeroDocumentoEmisor"),
+                            da.get("razonSocialEmisor")
                     )
                     .setIssuerName(da.get("nombreComercialEmisor"))
                     .setIssuerAddress(
@@ -469,7 +480,7 @@ public class OfflineInvoice {
             //add item information
             d.getItems().forEach(i -> {
                 Map<String, String> ia = i.getAttributes().stream().collect(Collectors.toMap(t -> t.getName(), t -> t.getValue()));
-                InvoiceLineBuilder ilb = new InvoiceLineBuilder()
+                pe.labtech.einvoice.commons2.ubl.builder.InvoiceLineBuilder ilb = new pe.labtech.einvoice.commons2.ubl.builder.InvoiceLineBuilder()
                         .init(
                                 ia.get("numeroOrdenItem"),
                                 buildNumber(ia.get("cantidad")),

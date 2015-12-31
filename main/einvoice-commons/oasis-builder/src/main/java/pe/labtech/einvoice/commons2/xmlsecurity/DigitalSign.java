@@ -53,7 +53,7 @@ public class DigitalSign {
     static {
         System.setProperty("org.apache.xml.security.ignoreLineBreaks", "true");
         org.apache.xml.security.Init.init();
-        
+
     }
 
     /**
@@ -96,7 +96,6 @@ public class DigitalSign {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream(10240);
             TransformerFactory tf = TransformerFactory.newInstance();
-//            tf.setAttribute(OutputKeys.ENCODING, charsetName);
             Transformer t = tf.newTransformer();
             t.setParameter(OutputKeys.ENCODING, charsetName);
             t.transform(new DOMSource(document), new StreamResult(bos));

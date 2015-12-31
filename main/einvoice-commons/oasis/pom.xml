@@ -8,4 +8,10 @@
     </parent>
     <artifactId>oasis</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+        </dependency>
+    </dependencies>
 </project>
