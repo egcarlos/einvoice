@@ -5,6 +5,8 @@
 package pe.labtech.einvoice.core.entity;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,8 +31,8 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * Clase Document.
- * 
-* @author Labtech S.R.L. (info@labtech.pe)
+ *
+ * @author Labtech S.R.L. (info@labtech.pe)
  */
 @Entity
 @Table(name = "BL_DOCUMENT")
@@ -134,6 +137,11 @@ public class Document implements Serializable {
     }
 
     public Document() {
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.setDocumentDate(MessageFormat.format("{0,date,yyyy/MM/dd-HH:mm:ssZ}", new Date()));
     }
 
     @Override

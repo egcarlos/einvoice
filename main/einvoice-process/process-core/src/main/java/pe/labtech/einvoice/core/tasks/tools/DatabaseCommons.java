@@ -329,19 +329,20 @@ public class DatabaseCommons {
      * @return valor del atributo
      */
     public static String getAttributeValue(DatabaseManager db, Document document, String name) {
-        try {
-            return db.seekNT(e -> e
-                    .createQuery(
-                            "SELECT O.value FROM DocumentAttribute O WHERE O.document = :document AND O.name = :name",
-                            String.class
-                    )
-                    .setParameter("document", document)
-                    .setParameter("name", name)
-                    .getSingleResult()
-            );
-        } catch (NonUniqueResultException | NoResultException ex) {
-            return null;
-        }
+        return db.seekNT(e -> {
+            try {
+                return e
+                        .createQuery(
+                                "SELECT O.value FROM DocumentAttribute O WHERE O.document = :document AND O.name = :name",
+                                String.class
+                        )
+                        .setParameter("document", document)
+                        .setParameter("name", name)
+                        .getSingleResult();
+            } catch (NonUniqueResultException | NoResultException ex) {
+                return null;
+            }
+        });
     }
 
 }

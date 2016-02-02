@@ -8,7 +8,6 @@ import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
